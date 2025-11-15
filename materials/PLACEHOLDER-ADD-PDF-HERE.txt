@@ -1,0 +1,10 @@
+This is a placeholder file.
+
+Please replace this with your actual CO224 Complete Lecture Notes PDF file.
+
+Instructions:
+1. Name your PDF file: CO224-Complete-Notes.pdf
+2. Place it in this materials/ folder
+3. Delete this placeholder file
+
+The download link on your website points to: materials/CO224-Complete-Notes.pdf

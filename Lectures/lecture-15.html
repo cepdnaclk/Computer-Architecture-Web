@@ -1,0 +1,1378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lecture 15: Direct Mapped Cache Control - CO224 Computer Architecture</title>
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="lecture-header">
+        <div class="container">
+            <a href="../index.html" class="back-link">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                    <polyline points="12 19 5 12 12 5"></polyline>
+                </svg>
+                Back to All Lectures
+            </a>
+            <h1 class="lecture-title">Lecture 15: Direct Mapped Cache Control</h1>
+            <p class="lecture-meta">CO224 - Computer Architecture</p>
+        </div>
+    </header>
+
+    <main class="lecture-content-area container">
+        <div class="content-body">
+            <h1>Lecture 15: Cache Memory Operations – Read/Write Access and Write Policies</h1>
+
+<h2>Introduction</h2>
+
+<p>This lecture provides a comprehensive, step‑by‑step examination of how a direct‑mapped cache services read and write requests, differentiates hits from misses, and preserves data correctness. We finish the full read path (including stall + block fetch sequence), analyze write hits and misses, and introduce the write‑through policy as the simplest consistency mechanism between cache and main memory. Performance consequences of constant memory writes, the need for high hit rates, and the motivation for more advanced write‑back policies (next lecture) are emphasized. By the end you will understand exactly what the cache controller must do (state transitions, signals, data/tag/valid updates) for every access type and why write policies are a central architectural tradeoff.</p>
+
+<p>---</p>
+
+<h2>1. Lecture Introduction and Recap</h2>
+
+<h3>1.1 Previous Lecture Review</h3>
+
+<h4>Memory Systems Foundation</h4>
+
+<ul>
+<li>Memory hierarchy concept (SRAM → DRAM → Disk)</li>
+<li>Illusion of large and fast memory simultaneously</li>
+<li>CPU accesses only cache (top level)</li>
+</ul>
+
+<h4>Locality Principles</h4>
+
+<ul>
+<li><strong>Temporal locality:</strong> Recently accessed data likely accessed again soon</li>
+<li><strong>Spatial locality:</strong> Nearby data likely accessed soon</li>
+<li>Foundation for cache effectiveness</li>
+</ul>
+
+<h4>Direct-Mapped Cache Introduction</h4>
+
+<ul>
+<li>Each memory block maps to exactly ONE cache location</li>
+<li>Mapping function: Cache Index = Block Address MOD Cache Size</li>
+<li>Read access process partially covered</li>
+</ul>
+
+<h4>Cache Structure (Recap)</h4>
+
+<ul>
+<li><strong>Data array:</strong> Stores data blocks (not individual words)</li>
+<li><strong>Tag array:</strong> Stores tags for block identification</li>
+<li><strong>Valid bit array:</strong> Indicates valid/invalid entries</li>
+<li><strong>Index:</strong> Not stored, implicit in position (for convenience in diagrams)</li>
+</ul>
+
+<h4>Address Breakdown (Recap)</h4>
+
+``<code>
+<p>[Tag][Index][Offset]</p>
+<p>^      ^       ^</p>
+<p>|      |       └── Identifies word/byte within block</p>
+<p>|      └── Identifies cache entry (direct mapping)</p>
+<p>└── Remaining bits for block identification</p>
+</code>`<code>
+
+<h3>1.2 Today's Focus</h3>
+
+<ul>
+<li>Complete discussion of read miss handling</li>
+<li>Write access operations (hit and miss)</li>
+<li>Write policies and their implications</li>
+<li>Data consistency issues</li>
+<li>Performance considerations</li>
+</ul>
+
+<p>---</p>
+
+<h2>2. Cache Read Access - Complete Process</h2>
+
+<h3>2.1 Read Access Input Signals</h3>
+
+<strong>From CPU to Cache Controller:</strong>
+
+<p>1. <strong>Address</strong> (word or byte address)</p>
+<p>2. <strong>Read Control Signal</strong> (from CPU control unit)</p>
+<p>- Indicates this is a read operation (not write)</p>
+<p>- Part of memory control signals</p>
+
+<h3>2.2 Cache Read Steps (Detailed)</h3>
+
+<h4>Step 1: Address Decomposition</h4>
+
+<ul>
+<li>Parse incoming address into three fields:</li>
+</ul>
+<p>- <strong>Tag:</strong> For verification</p>
+<p>- <strong>Index:</strong> For cache entry selection</p>
+<p>- <strong>Offset:</strong> For word/byte selection within block</p>
+
+<h4>Step 2: Cache Entry Selection (Indexing)</h4>
+
+<ul>
+<li>Extract index bits from address</li>
+<li>Cache controller knows which bits are index (by design)</li>
+<li>Use demultiplexer circuitry to access correct cache entry</li>
+<li>Example: Index = 101 (binary) → Access cache entry 5</li>
+<li>Direct access, no search needed</li>
+<li>Combinational logic (fast)</li>
+</ul>
+
+<h4>Step 3: Tag Comparison</h4>
+
+<ul>
+<li>Extract stored tag from selected cache entry</li>
+<li>Extract tag from incoming address</li>
+<li>Use comparator circuit (XNOR gates + AND gate)</li>
+<li>Output: 1 if tags match, 0 if tags differ</li>
+</ul>
+
+<h4>Step 4: Valid Bit Check</h4>
+
+<ul>
+<li>Extract valid bit from selected cache entry</li>
+<li>Check if entry contains valid data</li>
+<li>Output: 1 if valid, 0 if invalid</li>
+</ul>
+
+<h4>Step 5: Hit/Miss Determination</h4>
+
+<ul>
+<li>Logic: <strong>Hit = (Tag Match) AND (Valid Bit)</strong></li>
+<li>If both conditions true → HIT</li>
+<li>If either condition false → MISS</li>
+<li>Single AND gate combines both signals</li>
+</ul>
+
+<h4>Step 6: Data Extraction (Parallel Operation)</h4>
+
+<ul>
+<li>Happens simultaneously with tag comparison</li>
+<li>Extract entire data block from cache entry</li>
+<li>Place data block on internal wires</li>
+<li>Example: 8-byte block = 2 words</li>
+</ul>
+
+<h4>Step 7: Word Selection (Using Offset)</h4>
+
+<ul>
+<li>CPU requests a single WORD</li>
+<li>Use word offset bits as MUX select signal</li>
+<li>Example: 2 words in block</li>
+</ul>
+<p>- Offset MSB = 0 → Select first word</p>
+<p>- Offset MSB = 1 → Select second word</p>
+<ul>
+<li>Multiplexer extracts correct word from block</li>
+</ul>
+
+<h3>2.3 Timing Optimization</h3>
+
+<strong>Parallel Operations:</strong>
+
+<ul>
+<li>Tag comparison (Steps 3-5) and data extraction (Steps 6-7) happen in PARALLEL</li>
+<li>Both are combinational circuits</li>
+<li>Total delay = max(tag comparison delay, data extraction delay)</li>
+<li>Reduces overall hit latency</li>
+</ul>
+
+<h3>2.4 Read Hit Outcome</h3>
+
+<ul>
+<li>Selected word is correct data</li>
+<li>Send word to CPU immediately</li>
+<li>No stall required</li>
+<li>Total time: Hit latency (< 1 nanosecond for SRAM)</li>
+<li>Completes within one CPU clock cycle</li>
+<li>Pipeline continues uninterrupted</li>
+</ul>
+
+<h3>2.5 Pipeline Integration</h3>
+
+<ul>
+<li>In MIPS pipeline, MEM stage accesses memory</li>
+<li>With cache hit: Memory access completes in 1 cycle</li>
+<li>Pipeline maintains smooth operation</li>
+<li>No bubbles inserted</li>
+</ul>
+
+<p>---</p>
+
+<h2>3. Cache Read Miss Handling</h2>
+
+<h3>3.1 Read Miss Scenario</h3>
+
+<h4>Miss Conditions</h4>
+
+<p>1. <strong>Tag mismatch</strong> (most common)</p>
+<p>- Requested block not in cache</p>
+<p>- Different block occupies that cache location</p>
+2. <strong>Invalid entry</strong>
+<p>- Valid bit = 0</p>
+<p>- Entry contains no valid data (e.g., after initialization)</p>
+3. <strong>Both conditions</strong>
+<p>- Tag mismatch AND invalid entry</p>
+
+<h3>3.2 Read Miss Response Required Actions</h3>
+
+<h4>Action 1: STALL THE CPU</h4>
+
+<strong>Process:</strong>
+
+<ul>
+<li>CPU cannot proceed without requested data</li>
+<li>Data hazard would occur if CPU continues</li>
+<li>Cache controller sends STALL signal to CPU</li>
+<li>CPU must monitor stall signal continuously</li>
+<li>When stall signal high → Freeze CPU operation</li>
+</ul>
+<p>- Stop fetching new instructions</p>
+<p>- Freeze all pipeline stages</p>
+<p>- Hold current state</p>
+
+<strong>CPU's Perspective:</strong>
+
+<ul>
+<li>CPU doesn't know cache and memory are separate</li>
+<li>CPU sees memory hierarchy as single "memory"</li>
+<li>Must respond to stall signal from memory subsystem</li>
+<li>In MEM stage: Check and respond to stall signal</li>
+</ul>
+
+<h4>Action 2: MAKE READ REQUEST TO MAIN MEMORY</h4>
+
+<strong>Request Details:</strong>
+
+<ul>
+<li>Request the missing DATA BLOCK (not just word!)</li>
+<li>Cache and memory trade in BLOCKS</li>
+<li>CPU trades in words/bytes, but cache-memory interface uses blocks</li>
+<li>Send block address to main memory</li>
+<li>Memory fetches entire block</li>
+</ul>
+
+<strong>Reason for Block Transfer:</strong>
+
+<ul>
+<li>Exploits spatial locality</li>
+<li>Fetches requested word AND nearby words</li>
+<li>Reduces future misses for nearby addresses</li>
+<li>More efficient than fetching single words</li>
+</ul>
+
+<strong>Memory Access Time:</strong>
+
+<ul>
+<li>DRAM access: Several CPU clock cycles</li>
+<li>Range: 10 to 100+ CPU clock cycles</li>
+<li>Much slower than cache (< 1 cycle)</li>
+<li>This is the <strong>MISS PENALTY</strong></li>
+</ul>
+
+<h4>Action 3: WAIT FOR MEMORY RESPONSE</h4>
+
+<ul>
+<li>Memory performs read operation</li>
+<li>Data travels from memory to cache</li>
+<li>Controller waits (CPU still stalled)</li>
+<li>Multiple clock cycles elapse</li>
+</ul>
+
+<h4>Action 4: UPDATE CACHE ENTRY</h4>
+
+<strong>Three components to update:</strong>
+
+<strong>a) Update Data Block:</strong>
+
+<ul>
+<li>Write fetched block into cache entry</li>
+<li>Replace old data at that index</li>
+</ul>
+
+<strong>b) Update Tag:</strong>
+
+<ul>
+<li>Extract tag from block address</li>
+<li>Write tag into tag array at that index</li>
+<li>Ensures future tag comparisons work correctly</li>
+</ul>
+
+<strong>c) Set Valid Bit:</strong>
+
+<ul>
+<li>Set valid bit to 1</li>
+<li>Denotes entry now contains valid data</li>
+</ul>
+
+<h4>Action 5: SEND DATA TO CPU</h4>
+
+<ul>
+<li>Extract requested word from newly loaded block</li>
+<li>Use offset to select correct word</li>
+<li>Put data on bus to CPU</li>
+<li>CPU receives requested data</li>
+</ul>
+
+<h4>Action 6: CLEAR STALL SIGNAL</h4>
+
+<ul>
+<li>Cache controller clears (lowers) stall signal</li>
+<li>CPU detects stall signal going low</li>
+<li>CPU resumes operation</li>
+<li>Pipeline unfreezes and continues</li>
+</ul>
+
+<h3>3.3 Total Read Miss Time</h3>
+
+<strong>Formula:</strong>
+
+</code>`<code>
+<p>Read Miss Time = Hit Latency + Miss Penalty</p>
+</code>`<code>
+
+<strong>Where:</strong>
+
+<ul>
+<li><strong>Hit Latency:</strong> Time to determine it's a miss (< 1 ns)</li>
+<li><strong>Miss Penalty:</strong> Time to fetch from memory (10-100+ CPU cycles)</li>
+</ul>
+
+<strong>Example Calculation:</strong>
+
+<ul>
+<li>Hit latency: 1 ns (1 cycle at 1 GHz)</li>
+<li>Miss penalty: 50 ns (50 cycles at 1 GHz)</li>
+<li>Total: 1 + 50 = 51 cycles</li>
+</ul>
+
+<h3>3.4 Performance Impact</h3>
+
+<ul>
+<li>Single miss causes 50+ cycle stall</li>
+<li>Catastrophic for pipeline performance</li>
+<li>Emphasizes need for high hit rate (> 99.9%)</li>
+</ul>
+
+<h3>3.5 Question: What About the Old Block?</h3>
+
+<strong>The Deferred Question:</strong>
+
+<ul>
+<li>When fetching new block on miss</li>
+<li>Old block occupies that cache entry</li>
+<li>What happens to old block?</li>
+<li>Is it okay to discard it?</li>
+</ul>
+
+<strong>Initial Answer:</strong> "We'll discuss after introducing write policies"
+
+<ul>
+<li>Answer depends on write policy</li>
+<li>Need to understand writes first</li>
+<li>Question will be revisited</li>
+</ul>
+
+<p>---</p>
+
+<h2>4. Cache Write Access - Introduction</h2>
+
+<h3>4.1 Write Access Input Signals</h3>
+
+<strong>From CPU to Cache Controller:</strong>
+
+<p>1. <strong>Address</strong> (where to write)</p>
+<p>2. <strong>Data Word</strong> (what to write)</p>
+<p>3. <strong>Write Control Signal</strong> (indicates write operation)</p>
+
+<p>Three inputs vs. two for read (no data input needed for read).</p>
+
+<h3>4.2 Write Access Process</h3>
+
+<h4>Step 1: Address Decomposition</h4>
+
+<ul>
+<li>Same as read: [Tag][Index][Offset]</li>
+</ul>
+
+<h4>Step 2: Cache Entry Selection</h4>
+
+<ul>
+<li>Same as read: Use index bits</li>
+<li>Demultiplexer accesses correct entry</li>
+<li>Direct access based on index</li>
+<li>Example: Index 101 → Entry 5</li>
+</ul>
+
+<h4>Step 3: Tag Comparison</h4>
+
+<ul>
+<li>Extract tag from cache entry</li>
+<li>Compare with incoming address tag</li>
+<li>Comparator circuit (same as read)</li>
+<li>Output: Match or no match</li>
+</ul>
+
+<h4>Step 4: Valid Bit Check</h4>
+
+<ul>
+<li>Extract and check valid bit</li>
+<li>Same as read operation</li>
+<li>Ensures entry is valid</li>
+</ul>
+
+<h4>Step 5: Hit/Miss Determination</h4>
+
+<ul>
+<li>Hit = (Tag Match) AND (Valid Bit)</li>
+<li>Same logic as read</li>
+<li>Determines write hit or write miss</li>
+</ul>
+
+<h4>Step 6: Data Writing (The Difference)</h4>
+
+<strong>This is where write differs from read:</strong>
+
+<ul>
+<li>Must write data word to correct location in block</li>
+<li>Use offset to determine which word in block</li>
+</ul>
+
+<h3>4.3 Writing Mechanism</h3>
+
+<strong>Input:</strong>
+
+<ul>
+<li>Incoming data word (from CPU)</li>
+<li>Offset bits from address</li>
+</ul>
+
+<strong>Demultiplexer Selection:</strong>
+
+<ul>
+<li>Use word offset as demultiplexer select signal</li>
+<li>Example with 2 words per block:</li>
+</ul>
+<p>- Word offset = 0 → Write to first word</p>
+<p>- Word offset = 1 → Write to second word</p>
+<ul>
+<li>Demultiplexer directs data to correct word position</li>
+</ul>
+
+<strong>Example:</strong>
+
+<ul>
+<li>Block has 2 words: Word0 (bytes 0-3), Word1 (bytes 4-7)</li>
+<li>Incoming data word: 0x12345678</li>
+<li>Offset MSB = 1 → Select Word1</li>
+<li>Demux directs data to Word1 position in block</li>
+</ul>
+
+<strong>Write Operation Control:</strong>
+
+<ul>
+<li>Writing controlled by Write control signal from CPU</li>
+<li>Only write if signal indicates write operation</li>
+<li>Demultiplexer enabled by write signal</li>
+</ul>
+
+<h3>4.4 Critical Question: Can Write and Tag Compare Happen in Parallel?</h3>
+
+<h4>For Read (Previous Discussion)</h4>
+
+<ul>
+<li><strong>YES, both can happen in parallel</strong></li>
+<li>If miss, discard extracted data (no harm done)</li>
+<li>Reading doesn't change cache state</li>
+</ul>
+
+<h4>For Write (Current Question)</h4>
+
+<strong>More problematic!</strong>
+
+<ul>
+<li>What if we write and then discover tag mismatch?</li>
+</ul>
+
+<strong>Scenario:</strong>
+
+<ul>
+<li>Write to cache entry simultaneously with tag comparison</li>
+<li>Tag comparison returns MISMATCH</li>
+<li>We've now CORRUPTED data in cache!</li>
+<li>Written to wrong block (different tag)</li>
+<li>Data integrity violated</li>
+</ul>
+
+<strong>Problem:</strong>
+
+<ul>
+<li>If invalid entry: Not too serious (data was garbage anyway)</li>
+<li>If tag mismatch: <strong>SERIOUS problem!</strong></li>
+</ul>
+<p>- Overwrote valid data for different block</p>
+<p>- That block's data now corrupted</p>
+<p>- Future accesses to that block get wrong data</p>
+
+<strong>Initial Conclusion:</strong>
+
+<ul>
+<li>Cannot safely write and tag compare in parallel</li>
+<li>Need mechanism to prevent corruption</li>
+<li>Solution depends on write policy (discussed next)</li>
+</ul>
+
+<p>---</p>
+
+<h2>5. Write Policies - Introduction</h2>
+
+<h3>5.1 The Data Consistency Problem</h3>
+
+<strong>Scenario:</strong>
+
+<ul>
+<li>CPU writes to address A</li>
+<li>Address A hits in cache</li>
+<li>Cache controller writes new value to cache entry</li>
+<li>Cache now has updated value</li>
+<li>Main memory still has OLD value</li>
+<li>Two versions exist: Cache version ≠ Memory version</li>
+</ul>
+
+<strong>The Inconsistency:</strong>
+
+<ul>
+<li>Cache entry now INCONSISTENT with main memory</li>
+<li>Same address has different values in different levels</li>
+<li>Data coherence problem</li>
+</ul>
+
+<h3>5.2 Why This Matters</h3>
+
+<ul>
+<li>Future access to same address: Which value is correct?</li>
+<li>If cache entry replaced: New value lost</li>
+<li>I/O devices may access memory directly (bypass cache)</li>
+<li>Multi-processor systems: Other CPUs access memory</li>
+<li>Must maintain data consistency across hierarchy</li>
+</ul>
+
+<h3>5.3 Two Fundamental Write Policies</h3>
+
+<p>1. <strong>Write-Through</strong> (discussed this lecture)</p>
+<p>2. <strong>Write-Back</strong> (mentioned, detailed in next lecture)</p>
+
+<p>---</p>
+
+<h2>6. Write-Through Policy</h2>
+
+<h3>6.1 Write-Through Definition</h3>
+
+<strong>Policy Statement:</strong>
+
+<p>> "Always write to BOTH cache AND memory"</p>
+
+<strong>Mechanism:</strong>
+
+<ul>
+<li>On every write operation:</li>
+</ul>
+<p>1. Write to cache (if hit)</p>
+<p>2. Simultaneously write to main memory</p>
+<ul>
+<li>Both levels updated together</li>
+<li>Ensures cache and memory always consistent</li>
+</ul>
+
+<h3>6.2 Write-Through Process</h3>
+
+<h4>Write Hit with Write-Through</h4>
+
+<p>1. Determine it's a write hit (tag match + valid)</p>
+<p>2. Write data word to cache block (using offset)</p>
+<p>3. Also send write request to main memory</p>
+<p>4. Update same address in memory</p>
+<p>5. Wait for memory write to complete</p>
+<p>6. Both cache and memory now have same value</p>
+
+<h4>Write Miss with Write-Through</h4>
+
+<p>1. Determine it's a write miss</p>
+<p>2. Stall CPU</p>
+<p>3. Fetch missing block from memory (read operation)</p>
+<p>4. Update cache entry with fetched block</p>
+<p>5. Write the word to correct position in block</p>
+<p>6. Also write to memory</p>
+<p>7. Clear stall signal</p>
+<p>8. Both levels updated</p>
+
+<h3>6.3 Advantages of Write-Through</h3>
+
+<h4>Advantage 1: SIMPLICITY</h4>
+
+<ul>
+<li>Straightforward to implement</li>
+<li>No complex consistency protocols</li>
+<li>Cache controller logic simpler</li>
+<li>Design principle: Keep cache simple</li>
+</ul>
+
+<h4>Advantage 2: CONSISTENCY GUARANTEED</h4>
+
+<ul>
+<li>Cache and memory ALWAYS have same values</li>
+<li>No special handling for discarded blocks</li>
+<li>Can replace any cache entry anytime</li>
+<li>Memory always has correct, up-to-date data</li>
+</ul>
+
+<h4>Advantage 3: ANSWERS THE OLD BLOCK QUESTION</h4>
+
+<strong>With write-through policy:</strong>
+
+<ul>
+<li>Old block can be safely discarded</li>
+<li>All updates were written to memory</li>
+<li>Memory has latest version</li>
+<li>Future accesses can fetch from memory</li>
+<li>No data loss</li>
+</ul>
+
+<strong>Comparison:</strong>
+
+<ul>
+<li>Read miss: Old block discarded, data available in memory</li>
+<li>Write with write-through: Always updated memory, safe to discard</li>
+</ul>
+
+<h4>Advantage 4: PARALLEL WRITE AND TAG COMPARE NOW POSSIBLE!</h4>
+
+<strong>Critical Insight:</strong>
+<p>Can now overlap write and tag comparison. Why? Two scenarios:</p>
+
+<strong>Scenario A: Write Hit</strong>
+
+<ul>
+<li>Written to cache, will also write to memory</li>
+<li>Tag matches, write is correct</li>
+<li>Both cache and memory updated</li>
+<li>No problem</li>
+</ul>
+
+<strong>Scenario B: Write Miss</strong>
+
+<ul>
+<li>Written to cache entry (possibly wrong block)</li>
+<li>Tag mismatch detected</li>
+<li>Will fetch correct block from memory anyway</li>
+<li>Will overwrite cache entry with correct block</li>
+<li>Corrupted data gets replaced immediately</li>
+<li>Memory has correct version (wasn't corrupted)</li>
+<li>No lasting damage</li>
+</ul>
+
+<strong>Result:</strong>
+
+<ul>
+<li>Safe to write and tag compare in parallel</li>
+<li>Saves time (hit latency reduced)</li>
+<li>Both operations in same clock cycle</li>
+<li>If hit: Saved time</li>
+<li>If miss: No harm (will fix cache anyway)</li>
+</ul>
+
+<strong>Timing Optimization:</strong>
+
+<ul>
+<li>Tag comparison time: T_comp</li>
+<li>Write time: T_write</li>
+<li>Without overlap: Total = T<em>comp + T</em>write</li>
+<li>With overlap: Total = max(T<em>comp, T</em>write)</li>
+<li>Typically similar delays → Nearly 2× speedup</li>
+</ul>
+
+<h3>6.4 Disadvantages of Write-Through</h3>
+
+<h4>Disadvantage 1: EXCESSIVE WRITE TRAFFIC</h4>
+
+<ul>
+<li>EVERY write goes to memory</li>
+<li>Memory writes are slow (10-100+ cycles)</li>
+<li>Generates continuous memory traffic</li>
+<li>Memory bus congestion</li>
+</ul>
+
+<h4>Disadvantage 2: CPU STALLS ON EVERY WRITE</h4>
+
+<strong>Critical Problem:</strong>
+
+<ul>
+<li>Every write requires memory access</li>
+<li>Memory much slower than cache</li>
+<li>CPU must stall for EVERY write</li>
+<li>Wait for memory write to complete</li>
+</ul>
+
+<strong>Stall Duration:</strong>
+
+<ul>
+<li>Memory write: 10-100 CPU clock cycles</li>
+<li>Every store instruction causes stall</li>
+<li>Even on write HIT!</li>
+</ul>
+
+<strong>Example:</strong>
+
+<ul>
+<li>Store instruction hits in cache</li>
+<li>Still must wait for memory write</li>
+<li>50 cycle stall for every store</li>
+<li>Pipeline essentially stops</li>
+</ul>
+
+<strong>Impact on Programs with Many Writes:</strong>
+
+<ul>
+<li>Programs with frequent store instructions</li>
+<li>Array updates, structure modifications</li>
+<li>Loop counters being updated</li>
+<li>String manipulation</li>
+<li>All suffer severe performance degradation</li>
+</ul>
+
+<strong>Performance Comparison:</strong>
+
+<ul>
+<li>Read hit: < 1 cycle (fast!)</li>
+<li>Write hit with write-through: 50+ cycles (slow!)</li>
+<li>Asymmetry: Reads fast, writes catastrophically slow</li>
+</ul>
+
+<strong>Pipeline Impact:</strong>
+
+<ul>
+<li>Recall pipelining lectures: Minimized stalls</li>
+<li>Worked hard to avoid 1-2 cycle stalls</li>
+<li>Write-through introduces 50+ cycle stalls regularly</li>
+<li>Contradicts pipeline optimization goals</li>
+<li>"Doesn't add up" - unacceptable performance loss</li>
+</ul>
+
+<strong>Real-World Issue:</strong>
+
+<ul>
+<li>Write-through used in some systems</li>
+<li>But with additional optimizations (write buffers, discussed later)</li>
+<li>Pure write-through too slow for modern systems</li>
+</ul>
+
+<h4>Disadvantage 3: POWER CONSUMPTION</h4>
+
+<ul>
+<li>Memory accesses consume power</li>
+<li>Every write → Memory access → Power consumption</li>
+<li>Unnecessary power usage</li>
+<li>Critical for mobile/embedded systems</li>
+</ul>
+
+<h4>Disadvantage 4: MEMORY WEAR</h4>
+
+<ul>
+<li>Flash memory: Limited write cycles</li>
+<li>SSDs wear out with writes</li>
+<li>Write-through accelerates wear</li>
+<li>Reduces memory lifespan</li>
+</ul>
+
+<p>---</p>
+
+<h2>7. Resolving the Old Block Question</h2>
+
+<h3>7.1 The Question Revisited</h3>
+
+<strong>Original Question:</strong>
+
+<p>> "What happens to the old block when we fetch a new block from memory on a miss?"</p>
+
+<strong>Context:</strong>
+
+<ul>
+<li>Read or write miss occurs</li>
+<li>Need to fetch missing block from memory</li>
+<li>Old block occupies target cache entry</li>
+<li>Must replace old block with new block</li>
+<li>Is it safe to discard old block?</li>
+</ul>
+
+<h3>7.2 Answer with Write-Through Policy</h3>
+
+<strong>YES, Safe to Discard</strong>
+
+<h4>Reason 1: Memory Has Updated Version</h4>
+
+<ul>
+<li>Write-through ensures every write goes to memory</li>
+<li>All modifications reflected in memory</li>
+<li>Memory always has latest version of all blocks</li>
+<li>Old block's latest state is in memory</li>
+</ul>
+
+<h4>Reason 2: Can Re-fetch If Needed</h4>
+
+<ul>
+<li>Future access to old block's address</li>
+<li>Will miss in cache (block was replaced)</li>
+<li>Can fetch from memory again</li>
+<li>Memory has correct, up-to-date data</li>
+<li>No data loss</li>
+</ul>
+
+<h3>7.3 Example Scenario</h3>
+
+<p>1. Block A in cache at index 3</p>
+<p>2. Block A modified several times</p>
+<p>3. Each modification written to cache AND memory</p>
+<p>4. Block B (also maps to index 3) is requested</p>
+<p>5. Miss occurs for Block B</p>
+<p>6. Fetch Block B from memory</p>
+<p>7. Replace Block A with Block B at index 3</p>
+<p>8. Block A discarded from cache</p>
+<p>9. Block A's data safe in memory</p>
+<p>10. Later access to Block A: Miss, fetch from memory again</p>
+
+<h3>7.4 Comparison with Invalid Entry</h3>
+
+<ul>
+<li>If miss due to invalid bit: Obviously safe to replace</li>
+<li>If miss due to tag mismatch: Safe because of write-through</li>
+</ul>
+
+<h3>7.5 Contrast with Future Policy (Teaser)</h3>
+
+<ul>
+<li>With other write policies (write-back), answer may differ</li>
+<li>May NOT be safe to discard old block</li>
+<li>Will discuss in next lecture</li>
+</ul>
+
+<strong>Conclusion:</strong>
+
+<ul>
+<li>Write-through simplifies replacement</li>
+<li>No special checks needed before replacing block</li>
+<li>Always safe to overwrite cache entry</li>
+<li>Memory serves as reliable backup</li>
+</ul>
+
+<p>---</p>
+
+<h2>8. Parallelism in Write Access with Write-Through</h2>
+
+<h3>8.1 The Parallel Write Problem Solved</h3>
+
+<strong>Original Concern:</strong>
+
+<ul>
+<li>Want to overlap write operation and tag comparison</li>
+<li>Reduce hit latency</li>
+<li>But risk corrupting data if tag mismatch</li>
+</ul>
+
+<h3>8.2 With Write-Through Policy</h3>
+
+<h4>Case 1: Write Hit</h4>
+
+<ul>
+<li>Write to cache and tag compare happen in parallel</li>
+<li>Tag matches → It was a hit</li>
+<li>Cache entry correctly updated</li>
+<li>Also write to memory (per write-through policy)</li>
+<li>Both cache and memory consistent</li>
+<li>Time saved: One cycle</li>
+<li>No problem!</li>
+</ul>
+
+<h4>Case 2: Write Miss</h4>
+
+<ul>
+<li>Write to cache and tag compare happen in parallel</li>
+<li>Tag doesn't match → It was a miss</li>
+<li>Cache entry might be corrupted (wrote to wrong block)</li>
+<li><strong>BUT:</strong> About to fetch correct block from memory</li>
+<li>Will OVERWRITE this cache entry with new block</li>
+<li>Corrupted data disappears immediately</li>
+<li>Also, write goes to memory (correct address in memory)</li>
+<li>End result: Cache fixed, memory correct</li>
+</ul>
+
+<h3>8.3 Key Insight</h3>
+
+<ul>
+<li>Write-through to memory preserves correctness</li>
+<li>Memory write goes to CORRECT address (from address bus)</li>
+<li>Even if cache entry temporarily corrupted</li>
+<li>Cache entry will be fixed when correct block loaded</li>
+<li>Memory never corrupted</li>
+</ul>
+
+<h3>8.4 Timeline for Write Miss</h3>
+
+</code>`<code>
+<p>Cycle 1: Write to cache (possibly wrong block) + Tag compare</p>
+<p>Cycle 1: Also initiate memory write (correct address)</p>
+<p>Cycle 2-50: Fetch correct block from memory</p>
+<p>Cycle 51: Overwrite cache entry with correct block</p>
+<p>Result: Cache correct, memory correct</p>
+</code>`<code>
+
+<h3>8.5 Safety Guarantee</h3>
+
+<ul>
+<li><strong>Memory write:</strong> Targets address from address bus (always correct)</li>
+<li><strong>Cache write:</strong> Targets index (might be for different block)</li>
+<li><strong>If miss:</strong> Cache mistake corrected by fetch</li>
+<li><strong>If hit:</strong> No mistake, everything correct</li>
+<li><strong>In both cases:</strong> End state correct</li>
+</ul>
+
+<h3>8.6 Performance Benefit</h3>
+
+<ul>
+<li>Saved cycles on write hit path</li>
+<li>Write and tag compare: Parallel instead of sequential</li>
+<li>Approximately 2× faster hit determination</li>
+<li>Critical for frequent write hits</li>
+</ul>
+
+<h3>8.7 Enabled by Write-Through</h3>
+
+<ul>
+<li>Only possible because memory updated on every write</li>
+<li>Other policies may not allow this optimization</li>
+<li>Write-through sacrifices write performance for simplicity</li>
+<li>But enables some optimizations</li>
+</ul>
+
+<p>---</p>
+
+<h2>9. Summary of Cache Operations</h2>
+
+<h3>9.1 Complete Cache Operation Overview</h3>
+
+<h4>READ HIT</h4>
+
+<ul>
+<li>Index → Tag compare + Valid check → Match</li>
+<li>Extract data block → Select word → Send to CPU</li>
+<li>Time: < 1 cycle (hit latency only)</li>
+<li>No stall</li>
+<li>Pipeline continues</li>
+</ul>
+
+<h4>READ MISS</h4>
+
+<ul>
+<li>Index → Tag compare + Valid check → No match</li>
+<li>Stall CPU</li>
+<li>Fetch block from memory (10-100+ cycles)</li>
+<li>Update cache: Data + Tag + Valid bit</li>
+<li>Extract word → Send to CPU</li>
+<li>Clear stall</li>
+<li>Time: Hit latency + Miss penalty</li>
+<li>Major pipeline disruption</li>
+</ul>
+
+<h4>WRITE HIT (with Write-Through)</h4>
+
+<ul>
+<li>Index → Tag compare + Valid check (parallel with write)</li>
+<li>Write word to cache block</li>
+<li>Also write to memory (10-100+ cycles)</li>
+<li>Stall CPU until memory write completes</li>
+<li>Time: Hit latency + Memory write time</li>
+<li>Slower than read hit!</li>
+</ul>
+
+<h4>WRITE MISS (with Write-Through)</h4>
+
+<ul>
+<li>Index → Tag compare + Valid check → No match</li>
+<li>Stall CPU</li>
+<li>Fetch block from memory</li>
+<li>Update cache: Data + Tag + Valid bit</li>
+<li>Write word to cache block</li>
+<li>Also write to memory</li>
+<li>Clear stall</li>
+<li>Time: Hit latency + Miss penalty + Memory write time</li>
+<li>Even slower than read miss!</li>
+</ul>
+
+<h3>9.2 Performance Characteristics</h3>
+
+<p>| Case                                           | Time        | Comment                                                           |</p>
+<p>| ---------------------------------------------- | ----------- | ----------------------------------------------------------------- |</p>
+<p>| <strong>Best Case (Read Hit)</strong>                       | < 1 cycle   | Optimal performance. Want this to be most common case             |</p>
+<p>| <strong>Moderate Case (Read Miss)</strong>                  | 50+ cycles  | Acceptable if infrequent. Reason for high hit rate requirement    |</p>
+<p>| <strong>Poor Case (Write Hit with Write-Through)</strong>   | 50+ cycles  | Every write hits this case. Unacceptable for write-heavy programs |</p>
+<p>| <strong>Worst Case (Write Miss with Write-Through)</strong> | 100+ cycles | Rare but extremely slow. Catastrophic when occurs                 |</p>
+
+<strong>Performance Goal:</strong>
+
+<ul>
+<li>Maximize read hits</li>
+<li>Minimize write impact (better policy needed)</li>
+<li>Overall hit rate > 99.9%</li>
+</ul>
+
+<p>---</p>
+
+<h2>10. Write-Through Policy Evaluation</h2>
+
+<h3>10.1 Summary of Write-Through</h3>
+
+<strong>Mechanism:</strong>
+
+<ul>
+<li>Write to cache (if hit) AND memory</li>
+<li>Always keep both consistent</li>
+<li>Memory is authoritative backup</li>
+</ul>
+
+<strong>Implementation Complexity:</strong>
+
+<ul>
+<li>Simple cache controller logic</li>
+<li>No complex state tracking</li>
+<li>Straightforward consistency maintenance</li>
+</ul>
+
+<h3>10.2 Advantages</h3>
+
+<p>| Advantage                    | Description                                                                                                               |</p>
+<p>| ---------------------------- | ------------------------------------------------------------------------------------------------------------------------- |</p>
+<p>| <strong>1. Simplicity</strong>            | Easy to understand, simple to implement, minimal controller complexity, aligns with design principle (simple cache)       |</p>
+<p>| <strong>2. Consistency</strong>           | Cache and memory always consistent, no special synchronization needed, can discard blocks anytime, memory always reliable |</p>
+<p>| <strong>3. Data Safety</strong>           | No data loss on block replacement, memory has all updates, crash recovery simpler, I/O devices see correct data           |</p>
+<p>| <strong>4. Enables Optimizations</strong> | Can overlap write and tag compare, reduces hit latency, safe due to memory backup                                         |</p>
+
+<h3>10.3 Disadvantages</h3>
+
+<p>| Disadvantage               | Description                                                                                                                                |</p>
+<p>| -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |</p>
+<p>| <strong>1. Performance Penalty</strong> | Every write stalls CPU, 10-100+ cycle stalls per write, unacceptable for write-intensive programs, contradicts pipeline optimization goals |</p>
+<p>| <strong>2. Memory Traffic</strong>      | Excessive write traffic to memory, memory bus congestion, reduces available bandwidth for read misses, slows down entire system            |</p>
+<p>| <strong>3. Power Consumption</strong>   | Every write powers up memory, unnecessary power usage, battery drain in mobile devices, heat generation                                    |</p>
+<p>| <strong>4. Memory Wear</strong>         | Flash/SSD: Limited write cycles, accelerated wear-out, reduced memory lifespan, particularly bad for SSDs                                  |</p>
+
+<h3>10.4 When Write-Through Used</h3>
+
+<h4>Suitable Applications</h4>
+
+<ul>
+<li>Read-heavy workloads</li>
+<li>Simple embedded systems</li>
+<li>Systems requiring guaranteed consistency</li>
+<li>Safety-critical applications</li>
+</ul>
+
+<h4>Real-World Usage</h4>
+
+<ul>
+<li>Often combined with write buffers</li>
+<li>Write buffer: Small queue for pending writes</li>
+<li>CPU continues after writing to buffer</li>
+<li>Buffer drains to memory in background</li>
+<li>Reduces stall impact (will discuss if time permits)</li>
+</ul>
+
+<h4>Modern Systems</h4>
+
+<ul>
+<li>Pure write-through rarely used alone</li>
+<li>Too slow for general-purpose computing</li>
+<li>Alternative: Write-back policy (next lecture)</li>
+<li>Trade complexity for performance</li>
+</ul>
+
+<p>---</p>
+
+<h2>11. The Need for Alternative Write Policies</h2>
+
+<h3>11.1 The Performance Problem</h3>
+
+<h4>Write-Heavy Programs</h4>
+
+<p>Many programming patterns involve frequent writes:</p>
+
+<ul>
+<li>Array updates in loops</li>
+<li>Data structure modifications</li>
+<li>Counter increments</li>
+<li>Accumulator updates</li>
+<li>String/buffer operations</li>
+</ul>
+
+<strong>Example Code:</strong>
+
+</code>`<code>c
+<p>for (int i = 0; i < 1000; i++) {</p>
+<p>array[i] = compute(i);  // Store in every iteration</p>
+<p>sum += array[i];         // Read, accumulate, store</p>
+<p>}</p>
+</code>``
+
+<h4>With Write-Through</h4>
+
+<ul>
+<li>Loop iterations: 1000</li>
+<li>Stores per iteration: 2 (array[i], sum)</li>
+<li>Total stores: 2000</li>
+<li>Cycles per store: 50 (memory write)</li>
+<li><strong>Total stall cycles: 100,000!</strong></li>
+<li>Versus computation cycles: Maybe 10,000</li>
+<li><strong>Performance: 10× slower than necessary!</strong></li>
+</ul>
+
+<h3>11.2 Pipeline Impact</h3>
+
+<ul>
+<li>Pipelining designed to execute 1 instruction/cycle (ideal)</li>
+<li>Write-through: 50 cycles per store instruction</li>
+<li>Pipeline utilization: ~2% (1/50)</li>
+<li>Completely defeats pipelining benefits</li>
+</ul>
+
+<h3>11.3 Comparison with Read Operations</h3>
+
+<p>| Operation  | Time        | Frequency | Acceptability    |</p>
+<p>| ---------- | ----------- | --------- | ---------------- |</p>
+<p>| Read hit   | < 1 cycle   | Common    | Fast             |</p>
+<p>| Read miss  | 50 cycles   | Rare      | Acceptable       |</p>
+<p>| Write hit  | 50 cycles   | Frequent  | <strong>Unacceptable</strong> |</p>
+<p>| Write miss | 100+ cycles | Rare      | Terrible         |</p>
+
+<h3>11.4 The Contradiction</h3>
+
+<ul>
+<li>Spent lectures optimizing pipeline</li>
+<li>Minimized hazards, used forwarding, prediction</li>
+<li>Eliminated 1-2 cycle stalls</li>
+<li>Now introducing 50+ cycle stalls on every write!</li>
+<li>"Doesn't add up" - need better solution</li>
+</ul>
+
+<h3>11.5 Question Raised</h3>
+
+<strong>"What can we do to avoid this situation?"</strong>
+
+<strong>Student Insight:</strong>
+
+<p>> "We can write to memory only when we want to replace that cache block with different data"</p>
+
+<strong>Instructor Response:</strong>
+
+<p>> "Exactly! That becomes a different write policy."</p>
+
+<h3>11.6 Teaser for Next Lecture</h3>
+
+<ul>
+<li>Alternative policy: <strong>Write-Back</strong></li>
+<li>Write to cache only, not memory immediately</li>
+<li>Write to memory only when necessary</li>
+<li>Much better performance</li>
+<li>Added complexity in return</li>
+<li>Will discuss in detail next class</li>
+</ul>
+
+<p>---</p>
+
+<h2>12. Lecture Conclusion</h2>
+
+<h3>12.1 Topics Covered</h3>
+
+<h4>1. Complete Read Access Process</h4>
+
+<ul>
+<li>Index → Tag compare → Valid check → Hit/Miss</li>
+<li>Parallel data extraction and word selection</li>
+<li>Hit: Send data immediately</li>
+<li>Miss: Fetch from memory, stall CPU</li>
+</ul>
+
+<h4>2. Read Miss Handling</h4>
+
+<p>Six-step process:</p>
+
+<p>1. Stall CPU</p>
+<p>2. Request block from memory</p>
+<p>3. Wait for response</p>
+<p>4. Update cache entry (data, tag, valid)</p>
+<p>5. Send data to CPU</p>
+<p>6. Clear stall</p>
+
+<ul>
+<li>Miss penalty: 10-100+ cycles</li>
+</ul>
+
+<h4>3. Write Access Process</h4>
+
+<ul>
+<li>Similar to read: Index → Tag compare → Valid check</li>
+<li>Difference: Must write data to cache</li>
+<li>Use demultiplexer to direct data to correct word</li>
+</ul>
+
+<h4>4. Data Consistency Problem</h4>
+
+<ul>
+<li>Writing to cache creates inconsistency</li>
+<li>Cache has new value, memory has old value</li>
+<li>Need policy to maintain consistency</li>
+</ul>
+
+<h4>5. Write-Through Policy</h4>
+
+<ul>
+<li>Write to both cache and memory on every write</li>
+<li>Advantages: Simple, consistent, safe</li>
+<li>Disadvantages: Slow, excessive traffic, poor performance</li>
+</ul>
+
+<h4>6. Old Block Question Resolved</h4>
+
+<ul>
+<li>With write-through: Safe to discard</li>
+<li>Memory has updated version</li>
+<li>Can re-fetch if needed later</li>
+</ul>
+
+<h4>7. Parallel Write Optimization</h4>
+
+<ul>
+<li>Can overlap write and tag compare</li>
+<li>Write-through makes this safe</li>
+<li>Reduces hit latency</li>
+</ul>
+
+<h4>8. Performance Issues</h4>
+
+<ul>
+<li>Write-through too slow for write-intensive programs</li>
+<li>Every write causes long stall</li>
+<li>Need better policy</li>
+</ul>
+
+<h3>12.2 Next Lecture Preview</h3>
+
+<strong>Topics to Cover:</strong>
+
+<ul>
+<li>Write-Back policy (delayed writes)</li>
+<li>Dirty bit concept</li>
+<li>When to write back to memory</li>
+<li>Performance improvements</li>
+<li>Complexity tradeoffs</li>
+<li>Block replacement with write-back</li>
+<li>Comparison: Write-through vs. Write-back</li>
+<li>Real-world cache designs</li>
+</ul>
+
+<strong>Implementation Details:</strong>
+
+<ul>
+<li>Write buffer optimization for write-through</li>
+<li>Handling dirty blocks on replacement</li>
+<li>Write-back state machine</li>
+<li>Performance analysis</li>
+</ul>
+
+<strong>Advanced Topics (if time):</strong>
+
+<ul>
+<li>Write-allocate vs. no-write-allocate</li>
+<li>Write-combining</li>
+<li>Victim caches</li>
+<li>Multi-level caches with different policies</li>
+</ul>
+
+<strong>The Goal:</strong>
+
+<ul>
+<li>Understand tradeoffs between simplicity and performance</li>
+<li>Choose appropriate policy for application</li>
+<li>Design efficient cache systems</li>
+</ul>
+
+<strong>Key Insight:</strong>
+<p>Write-through sacrifices performance for simplicity. In modern systems, performance is critical, so more complex policies are necessary despite added complexity.</p>
+
+<p>---</p>
+
+<h2>Key Takeaways</h2>
+
+<p>1. <strong>Cache read hit</strong> completes in single cycle—tag match and valid bit set indicate data available immediately from cache.</p>
+
+<p>2. <strong>Cache read miss</strong> requires multiple cycles—must fetch entire block from main memory, update cache entry, set valid bit, then retry access.</p>
+
+<p>3. <strong>Cache controller</strong> implements state machine—managing transitions between idle, compare tags, fetch block, and write cache states.</p>
+
+<p>4. <strong>Tag comparison</strong> determines hit/miss—stored tag must match address tag AND valid bit must be set for successful hit.</p>
+
+<p>5. <strong>Block fetch</strong> retrieves entire block from memory—exploiting spatial locality by bringing multiple words that will likely be accessed soon.</p>
+
+<p>6. <strong>Valid bit initialization</strong> crucial at startup—all valid bits cleared to zero, preventing false hits on random cache data.</p>
+
+<p>7. <strong>Write operations</strong> complicate cache design—must maintain consistency between cache and main memory through careful policy choices.</p>
+
+<p>8. <strong>Write-through policy</strong> updates both cache and memory on every write—simple consistency but severe performance penalty.</p>
+
+<p>9. <strong>Write-through advantages</strong>: Simple implementation, main memory always current, no dirty bit needed, straightforward crash recovery.</p>
+
+<p>10. <strong>Write-through disadvantages</strong>: Every write causes slow memory access (~100 ns), dramatically reduces performance, wastes memory bandwidth.</p>
+
+<p>11. <strong>Write buffers</strong> partially mitigate write-through penalty—CPU writes to buffer and continues, buffer writes to memory asynchronously.</p>
+
+<p>12. <strong>Write buffer depth</strong> typically 4-8 entries—balances performance improvement against hardware cost and complexity.</p>
+
+<p>13. <strong>Write buffer full</strong> forces CPU stall—occurs during write-intensive code sections, limiting write-through effectiveness.</p>
+
+<p>14. <strong>Write miss policies</strong> determine cache behavior—write-allocate (fetch block first) versus no-write-allocate (write directly to memory).</p>
+
+<p>15. <strong>Write-allocate</strong> exploits temporal locality—if just written location likely accessed again soon, fetching to cache improves future performance.</p>
+
+<p>16. <strong>No-write-allocate</strong> avoids fetch overhead—appropriate when written locations unlikely to be accessed soon.</p>
+
+<p>17. <strong>Policy combinations</strong> affect overall performance—write-through typically paired with no-write-allocate for consistency.</p>
+
+<p>18. <strong>Cache consistency</strong> means cache and memory agree on data values—critical correctness requirement across all cache operations.</p>
+
+<p>19. <strong>Performance impact</strong> of write policies substantial—write-through can increase memory traffic by 15-20% in typical programs.</p>
+
+<p>20. <strong>Write-back policy</strong> introduced as superior alternative—defers memory writes until block eviction, dramatically reducing memory traffic.</p>
+
+<h2>Summary</h2>
+
+<p>Detailed examination of cache memory operations reveals the sophisticated control logic required to manage read and write accesses while maintaining data consistency between cache and main memory. Read operations follow straightforward paths: hits deliver data in single cycle via tag comparison confirming both tag match and valid bit set, while misses trigger multi-cycle sequences fetching entire blocks from main memory, updating cache entries, setting valid bits, and retrying accesses. The cache controller implements these sequences through state machine logic managing transitions between idle, tag comparison, block fetching, and cache writing states. Write operations introduce significant complexity and performance implications through policy choices determining how cache and memory stay synchronized. Write-through policy, updating both cache and memory on every write, offers simplicity and guaranteed consistency—main memory always reflects current data state, enabling straightforward crash recovery and multi-processor coherence. However, write-through's performance penalty proves severe: every write operation incurs ~100 nanosecond memory access delay, effectively eliminating cache benefit for write-heavy code sections and wasting substantial memory bandwidth on updates. Write buffers provide partial mitigation by decoupling CPU from memory write delays, allowing processors to write to small hardware queues and continue execution while buffer contents asynchronously propagate to main memory. Typical write buffers holding 4-8 entries balance performance improvement against hardware cost, though write-intensive code can still fill buffers and force CPU stalls. Write miss policies—write-allocate (fetch block before writing) versus no-write-allocate (write directly to memory)—represent additional design choices affecting performance based on program access patterns. Write-allocate exploits temporal locality, benefiting code that writes then soon reads same locations, while no-write-allocate avoids fetch overhead for write-once scenarios. Write-through typically pairs with no-write-allocate for policy consistency. The fundamental limitation—that write-through forces memory access on every write regardless of whether data will be accessed again—motivates write-back policies introduced in subsequent lectures, which defer memory writes until block eviction and thereby dramatically reduce memory traffic. Understanding these operational details and policy tradeoffs proves essential for appreciating how real cache implementations balance performance, complexity, consistency, and correctness requirements in practical computer systems.</p>
+
+            
+            <div class="lecture-nav">
+                <a href="lecture-14.html" class="nav-btn">← Previous Lecture</a>
+                <a href="lecture-16.html" class="nav-btn">Next Lecture →</a>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 CO224 Computer Architecture Lecture Series. All rights reserved.</p>
+            <p>Department of Computer Engineering, University of Peradeniya</p>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,2105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lecture 14: Memory Hierarchy and Caching - CO224 Computer Architecture</title>
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="lecture-header">
+        <div class="container">
+            <a href="../index.html" class="back-link">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                    <polyline points="12 19 5 12 12 5"></polyline>
+                </svg>
+                Back to All Lectures
+            </a>
+            <h1 class="lecture-title">Lecture 14: Memory Hierarchy and Caching</h1>
+            <p class="lecture-meta">CO224 - Computer Architecture</p>
+        </div>
+    </header>
+
+    <main class="lecture-content-area container">
+        <div class="content-body">
+            <h1>Lecture 14: Introduction to Memory Systems and Cache Memory</h1>
+
+<h2>Introduction</h2>
+
+<p>This lecture marks a crucial transition from CPU-centric topics to memory systems, introducing cache memory as the elegant solution to the fundamental processor-memory speed gap. We begin with historical context, tracing how stored-program concept revolutionized computing, then explore the memory hierarchy that creates the illusion of large, fast memory through careful exploitation of temporal and spatial locality. The direct-mapped cache organization receives detailed treatment, establishing foundational concepts of blocks, tags, indices, and valid bits that underpin all cache designs. Understanding cache memory proves as essential as understanding processor architecture, as memory system performance often determines overall computer system speed in practice.</p>
+
+<p>---</p>
+
+<h2>1. Lecture Introduction and Historical Context</h2>
+
+<h3>1.1 Course Transition</h3>
+
+<strong>Previous Topics:</strong>
+
+<ul>
+<li>CPU datapath and control (ARM, MIPS, pipelining)</li>
+</ul>
+
+<strong>New Focus:</strong>
+
+<ul>
+<li>Memory systems (equally important as CPU)</li>
+</ul>
+
+<strong>Motivation:</strong>
+
+<ul>
+<li>Memory plays as significant a role as CPU in modern computer architecture</li>
+</ul>
+
+<h3>1.2 Historical Background</h3>
+
+<h4>Early Computing Machines (1940s)</h4>
+
+<strong>Examples:</strong>
+
+<ul>
+<li>ENIAC (University of Pennsylvania)</li>
+<li>Harvard Mark I (ASTC)</li>
+</ul>
+
+<strong>Characteristics:</strong>
+
+<ul>
+<li>Filled entire rooms</li>
+<li>Built using vacuum tubes and electrical circuitry</li>
+<li>Developed for war efforts (World War II)</li>
+<li>Used for artillery planning, nuclear weapon calculations</li>
+<li>No concept of software or memory as we know today</li>
+</ul>
+
+<strong>Programming Method:</strong>
+
+<ul>
+<li>Rewiring the entire machine for each algorithm</li>
+<li>Engineers spent days/weeks reconfiguring machines</li>
+<li>No stored program concept</li>
+</ul>
+
+<h3>1.3 Key Historical Figures</h3>
+
+<h4>Alan Turing (1936)</h4>
+
+<ul>
+<li>British mathematician, brilliant mind</li>
+<li>First conceived the stored program computer concept</li>
+<li>Designed the Universal Turing Machine (hypothetical machine)</li>
+<li>First notion of memory, programs stored in computers, data read/write operations</li>
+<li>Later involved in World War II cryptography (Enigma Machine, "The Imitation Game")</li>
+</ul>
+
+<h4>John von Neumann (1940s)</h4>
+
+<ul>
+<li>Hungarian mathematician, regarded as "last of the brilliant mathematicians"</li>
+<li>Prodigy: Solving calculus problems by age 8</li>
+<li>Contributed across many fields</li>
+<li>Got involved with EDVAC computer project</li>
+<li>Implemented stored program concept based on Turing's ideas</li>
+</ul>
+
+<h3>1.4 First Stored Program Computers</h3>
+
+<h4>EDVAC (1948)</h4>
+
+<ul>
+<li>Commissioned by U.S. Army</li>
+<li>John von Neumann involved as consultant</li>
+<li>Memory: Initially 1044 words, upgraded to 1024 words (power of 2)</li>
+<li>First machine with stored program concept</li>
+<li>Memory stored program electrically (not in wiring)</li>
+<li>Engineers created the first "memory" device</li>
+<li>First test programs: Nuclear weapon detonation calculations, hydrogen bomb calculations</li>
+</ul>
+
+<h4>Von Neumann Architecture</h4>
+
+<strong>Key Concept:</strong>
+
+<ul>
+<li>Data AND instructions both in SAME memory</li>
+<li>Access data and programs through SAME connection pathways</li>
+<li>Unified memory for instructions and data</li>
+<li>This concept became foundation of modern computers</li>
+</ul>
+
+<h4>EDSAC (Cambridge University)</h4>
+
+<ul>
+<li>Built about a year after EDVAC</li>
+<li>First machine fully implementing Von Neumann architecture</li>
+<li>Memory: 512 words of 18 bits each</li>
+<li>Also built for war effort</li>
+</ul>
+
+<h4>Harvard Architecture (Contrasted)</h4>
+
+<ul>
+<li>Separate storages for instructions and data</li>
+<li>Separate connections to instruction memory and data memory</li>
+<li>Used in MIPS datapath design (separate instruction memory and data memory)</li>
+</ul>
+
+<strong>Modern Computers:</strong>
+
+<ul>
+<li>Use a MIX of both Von Neumann and Harvard architectures</li>
+<li>Features from both types incorporated</li>
+</ul>
+
+<p>---</p>
+
+<h2>2. Memory Technologies: Types and Characteristics</h2>
+
+<h3>2.1 Commonly Used Memory Technologies Today</h3>
+
+<ul>
+<li>SRAM (Static RAM)</li>
+<li>DRAM (Dynamic RAM)</li>
+<li>Flash Memory</li>
+<li>Magnetic Disk</li>
+<li>Magnetic Tape</li>
+</ul>
+
+<h3>2.2 SRAM (Static RAM)</h3>
+
+<p>| Property            | Value/Description                          |</p>
+<p>| ------------------- | ------------------------------------------ |</p>
+<p>| <strong>Technology</strong>      | Built using flip-flops                     |</p>
+<p>| <strong>Volatility</strong>      | Volatile (loses content when power lost)   |</p>
+<p>| <strong>Access Time</strong>     | Less than 1 nanosecond (< 1 ns)            |</p>
+<p>| <strong>Clock Frequency</strong> | More than 1 GHz                            |</p>
+<p>| <strong>Cycle Time</strong>      | Less than 1 nanosecond (< 1 ns)            |</p>
+<p>| <strong>Capacity</strong>        | Kilobytes to Megabytes range               |</p>
+<p>| <strong>Cost</strong>            | ~$2000 per gigabyte (VERY EXPENSIVE)       |</p>
+<p>| <strong>Speed</strong>           | Extremely fast                             |</p>
+<p>| <strong>Usage</strong>           | Cache memories (small amounts due to cost) |</p>
+
+<strong>Note on Cycle Time:</strong>
+
+<ul>
+<li>Cycle time = minimum time between two consecutive memory accesses</li>
+<li>Access time ≈ Cycle time for SRAM</li>
+</ul>
+
+<h3>2.3 DRAM (Dynamic RAM)</h3>
+
+<p>| Property        | Value/Description                              |</p>
+<p>| --------------- | ---------------------------------------------- |</p>
+<p>| <strong>Technology</strong>  | Transistors + Capacitors                       |</p>
+<p>| <strong>Volatility</strong>  | Volatile (requires power AND periodic refresh) |</p>
+<p>| <strong>Access Time</strong> | ~25 nanoseconds (50 ns in some contexts)       |</p>
+<p>| <strong>Cycle Time</strong>  | ~50 nanoseconds (double the access time)       |</p>
+<p>| <strong>Capacity</strong>    | Gigabytes (8 GB, 16 GB, or more)               |</p>
+<p>| <strong>Cost</strong>        | ~$10 per gigabyte                              |</p>
+<p>| <strong>Usage</strong>       | Main memory in computers                       |</p>
+
+<strong>Key Characteristics:</strong>
+
+<ul>
+<li>Capacitor charge must be maintained</li>
+<li>"Destructive read": Reading loses the charge, requires rewrite/refresh</li>
+<li>Longer cycle time due to refresh requirement</li>
+<li>After reading, must rewrite data to same cell</li>
+<li>Significantly slower than SRAM (25-50 ns vs < 1 ns)</li>
+</ul>
+
+<h3>2.4 Flash Memory</h3>
+
+<p>| Property        | Value/Description                                     |</p>
+<p>| --------------- | ----------------------------------------------------- |</p>
+<p>| <strong>Technology</strong>  | NAND MOSFET (NAND gate with two gates)                |</p>
+<p>| <strong>Volatility</strong>  | Non-volatile (retains data without power)             |</p>
+<p>| <strong>Access Time</strong> | ~70 nanoseconds                                       |</p>
+<p>| <strong>Cycle Time</strong>  | ~70 nanoseconds                                       |</p>
+<p>| <strong>Capacity</strong>    | Gigabytes range                                       |</p>
+<p>| <strong>Cost</strong>        | Less than $1 per gigabyte                             |</p>
+<p>| <strong>Usage</strong>       | Secondary storage (SSDs - Solid State Devices/Drives) |</p>
+
+<strong>Limitation:</strong>
+
+<ul>
+<li>Limited read/write cycles</li>
+<li>After several thousand cycles, memory cells may degrade</li>
+<li>Integrity decreases, capacity effectively decreases</li>
+<li>Slightly slower than DRAM, but non-volatile</li>
+</ul>
+
+<h3>2.5 Magnetic Disk</h3>
+
+<p>| Property        | Value/Description                                          |</p>
+<p>| --------------- | ---------------------------------------------------------- |</p>
+<p>| <strong>Technology</strong>  | Magnetic (mechanical device)                               |</p>
+<p>| <strong>Access Time</strong> | 5 to 10 milliseconds (MUCH slower than electronic memory!) |</p>
+<p>| <strong>Cycle Time</strong>  | Similar to access time (~5-10 ms)                          |</p>
+<p>| <strong>Capacity</strong>    | Several terabytes                                          |</p>
+<p>| <strong>Cost</strong>        | Fraction of a dollar per gigabyte (very cheap)             |</p>
+
+<strong>Usage:</strong>
+
+<ul>
+<li>Previously: Main secondary storage</li>
+<li>Currently: Being replaced by flash/SSDs for secondary storage</li>
+<li>Now used primarily for tertiary storage, backups</li>
+<li>Good for long-term data retention, low cost</li>
+<li>Slowness acceptable for infrequent backup operations</li>
+</ul>
+
+<strong>Note:</strong> Average numbers; varies by data location on disk. Mechanical: spinning platters, moving read/write heads.
+
+<p>---</p>
+
+<h2>3. The Memory Performance Problem</h2>
+
+<h3>3.1 The CPU-Memory Speed Gap</h3>
+
+<strong>CPU Clock Cycle:</strong>
+
+<ul>
+<li>Modern CPUs: > 1 GHz clock frequency</li>
+<li>Clock cycle: < 1 nanosecond (1 ns corresponds to 1 GHz)</li>
+</ul>
+
+<strong>Main Memory (DRAM):</strong>
+
+<ul>
+<li>Cycle time: ~50 nanoseconds</li>
+<li>Time between starts of two consecutive memory accesses: 50 ns</li>
+</ul>
+
+<h3>3.2 The Problem</h3>
+
+<strong>Speed Discrepancy:</strong>
+
+<ul>
+<li>CPU cycle: < 1 ns</li>
+<li>Memory cycle: 50 ns</li>
+<li><strong>Memory is 50× SLOWER than CPU!</strong></li>
+</ul>
+
+<h3>3.3 Impact on Pipelining</h3>
+
+<strong>The Challenge:</strong>
+
+<ul>
+<li>In MIPS pipeline, MEM stage must finish in ONE clock cycle</li>
+<li>Every pipeline stage must take same time</li>
+<li>How can MEM stage complete in 1 ns when memory takes 50 ns?</li>
+<li>Pipeline performance would be severely degraded</li>
+</ul>
+
+<strong>The Contradiction:</strong>
+
+<ul>
+<li>CPU expects 1 ns memory access</li>
+<li>Actual DRAM takes 50 ns</li>
+<li>"Something is not right" - how can this work?</li>
+</ul>
+
+<p>---</p>
+
+<h2>4. Memory Hierarchy Concept</h2>
+
+<h3>4.1 The Solution: Memory Hierarchy</h3>
+
+<strong>Core Idea:</strong>
+
+<ul>
+<li>Trick the CPU into thinking memory is BOTH fast AND large</li>
+<li>Desired characteristics:</li>
+</ul>
+<p>- Fast access times (like SRAM: < 1 ns)</p>
+<p>- Large capacity (like Disk: terabytes)</p>
+<ul>
+<li>These characteristics don't exist in single technology</li>
+<li>Solution: Implement memory as a HIERARCHY</li>
+</ul>
+
+<h3>4.2 Memory Hierarchy Structure</h3>
+
+``<code>
+<p>Level 1 (Top): SRAM (Cache)</p>
+<ul>
+<li>Smallest capacity</li>
+<li>Fastest speed</li>
+<li>Closest to CPU physically</li>
+</ul>
+
+<p>Level 2: DRAM (Main Memory)</p>
+<ul>
+<li>Medium capacity</li>
+<li>Medium speed</li>
+</ul>
+
+<p>Level 3 (Bottom): Disk</p>
+<ul>
+<li>Largest capacity</li>
+<li>Slowest speed</li>
+</ul>
+</code>`<code>
+
+<h3>4.3 Key Principles</h3>
+
+<h4>1. CPU Access Restriction</h4>
+
+<ul>
+<li>CPU can ONLY access top level (SRAM cache)</li>
+<li>CPU thinks cache is the actual memory</li>
+<li>CPU cannot directly access DRAM or Disk</li>
+</ul>
+
+<h4>2. CPU's Perception</h4>
+
+<ul>
+<li>Experiences the SPEED of SRAM</li>
+<li>Feels the CAPACITY of DRAM and Disk combined</li>
+<li>Illusion: Memory is as fast as SRAM AND as big as lowest level</li>
+</ul>
+
+<h4>3. Data Organization</h4>
+
+<ul>
+<li>Upper levels contain SUBSET of data from lower levels</li>
+<li>SRAM (few MB) contains subset of DRAM (several GB)</li>
+<li>DRAM contains subset of Disk (several TB)</li>
+<li>At any given time, each level holds only a fraction of lower level's data</li>
+</ul>
+
+<h4>4. Hierarchy Characteristics</h4>
+
+<ul>
+<li>Devices up the hierarchy: Smaller and faster</li>
+<li>Devices down the hierarchy: Larger but slower</li>
+</ul>
+
+<h3>4.4 The Challenge</h3>
+
+<strong>What if CPU asks for data NOT in the cache (top level)?</strong>
+
+<ul>
+<li>Need mechanism to copy data from lower levels</li>
+<li>This leads to the concepts of hits, misses, and cache management</li>
+</ul>
+
+<p>---</p>
+
+<h2>5. Analogy: Music Library</h2>
+
+<h3>5.1 Understanding Memory Hierarchy Through Music</h3>
+
+<h4>Three-Level Music System</h4>
+
+<strong>1. Mobile Phone (analogous to SRAM/Cache):</strong>
+
+<ul>
+<li>Carries a subset of your favorite songs</li>
+<li>Always with you</li>
+<li>Listen to music directly from phone</li>
+<li>Limited storage (like cache has limited capacity)</li>
+</ul>
+
+<strong>2. Computer Hard Disk (analogous to DRAM/Main Memory):</strong>
+
+<ul>
+<li>Main music collection stored here</li>
+<li>Larger collection than phone</li>
+<li>Not always accessible (not in pocket)</li>
+<li>Copy songs from here to phone when needed</li>
+</ul>
+
+<strong>3. Internet (analogous to Disk/Mass Storage):</strong>
+
+<ul>
+<li>All songs available (massive storage)</li>
+<li>Download/buy songs from here</li>
+<li>Copy to computer, then to phone</li>
+</ul>
+
+<h3>5.2 Usage Scenarios</h3>
+
+<h4>Scenario 1 (Hit)</h4>
+
+<ul>
+<li>Want to listen to a song</li>
+<li>Song is already on phone</li>
+<li>Just play it directly</li>
+<li>Similar to cache hit: Data already in cache</li>
+</ul>
+
+<h4>Scenario 2 (Miss to Level 2)</h4>
+
+<ul>
+<li>Want to listen to a song</li>
+<li>Song NOT on phone</li>
+<li>Must go to computer and copy to phone</li>
+<li>Then listen on phone</li>
+<li>Similar to cache miss: Must fetch from main memory</li>
+</ul>
+
+<h4>Scenario 3 (Miss to Level 3)</h4>
+
+<ul>
+<li>Want to listen to a song</li>
+<li>Song NOT on phone AND NOT on computer</li>
+<li>Download from internet to computer</li>
+<li>Copy to phone</li>
+<li>Then listen</li>
+<li>Similar to cache miss to disk: Must fetch from lowest level</li>
+</ul>
+
+<h3>5.3 Key Parallels</h3>
+
+<ul>
+<li>Always listen from phone (CPU always accesses cache)</li>
+<li>Main collection in computer (main memory holds primary data)</li>
+<li>All data available on internet (disk holds everything)</li>
+<li>Copy operations when data not available at higher levels</li>
+</ul>
+
+<p>---</p>
+
+<h2>6. Memory Hierarchy Terminology</h2>
+
+<h3>6.1 Essential Terms for Memory Access</h3>
+
+<h4>HIT</h4>
+
+<strong>Definition:</strong> Requested data IS available at the accessed level
+
+<ul>
+<li>CPU requests data → Data found in cache</li>
+<li>Like wanting to listen to song already on your phone</li>
+<li>Can be served immediately from that level</li>
+</ul>
+
+<h4>MISS</h4>
+
+<strong>Definition:</strong> Requested data is NOT available at the accessed level
+
+<ul>
+<li>CPU requests data → Data NOT found in cache</li>
+<li>Like wanting to listen to song not on your phone</li>
+<li>Must fetch from lower level in hierarchy</li>
+</ul>
+
+<h4>HIT RATE</h4>
+
+<strong>Definition:</strong> Ratio/percentage of accesses that result in hits
+
+<strong>Formula:</strong>
+
+</code>`<code>
+<p>Hit Rate = (Number of Hits) / (Total Accesses)</p>
+</code>`<code>
+
+<strong>Example:</strong> 100 accesses, 90 hits → Hit Rate = 90% or 0.9
+
+<p>Indicates how often data is found at the accessed level. Higher hit rate = better performance.</p>
+
+<h4>MISS RATE</h4>
+
+<strong>Definition:</strong> Ratio/percentage of accesses that result in misses
+
+<strong>Formula:</strong>
+
+</code>`<code>
+<p>Miss Rate = (Number of Misses) / (Total Accesses)</p>
+<p>Miss Rate = 1 - Hit Rate</p>
+</code>`<code>
+
+<strong>Example:</strong> 100 accesses, 10 misses → Miss Rate = 10% or 0.1
+
+<p>Lower miss rate = better performance.</p>
+
+<h4>HIT LATENCY</h4>
+
+<strong>Definition:</strong> Time taken to determine if access is a hit AND serve the data
+
+<ul>
+<li>Time to check if data is in cache and deliver it to CPU</li>
+<li>For SRAM cache: < 1 nanosecond</li>
+</ul>
+
+<strong>Components:</strong>
+
+<ul>
+<li>Time to search cache</li>
+<li>Time to verify data presence</li>
+<li>Time to extract and send data to CPU</li>
+</ul>
+
+<h4>MISS PENALTY</h4>
+
+<strong>Definition:</strong> EXTRA time required when access is a miss
+
+<strong>Process:</strong>
+
+<p>1. Determine it's a miss (hit latency spent)</p>
+<p>2. Go to next level (DRAM)</p>
+<p>3. Find the data</p>
+<p>4. Copy to cache</p>
+<p>5. Put in appropriate place</p>
+<p>6. Deliver to CPU</p>
+
+<strong>Key Points:</strong>
+
+<ul>
+<li>Total time on miss = Hit Latency + Miss Penalty</li>
+<li>Miss penalty for DRAM access can be 100× hit latency</li>
+<li>Very expensive in terms of time!</li>
+</ul>
+
+<p>---</p>
+
+<h2>7. Performance Impact and Requirements</h2>
+
+<h3>7.1 Average Memory Access Time</h3>
+
+<strong>Formula:</strong>
+
+</code>`<code>
+<p>Average Access Time = Hit Latency + (Miss Rate × Miss Penalty)</p>
+</code>`<code>
+
+<strong>Explanation:</strong>
+
+<ul>
+<li>ALL accesses consume hit latency (must check cache)</li>
+<li>Only misses consume additional miss penalty</li>
+<li>Miss Rate determines portion of accesses incurring penalty</li>
+</ul>
+
+<h3>7.2 Example Analysis</h3>
+
+<strong>Given:</strong>
+
+<ul>
+<li>Hit Latency (SRAM): < 1 nanosecond</li>
+<li>Miss Penalty (DRAM access): ~100 nanoseconds (100× slower)</li>
+<li>CPU clock cycle: < 1 nanosecond</li>
+</ul>
+
+<h4>For Pipeline to Work</h4>
+
+<ul>
+<li>MEM stage must complete in 1 clock cycle</li>
+<li>Memory access must complete in < 1 ns most of the time</li>
+</ul>
+
+<h4>Required Hit Rate Calculation</h4>
+
+<strong>If Hit Rate = 99.9% (Miss Rate = 0.1%):</strong>
+
+</code>`<code>
+<p>Average Time = 1 ns + (0.001 × 100 ns)</p>
+<p>= 1 ns + 0.1 ns</p>
+<p>= 1.1 ns</p>
+</code>`<code>
+
+<p>Still close to 1 clock cycle!</p>
+
+<strong>If Hit Rate = 90% (Miss Rate = 10%):</strong>
+
+</code>`<code>
+<p>Average Time = 1 ns + (0.10 × 100 ns)</p>
+<p>= 1 ns + 10 ns</p>
+<p>= 11 ns</p>
+</code>`<code>
+
+<p>Unacceptable! 11× slower than CPU clock!</p>
+
+<h3>7.3 Critical Requirement</h3>
+
+<ul>
+<li>Need VERY HIGH hit rate at cache level</li>
+<li>Not just high, but VERY, VERY high</li>
+<li>Target: <strong>99.9% or better</strong></li>
+<li>Only 0.1% of accesses should go to memory</li>
+</ul>
+
+<h3>7.4 Performance Implications</h3>
+
+<h4>With 99.9% Hit Rate</h4>
+
+<ul>
+<li>99.9% of time: CPU works fine, memory appears fast</li>
+<li>0.1% of time: CPU must STALL, wait for data from DRAM</li>
+<li>Stall is unavoidable for misses</li>
+<li>Overall: CPU maintains illusion of fast, large memory</li>
+</ul>
+
+<h4>With Lower Hit Rate</h4>
+
+<ul>
+<li>More frequent stalls</li>
+<li>Pipeline performance degrades significantly</li>
+<li>Average memory access time increases</li>
+<li>CPU slows down dramatically</li>
+</ul>
+
+<strong>Conclusion:</strong>
+
+<ul>
+<li>Must ensure VERY high hit rate at SRAM level</li>
+<li>Memory hierarchy only works if locality principles hold</li>
+<li>Like having most songs you want to listen to already on phone</li>
+<li>Don't want to copy from computer frequently (time-consuming)</li>
+</ul>
+
+<p>---</p>
+
+<h2>8. Principles of Locality</h2>
+
+<h3>8.1 Foundation for Memory Hierarchy Success</h3>
+
+<strong>Nature of Computer Programs:</strong>
+
+<ul>
+<li>Programs access only SMALL portion of entire address space at any given time</li>
+<li>Address space: Entire memory range (address 0 to maximum address)</li>
+<li>At any time window, program uses only small fraction of total data</li>
+<li>True by nature of how programs are written, compiled, and executed</li>
+<li>True for instruction sets like ARM, MIPS</li>
+</ul>
+
+<h3>8.2 Temporal Locality (Locality in Time)</h3>
+
+<h4>Definition</h4>
+
+<strong>"Recently accessed data are likely to be accessed again soon"</strong>
+
+<strong>Explanation:</strong>
+
+<ul>
+<li>If you access memory address A at time T</li>
+<li>High probability of accessing address A again at time T+ΔT (soon after)</li>
+<li>Same data accessed multiple times in short time window</li>
+<li>"Locality in time" - data clustered temporally</li>
+</ul>
+
+<h4>Common Examples in Programs</h4>
+
+<strong>a) Loop Index Variables:</strong>
+
+</code>`<code>c
+<p>for (int i = 0; i < 100; i++) {</p>
+<p>// i is accessed every iteration</p>
+<p>// Same memory location for 'i' accessed repeatedly</p>
+<p>}</p>
+</code>`<code>
+
+<strong>b) Loop-Invariant Data:</strong>
+
+</code>`<code>c
+<p>for (int i = 0; i < n; i++) {</p>
+<p>result = result + array[i] * constant;</p>
+<p>// 'result' and 'constant' accessed every iteration</p>
+<p>}</p>
+</code>`<code>
+
+<strong>c) Function/Procedure Calls:</strong>
+
+<ul>
+<li>Local variables accessed multiple times during function execution</li>
+<li>Same stack frame locations accessed repeatedly</li>
+</ul>
+
+<strong>d) Instructions:</strong>
+
+<ul>
+<li>Loop body instructions executed many times</li>
+<li>Same instruction addresses accessed repeatedly</li>
+</ul>
+
+<h4>Music Analogy</h4>
+
+<ul>
+<li>If you listen to a song, you're likely to listen to it again soon</li>
+<li>Sometimes listen to same song 10 times in a row</li>
+<li>Want to replay favorite songs</li>
+</ul>
+
+<h4>Degree of Temporal Locality</h4>
+
+<ul>
+<li>Varies from program to program</li>
+<li>But present in nearly ALL programs</li>
+<li>Stronger in some (tight loops) than others</li>
+</ul>
+
+<h3>8.3 Spatial Locality (Locality in Space)</h3>
+
+<h4>Definition</h4>
+
+<strong>"Data located close to recently accessed data are likely to be accessed soon"</strong>
+
+<strong>Explanation:</strong>
+
+<ul>
+<li>If you access memory address A at time T</li>
+<li>High probability of accessing addresses A+1, A+2, A+3, ... soon after</li>
+<li>Sequential or nearby addresses accessed together</li>
+<li>"Locality in space" - data clustered spatially in memory</li>
+</ul>
+
+<h4>Common Examples in Programs</h4>
+
+<strong>a) Array Traversal:</strong>
+
+</code>`<code>c
+<p>for (int i = 0; i < 100; i++) {</p>
+<p>sum += array[i];</p>
+<p>// Access array[0], then array[1], then array[2], ...</p>
+<p>// Sequential memory addresses</p>
+<p>}</p>
+</code>`<code>
+
+<strong>b) Sequential Instruction Execution:</strong>
+
+<ul>
+<li>Instructions stored sequentially in memory</li>
+<li>PC increments: fetch instruction at PC, then PC+4, then PC+8, ...</li>
+<li>Except for branches, mostly sequential</li>
+</ul>
+
+<strong>c) Data Structures:</strong>
+
+</code>`<code>c
+<p>struct Student {</p>
+<p>int id;</p>
+<p>char name[50];</p>
+<p>float gpa;</p>
+<p>};</p>
+<p>Student s;</p>
+<p>// Accessing s.id, then s.name, then s.gpa</p>
+<p>// Nearby memory locations</p>
+</code>`<code>
+
+<strong>d) String Processing:</strong>
+
+</code>`<code>c
+<p>char str[] = "Hello";</p>
+<p>for (int i = 0; str[i] != '\0'; i++) {</p>
+<p>// Access str[0], str[1], str[2], ...</p>
+<p>// Consecutive bytes in memory</p>
+<p>}</p>
+</code>`<code>
+
+<h4>Music Analogy</h4>
+
+<ul>
+<li>If you listen to song by artist X, likely to listen to another song by artist X</li>
+<li>If you listen to song from album Y, likely to listen to next song in album Y</li>
+<li>Related/nearby songs accessed together</li>
+</ul>
+
+<h4>Degree of Spatial Locality</h4>
+
+<ul>
+<li>Varies by data access patterns</li>
+<li>Strong in array-based algorithms</li>
+<li>Present in most structured programs</li>
+</ul>
+
+<h3>8.4 Universal Applicability</h3>
+
+<ul>
+<li>Both principles hold true for NEARLY ALL programs</li>
+<li>Degree varies, but principles universally applicable</li>
+<li>Foundation assumptions for cache design</li>
+</ul>
+
+<p>---</p>
+
+<h2>9. Cache Memory Concept and Block-Based Operation</h2>
+
+<h3>9.1 Cache Memory Overview</h3>
+
+<strong>Purpose:</strong>
+
+<ul>
+<li>Memory device at top level of hierarchy</li>
+<li>Based on two principles of locality</li>
+<li>Decides what data to keep based on locality principles</li>
+</ul>
+
+<h3>9.2 Data Organization: BLOCKS</h3>
+
+<strong>Key Concepts:</strong>
+
+<ul>
+<li>CPU requests individual WORDS from memory</li>
+<li>Between cache and memory: Handle BLOCKS of data</li>
+<li><strong>Block</strong> = multiple consecutive words</li>
+<li>Block size example: 8 bytes = 2 words (with 4-byte words)</li>
+<li>Hidden from CPU (CPU still thinks in words)</li>
+</ul>
+
+<h3>9.3 Why Blocks? (Spatial Locality)</h3>
+
+<h4>Instead of Words</h4>
+
+<ul>
+<li>Fetch single word CPU requested</li>
+<li>Next access likely nearby address</li>
+<li>Would require another fetch</li>
+</ul>
+
+<h4>Using Blocks</h4>
+
+<ul>
+<li>Fetch requested word AND nearby words together</li>
+<li>Bring entire block (e.g., 8 consecutive bytes)</li>
+<li>Subsequent accesses likely in same block (spatial locality)</li>
+<li>Reduces future misses</li>
+</ul>
+
+<h4>Music Library Analogy</h4>
+
+<ul>
+<li>Want to listen to one song → Copy entire album to phone</li>
+<li>Not just the single song you want right now</li>
+<li>Because you'll likely want other songs from same album soon</li>
+<li>Saves future copy operations</li>
+</ul>
+
+<h4>Block Benefits</h4>
+
+<ul>
+<li>Exploits spatial locality</li>
+<li>Reduces miss rate</li>
+<li>Amortizes fetch cost over multiple words</li>
+<li>More efficient use of memory bandwidth</li>
+</ul>
+
+<h3>9.4 Cache Management Decisions</h3>
+
+<h4>1. What to Keep in Cache</h4>
+
+<ul>
+<li>Based on BOTH locality principles</li>
+<li>Recently accessed data (temporal locality)</li>
+<li>Blocks containing nearby data (spatial locality)</li>
+</ul>
+
+<h4>2. What to Evict from Cache</h4>
+
+<ul>
+<li>Based on TEMPORAL locality</li>
+<li>When cache full and need space for new block</li>
+<li>Must throw out existing data</li>
+</ul>
+
+<h3>9.5 Eviction Strategy (Ideal)</h3>
+
+<strong>Least Recently Used (LRU):</strong>
+
+<ul>
+<li>Throw out LEAST RECENTLY USED (LRU) data</li>
+<li>If cache has 10 blocks, need to evict 1</li>
+<li>Choose the block that was used longest time ago</li>
+<li>Keep more recently used blocks</li>
+<li>Temporal locality suggests LRU block least likely to be accessed soon</li>
+</ul>
+
+<strong>Example:</strong>
+
+<ul>
+<li>Cache has blocks A, B, C, D, E</li>
+<li>Last access times: A(10 cycles ago), B(2 cycles ago), C(50 cycles ago), D(5 cycles ago), E(1 cycle ago)</li>
+<li>Need to evict one block</li>
+<li>Evict C (least recently used, 50 cycles ago)</li>
+<li>Keep E, B, D, A (more recently used)</li>
+</ul>
+
+<p>---</p>
+
+<h2>10. Memory Addressing: Bytes, Words, and Blocks</h2>
+
+<h3>10.1 Byte Address</h3>
+
+<strong>Definition:</strong> Address referring to individual byte in memory
+
+<strong>Characteristics:</strong>
+
+<ul>
+<li>Each byte-sized location has unique address</li>
+<li>Standard memory addressing</li>
+<li>Address Space: With 32-bit address, can access 2³² individual bytes</li>
+</ul>
+
+<strong>Example Address:</strong>
+
+</code>`<code>
+<p>Address: 00000000000000000000000000001010 (binary)</p>
+<p>= 10 (decimal)</p>
+<p>Points to: Byte at memory location 10</p>
+</code>`<code>
+
+<strong>Memory Structure:</strong>
+
+</code>`<code>
+<p>Address 0:  [byte 0]</p>
+<p>Address 1:  [byte 1]</p>
+<p>Address 2:  [byte 2]</p>
+<p>...</p>
+<p>Address 10: [byte 10]  ← This byte addressed by example</p>
+<p>...</p>
+</code>`<code>
+
+<h3>10.2 Word Address</h3>
+
+<strong>Definition:</strong> Address referring to a word (multiple bytes) in memory
+
+<strong>Typical Word Size:</strong> 4 bytes (32 bits)
+
+<h4>Word Alignment</h4>
+
+<ul>
+<li>Words start at addresses that are multiples of 4</li>
+<li>Word 0: Addresses 0, 1, 2, 3</li>
+<li>Word 1: Addresses 4, 5, 6, 7</li>
+<li>Word 2: Addresses 8, 9, 10, 11</li>
+<li>Word 3: Addresses 12, 13, 14, 15</li>
+</ul>
+
+<h4>Word Address Format (32-bit)</h4>
+
+</code>`<code>
+<p>[30-bit word identifier][2-bit byte offset]</p>
+<p>└── Always "00" for word-aligned addresses</p>
+</code>`<code>
+
+<strong>Example:</strong>
+
+</code>`<code>
+<p>Address: ...00001000 (binary)</p>
+<p>- Last 2 bits: 00 → Word-aligned</p>
+<p>- Remaining bits: Identify which word</p>
+<p>- This is address 8, start of word 2</p>
+</code>`<code>
+
+<h4>Byte Within Word</h4>
+
+<p>Last 2 bits select byte within word:</p>
+
+<ul>
+<li></code>00<code> → First byte (address 8)</li>
+<li></code>01<code> → Second byte (address 9)</li>
+<li></code>10<code> → Third byte (address 10)</li>
+<li></code>11<code> → Fourth byte (address 11)</li>
+</ul>
+
+<strong>Key Points:</strong>
+
+<ul>
+<li>Word addresses are multiples of 4</li>
+<li>Can divide by 4 without remainder</li>
+<li>Last 2 bits = 00 for word addresses</li>
+<li>NOT all addresses ending in 00 are word addresses, but word addresses end in 00</li>
+<li>Only portion of address except last 2 bits identifies the word</li>
+</ul>
+
+<h3>10.3 Block Address</h3>
+
+<strong>Definition:</strong> Address referring to a block (multiple words) in memory
+
+<strong>Example Block Size:</strong> 8 bytes = 2 words
+
+<h4>Block Alignment</h4>
+
+<ul>
+<li>Blocks start at addresses that are multiples of 8</li>
+<li>Block 0: Addresses 0-7</li>
+<li>Block 1: Addresses 8-15</li>
+<li>Block 2: Addresses 16-23</li>
+<li>Block 3: Addresses 24-31</li>
+</ul>
+
+<h4>Block Address Format (32-bit)</h4>
+
+</code>`<code>
+<p>[Block Identifier][3-bit offset]</p>
+<p>└── Last 3 bits for 8-byte blocks</p>
+</code>`<code>
+
+<strong>Example:</strong>
+
+</code>`<code>
+<p>Address: 00000000000000000000000000101101 (binary)</p>
+<p>= 45 (decimal)</p>
+
+<p>Block Address Portion:</p>
+<ul>
+<li>Ignore last 3 bits: 00101 (offset part)</li>
+<li>Block address: 00000000000000000000000000101 (identifies block)</li>
+<li>This identifies the block containing address 45</li>
+</ul>
+</code>`<code>
+
+<h4>Offset Within Block (3 bits for 8-byte blocks)</h4>
+
+<strong>BYTE OFFSET (all 3 bits):</strong>
+
+<ul>
+<li>Used to identify individual BYTE within block</li>
+<li></code>000<code> → Byte 0</li>
+<li></code>001<code> → Byte 1</li>
+<li>...</li>
+<li></code>111<code> → Byte 7</li>
+</ul>
+
+<strong>WORD OFFSET (most significant bit of offset):</strong>
+
+<ul>
+<li>Used to identify WORD within block (when block has 2 words)</li>
+<li></code>0XX<code> → First word (bytes 0-3)</li>
+<li></code>1XX<code> → Second word (bytes 4-7)</li>
+<li>Only need 1 bit to select between 2 words</li>
+</ul>
+
+<h3>10.4 Address Components Summary</h3>
+
+<strong>For address with 8-byte blocks, 4-byte words:</strong>
+
+</code>`<code>
+<p>[Block Address][Word Offset][Byte in Word]</p>
+<p>^              ^              ^</p>
+<p>|              |              └── 2 bits: Select byte within word</p>
+<p>|              └── 1 bit: Select word within block</p>
+<p>└── Remaining bits: Identify which block</p>
+</code>`<code>
+
+<strong>Example Breakdown:</strong>
+
+</code>`<code>
+<p>Address: ...00101101</p>
+<ul>
+<li>Last 2 bits (01): Byte offset within word → Byte 1 of word</li>
+<li>3rd bit from right (1): Word offset → Second word of block</li>
+<li>Remaining bits (...00101): Block address → Block 5</li>
+</ul>
+</code>`<code>
+
+<strong>All Bytes in Same Block:</strong>
+
+<ul>
+<li>Share same block address</li>
+<li>Differ only in offset bits</li>
+</ul>
+
+<strong>Important Distinctions:</strong>
+
+<ul>
+<li><strong>Byte address:</strong> Full 32 bits</li>
+<li><strong>Word address:</strong> Term refers to full address of word-aligned location</li>
+<li><strong>Block address:</strong> Term refers to portion of address identifying block (excluding offset)</li>
+</ul>
+
+<p>---</p>
+
+<h2>11. The Cache Addressing Problem</h2>
+
+<h3>11.1 Problem Statement</h3>
+
+<h4>In Main Memory</h4>
+
+<ul>
+<li>Direct addressing: Address 10 → Direct access to location 10</li>
+<li>Like array indexing: array[10] directly accesses index 10</li>
+<li>Straightforward: Address uniquely identifies memory location</li>
+<li>No search required: Hardware directly decodes address</li>
+</ul>
+
+<h4>In Cache</h4>
+
+<ul>
+<li>Cache is MUCH smaller than memory</li>
+<li>Memory: Gigabytes (millions/billions of addresses)</li>
+<li>Cache: Kilobytes or Megabytes (thousands/few million bytes)</li>
+<li>Example: Memory has 1 million addresses, cache has only 8 slots</li>
+</ul>
+
+<h3>11.2 The Challenge</h3>
+
+<ul>
+<li>CPU generates address from full address space (e.g., address 10)</li>
+<li>Cache has only 8 slots (indices 0-7)</li>
+<li>Cannot directly use memory address as cache index</li>
+<li>Address 10 doesn't directly map to cache location</li>
+<li><strong>How to find data in cache with memory address?</strong></li>
+</ul>
+
+<h3>11.3 Initial Solution Idea: Store Addresses with Data</h3>
+
+<strong>Approach:</strong>
+
+<ul>
+<li>Store memory address alongside data in cache</li>
+<li>Each cache entry: [Address | Data]</li>
+<li>When CPU requests address, search cache for matching address</li>
+</ul>
+
+<strong>Problems with This Approach:</strong>
+
+<strong>1. Space Overhead:</strong>
+
+<ul>
+<li>Must store full address (e.g., 32 bits) with each data block</li>
+<li>Significant storage overhead</li>
+<li>Example: 32-bit address + 256-bit data block = ~13% overhead</li>
+</ul>
+
+<strong>2. Search Time:</strong>
+
+<ul>
+<li>Must search through ALL cache entries</li>
+<li>Sequential or parallel search required</li>
+<li>Example: 8 cache slots → Check all 8 tags</li>
+<li>Time-consuming, degrades hit latency</li>
+<li>Cannot directly access cache entry</li>
+</ul>
+
+<h3>11.4 Need for Better Solution</h3>
+
+<strong>Requirements:</strong>
+
+<ul>
+<li>Require MAPPING between memory addresses and cache locations</li>
+<li>Want DIRECT access (no search) if possible</li>
+<li>Must be efficient in both space and time</li>
+</ul>
+
+<strong>Requirements for Practical Cache:</strong>
+
+<p>1. Fast access (< 1 ns hit latency)</p>
+<p>2. Minimal storage overhead</p>
+<p>3. Direct or near-direct cache indexing</p>
+<p>4. Efficient tag comparison (if needed)</p>
+
+<strong>Solution Preview:</strong> Address Mapping Functions
+
+<ul>
+<li>Need function: Memory Address → Cache Location</li>
+<li>Different mapping strategies possible</li>
+<li>Simplest: Direct Mapping (discussed next)</li>
+</ul>
+
+<p>---</p>
+
+<h2>12. Direct-Mapped Cache</h2>
+
+<h3>12.1 Direct Mapping Concept</h3>
+
+<strong>Definition:</strong>
+
+<ul>
+<li>Each memory address maps to EXACTLY ONE cache location</li>
+<li>One-to-one deterministic mapping</li>
+<li>No choice in cache placement</li>
+</ul>
+
+<strong>Mapping Rule:</strong>
+
+</code>`<code>
+<p>Cache Index = Block Address MOD (Number of Blocks in Cache)</p>
+</code>`<code>
+
+<strong>Formula:</strong>
+
+</code>`<code>
+<p>Cache Index = (Block Address) mod (Cache Size in Blocks)</p>
+</code>`<code>
+
+<strong>Example:</strong>
+
+<ul>
+<li>Cache has 8 blocks → Indices 0-7</li>
+<li>Block address = 13</li>
+<li>Cache index = 13 mod 8 = 5</li>
+<li>Block 13 maps ONLY to cache index 5</li>
+</ul>
+
+<h3>12.2 Mathematical Properties</h3>
+
+<h4>Mod Operation with Powers of 2</h4>
+
+<ul>
+<li>Cache sizes typically powers of 2 (1, 2, 4, 8, 16, 32, ...)</li>
+<li>Mod by power of 2 = take least significant bits</li>
+<li>Example: N mod 8 = N mod 2³ = last 3 bits of N</li>
+</ul>
+
+<h4>Hardware Implementation</h4>
+
+<ul>
+<li>No division circuit needed!</li>
+<li>Simply extract least significant bits</li>
+<li>Very fast, pure combinational logic</li>
+</ul>
+
+<h3>12.3 Direct Mapping Example</h3>
+
+<strong>Given:</strong>
+
+<ul>
+<li>Block size: 8 bytes</li>
+<li>Cache size: 8 blocks</li>
+<li>Cache indices: 0, 1, 2, 3, 4, 5, 6, 7</li>
+</ul>
+
+<strong>Cache Structure (Initial View):</strong>
+
+<p>| Index | Data Block |</p>
+<p>| ----- | ---------- |</p>
+<p>| 0     | [64 bits]  |</p>
+<p>| 1     | [64 bits]  |</p>
+<p>| 2     | [64 bits]  |</p>
+<p>| 3     | [64 bits]  |</p>
+<p>| 4     | [64 bits]  |</p>
+<p>| 5     | [64 bits]  |</p>
+<p>| 6     | [64 bits]  |</p>
+<p>| 7     | [64 bits]  |</p>
+
+<strong>Example Addresses:</strong>
+
+<strong>Address 1:</strong>
+
+</code>`<code>
+<p>Binary: ...00000001[011]</p>
+<p>└─ Block address = 0</p>
+<p>└─ Offset = 3 bytes</p>
+<p>Cache index = 0 mod 8 = 0</p>
+<p>Maps to cache index 0</p>
+</code>`<code>
+
+<strong>Address 2 (block address in focus):</strong>
+
+</code>`<code>
+<p>Binary: ...00000101[000]</p>
+<p>└─ Block address = 5</p>
+<p>└─ Offset = 0</p>
+<p>Cache index = 5 mod 8 = 5</p>
+<p>Maps to cache index 5</p>
+</code>`<code>
+
+<h3>12.4 Address Structure for Direct-Mapped Cache</h3>
+
+</code>`<code>
+<p>[Tag][Index][Offset]</p>
+<p>^     ^       ^</p>
+<p>|     |       └── Identifies byte/word within block</p>
+<p>|     └── Identifies cache location (index)</p>
+<p>└── Remaining bits to differentiate blocks mapping to same index</p>
+</code>`<code>
+
+<h4>Bit Allocation (for 8-block cache, 8-byte blocks, 32-bit address)</h4>
+
+<ul>
+<li><strong>Offset:</strong> 3 bits (for 8-byte blocks: 2³ = 8)</li>
+<li><strong>Index:</strong> 3 bits (for 8 cache blocks: 2³ = 8)</li>
+<li><strong>Tag:</strong> 26 bits (remaining: 32 - 3 - 3 = 26)</li>
+</ul>
+
+<h4>Index Bits</h4>
+
+<ul>
+<li>Least significant bits of block address</li>
+<li>Directly select cache location</li>
+<li>Number of bits = log₂(cache blocks)</li>
+<li>8 blocks → 3 index bits</li>
+<li>16 blocks → 4 index bits</li>
+<li>32 blocks → 5 index bits</li>
+</ul>
+
+<p>---</p>
+
+<h2>13. The Tag Problem in Direct-Mapped Cache</h2>
+
+<h3>13.1 Conflict Issue</h3>
+
+<strong>Multiple Blocks → Same Index:</strong>
+
+<ul>
+<li>Many memory blocks map to same cache index</li>
+<li>Example: Blocks 5, 13, 21, 29, ... all map to index 5 (mod 8)</li>
+<li>Only ONE can occupy cache index 5 at a time</li>
+</ul>
+
+<strong>Example Addresses Mapping to Index 5:</strong>
+
+<strong>Address A:</strong>
+
+</code>`<code>
+<p>Block address: ...00000101</p>
+<p>Index bits (last 3): 101 → Index 5</p>
+</code>`<code>
+
+<strong>Address B:</strong>
+
+</code>`<code>
+<p>Block address: ...00001101</p>
+<p>Index bits (last 3): 101 → Index 5</p>
+</code>`<code>
+
+<p>Both map to index 5, but different blocks!</p>
+
+<h3>13.2 The Problem</h3>
+
+<ul>
+<li>When CPU requests address with index 5</li>
+<li>Is data at index 5 for Address A or Address B?</li>
+<li>Need way to differentiate between conflicting blocks</li>
+</ul>
+
+<h3>13.3 Solution: TAG FIELD</h3>
+
+<strong>Tag Definition:</strong>
+
+<ul>
+<li>Remaining bits of block address (excluding index and offset)</li>
+<li>Stored WITH data in cache</li>
+<li>Used to verify correct block is present</li>
+</ul>
+
+</code>`<code>
+<p>Tag = Block Address (excluding index bits)</p>
+</code>`<code>
+
+<h4>Example Address Breakdown</h4>
+
+<strong>Full Address:</strong>
+
+</code>`<code>
+<p>[26-bit Tag][3-bit Index][3-bit Offset]</p>
+</code>`<code>
+
+<strong>Address A:</strong>
+
+</code>`<code>
+<p>[00000000000000000000000000][101][000]</p>
+<p>└── Tag = 0                └─ Index=5 └─ Offset</p>
+</code>`<code>
+
+<strong>Address B:</strong>
+
+</code>`<code>
+<p>[00000000000000000000000001][101][000]</p>
+<p>└── Tag = 1                └─ Index=5 └─ Offset</p>
+</code>`<code>
+
+<p>Both have index 5, but DIFFERENT tags!</p>
+
+<h3>13.4 Cache Structure with Tags</h3>
+
+<p>| Index | Valid | Tag  | Data Block |</p>
+<p>| ----- | ----- | ---- | ---------- |</p>
+<p>| 0     | V     | Tag0 | [64 bits]  |</p>
+<p>| 1     | V     | Tag1 | [64 bits]  |</p>
+<p>| 2     | V     | Tag2 | [64 bits]  |</p>
+<p>| 3     | V     | Tag3 | [64 bits]  |</p>
+<p>| 4     | V     | Tag4 | [64 bits]  |</p>
+<p>| 5     | V     | Tag5 | [64 bits]  |</p>
+<p>| 6     | V     | Tag6 | [64 bits]  |</p>
+<p>| 7     | V     | Tag7 | [64 bits]  |</p>
+
+<strong>Storage Requirements Per Cache Entry:</strong>
+
+<ul>
+<li>Tag: 26 bits (in this example)</li>
+<li>Valid bit: 1 bit</li>
+<li>Data: 64 bits (8 bytes)</li>
+<li>Total: 91 bits per entry</li>
+</ul>
+
+<strong>Storage Overhead:</strong>
+
+</code>`<code>
+<p>Overhead = (Tag + Valid) / Total</p>
+<p>= (26 + 1) / (26 + 1 + 64)</p>
+<p>= 27 / 91</p>
+<p>≈ 30% overhead in this small example</p>
+</code>`<code>
+
+<h4>Note on Overhead</h4>
+
+<ul>
+<li>Example uses VERY small cache (8 blocks)</li>
+<li>Real caches are much larger (thousands of blocks)</li>
+<li>Larger caches → More index bits</li>
+<li>More index bits → Fewer tag bits</li>
+<li>Overhead percentage decreases with larger caches</li>
+</ul>
+
+<strong>Example with Larger Cache:</strong>
+
+<ul>
+<li>1024 blocks (2¹⁰)</li>
+<li>Index: 10 bits</li>
+<li>Tag: 32 - 10 - 3 = 19 bits</li>
+<li>Overhead: (19+1)/84 ≈ 24% (better)</li>
+</ul>
+
+<h3>13.5 Valid Bit</h3>
+
+<strong>Purpose:</strong>
+
+<ul>
+<li>Indicates whether cache entry contains valid data</li>
+<li>Prevents using uninitialized/stale data</li>
+</ul>
+
+<strong>Initial State:</strong>
+
+<ul>
+<li>At program start, cache is empty</li>
+<li>All entries contain garbage/random values</li>
+<li>All valid bits set to 0 (invalid)</li>
+</ul>
+
+<strong>After Data Loaded:</strong>
+
+<ul>
+<li>When block loaded into cache, valid bit set to 1</li>
+<li>Indicates data is reliable</li>
+</ul>
+
+<strong>Uses Beyond Initialization:</strong>
+
+<ul>
+<li>Cache coherence (multi-processor systems)</li>
+<li>Invalidating stale data</li>
+<li>Handling context switches</li>
+<li>Will see more uses later in course</li>
+</ul>
+
+<p>---</p>
+
+<h2>14. Cache Read Access Operation</h2>
+
+<h3>14.1 Read Access Process</h3>
+
+<strong>CPU Provides:</strong>
+
+<p>1. Address (word or byte address)</p>
+<p>2. Control Signal: Read/Write indicator (from control unit)</p>
+
+<h3>14.2 For Read Access</h3>
+
+<h4>Step 1: ADDRESS BREAKDOWN</h4>
+
+<ul>
+<li>Receive address from CPU</li>
+<li>Parse into three fields:</li>
+</ul>
+<p>- Tag bits</p>
+<p>- Index bits</p>
+<p>- Offset bits</p>
+
+<strong>Example Address (32-bit):</strong>
+
+</code>`<code>
+<p>[26-bit Tag][3-bit Index][3-bit Offset]</p>
+</code>`<code>
+
+<h4>Step 2: INDEXING THE CACHE</h4>
+
+<ul>
+<li>Extract index bits from address</li>
+<li>Use index to directly access cache entry</li>
+<li>Combinational logic routes to correct entry</li>
+<li>Like array indexing: index 5 → entry 5</li>
+<li>No search needed!</li>
+<li>Fast: Pure combinational delay</li>
+</ul>
+
+<strong>Hardware:</strong>
+
+<ul>
+<li>Decoder circuit takes index bits</li>
+<li>Selects one of N cache entries</li>
+<li>Activates corresponding row</li>
+</ul>
+
+<h4>Step 3: TAG COMPARISON</h4>
+
+<ul>
+<li>Extract stored tag from selected cache entry</li>
+<li>Extract tag bits from incoming address</li>
+<li>Compare the two tags</li>
+<li>Use comparator circuit</li>
+</ul>
+
+<strong>Comparator Circuit:</strong>
+
+<ul>
+<li>For each bit position: XNOR gate</li>
+<li>XNOR outputs 1 if bits match, 0 if different</li>
+<li>AND all XNOR outputs together</li>
+<li>Final output: 1 if all bits match (tags equal), 0 otherwise</li>
+</ul>
+
+<strong>Example (4-bit tags):</strong>
+
+</code>`<code>
+<p>Stored tag:   1 0 1 1</p>
+<p>Address tag:  1 0 1 1</p>
+<p>XNOR:         1 1 1 1  → AND = 1 (MATCH!)</p>
+
+<p>Stored tag:   1 0 1 1</p>
+<p>Address tag:  1 0 0 1</p>
+<p>XNOR:         1 1 0 1  → AND = 0 (NO MATCH)</p>
+</code>`<code>
+
+<strong>For N-bit tag:</strong>
+
+<ul>
+<li>N XNOR gates (parallel)</li>
+<li>1 N-input AND gate</li>
+<li>Very fast combinational circuit</li>
+</ul>
+
+<h4>Step 4: VALID BIT CHECK</h4>
+
+<ul>
+<li>Extract valid bit from selected cache entry</li>
+<li>Check if entry is valid</li>
+<li>Valid bit = 1 → Entry contains valid data</li>
+<li>Valid bit = 0 → Entry is invalid (ignore)</li>
+</ul>
+
+<h4>Step 5: HIT/MISS DETERMINATION</h4>
+
+<ul>
+<li>Combine tag comparison and valid bit</li>
+<li>Hit = (Tag Match) AND (Valid Bit = 1)</li>
+<li>Miss = (Tag Mismatch) OR (Valid Bit = 0)</li>
+</ul>
+
+<strong>Logic Circuit:</strong>
+
+</code>`<code>
+<p>Tag Match Output ─┐</p>
+<p>AND ─→ Hit/Miss Signal</p>
+<p>Valid Bit ────────┘</p>
+</code>`<code>
+
+<strong>Output:</strong>
+
+<ul>
+<li>1 → HIT (data present and valid)</li>
+<li>0 → MISS (data not present or invalid)</li>
+</ul>
+
+<strong>Hit Latency:</strong>
+
+<ul>
+<li>Time for steps 2-5</li>
+<li>Dominated by:</li>
+</ul>
+<p>- Indexing combinational delay</p>
+<p>- Tag comparator delay</p>
+<p>- Valid bit access</p>
+<ul>
+<li>Typically < 1 nanosecond for SRAM</li>
+</ul>
+
+<h4>Step 6: DATA EXTRACTION (Parallel with Tag Check)</h4>
+
+<ul>
+<li>Can happen in PARALLEL with tag comparison</li>
+<li>Extract entire data block from selected cache entry</li>
+<li>Put data block on internal wires</li>
+</ul>
+
+<strong>Data Block:</strong>
+
+<ul>
+<li>Contains multiple words</li>
+<li>Example: 8 bytes = 2 words (4 bytes each)</li>
+</ul>
+
+<h4>Step 7: WORD SELECTION (Using Offset)</h4>
+
+<ul>
+<li>CPU wants a single WORD, not entire block</li>
+<li>Use offset bits to select correct word from block</li>
+<li>Offset bits → Multiplexer select signal</li>
+</ul>
+
+<strong>Multiplexer (MUX):</strong>
+
+<ul>
+<li>Inputs: All words in the data block</li>
+<li>Select: Word offset bits from address</li>
+<li>Output: Selected word</li>
+</ul>
+
+<strong>Example (2 words per block):</strong>
+
+<ul>
+<li>Block contains: Word0 (bytes 0-3), Word1 (bytes 4-7)</li>
+<li>Word offset = 0 → Select Word0</li>
+<li>Word offset = 1 → Select Word1</li>
+<li>Need 1-bit select for 2:1 MUX</li>
+</ul>
+
+<strong>Example (4 words per block):</strong>
+
+<ul>
+<li>Block contains: Word0, Word1, Word2, Word3</li>
+<li>Word offset = 2 bits → Select among 4 words</li>
+<li>Need 4:1 MUX</li>
+</ul>
+
+<strong>Timing:</strong>
+
+<ul>
+<li>Data extraction and word selection happen in parallel with tag check</li>
+<li>Both combinational circuits</li>
+<li>Similar delays</li>
+<li>Can overlap operations</li>
+</ul>
+
+<h4>Step 8: DECISION BASED ON HIT/MISS</h4>
+
+<strong>If HIT (signal = 1):</strong>
+
+<ul>
+<li>Selected word is correct data</li>
+<li>Send word to CPU immediately</li>
+<li>Access complete</li>
+<li>Total time: Hit latency (< 1 ns)</li>
+</ul>
+
+<strong>If MISS (signal = 0):</strong>
+
+<ul>
+<li>Selected word is WRONG data (different block or invalid)</li>
+<li>CANNOT send to CPU</li>
+<li>Must fetch correct block from main memory (DRAM)</li>
+<li>CPU must STALL (wait)</li>
+<li>Cache controller takes over</li>
+<li>Total time: Hit latency + Miss penalty</li>
+</ul>
+
+<strong>Miss Handling:</strong>
+
+<ul>
+<li>Will discuss in next lecture</li>
+<li>Involves accessing main memory</li>
+<li>Bringing block into cache</li>
+<li>Potentially evicting old block</li>
+<li>Then serving CPU request</li>
+</ul>
+
+<p>---</p>
+
+<h2>15. Cache Circuit Components Summary</h2>
+
+<h3>15.1 Key Circuit Elements</h3>
+
+<h4>1. INDEXING CIRCUITRY</h4>
+
+<ul>
+<li><strong>Input:</strong> Index bits from address</li>
+<li><strong>Function:</strong> Decoder to select cache entry</li>
+<li><strong>Output:</strong> Activates one cache row</li>
+<li><strong>Type:</strong> Combinational logic</li>
+<li><strong>Delay:</strong> Part of hit latency</li>
+</ul>
+
+<h4>2. TAG COMPARATOR</h4>
+
+<ul>
+<li><strong>Input:</strong> Stored tag, Address tag</li>
+<li><strong>Function:</strong> Multi-bit equality check</li>
+<li><strong>Components:</strong></li>
+</ul>
+<p>- N XNOR gates (N = tag bit width)</p>
+<p>- 1 N-input AND gate</p>
+<ul>
+<li><strong>Output:</strong> 1 if equal, 0 if not equal</li>
+<li><strong>Type:</strong> Combinational logic</li>
+<li><strong>Delay:</strong> Part of hit latency</li>
+</ul>
+
+<h4>3. VALID BIT CHECK</h4>
+
+<ul>
+<li><strong>Input:</strong> Valid bit from cache entry</li>
+<li><strong>Function:</strong> Read and check validity</li>
+<li><strong>Output:</strong> 1 if valid, 0 if invalid</li>
+<li><strong>Type:</strong> Simple wire/buffer</li>
+<li><strong>Delay:</strong> Minimal</li>
+</ul>
+
+<h4>4. HIT/MISS LOGIC</h4>
+
+<ul>
+<li><strong>Input:</strong> Tag match signal, Valid bit</li>
+<li><strong>Function:</strong> AND gate</li>
+<li><strong>Output:</strong> Hit/Miss signal</li>
+<li><strong>Type:</strong> Combinational logic</li>
+<li><strong>Delay:</strong> Single gate delay</li>
+</ul>
+
+<h4>5. DATA ARRAY ACCESS</h4>
+
+<ul>
+<li><strong>Input:</strong> Index bits</li>
+<li><strong>Function:</strong> Read data block from cache</li>
+<li><strong>Output:</strong> Multi-word data block</li>
+<li><strong>Type:</strong> SRAM memory read</li>
+<li><strong>Delay:</strong> SRAM access time (parallel with tag check)</li>
+</ul>
+
+<h4>6. WORD SELECTOR (Multiplexer)</h4>
+
+<ul>
+<li><strong>Input:</strong> Data block, Word offset bits</li>
+<li><strong>Function:</strong> Select one word from block</li>
+<li><strong>Output:</strong> Single word</li>
+<li><strong>Type:</strong> MUX (combinational)</li>
+<li><strong>Delay:</strong> MUX delay (parallel with tag check)</li>
+</ul>
+
+<h4>7. CONTROL LOGIC (Cache Controller)</h4>
+
+<ul>
+<li><strong>Input:</strong> Hit/Miss signal, Read/Write control</li>
+<li><strong>Function:</strong> Decide next actions</li>
+<li><strong>Output:</strong> Control signals for CPU, memory</li>
+<li><strong>On Hit:</strong> Enable data to CPU</li>
+<li><strong>On Miss:</strong> Initiate memory fetch, stall CPU</li>
+<li><strong>Type:</strong> Sequential logic (state machine)</li>
+</ul>
+
+<h3>15.2 Hit Latency Components</h3>
+
+<strong>Contributing Factors:</strong>
+
+<ul>
+<li>Indexing delay</li>
+<li>Tag comparison delay</li>
+<li>Valid bit check delay</li>
+<li>Hit/Miss determination delay</li>
+<li>Word selection delay (parallel)</li>
+<li>Wire delays</li>
+</ul>
+
+<strong>Dominant Delays:</strong>
+
+<ul>
+<li>Indexing (decoder)</li>
+<li>Tag comparator (XNOR + AND)</li>
+<li>These determine critical path</li>
+</ul>
+
+<strong>Parallelism:</strong>
+
+<ul>
+<li>Tag check and data extraction happen simultaneously</li>
+<li>Reduces total hit latency</li>
+<li>Only one path delay counts (whichever is longer)</li>
+</ul>
+
+<p>---</p>
+
+<h2>16. Next Lecture Preview</h2>
+
+<h3>16.1 Topics to Cover</h3>
+
+<h4>1. Cache Miss Handling</h4>
+
+<ul>
+<li>What happens after miss is determined?</li>
+<li>How to fetch block from main memory?</li>
+<li>Where to place new block in cache?</li>
+<li>What to do if cache location occupied?</li>
+</ul>
+
+<h4>2. Cache Controller State Machine</h4>
+
+<ul>
+<li>Not just combinational logic</li>
+<li>Sequential control needed for misses</li>
+<li>Multiple clock cycles to handle miss</li>
+<li>States: Idle, Compare Tags, Allocate, Write Back, etc.</li>
+</ul>
+
+<h4>3. Write Operations</h4>
+
+<ul>
+<li>Read operation covered this lecture</li>
+<li>Write more complex: Must update cache AND memory</li>
+<li>Write policies: Write-through, Write-back</li>
+<li>Dirty bits for modified blocks</li>
+</ul>
+
+<h4>4. Replacement Policies</h4>
+
+<ul>
+<li>When cache full, which block to evict?</li>
+<li>Least Recently Used (LRU)</li>
+<li>Other policies: FIFO, Random, LFU</li>
+</ul>
+
+<h4>5. Performance Analysis</h4>
+
+<ul>
+<li>Calculate average access time</li>
+<li>Impact of hit rate, miss penalty</li>
+<li>Cache size vs. performance tradeoffs</li>
+</ul>
+
+<h4>6. Advanced Cache Concepts</h4>
+
+<ul>
+<li>Set-associative caches (beyond direct-mapped)</li>
+<li>Multi-level caches (L1, L2, L3)</li>
+<li>Fully associative caches</li>
+</ul>
+
+<strong>Confirmed Future Class:</strong>
+
+<ul>
+<li>Additional class scheduled for Friday at 9:00 AM</li>
+<li>Notice to be posted on course platform</li>
+<li>Continue cache memory topics</li>
+</ul>
+
+<p>---</p>
+
+<h2>17. Key Takeaways and Summary</h2>
+
+<h3>17.1 Historical Foundations</h3>
+
+<ul>
+<li>Early computers had no memory/software concept</li>
+<li>Alan Turing conceived stored program computer (1936)</li>
+<li>John von Neumann implemented it in EDVAC (1948)</li>
+<li>Von Neumann architecture: Unified memory for instructions and data</li>
+<li>Harvard architecture: Separate instruction and data memories</li>
+</ul>
+
+<h3>17.2 Memory Technologies Hierarchy</h3>
+
+<p>| Technology | Speed             | Size             | Cost                      |</p>
+<p>| ---------- | ----------------- | ---------------- | ------------------------- |</p>
+<p>| SRAM       | Fastest (< 1 ns)  | Smallest (KB-MB) | Most expensive ($2000/GB) |</p>
+<p>| DRAM       | Medium (~50 ns)   | Medium (GB)      | Moderate ($10/GB)         |</p>
+<p>| Flash      | Similar to DRAM   | Gigabytes        | Cheap (< $1/GB)           |</p>
+<p>| Disk       | Slowest (5-10 ms) | Largest (TB)     | Cheapest (cents/GB)       |</p>
+
+<h3>17.3 The Performance Problem</h3>
+
+<ul>
+<li>CPU cycle time: < 1 nanosecond</li>
+<li>Main memory cycle time: ~50 nanoseconds</li>
+<li><strong>Memory 50× slower than CPU!</strong></li>
+<li>Pipeline requires memory access in 1 cycle</li>
+<li>Cannot directly use DRAM for CPU memory accesses</li>
+</ul>
+
+<h3>17.4 Memory Hierarchy Solution</h3>
+
+<ul>
+<li>Multiple levels: SRAM (cache) → DRAM → Disk</li>
+<li>CPU accesses only top level (cache)</li>
+<li>Upper levels hold subsets of lower levels</li>
+<li>Trick CPU: Fast as SRAM, large as Disk</li>
+<li>Requires very high hit rate (> 99.9%) at cache level</li>
+</ul>
+
+<h3>17.5 Principles of Locality</h3>
+
+<strong>1. Temporal Locality:</strong> Recently accessed data likely accessed again soon
+
+<ul>
+<li>Example: Loop variables, instructions in loops</li>
+</ul>
+
+<strong>2. Spatial Locality:</strong> Data near recently accessed data likely accessed soon
+
+<ul>
+<li>Example: Array elements, sequential instructions</li>
+</ul>
+
+<ul>
+<li>Both principles present in virtually all programs</li>
+<li>Foundation for cache effectiveness</li>
+</ul>
+
+<h3>17.6 Memory Addressing</h3>
+
+<ul>
+<li><strong>Byte Address:</strong> Individual byte reference (full address)</li>
+<li><strong>Word Address:</strong> 4-byte word reference (last 2 bits = 00 for alignment)</li>
+<li><strong>Block Address:</strong> Multiple-word block reference (excludes offset bits)</li>
+<li>Address structure: [Block Address][Offset]</li>
+<li>Offset subdivides: [Word Offset][Byte in Word]</li>
+</ul>
+
+<h3>17.7 Cache Terminology</h3>
+
+<ul>
+<li><strong>Hit:</strong> Data found in cache → Fast access (< 1 ns)</li>
+<li><strong>Miss:</strong> Data not in cache → Slow access (+ ~100 ns penalty)</li>
+<li><strong>Hit Rate:</strong> Fraction of accesses that hit (want > 99.9%)</li>
+<li><strong>Miss Rate:</strong> Fraction of accesses that miss (1 - Hit Rate)</li>
+<li><strong>Hit Latency:</strong> Time to determine hit and access data</li>
+<li><strong>Miss Penalty:</strong> EXTRA time to fetch from memory on miss</li>
+</ul>
+
+<h3>17.8 Cache Organization (Direct-Mapped)</h3>
+
+<ul>
+<li>Each memory block maps to exactly ONE cache location</li>
+<li>Mapping: Cache Index = Block Address mod (Cache Size)</li>
+<li>Address fields: [Tag][Index][Offset]</li>
+<li><strong>Index:</strong> Selects cache entry directly (no search!)</li>
+<li><strong>Tag:</strong> Differentiates blocks mapping to same index</li>
+<li><strong>Offset:</strong> Selects word/byte within block</li>
+<li><strong>Valid bit:</strong> Indicates if entry contains valid data</li>
+</ul>
+
+<h3>17.9 Direct-Mapped Cache Structure</h3>
+
+<ul>
+<li><strong>Tag array:</strong> Stores tags for verification</li>
+<li><strong>Valid bit array:</strong> Validity indicators</li>
+<li><strong>Data array:</strong> Stores actual data blocks</li>
+<li>Index not stored (implicit in position)</li>
+</ul>
+
+<h3>17.10 Cache Read Access Process</h3>
+
+<p>1. Extract index from address → Access cache entry</p>
+<p>2. Extract tag from cache entry → Compare with address tag</p>
+<p>3. Check valid bit from entry</p>
+<p>4. Determine hit/miss: (Tag Match) AND (Valid)</p>
+<p>5. In parallel: Extract data block, select word using offset</p>
+<p>6. If HIT: Send word to CPU (done in < 1 ns)</p>
+<p>7. If MISS: Must fetch from memory (will cover next lecture)</p>
+
+<h3>17.11 Critical Requirements</h3>
+
+<ul>
+<li>Hit latency must be < 1 CPU clock cycle</li>
+<li>Hit rate must be very high (> 99.9%)</li>
+<li>Only way to achieve: Exploit locality principles</li>
+<li>Direct mapping enables fast indexing (no search)</li>
+<li>Parallel tag check and data extraction minimize latency</li>
+</ul>
+
+<h3>17.12 Average Access Time Formula</h3>
+
+</code>`<code>
+<p>Average Access Time = Hit Latency + (Miss Rate × Miss Penalty)</p>
+</code>``
+
+<ul>
+<li>Must keep Miss Rate very low for performance</li>
+<li>Even 1% miss rate catastrophic if penalty is 100×</li>
+<li>Example: 1% miss rate → 1 + (0.01 × 100) = 2 ns average</li>
+<li>Example: 0.1% miss rate → 1 + (0.001 × 100) = 1.1 ns average</li>
+<li>Target: 99.9% or better hit rate</li>
+</ul>
+
+<h3>17.13 Pending Topics (Next Lectures)</h3>
+
+<ul>
+<li>Cache miss handling and memory fetch</li>
+<li>Cache controller state machine</li>
+<li>Write operations and write policies</li>
+<li>Block replacement strategies (LRU, etc.)</li>
+<li>Set-associative and fully associative caches</li>
+<li>Multi-level cache hierarchies</li>
+<li>Performance analysis and optimization</li>
+</ul>
+
+<h3>17.14 Music Library Analogy Summary</h3>
+
+<ul>
+<li><strong>Phone (cache):</strong> Small, fast, always accessible</li>
+<li><strong>Computer (main memory):</strong> Larger, slower, main collection</li>
+<li><strong>Internet (disk):</strong> Huge, slowest, everything available</li>
+<li>Listen from phone (CPU accesses cache)</li>
+<li>Copy from computer when song not on phone (fetch on miss)</li>
+<li>Download from internet when not on computer (fetch from disk)</li>
+<li>Keep favorite songs on phone (exploit temporal locality)</li>
+<li>Copy whole album at once (exploit spatial locality)</li>
+</ul>
+
+<p>---</p>
+
+<h2>Key Takeaways</h2>
+
+<p>1. <strong>Stored-program concept</strong> revolutionized computing—programs stored in memory like data, eliminating manual reconfiguration for each algorithm.</p>
+
+<p>2. <strong>Von Neumann architecture</strong> established fundamental computer organization—CPU, memory, and I/O with instructions and data sharing same memory.</p>
+
+<p>3. <strong>Processor-memory speed gap</strong> creates performance bottleneck—CPU operates at nanosecond scale while main memory requires tens of nanoseconds.</p>
+
+<p>4. <strong>Memory hierarchy</strong> provides illusion of large, fast memory—small fast cache near CPU, larger slower DRAM main memory, massive slow disk storage.</p>
+
+<p>5. <strong>Temporal locality</strong>: Recently accessed data likely accessed again soon—programs exhibit loops, function calls, and repeated variable access patterns.</p>
+
+<p>6. <strong>Spatial locality</strong>: Nearby data likely accessed soon—programs access arrays sequentially and instructions execute in order.</p>
+
+<p>7. <strong>Cache exploits locality</strong> to achieve high hit rates—keeping frequently accessed data in fast storage dramatically improves average access time.</p>
+
+<p>8. <strong>Cache organized in blocks</strong>, not individual words—exploiting spatial locality by fetching multiple words together.</p>
+
+<p>9. <strong>Direct-mapped cache</strong>: Each memory block maps to exactly one cache location—simplest cache organization using modulo arithmetic for mapping.</p>
+
+<p>10. <strong>Address breakdown</strong>: Tag + Index + Offset—index selects cache entry, tag identifies specific block, offset selects word within block.</p>
+
+<p>11. <strong>Valid bit</strong> indicates cache entry contains meaningful data—essential for distinguishing real data from uninitialized entries at startup.</p>
+
+<p>12. <strong>Cache hit</strong> occurs when requested data found in cache—CPU receives data in ~1 nanosecond, avoiding slow main memory access.</p>
+
+<p>13. <strong>Cache miss</strong> requires main memory fetch—takes ~100 nanoseconds, replacing cache entry with new block from memory.</p>
+
+<p>14. <strong>Hit rate determines cache effectiveness</strong>—even 1% miss rate significantly impacts average memory access time with 100× penalty.</p>
+
+<p>15. <strong>Block size affects performance</strong>—larger blocks exploit spatial locality better but reduce total number of blocks, potentially increasing conflicts.</p>
+
+<p>16. <strong>Cache size</strong> represents total data storage capacity—typical L1 caches 32-64 KB, L2 caches 256 KB-1 MB.</p>
+
+<p>17. <strong>Tag comparison</strong> happens in parallel with data access—enabling fast hit detection and maintaining single-cycle cache access.</p>
+
+<p>18. <strong>Music library analogy</strong> clarifies cache concept—phone (cache) holds favorites, computer (DRAM) has main collection, internet (disk) contains everything.</p>
+
+<p>19. <strong>Cache transparent to programmer</strong>—software sees uniform memory, hardware manages cache automatically for best performance.</p>
+
+<p>20. <strong>Memory hierarchy only works because programs exhibit locality</strong>—without temporal and spatial locality, caching would fail catastrophically.</p>
+
+<h2>Summary</h2>
+
+<p>The introduction to memory systems and cache memory reveals how the fundamental processor-memory speed gap—with CPUs operating 100× faster than main memory—drives sophisticated cache hierarchy designs that create the illusion of large, fast memory. Historical context from Alan Turing's theoretical foundations through Von Neumann's stored-program architecture establishes how modern computers execute instructions fetched from memory rather than requiring manual reconfiguration. The memory hierarchy concept, with small fast SRAM caches near the CPU, larger slower DRAM main memory, and massive disk storage, exploits two fundamental program properties: temporal locality (recently accessed data likely accessed again soon) and spatial locality (nearby data likely accessed soon). Cache memory, organized in blocks rather than individual words, dramatically improves average access time by maintaining frequently accessed data in fast storage, achieving hit rates often exceeding 95% in practice. Direct-mapped cache organization, the simplest mapping scheme, uses modulo arithmetic to assign each memory block to exactly one cache location, with address bits divided into tag (identifying specific block), index (selecting cache entry), and offset (choosing word within block). The valid bit distinguishes real cached data from uninitialized entries, essential at system startup when cache contains random values. Cache hits deliver data in approximately 1 nanosecond while misses require ~100 nanosecond main memory access, making even small miss rates significant—a 1% miss rate doubles average access time from 1 ns to 2 ns. The music library analogy effectively clarifies concepts: phone storage represents cache (small, fast, always accessible), computer storage represents main memory (larger, slower, main collection), and internet streaming represents disk (unlimited, very slow, backup). This cache transparency—programmer sees uniform memory while hardware automatically manages caching—enables software compatibility across different cache configurations. The critical insight remains that memory hierarchy effectiveness depends entirely on programs exhibiting locality; without these natural access patterns inherent to how we write code, caching would provide no benefit. Understanding cache fundamentals proves essential for both hardware designers optimizing cache architectures and software developers writing cache-friendly code that maximizes hit rates.</p>
+
+            
+            <div class="lecture-nav">
+                <a href="lecture-13.html" class="nav-btn">← Previous Lecture</a>
+                <a href="lecture-15.html" class="nav-btn">Next Lecture →</a>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 CO224 Computer Architecture Lecture Series. All rights reserved.</p>
+            <p>Department of Computer Engineering, University of Peradeniya</p>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lecture 6: Branching - CO224 Computer Architecture</title>
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="lecture-header">
+        <div class="container">
+            <a href="../index.html" class="back-link">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                    <polyline points="12 19 5 12 12 5"></polyline>
+                </svg>
+                Back to All Lectures
+            </a>
+            <h1 class="lecture-title">Lecture 6: Branching</h1>
+            <p class="lecture-meta">CO224 - Computer Architecture</p>
+        </div>
+    </header>
+
+    <main class="lecture-content-area container">
+        <div class="content-body">
+            <h1>Lecture 6: Branching and Control Flow</h1>
+
+<h2>Introduction</h2>
+
+<p>Control flow is what distinguishes computers from simple calculators—the ability to make decisions and alter execution based on conditions. This lecture explores conditional operations and branching in ARM assembly, covering comparison instructions, conditional branches, loop implementation, and PC-relative addressing. Understanding these mechanisms is essential for translating high-level control structures (if statements, loops) into assembly code and for comprehending how processors implement dynamic program behavior.</p>
+
+<p>---</p>
+
+<h2>1. Fundamentals of Conditional Execution</h2>
+
+<h3>1.1 Decision-Making in Computers</h3>
+
+<strong>What Makes Computers Powerful</strong>
+
+<ul>
+<li>Ability to make decisions based on data</li>
+<li>Execute different instructions depending on conditions</li>
+<li>Implement if statements, loops, and function calls</li>
+<li>Respond dynamically to input and computed values</li>
+</ul>
+
+<strong>Control Flow Concepts</strong>
+
+<ul>
+<li><strong>Sequential execution</strong>: Default behavior (PC += 4)</li>
+<li><strong>Conditional branching</strong>: Jump if condition is true</li>
+<li><strong>Unconditional branching</strong>: Always jump</li>
+<li><strong>Function calls</strong>: Branch with return address saving</li>
+</ul>
+
+<h3>1.2 Program Status Register (PSR)</h3>
+
+<strong>Status Flags</strong>
+
+<ul>
+<li><strong>N (Negative)</strong>: Set if result is negative (bit 31 = 1)</li>
+<li><strong>Z (Zero)</strong>: Set if result is zero</li>
+<li><strong>C (Carry)</strong>: Set if unsigned overflow occurred</li>
+<li><strong>V (oVerflow)</strong>: Set if signed overflow occurred</li>
+</ul>
+
+<strong>How Flags Are Set</strong>
+
+<ul>
+<li>Comparison instructions (CMP, CMN, TST, TEQ)</li>
+<li>Arithmetic/logic instructions with S suffix (ADDS, SUBS)</li>
+<li>Flags reflect the result of the operation</li>
+<li>Used by subsequent conditional branches</li>
+</ul>
+
+<strong>Example</strong>
+
+<p>``<code>assembly</p>
+<p>CMP R1, R2           ; Compare R1 and R2 (computes R1 - R2)</p>
+<p>; Sets flags based on result</p>
+</code>`<code>
+
+<p>If R1 = 5, R2 = 3:</p>
+
+<ul>
+<li>Result of R1 - R2 = 2 (positive, non-zero)</li>
+<li>N = 0 (not negative)</li>
+<li>Z = 0 (not zero)</li>
+<li>C = 1 (no borrow needed)</li>
+<li>V = 0 (no overflow)</li>
+</ul>
+
+<h2>2. Comparison Instructions</h2>
+
+<h3>2.1 Compare (CMP)</h3>
+
+<strong>Syntax</strong>
+
+</code>`<code>assembly
+<p>CMP Rn, Rm           ; Compare Rn with Rm</p>
+<p>CMP Rn, #imm         ; Compare Rn with immediate</p>
+</code>`<code>
+
+<strong>Operation</strong>
+
+<ul>
+<li>Performs Rn - Rm (subtraction)</li>
+<li>Updates PSR flags based on result</li>
+<li>Does NOT store the result</li>
+<li>Does NOT modify any register</li>
+</ul>
+
+<strong>Example Usage</strong>
+
+</code>`<code>assembly
+<p>MOV R1, #10</p>
+<p>MOV R2, #5</p>
+<p>CMP R1, R2           ; Compares 10 with 5</p>
+<p>; Result: 10 - 5 = 5 (positive, non-zero)</p>
+<p>; Z = 0, N = 0</p>
+</code>`<code>
+
+<h3>2.2 Compare Negative (CMN)</h3>
+
+<strong>Syntax</strong>
+
+</code>`<code>assembly
+<p>CMN Rn, Rm           ; Compare Negative</p>
+<p>CMN Rn, #imm</p>
+</code>`<code>
+
+<strong>Operation</strong>
+
+<ul>
+<li>Performs Rn + Rm (addition)</li>
+<li>Updates PSR flags</li>
+<li>Equivalent to CMP Rn, -Rm</li>
+<li>Useful for checking if sum equals zero</li>
+</ul>
+
+<h3>2.3 Test (TST)</h3>
+
+<strong>Syntax</strong>
+
+</code>`<code>assembly
+<p>TST Rn, Rm           ; Test bits</p>
+<p>TST Rn, #imm</p>
+</code>`<code>
+
+<strong>Operation</strong>
+
+<ul>
+<li>Performs Rn AND Rm (bitwise AND)</li>
+<li>Updates PSR flags</li>
+<li>Result not stored</li>
+<li>Used to test if specific bits are set</li>
+</ul>
+
+<strong>Example: Check if bit 5 is set</strong>
+
+</code>`<code>assembly
+<p>TST R1, #0x20        ; Test bit 5</p>
+<p>BEQ bit_clear        ; Branch if bit was clear (Z=1)</p>
+</code>`<code>
+
+<h3>2.4 Test Equivalence (TEQ)</h3>
+
+<strong>Syntax</strong>
+
+</code>`<code>assembly
+<p>TEQ Rn, Rm           ; Test Equivalence</p>
+<p>TEQ Rn, #imm</p>
+</code>`<code>
+
+<strong>Operation</strong>
+
+<ul>
+<li>Performs Rn XOR Rm (exclusive OR)</li>
+<li>Updates PSR flags</li>
+<li>Z=1 if values are equal</li>
+<li>Used to compare values without affecting C or V flags</li>
+</ul>
+
+<h2>3. Conditional Branch Instructions</h2>
+
+<h3>3.1 Branch if Equal (BEQ)</h3>
+
+<strong>Syntax</strong>
+
+</code>`<code>assembly
+<p>BEQ label            ; Branch if equal (Z=1)</p>
+</code>`<code>
+
+<strong>Condition</strong>
+
+<ul>
+<li>Branches if Zero flag is set (Z = 1)</li>
+<li>Typically used after CMP to check equality</li>
+</ul>
+
+<strong>Example</strong>
+
+</code>`<code>assembly
+<p>CMP R1, R2           ; Compare R1 and R2</p>
+<p>BEQ equal<em>label      ; Jump to equal</em>label if R1 == R2</p>
+<p>; Code if not equal</p>
+<p>equal_label:</p>
+<p>; Code if equal</p>
+</code>`<code>
+
+<h3>3.2 Branch if Not Equal (BNE)</h3>
+
+<strong>Syntax</strong>
+
+</code>`<code>assembly
+<p>BNE label            ; Branch if not equal (Z=0)</p>
+</code>`<code>
+
+<strong>Condition</strong>
+
+<ul>
+<li>Branches if Zero flag is clear (Z = 0)</li>
+<li>Opposite of BEQ</li>
+</ul>
+
+<strong>Example</strong>
+
+</code>`<code>assembly
+<p>CMP R3, #0</p>
+<p>BNE not_zero         ; Jump if R3 != 0</p>
+<p>; Code if R3 is zero</p>
+<p>not_zero:</p>
+<p>; Code if R3 is non-zero</p>
+</code>`<code>
+
+<h3>3.3 Signed Comparison Branches</h3>
+
+<strong>Branch if Greater or Equal (BGE)</strong>
+
+</code>`<code>assembly
+<p>BGE label            ; Branch if Rn >= Rm (signed)</p>
+<p>; Condition: N == V</p>
+</code>`<code>
+
+<strong>Branch if Less Than (BLT)</strong>
+
+</code>`<code>assembly
+<p>BLT label            ; Branch if Rn < Rm (signed)</p>
+<p>; Condition: N != V</p>
+</code>`<code>
+
+<strong>Branch if Greater Than (BGT)</strong>
+
+</code>`<code>assembly
+<p>BGT label            ; Branch if Rn > Rm (signed)</p>
+<p>; Condition: Z==0 AND N==V</p>
+</code>`<code>
+
+<strong>Branch if Less or Equal (BLE)</strong>
+
+</code>`<code>assembly
+<p>BLE label            ; Branch if Rn <= Rm (signed)</p>
+<p>; Condition: Z==1 OR N!=V</p>
+</code>`<code>
+
+<strong>Example</strong>
+
+</code>`<code>assembly
+<p>CMP R1, R2</p>
+<p>BGE greater_equal    ; Branch if R1 >= R2 (signed)</p>
+<p>; Code if R1 < R2</p>
+<p>greater_equal:</p>
+<p>; Code if R1 >= R2</p>
+</code>`<code>
+
+<h3>3.4 Unsigned Comparison Branches</h3>
+
+<strong>Branch if Higher or Same (BHS)</strong> (also called BCS - Branch if Carry Set)
+
+</code>`<code>assembly
+<p>BHS label            ; Branch if Rn >= Rm (unsigned)</p>
+<p>; Condition: C == 1</p>
+</code>`<code>
+
+<strong>Branch if Lower (BLO)</strong> (also called BCC - Branch if Carry Clear)
+
+</code>`<code>assembly
+<p>BLO label            ; Branch if Rn < Rm (unsigned)</p>
+<p>; Condition: C == 0</p>
+</code>`<code>
+
+<strong>Branch if Higher (BHI)</strong>
+
+</code>`<code>assembly
+<p>BHI label            ; Branch if Rn > Rm (unsigned)</p>
+<p>; Condition: C==1 AND Z==0</p>
+</code>`<code>
+
+<strong>Branch if Lower or Same (BLS)</strong>
+
+</code>`<code>assembly
+<p>BLS label            ; Branch if Rn <= Rm (unsigned)</p>
+<p>; Condition: C==0 OR Z==1</p>
+</code>`<code>
+
+<h3>3.5 Signed vs. Unsigned Example</h3>
+
+<strong>Key Difference</strong>
+
+</code>`<code>assembly
+<p>MOV R0, #0xFFFFFFFF  ; R0 = -1 (signed) or 4,294,967,295 (unsigned)</p>
+<p>MOV R1, #1           ; R1 = 1</p>
+<p>CMP R0, R1</p>
+
+<p>BLO lower_unsigned   ; BRANCH NOT TAKEN</p>
+<p>; Unsigned: 4,294,967,295 > 1</p>
+
+<p>BLT less_signed      ; BRANCH TAKEN</p>
+<p>; Signed: -1 < 1</p>
+</code>`<code>
+
+<strong>When to Use Each</strong>
+
+<ul>
+<li><strong>Signed</strong>: Comparing integers that can be negative (temperatures, offsets, differences)</li>
+<li><strong>Unsigned</strong>: Comparing addresses, array indices, sizes, counts</li>
+</ul>
+
+<h3>3.6 Unconditional Branch</h3>
+
+<strong>Syntax</strong>
+
+</code>`<code>assembly
+<p>B label              ; Branch always</p>
+</code>`<code>
+
+<strong>Purpose</strong>
+
+<ul>
+<li>Jump without checking any condition</li>
+<li>Skip code sections</li>
+<li>Implement infinite loops</li>
+<li>Return to loop start</li>
+</ul>
+
+<strong>Example</strong>
+
+</code>`<code>assembly
+<p>B end                ; Skip this section</p>
+<p>; Code to skip</p>
+<p>end:</p>
+<p>; Continue execution here</p>
+</code>`<code>
+
+<h2>4. Labels in Assembly</h2>
+
+<h3>4.1 Label Definition</h3>
+
+<strong>Purpose</strong>
+
+<ul>
+<li>Mark specific instruction locations</li>
+<li>Provide symbolic names for addresses</li>
+<li>Enable branches and data references</li>
+</ul>
+
+<strong>Syntax</strong>
+
+</code>`<code>assembly
+<p>label:               ; Label definition (note colon)</p>
+<p>MOV R0, #1      ; Instruction at this label</p>
+</code>`<code>
+
+<strong>Naming Rules</strong>
+
+<ul>
+<li>Can be almost any identifier</li>
+<li>Common conventions: loop, exit, done, L1, L2</li>
+<li>Cannot conflict with instruction mnemonics</li>
+<li>Case-sensitive</li>
+</ul>
+
+<strong>Example</strong>
+
+</code>`<code>assembly
+<p>start:</p>
+<p>MOV R0, #0</p>
+<p>loop:</p>
+<p>ADD R0, R0, #1</p>
+<p>CMP R0, #10</p>
+<p>BLT loop         ; Branch to loop label</p>
+<p>B start          ; Branch to start label</p>
+</code>`<code>
+
+<h3>4.2 Label Resolution</h3>
+
+<strong>Assembly Process</strong>
+
+<p>1. First pass: Record label addresses</p>
+<p>2. Second pass: Replace labels with addresses</p>
+<p>3. Calculate offsets for PC-relative branches</p>
+
+<strong>Virtual Addresses</strong>
+
+<ul>
+<li>Assembler assigns virtual addresses from 0</li>
+<li>First instruction: address 0</li>
+<li>Second instruction: address 4</li>
+<li>Third instruction: address 8</li>
+<li>Physical addresses determined at load time</li>
+</ul>
+
+<h2>5. Implementing Control Structures</h2>
+
+<h3>5.1 If Statement</h3>
+
+<strong>C Code</strong>
+
+</code>`<code>c
+<p>if (i == j)</p>
+<p>f = g + h;</p>
+<p>else</p>
+<p>f = g - h;</p>
+</code>`<code>
+
+<strong>ARM Assembly (Method 1: Branch on False)</strong>
+
+</code>`<code>assembly
+<p>CMP R3, R4       ; Compare i (R3) and j (R4)</p>
+<p>BNE else         ; Branch to else if not equal</p>
+<p>ADD R0, R1, R2   ; f = g + h (then clause)</p>
+<p>B exit           ; Skip else clause</p>
+<p>else:</p>
+<p>SUB R0, R1, R2   ; f = g - h (else clause)</p>
+<p>exit:</p>
+<p>; Continue...</p>
+</code>`<code>
+
+<strong>ARM Assembly (Method 2: Conditional Execution)</strong>
+
+</code>`<code>assembly
+<p>CMP R3, R4       ; Compare i and j</p>
+<p>ADDEQ R0, R1, R2 ; f = g + h (executed only if equal)</p>
+<p>SUBNE R0, R1, R2 ; f = g - h (executed only if not equal)</p>
+</code>`<code>
+
+<h3>5.2 If-Else Ladder</h3>
+
+<strong>C Code</strong>
+
+</code>`<code>c
+<p>if (x < 0)</p>
+<p>result = -1;</p>
+<p>else if (x == 0)</p>
+<p>result = 0;</p>
+<p>else</p>
+<p>result = 1;</p>
+</code>`<code>
+
+<strong>ARM Assembly</strong>
+
+</code>`<code>assembly
+<p>CMP R1, #0       ; Compare x with 0</p>
+<p>BLT negative     ; Branch if x < 0</p>
+<p>BEQ zero         ; Branch if x == 0</p>
+<p>; x > 0</p>
+<p>MOV R0, #1</p>
+<p>B done</p>
+<p>negative:</p>
+<p>MOV R0, #-1</p>
+<p>B done</p>
+<p>zero:</p>
+<p>MOV R0, #0</p>
+<p>done:</p>
+<p>; Continue...</p>
+</code>`<code>
+
+<h3>5.3 While Loop</h3>
+
+<strong>C Code</strong>
+
+</code>`<code>c
+<p>while (i < n) {</p>
+<p>sum += i;</p>
+<p>i++;</p>
+<p>}</p>
+</code>`<code>
+
+<strong>ARM Assembly</strong>
+
+</code>`<code>assembly
+<p>loop:</p>
+<p>CMP R1, R2       ; Compare i (R1) with n (R2)</p>
+<p>BGE end_loop     ; Exit if i >= n</p>
+<p>ADD R0, R0, R1   ; sum = sum + i</p>
+<p>ADD R1, R1, #1   ; i++</p>
+<p>B loop           ; Branch back to loop start</p>
+<p>end_loop:</p>
+<p>; Continue...</p>
+</code>`<code>
+
+<h3>5.4 For Loop</h3>
+
+<strong>C Code</strong>
+
+</code>`<code>c
+<p>for (i = 0; i < 10; i++) {</p>
+<p>sum += i;</p>
+<p>}</p>
+</code>`<code>
+
+<strong>ARM Assembly</strong>
+
+</code>`<code>assembly
+<p>MOV R1, #0       ; i = 0 (initialization)</p>
+<p>for_loop:</p>
+<p>CMP R1, #10      ; Compare i with 10</p>
+<p>BGE end_for      ; Exit if i >= 10</p>
+<p>ADD R0, R0, R1   ; sum = sum + i (loop body)</p>
+<p>ADD R1, R1, #1   ; i++ (increment)</p>
+<p>B for_loop       ; Branch back to loop start</p>
+<p>end_for:</p>
+<p>; Continue...</p>
+</code>`<code>
+
+<h3>5.5 Do-While Loop</h3>
+
+<strong>C Code</strong>
+
+</code>`<code>c
+<p>do {</p>
+<p>sum += i;</p>
+<p>i++;</p>
+<p>} while (i < n);</p>
+</code>`<code>
+
+<strong>ARM Assembly</strong>
+
+</code>`<code>assembly
+<p>do_loop:</p>
+<p>ADD R0, R0, R1   ; sum = sum + i (loop body first)</p>
+<p>ADD R1, R1, #1   ; i++</p>
+<p>CMP R1, R2       ; Compare i with n</p>
+<p>BLT do_loop      ; Branch back if i < n</p>
+<p>; Continue...</p>
+</code>`<code>
+
+<strong>Key Difference from While</strong>
+
+<ul>
+<li>Body executes at least once</li>
+<li>Condition checked at end, not beginning</li>
+</ul>
+
+<h2>6. Array Access in Loops</h2>
+
+<h3>6.1 Static Array Indexing</h3>
+
+<strong>C Code</strong>
+
+</code>`<code>c
+<p>while (save[i] == k)</p>
+<p>i++;</p>
+</code>`<code>
+
+<strong>ARM Assembly</strong>
+
+</code>`<code>assembly
+<p>; R6 = base address of save array</p>
+<p>; R3 = i (index)</p>
+<p>; R5 = k (comparison value)</p>
+<p>loop:</p>
+<p>ADD R12, R6, R3, LSL #2  ; address = base + (i * 4)</p>
+<p>LDR R0, [R12, #0]        ; R0 = save[i]</p>
+<p>CMP R0, R5               ; Compare save[i] with k</p>
+<p>BNE exit                 ; Exit if not equal</p>
+<p>ADD R3, R3, #1           ; i++</p>
+<p>B loop                   ; Continue loop</p>
+<p>exit:</p>
+<p>; Continue...</p>
+</code>`<code>
+
+<strong>Dynamic Offset Calculation</strong>
+
+<ul>
+<li></code>R3, LSL #2<code> means R3 × 4 (shift left 2 = multiply by 4)</li>
+<li>Words are 4 bytes, so array element i is at base + (i × 4)</li>
+<li>Efficient: shift is faster than multiplication</li>
+</ul>
+
+<h3>6.2 Array Traversal</h3>
+
+<strong>C Code</strong>
+
+</code>`<code>c
+<p>int sum = 0;</p>
+<p>for (int i = 0; i < 10; i++) {</p>
+<p>sum += arr[i];</p>
+<p>}</p>
+</code>`<code>
+
+<strong>ARM Assembly</strong>
+
+</code>`<code>assembly
+<p>LDR R6, =arr     ; R6 = base address of array</p>
+<p>MOV R0, #0       ; sum = 0</p>
+<p>MOV R1, #0       ; i = 0</p>
+<p>loop:</p>
+<p>CMP R1, #10</p>
+<p>BGE done</p>
+<p>ADD R12, R6, R1, LSL #2  ; address = base + i*4</p>
+<p>LDR R2, [R12]            ; R2 = arr[i]</p>
+<p>ADD R0, R0, R2           ; sum += arr[i]</p>
+<p>ADD R1, R1, #1           ; i++</p>
+<p>B loop</p>
+<p>done:</p>
+<p>; R0 contains sum</p>
+</code>`<code>
+
+<h2>7. PC-Relative Addressing</h2>
+
+<h3>7.1 Branch Instruction Encoding</h3>
+
+<strong>32-Bit Format</strong>
+
+</code>`<code>
+<p>[Cond][1010][Offset]</p>
+<p>4-bit 4-bit 24-bit</p>
+</code>`<code>
+
+<strong>Fields</strong>
+
+<ul>
+<li><strong>Cond</strong>: Condition code (EQ, NE, LT, etc.)</li>
+<li><strong>1010</strong>: Fixed format field for branch</li>
+<li><strong>Offset</strong>: 24-bit signed offset</li>
+</ul>
+
+<h3>7.2 Address Calculation</h3>
+
+<strong>Problem with Absolute Addressing</strong>
+
+<ul>
+<li>24 bits can address 2²⁴ = 16 MB</li>
+<li>Limits program size to 16 MB</li>
+<li>Fixed addresses complicate relocation</li>
+</ul>
+
+<strong>PC-Relative Solution</strong>
+
+<ul>
+<li>Store offset from current PC, not absolute address</li>
+<li>Target = PC + offset</li>
+<li>Can branch ±16 MB from current instruction</li>
+<li>Total program can exceed 16 MB</li>
+</ul>
+
+<strong>Offset Calculation</strong>
+
+</code>`<code>
+<p>Offset = (Target Address - PC) / 4</p>
+</code>`<code>
+
+<strong>Why Divide by 4?</strong>
+
+<ul>
+<li>All instructions are 4-byte aligned</li>
+<li>Least significant 2 bits always 00</li>
+<li>Omit these bits in encoding</li>
+<li>Effective range: ±64 MB (24-bit offset × 4)</li>
+</ul>
+
+<strong>Example</strong>
+
+</code>`<code>
+<p>Current PC: 0x1000</p>
+<p>Target: 0x1020</p>
+<p>Offset = (0x1020 - 0x1000) / 4 = 0x20 / 4 = 8 instructions</p>
+
+<p>Encoded offset in branch instruction: 8</p>
+<p>At execution: PC = 0x1000 + (8 × 4) = 0x1020</p>
+</code>`<code>
+
+<h3>7.3 Advantages of PC-Relative</h3>
+
+<strong>Position-Independent Code</strong>
+
+<ul>
+<li>Code can load at any address</li>
+<li>Branches remain correct regardless of location</li>
+<li>Essential for libraries and shared code</li>
+</ul>
+
+<strong>Simplified Linking</strong>
+
+<ul>
+<li>Linker doesn't need to patch all branches</li>
+<li>Only external function calls need adjustment</li>
+</ul>
+
+<strong>Branch Locality</strong>
+
+<ul>
+<li>Most branches are to nearby instructions</li>
+<li>PC-relative naturally handles this case</li>
+<li>Absolute addressing wastes bits for nearby targets</li>
+</ul>
+
+<h2>8. Conditional Execution (Alternative to Branching)</h2>
+
+<h3>8.1 Conditional Instruction Suffixes</h3>
+
+<strong>Concept</strong>
+
+<ul>
+<li>Add condition code to instruction mnemonic</li>
+<li>Instruction executes only if condition is true</li>
+<li>Otherwise, instruction is skipped (NOP)</li>
+</ul>
+
+<strong>Available Suffixes</strong>
+
+<ul>
+<li>EQ (equal), NE (not equal)</li>
+<li>GT, LT, GE, LE (signed comparisons)</li>
+<li>HI, LO, HS, LS (unsigned comparisons)</li>
+<li>Many others (see ARM documentation)</li>
+</ul>
+
+<strong>Examples</strong>
+
+</code>`<code>assembly
+<p>CMP R1, R2</p>
+<p>ADDEQ R0, R3, R4     ; Execute ADD only if R1 == R2</p>
+<p>SUBNE R0, R3, R4     ; Execute SUB only if R1 != R2</p>
+<p>MOVGT R5, #10        ; Execute MOV only if R1 > R2</p>
+</code>`<code>
+
+<h3>8.2 Conditional Execution Example</h3>
+
+<strong>C Code</strong>
+
+</code>`<code>c
+<p>if (a == b)</p>
+<p>max = a;</p>
+<p>else</p>
+<p>max = b;</p>
+</code>`<code>
+
+<strong>Method 1: Branching</strong>
+
+</code>`<code>assembly
+<p>CMP R1, R2       ; Compare a and b</p>
+<p>BNE else</p>
+<p>MOV R0, R1       ; max = a</p>
+<p>B done</p>
+<p>else:</p>
+<p>MOV R0, R2       ; max = b</p>
+<p>done:</p>
+</code>`<code>
+
+<strong>Method 2: Conditional Execution</strong>
+
+</code>`<code>assembly
+<p>CMP R1, R2       ; Compare a and b</p>
+<p>MOVEQ R0, R1     ; max = a (if equal)</p>
+<p>MOVNE R0, R2     ; max = b (if not equal)</p>
+</code>`<code>
+
+<h3>8.3 Advantages and Limitations</h3>
+
+<strong>Advantages</strong>
+
+<ul>
+<li>More compact code (fewer instructions)</li>
+<li>No branch misprediction penalty</li>
+<li>Faster for simple conditions</li>
+<li>Clearer intent in some cases</li>
+</ul>
+
+<strong>Limitations</strong>
+
+<ul>
+<li>Only works for simple, short sequences</li>
+<li>Cannot conditionally execute blocks of code</li>
+<li>All conditional instructions must fit in pipeline</li>
+<li>May execute both paths (but discard one result)</li>
+</ul>
+
+<strong>When to Use</strong>
+
+<ul>
+<li>Simple assignments</li>
+<li>Min/max operations</li>
+<li>Short computations with single result</li>
+<li>Performance-critical paths where branches hurt</li>
+</ul>
+
+<h2>9. Basic Blocks</h2>
+
+<h3>9.1 Definition</h3>
+
+<strong>Basic Block Characteristics</strong>
+
+<ul>
+<li>Sequence of instructions with:</li>
+</ul>
+<p>- No embedded branches (except possibly at end)</p>
+<p>- No branch targets (except possibly at beginning)</p>
+<ul>
+<li>Executed atomically: all or nothing</li>
+<li>Single entry point, single exit point</li>
+</ul>
+
+<strong>Example</strong>
+
+</code>`<code>assembly
+<p>; Basic Block 1 (entry point)</p>
+<p>MOV R0, #0</p>
+<p>MOV R1, #10</p>
+<p>CMP R1, #10</p>
+<p>BNE block2       ; Exit point of block 1</p>
+
+<p>; Basic Block 2 (entry and exit point)</p>
+<p>block2:</p>
+<p>ADD R0, R0, #1</p>
+<p>CMP R0, R1</p>
+<p>BLT block2       ; Exit point of block 2</p>
+</code>``
+
+<h3>9.2 Importance in Compilation</h3>
+
+<strong>Compiler Optimizations</strong>
+
+<ul>
+<li>Identify basic blocks for analysis</li>
+<li>Optimize within blocks (register allocation, scheduling)</li>
+<li>Build control flow graph from blocks</li>
+<li>Apply inter-block optimizations</li>
+</ul>
+
+<strong>Processor Optimizations</strong>
+
+<ul>
+<li>Predict block execution</li>
+<li>Prefetch instructions in block</li>
+<li>Schedule instructions more aggressively</li>
+<li>Reduce branch overhead</li>
+</ul>
+
+<h2>Key Takeaways</h2>
+
+<p>1. <strong>Conditional execution</strong> distinguishes computers from calculators, enabling decision-making and dynamic behavior.</p>
+
+<p>2. <strong>CMP instruction</strong> sets PSR flags by performing subtraction without storing the result.</p>
+
+<p>3. <strong>Conditional branches</strong> (BEQ, BNE, BGE, BLT, etc.) check PSR flags to decide whether to jump.</p>
+
+<p>4. <strong>Signed vs. unsigned branches</strong> interpret the same bit patterns differently based on context.</p>
+
+<p>5. <strong>Labels</strong> provide symbolic names for addresses, enabling readable branch targets.</p>
+
+<p>6. <strong>If statements</strong> translate to compare + conditional branch + unconditional branch to skip alternate path.</p>
+
+<p>7. <strong>Loops</strong> use compare + conditional branch (to exit) + unconditional branch (to continue).</p>
+
+<p>8. <strong>Array access</strong> in loops uses dynamic offset calculation with shifts (LSL #2 for word arrays).</p>
+
+<p>9. <strong>PC-relative addressing</strong> stores branch offset from current PC, enabling position-independent code and large programs.</p>
+
+<p>10. <strong>Word-based offsets</strong> effectively quadruple branch range by encoding instruction count instead of byte offset.</p>
+
+<p>11. <strong>Conditional execution</strong> provides alternative to branching for simple cases, improving performance and code density.</p>
+
+<p>12. <strong>Basic blocks</strong> are atomic instruction sequences used by compilers and processors for optimization.</p>
+
+<p>13. <strong>Branch locality</strong> means most branches target nearby instructions, making PC-relative addressing natural and efficient.</p>
+
+<h2>Summary</h2>
+
+<p>Branching and conditional execution form the foundation of program control flow, translating high-level constructs like if statements and loops into machine instructions. The ARM architecture provides a rich set of conditional branches for both signed and unsigned comparisons, enabling efficient implementation of diverse control structures. Understanding the distinction between comparison (which sets flags) and branching (which checks flags) is essential for correct assembly programming. PC-relative addressing solves program size limitations while enabling position-independent code, and conditional execution offers a performant alternative to branching for simple cases. Mastering these concepts is crucial for translating algorithms into assembly code, optimizing performance-critical sections, and understanding how processors implement dynamic program behavior. These fundamentals prepare us for more advanced topics including function calls, stack management, and processor pipelining.</p>
+
+            
+            <div class="lecture-nav">
+                <a href="lecture-05.html" class="nav-btn">← Previous Lecture</a>
+                <a href="lecture-07.html" class="nav-btn">Next Lecture →</a>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 CO224 Computer Architecture Lecture Series. All rights reserved.</p>
+            <p>Department of Computer Engineering, University of Peradeniya</p>
+        </div>
+    </footer>
+</body>
+</html>

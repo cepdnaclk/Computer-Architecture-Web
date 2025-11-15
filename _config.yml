@@ -1,0 +1,19 @@
+# GitHub Pages Configuration for CO224 Lecture Series
+
+# This site is built with plain HTML/CSS/JS
+# No Jekyll processing needed
+exclude:
+  - .venv/
+  - convert_lectures.py
+  - README.md
+  - Lectures/
+
+# Site settings
+title: "CO224 - Computer Architecture"
+description: "A Comprehensive Lecture Series on Computer Architecture"
+url: "https://cepdnaclk.github.io"
+baseurl: "/CO224-Web"
+
+# Build settings
+markdown: kramdown
+theme: null

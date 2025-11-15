@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lecture 19: Multiprocessors - CO224 Computer Architecture</title>
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="lecture-header">
+        <div class="container">
+            <a href="../index.html" class="back-link">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                    <polyline points="12 19 5 12 12 5"></polyline>
+                </svg>
+                Back to All Lectures
+            </a>
+            <h1 class="lecture-title">Lecture 19: Multiprocessors</h1>
+            <p class="lecture-meta">CO224 - Computer Architecture</p>
+        </div>
+    </header>
+
+    <main class="lecture-content-area container">
+        <div class="content-body">
+            <h1>Lecture 19: Multiprocessors</h1>
+
+<h2>Introduction</h2>
+
+<p>Multiprocessor systems represent a fundamental paradigm shift in computer architecture, using multiple processors on the same chip to execute multiple programs or threads simultaneously when traditional performance improvement techniques—clock frequency scaling and instruction-level parallelism—reached physical and practical limits. This lecture explores the evolution toward multiprocessor architectures driven by power walls and parallelism walls, examines the critical challenge of cache coherence that arises when multiple processors maintain private caches of shared memory, and analyzes solutions including bus snooping protocols like MESI and scalable directory-based coherence schemes. We compare architectural organizations from uniform memory access (UMA) to non-uniform memory access (NUMA), understanding how different designs balance simplicity, performance, and scalability for systems ranging from dual-core smartphones to thousand-processor supercomputers.</p>
+
+<p>---</p>
+
+<h2>1. Introduction to Multiprocessors</h2>
+
+<p>Multiprocessor systems address performance limitations encountered with single processor systems by employing multiple processors on the same chip to execute multiple programs or threads simultaneously.</p>
+
+<p>---</p>
+
+<h2>2. Performance Evolution Background</h2>
+
+<h3>Historical Performance Improvements</h3>
+
+<h4>Early Methods: Clock Frequency Scaling</h4>
+
+<strong>Approach</strong>:
+
+<ul>
+<li>Increasing clock frequency (reducing clock cycle time)</li>
+<li>Goal: Spend less time per instruction</li>
+</ul>
+
+<strong>Limitations Encountered</strong>:
+
+<ul>
+<li>Hit barrier at ~4 GHz: Power wall problem</li>
+<li>Excessive power dissipation caused overheating</li>
+<li>Cooling became inadequate</li>
+<li>Could not sustainably increase frequency further</li>
+</ul>
+
+<h4>Instruction Level Parallelism (ILP)</h4>
+
+<strong>Techniques</strong>:
+
+<ul>
+<li><strong>Pipelining</strong>: Process multiple instructions simultaneously</li>
+<li>Utilize different hardware components at same time</li>
+<li>Example: Execute one instruction while fetching another</li>
+<li><strong>Advanced techniques</strong>: Multiple issue, out-of-order execution</li>
+<li>Exploit parallelism inherent in programs</li>
+</ul>
+
+<strong>Limitations Encountered</strong>:
+
+<ul>
+<li>Programs contain limited inherent parallelism</li>
+<li>Dependencies prevent unlimited parallel execution</li>
+<li>Hit "parallelism wall"</li>
+<li>Can't exploit more parallelism beyond program's inherent limits</li>
+</ul>
+
+<h3>Moore's Law Context</h3>
+
+<strong>Observation</strong>:
+
+<ul>
+<li>Number of transistors doubles every 2 years</li>
+<li>Technology improves, more transistors available</li>
+</ul>
+
+<strong>Question</strong>: How to use abundant transistors?
+
+<strong>Solution</strong>: Multiple processors on same chip
+
+<p>---</p>
+
+<h2>3. Multiprocessor Approach</h2>
+
+<h3>Key Characteristics</h3>
+
+<ul>
+<li>Multiple processor cores on same chip</li>
+<li>Execute multiple instruction streams simultaneously</li>
+<li>Run multiple programs/threads in real time (true parallelism)</li>
+<li>Different from single processor illusion of parallelism</li>
+</ul>
+
+<h3>Terminology</h3>
+
+<ul>
+<li><strong>Processing Elements (PE)</strong>: Common term for individual processors</li>
+<li>Each PE is a complete CPU with fetch, decode, execute units</li>
+</ul>
+
+<h3>Key Problem: Communication Between Processors</h3>
+
+<ul>
+<li>Multiple processors executing simultaneously</li>
+<li>Programs often need to communicate/share data</li>
+<li>Splitting programs into threads requires coordination</li>
+<li>Communication is central design challenge</li>
+</ul>
+
+<p>---</p>
+
+<h2>4. Shared Memory Multiprocessors (SMM)</h2>
+
+<h3>Most Common Approach</h3>
+
+<strong>Architecture</strong>:
+
+<ul>
+<li>Communication through shared memory</li>
+<li>All processors access same physical address space</li>
+<li>Memory device connected via common bus/interconnect</li>
+</ul>
+
+<h3>Operating System Role</h3>
+
+<strong>Responsibilities</strong>:
+
+<ul>
+<li>OS code stored in shared memory</li>
+<li>OS shared between all processors</li>
+<li>Manages memory access arbitration</li>
+<li>Performs workload balancing</li>
+<li>Ensures processors access only authorized memory portions</li>
+</ul>
+
+<h3>Workload Balancing</h3>
+
+<strong>Purpose</strong>:
+
+<ul>
+<li>OS distributes tasks among processors</li>
+<li>Goal: All processors working in parallel</li>
+<li>Avoid idle processors</li>
+<li>Maximize overall system utilization</li>
+</ul>
+
+<p>---</p>
+
+<h2>5. Memory Contention Problem</h2>
+
+<h3>Inherent Issue</h3>
+
+<strong>Challenge</strong>:
+
+<ul>
+<li>Multiple processors accessing same memory device</li>
+<li>Competition for memory access</li>
+<li>Processors must wait for memory availability</li>
+<li>Synchronization overhead</li>
+<li>Access time increases with contention</li>
+</ul>
+
+<h3>Effect on Performance</h3>
+
+<strong>Bottleneck</strong>:
+
+<ul>
+<li>Memory becomes bottleneck</li>
+<li>Bus connects all processors to memory</li>
+<li>If one processor using memory, others must wait</li>
+<li>Can take hundreds of cycles</li>
+<li>Limits scalability</li>
+</ul>
+
+<p>---</p>
+
+<h2>6. Uniform Memory Access (UMA)</h2>
+
+<h3>Definition</h3>
+
+<strong>Characteristics</strong>:
+
+<ul>
+<li>Each processor sees memory in exact same way</li>
+<li>Same average memory access time for all processors</li>
+<li>Access time independent of which processor is accessing</li>
+<li>By design, no difference in access time (ignoring contention)</li>
+</ul>
+
+<h3>Also Known As</h3>
+
+<ul>
+<li><strong>Symmetric Multiprocessors (SMP)</strong></li>
+<li>Both terms used interchangeably</li>
+</ul>
+
+<h3>Key Properties</h3>
+
+<ul>
+<li>Shared address space</li>
+<li>Uniform view of memory by all processors</li>
+<li>All processors experience same average latency</li>
+</ul>
+
+<p>---</p>
+
+<h2>7. Solution to Contention: Caches</h2>
+
+<h3>Using Local Caches</h3>
+
+<strong>Approach</strong>:
+
+<ul>
+<li>Each processor has private cache</li>
+<li>Based on locality principles (temporal and spatial)</li>
+<li>Most memory accesses served at cache level</li>
+<li>Only small percentage (misses) go to main memory</li>
+<li>Reduces bus/memory contention significantly</li>
+</ul>
+
+<h3>Benefits</h3>
+
+<ul>
+<li>Exploits locality in programs</li>
+<li>Minimizes memory accesses</li>
+<li>Reduces bottleneck effect</li>
+<li>Allows better scalability</li>
+</ul>
+
+<h3>New Problem: Cache Coherence</h3>
+
+<ul>
+<li>Shared data blocks can be in multiple caches</li>
+<li>Updates in one cache not automatically reflected in others</li>
+<li>Need mechanism to maintain consistency</li>
+</ul>
+
+<p>---</p>
+
+<h2>8. Cache Coherence Problem</h2>
+
+<h3>The Issue</h3>
+
+<strong>Scenario</strong>:
+
+<ul>
+<li>Multiple caches have copies of same data block</li>
+<li>One processor writes to that block</li>
+<li>Other caches have stale (old) data</li>
+<li>Processors see different values for same address</li>
+<li>Data becomes incoherent</li>
+</ul>
+
+<h3>Example Sequence</h3>
+
+<p>1. <strong>PE1 reads X (value = 1)</strong> → Cached in PE1</p>
+<p>2. <strong>PE2 reads X (value = 1)</strong> → Cached in PE2</p>
+<p>3. <strong>PE1 writes X = 0</strong> → PE1 cache updated</p>
+<p>4. Memory may or may not be updated (depends on write policy)</p>
+<p>5. PE2 still sees X = 1 (stale data)</p>
+<p>6. <strong>Inconsistency</strong>: Same address, different values</p>
+
+<h3>With Write-Through Policy</h3>
+
+<ul>
+<li>PE1 writes X = 0 → Cache and memory updated</li>
+<li>Memory has correct value</li>
+<li>But PE2 cache still has old value (X = 1)</li>
+<li>Coherence still lost</li>
+</ul>
+
+<h3>With Write-Back Policy</h3>
+
+<ul>
+<li>PE1 writes X = 0 → Only cache updated</li>
+<li>Memory still has old value (X = 1)</li>
+<li>PE2 cache still has old value (X = 1)</li>
+<li>Both memory and PE2 incoherent with PE1</li>
+</ul>
+
+<h3>Requirement</h3>
+
+<ul>
+<li>Cache coherence MUST be maintained</li>
+<li>Otherwise parallel programs execute incorrectly</li>
+<li>Get wrong results</li>
+<li>Latest updates must be visible to all processors</li>
+</ul>
+
+<p>---</p>
+
+<h2>9. Bus Snooping</h2>
+
+<p>Common technique for cache coherence in SMP systems.</p>
+
+<h3>What is Bus Snooping?</h3>
+
+<strong>Mechanism</strong>:
+
+<ul>
+<li>Dedicated bus for coherency control: <strong>Snoop bus</strong></li>
+<li>Sole purpose: Control coherency of cache data</li>
+<li>Separate from memory bus</li>
+<li>Cache controllers communicate through snoop bus</li>
+</ul>
+
+<h3>How It Works</h3>
+
+<p>1. Cache controller performs write to address</p>
+<p>2. Broadcasts address information on snoop bus</p>
+<p>3. All cache controllers listen to snoop bus</p>
+<p>4. Controllers check if they have same address cached</p>
+<p>5. If yes, take action based on protocol</p>
+
+<h3>Key Feature</h3>
+
+<ul>
+<li>All caches monitor (snoop on) the bus</li>
+<li>Detect writes by other processors</li>
+<li>Take appropriate action to maintain coherence</li>
+</ul>
+
+<p>---</p>
+
+<h2>10. Write Invalidate Protocol</h2>
+
+<h3>Approach</h3>
+
+<ul>
+<li>When write detected, invalidate own copy</li>
+<li>Group of protocols using this approach</li>
+<li>Most common and easiest to implement</li>
+</ul>
+
+<h3>Mechanism</h3>
+
+<h4>On Write by Processor</h4>
+
+<p>1. Update own cache</p>
+<p>2. Broadcast write address on snoop bus</p>
+
+<h4>On Receiving Write Broadcast</h4>
+
+<p>1. Check if same address in own cache</p>
+<p>2. If yes: Mark block as INVALID (clear valid bit)</p>
+<p>3. Next access will be miss</p>
+
+<h3>With Write-Through Policy</h3>
+
+<ul>
+<li>Memory always has up-to-date value</li>
+<li>On miss after invalidation: Fetch from memory</li>
+<li>Straightforward implementation</li>
+</ul>
+
+<h3>With Write-Back Policy</h3>
+
+<strong>Challenge</strong>:
+
+<ul>
+<li>Only writing cache has up-to-date value</li>
+<li>Memory has stale value</li>
+<li>On miss after invalidation: Cannot fetch from memory</li>
+</ul>
+
+<strong>Solution: Snoop Read</strong>:
+
+<ul>
+<li>Cache with invalid block places snoop read request on bus</li>
+<li>Cache controllers listen to snoop read</li>
+<li>Controller with valid up-to-date copy responds</li>
+<li>Supplies data through snoop bus</li>
+<li>More efficient than going to memory</li>
+<li>Avoids slow memory access</li>
+</ul>
+
+<h3>Complexity</h3>
+
+<strong>Trade-offs</strong>:
+
+<ul>
+<li>More complex cache controller</li>
+<li>Snoop bus needs to carry data and addresses</li>
+<li>More hardware required</li>
+<li>Higher power consumption</li>
+<li>But better performance (less memory traffic)</li>
+</ul>
+
+<p>---</p>
+
+<h2>11. Write Update Protocol</h2>
+
+<h3>Alternative Approach</h3>
+
+<strong>Concept</strong>:
+
+<ul>
+<li>Update own copy instead of invalidating</li>
+<li>Also called Write Broadcast</li>
+<li>Different action when write detected</li>
+</ul>
+
+<h3>Mechanism</h3>
+
+<h4>On Write by Processor</h4>
+
+<p>1. Update own cache</p>
+<p>2. Broadcast BOTH address AND data on snoop bus</p>
+
+<h4>On Receiving Write Broadcast</h4>
+
+<p>1. Check if same address in own cache</p>
+<p>2. If yes: Update own copy with new data</p>
+<p>3. Keep block VALID</p>
+
+<h3>Benefits</h3>
+
+<ul>
+<li>No miss on next access to same address</li>
+<li>Data already updated in all caches</li>
+<li>Don't need extra read operation</li>
+<li>Simpler cache controller (no snoop read needed)</li>
+</ul>
+
+<h3>Costs</h3>
+
+<ul>
+<li>Snoop bus must carry data (wider bus)</li>
+<li>More hardware on snoop bus</li>
+<li>Higher power consumption</li>
+<li>More bus traffic</li>
+</ul>
+
+<h3>Comparison</h3>
+
+<ul>
+<li>Simpler than write invalidate with write-back</li>
+<li>Fewer cache misses</li>
+<li>Higher bus bandwidth requirement</li>
+</ul>
+
+<p>---</p>
+
+<h2>12. Real Protocol Implementations</h2>
+
+<h3>Historical Protocols</h3>
+
+<h4>Write Once Protocol</h4>
+
+<ul>
+<li><strong>Type</strong>: Write invalidate</li>
+<li><strong>Write policy</strong>: Write-through on first write, write-back after</li>
+<li>One of first bus snooping protocols</li>
+</ul>
+
+<h4>Synapse N+1 Protocol</h4>
+
+<ul>
+<li><strong>Type</strong>: Write invalidate</li>
+<li><strong>Write policy</strong>: Write-back</li>
+<li>Early implementation</li>
+</ul>
+
+<h4>Berkeley Protocol</h4>
+
+<ul>
+<li><strong>Type</strong>: Write invalidate</li>
+<li><strong>Write policy</strong>: Write-back</li>
+<li>Used in Berkeley SPUR processor</li>
+</ul>
+
+<h4>Illinois Protocol (MESI)</h4>
+
+<ul>
+<li><strong>Type</strong>: Write invalidate</li>
+<li><strong>Write policy</strong>: Write-back</li>
+<li>Used in SGI Power and Challenge systems</li>
+<li>Very popular, widely adopted</li>
+</ul>
+
+<h4>Firefly Protocol</h4>
+
+<ul>
+<li><strong>Type</strong>: Write update</li>
+<li><strong>Write policy</strong>: Mixed (write-back for private data, write-through for shared data)</li>
+<li>Used in DEC Firefly and Sun SPARC systems</li>
+</ul>
+
+<h3>Most Common Combination</h3>
+
+<ul>
+<li>Write invalidate protocols</li>
+<li>Write-back policy</li>
+<li>Reduces memory accesses (expensive in terms of time)</li>
+<li>Easier to implement than write update</li>
+<li>Good balance of performance and complexity</li>
+</ul>
+
+<p>---</p>
+
+<h2>13. MESI Protocol Details</h2>
+
+Named after four states: <strong>Modified, Exclusive, Shared, Invalid</strong>
+
+<p>Most popular cache coherency protocol, used in Intel Pentium and IBM PowerPC processors.</p>
+
+<h3>Four Block States (Requires 2 Bits)</h3>
+
+<h4>1. INVALID (I)</h4>
+
+<ul>
+<li>Data not valid</li>
+<li>Block cannot be used</li>
+<li>Must fetch from elsewhere</li>
+</ul>
+
+<h4>2. SHARED (S)</h4>
+
+<ul>
+<li>Multiple caches have copies of this block</li>
+<li>All copies have same value</li>
+<li>Value consistent with memory</li>
+<li>Memory has up-to-date value</li>
+</ul>
+
+<h4>3. EXCLUSIVE (E)</h4>
+
+<ul>
+<li>Only cached copy in entire system</li>
+<li>No other cache has this block</li>
+<li>Value consistent with memory</li>
+<li>Memory has up-to-date value</li>
+</ul>
+
+<h4>4. MODIFIED (M)</h4>
+
+<ul>
+<li>Only cached copy in system</li>
+<li>Value INCONSISTENT with memory</li>
+<li>This cache has most recent value</li>
+<li>Memory has stale value</li>
+<li>Block is "dirty"</li>
+</ul>
+
+<p>---</p>
+
+<h2>14. MESI Protocol State Transitions</h2>
+
+<h3>Example with PE1, PE2, PE3</h3>
+
+<strong>Initial State</strong>: Variable X = 1 in memory, all cache entries invalid
+
+<h4>Step 1: PE1 Reads X</h4>
+
+<strong>Actions</strong>:
+
+<ul>
+<li>Check other caches (snoop read request)</li>
+<li>No other cache has X</li>
+<li>Fetch from memory</li>
+<li><strong>State transition</strong>: Invalid → Exclusive</li>
+</ul>
+
+<strong>Result</strong>:
+
+<ul>
+<li>PE1: X = 1 (Exclusive)</li>
+</ul>
+
+<h4>Step 2: PE3 Reads X</h4>
+
+<strong>Actions</strong>:
+
+<ul>
+<li>Check other caches (snoop read request)</li>
+<li>PE1 responds (has Exclusive copy)</li>
+<li>PE1 supplies data to PE3</li>
+</ul>
+
+<strong>State transitions</strong>:
+
+<ul>
+<li>PE1: Exclusive → Shared</li>
+<li>PE3: Invalid → Shared</li>
+</ul>
+
+<strong>Result</strong>:
+
+<ul>
+<li>Both PE1 and PE3: X = 1 (Shared)</li>
+<li>Consistent with memory</li>
+</ul>
+
+<h4>Step 3: PE3 Writes X = 0</h4>
+
+<strong>Actions</strong>:
+
+<ul>
+<li>Block in PE3 was Shared</li>
+<li>Update local cache</li>
+<li>Broadcast invalidate on snoop bus</li>
+<li><strong>State transition</strong>: Shared → Modified</li>
+</ul>
+
+<strong>Result</strong>:
+
+<ul>
+<li>PE3: X = 0 (Modified)</li>
+<li>PE1 receives invalidate:</li>
+</ul>
+<p>- State transition: Shared → Invalid</p>
+<p>- PE1: X = ? (Invalid)</p>
+<ul>
+<li>Memory still has X = 1 (stale)</li>
+</ul>
+
+<h4>Step 4: PE1 Reads X</h4>
+
+<strong>Actions</strong>:
+
+<ul>
+<li>Block in PE1 is Invalid (tag matches but invalid)</li>
+<li>Place snoop read request on bus</li>
+<li>PE3 has Modified copy (most up-to-date)</li>
+<li>PE3 responds to snoop read:</li>
+</ul>
+<p>- Supplies data to PE1 through snoop bus</p>
+<p>- Writes back to memory</p>
+<p>- State transition: Modified → Shared</p>
+<ul>
+<li>PE1 receives data:</li>
+</ul>
+<p>- State transition: Invalid → Shared</p>
+
+<strong>Result</strong>:
+
+<ul>
+<li>PE1: X = 0 (Shared)</li>
+<li>PE3: X = 0 (Shared)</li>
+<li>Memory: X = 0 (updated)</li>
+<li>All consistent</li>
+</ul>
+
+<h3>Key Points</h3>
+
+<ul>
+<li>Coherency maintained throughout</li>
+<li>Invalidations prevent stale data reads</li>
+<li>Modified state identifies most recent value</li>
+<li>Snoop reads fetch from other caches efficiently</li>
+<li>Write-backs occur when transitioning from Modified to Shared</li>
+</ul>
+
+<p>---</p>
+
+<h2>15. Scalability of UMA Systems</h2>
+
+<h3>Limitation</h3>
+
+<strong>Challenges</strong>:
+
+<ul>
+<li>Bus snooping doesn't scale well</li>
+<li>Bus contention increases with more processors</li>
+<li>Snoop bus becomes bottleneck</li>
+<li>Memory bus also becomes bottleneck</li>
+</ul>
+
+<h3>Practical Limit</h3>
+
+<ul>
+<li>Up to ~32 processing elements with bus-based design</li>
+<li>Not a hard threshold but approximate practical limit</li>
+<li>Beyond this, contention significantly degrades performance</li>
+</ul>
+
+<h3>Alternative Interconnects</h3>
+
+<h4>Crossbar Switches</h4>
+
+<ul>
+<li>Alternative to bus-based architecture</li>
+<li>Allows multiple simultaneous connections</li>
+<li>Better than simple bus</li>
+</ul>
+
+<h4>Multi-Stage Crossbar Switch Network</h4>
+
+<ul>
+<li>Multiple crossbar switches in network topology</li>
+<li>Increased parallelism in interconnect</li>
+<li>Can connect multiple memory banks simultaneously</li>
+<li>Increases scalability</li>
+</ul>
+
+<h3>Improved Scalability</h3>
+
+<ul>
+<li>With crossbar networks: Up to ~256 processing elements</li>
+<li>Still limited but much better than bus-based</li>
+<li>Trade-off: More complex hardware</li>
+</ul>
+
+<p>---</p>
+
+<h2>16. Non-Uniform Memory Access (NUMA)</h2>
+
+<h3>Designed for Even Higher Scalability</h3>
+
+<strong>Goals</strong>:
+
+<ul>
+<li>Target: Thousands of processing elements</li>
+<li>Beyond limits of UMA systems</li>
+<li>Still uses shared memory model</li>
+<li>Communication through shared address space</li>
+</ul>
+
+<h3>Key Difference from UMA</h3>
+
+<strong>Non-Uniform Access Times</strong>:
+
+<ul>
+<li>Memory access time DEPENDS on which processor is accessing</li>
+<li>Different processors experience different latencies</li>
+<li>Memory perspective is non-uniform</li>
+</ul>
+
+<h3>Architecture</h3>
+
+<strong>Structure</strong>:
+
+<ul>
+<li>Each processor has local memory</li>
+<li>Faster to access local memory</li>
+<li>Slower to access remote memory (other processors' local memory)</li>
+<li>But all memory accessible by all processors (shared address space)</li>
+</ul>
+
+<h3>Access Time Difference</h3>
+
+<ul>
+<li>Remote memory access: 4-5 times more cycles than local</li>
+<li>Significant performance impact</li>
+<li>Programming must consider locality</li>
+</ul>
+
+<h3>Operating System Role</h3>
+
+<strong>Optimization Responsibilities</strong>:
+
+<ul>
+<li>Must use special algorithms for memory optimization</li>
+<li>Workload distribution affects performance</li>
+<li>Should relocate memory blocks for optimization</li>
+<li>Goal: Maximize local accesses, minimize remote accesses</li>
+<li>Global optimization problem</li>
+</ul>
+
+<p>---</p>
+
+<h2>17. Two Types of NUMA</h2>
+
+<h3>1. NC-NUMA (Non-Cached NUMA)</h3>
+
+<strong>Characteristics</strong>:
+
+<ul>
+<li>No caches shown in architecture</li>
+<li>Processors directly access memory</li>
+<li>Simpler but slower</li>
+</ul>
+
+<h3>2. CC-NUMA (Cache-Coherent NUMA)</h3>
+
+<strong>Characteristics</strong>:
+
+<ul>
+<li>Includes caches at each node</li>
+<li>Must maintain cache coherence</li>
+<li>More complex but better performance</li>
+<li>Cannot use bus snooping (not scalable enough)</li>
+<li>Solution: Directory-based coherence</li>
+</ul>
+
+<p>---</p>
+
+<h2>18. Directory-Based Cache Coherence</h2>
+
+<p>Used in CC-NUMA systems for scalable cache coherence.</p>
+
+<h3>What is Directory?</h3>
+
+<strong>Definition</strong>:
+
+<ul>
+<li>Data structure tracking cache contents</li>
+<li>Distributed across system</li>
+<li>Stores information about which blocks are cached where</li>
+<li>Can be in memory or separate hardware</li>
+</ul>
+
+<h3>Purpose</h3>
+
+<strong>Functionality</strong>:
+
+<ul>
+<li>Cache controllers check directory to find block locations</li>
+<li>Determines if other caches have copies of block</li>
+<li>Enables coherence without bus snooping</li>
+<li>Scalable to thousands of processors</li>
+</ul>
+
+<h3>Organization</h3>
+
+<strong>Distributed Structure</strong>:
+
+<ul>
+<li>Directory can be distributed</li>
+<li>Each node has local directory</li>
+<li>Local directory tracks blocks from local memory address range</li>
+<li>Information about which caches have those blocks</li>
+<li>Blocks from other address ranges tracked in other directories</li>
+</ul>
+
+<h3>Operation</h3>
+
+<strong>Access Process</strong>:
+
+<ul>
+<li>Cache controller accesses appropriate directory</li>
+<li>Local directory if accessing local address range</li>
+<li>Remote directory if accessing remote address range</li>
+<li>Directory provides information about block locations</li>
+<li>Can then send invalidations or updates as needed</li>
+</ul>
+
+<h3>Write Policy</h3>
+
+<ul>
+<li>Typically use write-through policy</li>
+</ul>
+
+<p>---</p>
+
+<h2>Key Takeaways</h2>
+
+<p>1. Multiprocessors overcome single-processor performance limitations</p>
+<p>2. Shared memory provides communication mechanism between processors</p>
+<p>3. Cache coherence is essential for correct parallel program execution</p>
+<p>4. Bus snooping works well for small-scale systems (up to ~32 processors)</p>
+<p>5. MESI protocol is widely adopted for cache coherence</p>
+<p>6. UMA systems provide uniform access but limited scalability</p>
+<p>7. NUMA systems enable thousands of processors with non-uniform access</p>
+<p>8. Directory-based coherence enables scalable cache coherence</p>
+<p>9. Operating system plays crucial role in workload balancing and optimization</p>
+<p>10. Trade-offs exist between simplicity, performance, and scalability</p>
+
+<p>---</p>
+
+<h2>Summary</h2>
+
+<p>Multiprocessor systems have become the standard in modern computing, from smartphones to supercomputers, enabling the parallel processing power required for contemporary applications while managing the complex interactions between multiple processors sharing memory resources.</p>
+
+            
+            <div class="lecture-nav">
+                <a href="lecture-18.html" class="nav-btn">← Previous Lecture</a>
+                <a href="lecture-20.html" class="nav-btn">Next Lecture →</a>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 CO224 Computer Architecture Lecture Series. All rights reserved.</p>
+            <p>Department of Computer Engineering, University of Peradeniya</p>
+        </div>
+    </footer>
+</body>
+</html>

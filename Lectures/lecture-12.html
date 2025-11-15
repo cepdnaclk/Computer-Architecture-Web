@@ -1,0 +1,1605 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lecture 12: Pipelined Processors - CO224 Computer Architecture</title>
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="lecture-header">
+        <div class="container">
+            <a href="../index.html" class="back-link">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                    <polyline points="12 19 5 12 12 5"></polyline>
+                </svg>
+                Back to All Lectures
+            </a>
+            <h1 class="lecture-title">Lecture 12: Pipelined Processors</h1>
+            <p class="lecture-meta">CO224 - Computer Architecture</p>
+        </div>
+    </header>
+
+    <main class="lecture-content-area container">
+        <div class="content-body">
+            <h1>Lecture 12: Pipelining and Hazards in MIPS Processors</h1>
+
+<h2>Introduction</h2>
+
+<p>This lecture introduces pipelining as the primary performance enhancement technique in modern processor design, transforming the inefficient single-cycle architecture into a high-throughput execution engine. We explore how pipelining applies assembly-line principles to instruction execution, dramatically improving processor throughput while maintaining individual instruction latency. The lecture examines the three fundamental types of hazards—structural, data, and control—that threaten pipeline efficiency, and discusses practical solutions including forwarding, stalling, and branch prediction that enable real-world pipelined processors to achieve near-ideal performance.</p>
+
+<p>---</p>
+
+<h2>1. Recap: Single-Cycle Performance Limitations</h2>
+
+<h3>1.1 Critical Path Problem</h3>
+
+<strong>Load Word as Bottleneck:</strong>
+
+<ul>
+<li>Uses most resources: Instruction Memory → Register File → ALU → Data Memory → Register File</li>
+<li>Determines clock period for entire CPU</li>
+<li>Forces all other instructions to wait</li>
+</ul>
+
+<strong>Performance Issue:</strong>
+
+<ul>
+<li>Most instructions (arithmetic, branch) take less time than load</li>
+<li>Jump instruction takes even less time</li>
+<li>Clock period set by slowest instruction (load word)</li>
+</ul>
+
+<strong>Design Principle Violated:</strong>
+
+<ul>
+<li>"Make the common case fast"</li>
+<li>Common case (arithmetic) forced to run slowly</li>
+<li>Majority of instructions underutilize available time</li>
+</ul>
+
+<h3>1.2 Multi-Cycle as First Improvement</h3>
+
+<strong>Basic Concept:</strong>
+
+<ul>
+<li>Divide datapath into stages</li>
+<li>Each stage completes in one clock cycle</li>
+<li>Shorter clock cycles than single-cycle</li>
+</ul>
+
+<strong>Five Stages Identified:</strong>
+
+<p>1. Instruction Fetch (IF)</p>
+<p>2. Register Reading</p>
+<p>3. ALU Operations</p>
+<p>4. Memory Access</p>
+<p>5. Register Writing</p>
+
+<strong>Variable Stage Usage:</strong>
+
+<ul>
+<li>Load: Uses all 5 stages</li>
+<li>Most instructions: Skip memory access (4 stages)</li>
+<li>Jump: Only 2 stages (manipulating PC)</li>
+</ul>
+
+<strong>Clock Period Determination:</strong>
+
+<ul>
+<li>Decided by slowest stage (not slowest instruction)</li>
+<li>Adjust work in each stage for balance</li>
+<li>Maximize utilization of each clock cycle</li>
+</ul>
+
+<strong>Limitation:</strong>
+
+<ul>
+<li>Instruction must finish before next instruction starts</li>
+<li>Hardware still idle during many cycles</li>
+<li>Room for further improvement</li>
+</ul>
+
+<p>---</p>
+
+<h2>2. Pipelining Concept: The Laundry Shop Analogy</h2>
+
+<h3>2.1 Non-Pipelined Laundry Shop</h3>
+
+<strong>Setup:</strong>
+
+<ul>
+<li>One employee</li>
+<li>Four customers: A, B, C, D</li>
+<li>First-come, first-serve basis</li>
+<li>Four stages of work per customer:</li>
+</ul>
+<p>1. Washing: 30 minutes</p>
+<p>2. Drying: 30 minutes</p>
+<p>3. Folding/Ironing: 30 minutes</p>
+<p>4. Packaging: 30 minutes</p>
+<ul>
+<li>Total per customer: 2 hours</li>
+</ul>
+
+<strong>Sequential Processing:</strong>
+
+``<code>
+<p>Time:  6pm    7pm    8pm    9pm    10pm   11pm   12am   1am    2am</p>
+<p>A:     [Wash] [Dry]  [Fold] [Pack]</p>
+<p>B:                            [Wash] [Dry]  [Fold] [Pack]</p>
+<p>C:                                                   [Wash] [Dry]  [Fold] [Pack]</p>
+<p>D:                                                                          [Wash] [Dry]  [Fold] [Pack]</p>
+</code>`<code>
+
+<p>| Metric            | Value                |</p>
+<p>| ----------------- | -------------------- |</p>
+<p>| Total Time        | 8 hours (6pm to 2am) |</p>
+<p>| Time per Customer | 2 hours              |</p>
+<p>| Shop Closes       | 2am                  |</p>
+
+<strong>Problems:</strong>
+
+<ul>
+<li>Machines idle while employee works on other stages</li>
+<li>Washer idle during drying, folding, packaging</li>
+<li>Dryer idle except during drying stage</li>
+<li>Tremendous resource underutilization</li>
+</ul>
+
+<h3>2.2 Pipelined Laundry Shop</h3>
+
+<strong>Key Idea:</strong>
+
+<ul>
+<li>Use idle machines for next customers</li>
+<li>Overlap execution of different loads</li>
+<li>Parallel processing maximizes hardware utilization</li>
+</ul>
+
+<strong>Pipelined Schedule:</strong>
+
+</code>`<code>
+<p>Time:  6:00   6:30   7:00   7:30   8:00   8:30   9:00   9:30</p>
+<p>A:     [Wash] [Dry]  [Fold] [Pack]</p>
+<p>B:            [Wash] [Dry]  [Fold] [Pack]</p>
+<p>C:                   [Wash] [Dry]  [Fold] [Pack]</p>
+<p>D:                          [Wash] [Dry]  [Fold] [Pack]</p>
+<p>E:                                 [Wash] [Dry]  [Fold] [Pack]</p>
+</code>`<code>
+
+<strong>Timeline Analysis:</strong>
+
+<ul>
+<li>6:00-6:30: A washing (1 station busy)</li>
+<li>6:30-7:00: A drying, B washing (2 stations busy)</li>
+<li>7:00-7:30: A folding, B drying, C washing (3 stations busy)</li>
+<li>7:30-8:00: A packing, B folding, C drying, D washing (4 stations - <strong>ALL BUSY!</strong>)</li>
+<li>8:00-8:30: A done, B packing, C folding, D drying, E washing</li>
+</ul>
+
+<strong>Steady State:</strong>
+
+<ul>
+<li>Reached at 7:30-8:00 when all 4 stations occupied</li>
+<li>Pipeline full</li>
+<li>Maximum hardware utilization</li>
+<li>One customer finishes every 30 minutes</li>
+</ul>
+
+<h3>2.3 Performance Analysis</h3>
+
+<strong>Time Comparison:</strong>
+
+<ul>
+<li>Non-pipelined: 8 hours for 4 customers</li>
+<li>Pipelined: 3.5 hours for 4 customers</li>
+</ul>
+
+<strong>Speedup Calculation:</strong>
+
+</code>`<code>
+<p>Speedup = Non-pipelined Time / Pipelined Time</p>
+<p>= 8 hours / 3.5 hours</p>
+<p>= 2.3×</p>
+</code>`<code>
+
+<strong>Includes Pipeline Fill Time:</strong>
+
+<ul>
+<li>First 1.5 hours: Filling pipeline (not all stations busy)</li>
+<li>After 1.5 hours: Steady state (all stations busy)</li>
+</ul>
+
+<strong>Steady State Analysis (ignoring fill time):</strong>
+
+</code>`<code>
+<p>Non-pipelined: 2n hours for n loads (2 hours per load)</p>
+<p>Pipelined: 0.5n hours for n loads (0.5 hours per load)</p>
+
+<p>Steady State Speedup = 2n / 0.5n = 4×</p>
+</code>`<code>
+
+<strong>Theoretical Maximum Speedup:</strong>
+
+<ul>
+<li>Equals number of stages</li>
+<li>4 stages → 4× speedup maximum</li>
+<li>8 stages → 8× speedup maximum (if achievable)</li>
+</ul>
+
+<h3>2.4 Key Performance Terms</h3>
+
+<strong>Latency:</strong>
+
+<ul>
+<li>Time to complete one individual job</li>
+<li>Customer A: Still 2 hours in both cases</li>
+<li>Per-instruction time unchanged</li>
+</ul>
+
+<strong>Throughput:</strong>
+
+<ul>
+<li>How often one job completes</li>
+<li>Non-pipelined: 1 job every 2 hours</li>
+<li>Pipelined: 1 job every 30 minutes (steady state)</li>
+<li>Throughput is the relevant metric for pipelines</li>
+</ul>
+
+<strong>Observation:</strong>
+
+<ul>
+<li>Pipelining doesn't reduce individual job latency</li>
+<li>Pipelining dramatically improves throughput</li>
+<li>Overall system performance greatly enhanced</li>
+</ul>
+
+<strong>Analogy Summary:</strong>
+
+<ul>
+<li>Customers = Instructions</li>
+<li>Stages = Pipeline stages</li>
+<li>Time saved = Performance improvement</li>
+<li>Overlapping execution = Instruction-level parallelism</li>
+</ul>
+
+<p>---</p>
+
+<h2>3. MIPS Five-Stage Pipeline</h2>
+
+<h3>3.1 Pipeline Stage Definitions</h3>
+
+<h4>Stage 1: Instruction Fetch (IF)</h4>
+
+<ul>
+<li>Use current Program Counter (PC)</li>
+<li>PC points to next instruction to execute</li>
+<li>Access instruction memory</li>
+<li>Fetch instruction word</li>
+<li>Duration: One clock cycle</li>
+</ul>
+
+<h4>Stage 2: Instruction Decode / Register Read (ID)</h4>
+
+<ul>
+<li>Decode opcode field</li>
+<li>Determine instruction category</li>
+<li>Identify remaining bit organization</li>
+<li>Extract register addresses</li>
+<li>Read register file</li>
+<li>Both operations in one stage (workload balancing)</li>
+</ul>
+
+<h4>Stage 3: Execution (EX)</h4>
+
+<ul>
+<li>Arithmetic/Logic instructions: ALU computes result</li>
+<li>Memory instructions: ALU computes address (base + offset)</li>
+<li>Branch instructions: ALU performs comparison</li>
+<li>One clock cycle</li>
+</ul>
+
+<h4>Stage 4: Memory Access (MEM)</h4>
+
+<ul>
+<li>Load instructions: Read from data memory</li>
+<li>Store instructions: Write to data memory</li>
+<li>Other instructions: Skip this stage</li>
+<li>One clock cycle</li>
+</ul>
+
+<h4>Stage 5: Write Back (WB)</h4>
+
+<ul>
+<li>Write result to register file</li>
+<li>Source: ALU result (arithmetic) OR memory data (load)</li>
+<li>Multiplexer selects appropriate source</li>
+<li>One clock cycle</li>
+</ul>
+
+<strong>Workload Distribution Goal:</strong>
+
+<ul>
+<li>Evenly distribute work across stages</li>
+<li>Minimize clock cycle time</li>
+<li>Maximize hardware utilization</li>
+</ul>
+
+<h3>3.2 Stage Timing Example</h3>
+
+<strong>Assumed Component Delays:</strong>
+
+<p>| Component           | Delay (picoseconds) |</p>
+<p>| ------------------- | ------------------- |</p>
+<p>| Instruction Fetch   | 200 ps              |</p>
+<p>| Register Read/Write | 100 ps              |</p>
+<p>| ALU Operation       | 200 ps              |</p>
+<p>| Data Memory Access  | 200 ps              |</p>
+<p>| Sign Extension      | negligible          |</p>
+<p>| Multiplexers        | negligible          |</p>
+
+<strong>Single-Cycle Instruction Times:</strong>
+
+<p>| Instruction Type   | Stages Used     | Total Time |</p>
+<p>| ------------------ | --------------- | ---------- |</p>
+<p>| Load Word (LW)     | IF+ID+EX+MEM+WB | 800 ps     |</p>
+<p>| Store Word (SW)    | IF+ID+EX+MEM    | 700 ps     |</p>
+<p>| R-type (ADD, etc.) | IF+ID+EX+WB     | 600 ps     |</p>
+<p>| Branch (BEQ)       | IF+ID+EX        | 500 ps     |</p>
+
+<strong>Load Word Critical Path:</strong> 800 ps determines clock period
+
+<h3>3.3 Pipeline Implementation Details</h3>
+
+<strong>Clock Cycle Determination:</strong>
+
+<ul>
+<li>Must accommodate longest stage</li>
+<li>Longest stage: 200 ps (IF, ALU, MEM)</li>
+<li>Clock cycle: 200 ps</li>
+<li>Some stages underutilize cycle (register read/write: 100 ps)</li>
+</ul>
+
+<strong>Register Read/Write Timing:</strong>
+
+<ul>
+<li><strong>CRITICAL:</strong> Register write first half, read second half of same clock cycle</li>
+<li>Enables same-cycle read-after-write</li>
+<li>Prevents data hazards in some cases</li>
+</ul>
+
+<strong>Stage Alignment to Clock Cycles:</strong>
+
+<p>| Stage | Work                    | Time   | Cycle Time               |</p>
+<p>| ----- | ----------------------- | ------ | ------------------------ |</p>
+<p>| IF    | Instruction Memory read | 200 ps | 200 ps ✓                 |</p>
+<p>| ID    | Decode + Register Read  | 100 ps | 200 ps (space left)      |</p>
+<p>| EX    | ALU operation           | 200 ps | 200 ps ✓                 |</p>
+<p>| MEM   | Data Memory access      | 200 ps | 200 ps ✓                 |</p>
+<p>| WB    | Register write          | 100 ps | 200 ps (first half only) |</p>
+
+<strong>Space in ID Stage:</strong>
+
+<ul>
+<li>Register read: 100 ps</li>
+<li>Decoding: Fits in remaining 100 ps</li>
+<li>Combinational logic for opcode decode</li>
+<li>Total: ~200 ps utilized</li>
+</ul>
+
+<strong>Space in WB Stage:</strong>
+
+<ul>
+<li>Register write: 100 ps (first half)</li>
+<li>Second half: Available for next instruction's register read</li>
+</ul>
+
+<h3>3.4 Load Word Pipeline Example</h3>
+
+<strong>Instruction Stream:</strong> All Load Word instructions
+
+</code>`<code>assembly
+<p>LW $1, 0($10)</p>
+<p>LW $2, 4($10)</p>
+<p>LW $3, 8($10)</p>
+<p>LW $4, 12($10)</p>
+<p>...</p>
+</code>`<code>
+
+<strong>Pipeline Timing Diagram:</strong>
+
+</code>`<code>
+<p>Time (ps):  0-200  200-400  400-600  600-800  800-1000  1000-1200</p>
+<p>LW $1:      IF     ID       EX       MEM      WB</p>
+<p>LW $2:             IF       ID       EX       MEM       WB</p>
+<p>LW $3:                      IF       ID       EX        MEM</p>
+<p>LW $4:                               IF       ID        EX</p>
+</code>`<code>
+
+<strong>Single-Cycle Comparison:</strong>
+
+<ul>
+<li>Non-pipelined: 800 ps per instruction</li>
+<li>Pipelined: 200 ps per instruction (after pipeline fills)</li>
+</ul>
+
+<strong>Throughput Improvement:</strong>
+
+</code>`<code>
+<p>Non-pipelined: 1 instruction every 800 ps</p>
+<p>Pipelined: 1 instruction every 200 ps</p>
+
+<p>Speedup = 800 / 200 = 4×</p>
+</code>`<code>
+
+<strong>Absolute Time per Instruction:</strong>
+
+<ul>
+<li>Still ~800 ps (slightly more with alignment overhead)</li>
+<li>Latency unchanged or slightly worse</li>
+<li>Throughput dramatically improved</li>
+</ul>
+
+<h3>3.5 Ideal vs Actual Speedup</h3>
+
+<strong>Ideal Case (balanced stages):</strong>
+
+</code>`<code>
+<p>Time between instructions (pipelined) = Time per instruction (non-pipelined) / Number of stages</p>
+
+<p>Maximum Speedup = Number of Stages</p>
+</code>`<code>
+
+<strong>Actual Implementation:</strong>
+
+<ul>
+<li>Stages not perfectly balanced</li>
+<li>Register operations faster than memory/ALU</li>
+<li>Speedup < Number of stages</li>
+<li>Example: 5 stages → 4× speedup (not 5×)</li>
+</ul>
+
+<strong>Reasons for Less Than Ideal:</strong>
+
+<p>1. Unbalanced stage delays</p>
+<p>2. Pipeline fill time overhead</p>
+<p>3. Hazards (discussed later)</p>
+<p>4. Added synchronization logic</p>
+
+<p>---</p>
+
+<h2>4. MIPS ISA Design for Pipelining</h2>
+
+<h3>4.1 Fixed Instruction Length</h3>
+
+<strong>MIPS Characteristic:</strong>
+
+<ul>
+<li>All instructions exactly 32 bits</li>
+<li>Same as ARM (also designed for pipelining)</li>
+</ul>
+
+<strong>Benefits for Pipelining:</strong>
+
+<ul>
+<li>Simple instruction fetch (always 32 bits)</li>
+<li>Simple decode (fixed format)</li>
+<li>Bus width fully utilized every time</li>
+<li>No variable-width handling logic</li>
+</ul>
+
+<strong>Alternative (Variable-Length):</strong>
+
+<ul>
+<li>Complicates fetch stage</li>
+<li>Requires width detection logic</li>
+<li>May need multiple fetch cycles</li>
+<li>Added combinational logic delays</li>
+</ul>
+
+<h3>4.2 Fewer Regular Instruction Formats</h3>
+
+<strong>MIPS Formats:</strong>
+
+<ul>
+<li>Only 3-4 instruction formats (R, I, J types)</li>
+<li>Small opcode field (6 bits)</li>
+<li>Regular register field positions</li>
+</ul>
+
+<strong>Benefits:</strong>
+
+<ul>
+<li>Fast decoding (small opcode → simple logic)</li>
+<li>Fits decode + register read in one stage</li>
+<li>Minimal combinational delay</li>
+</ul>
+
+<strong>Register Field Consistency:</strong>
+
+<ul>
+<li>RS (bits 21-25): First source register</li>
+<li>RT (bits 16-20): Second source / destination</li>
+<li>RD (bits 11-15): Destination (R-type)</li>
+<li>Same positions across formats</li>
+</ul>
+
+<strong>Decoding Simplification:</strong>
+
+<ul>
+<li>Small opcode → simple decode logic</li>
+<li>Regular formats → minimal mux complexity</li>
+<li>Fast enough for single clock cycle</li>
+</ul>
+
+<h3>4.3 Separate ALU Operation Field</h3>
+
+<strong>Function Field (funct):</strong>
+
+<ul>
+<li>Bits 0-5: Specifies ALU operation for R-type</li>
+<li>Separate from opcode</li>
+<li>Only examined for R-type (opcode = 0)</li>
+</ul>
+
+<strong>Design Rationale:</strong>
+
+<ul>
+<li>ALU operation determined in EX stage</li>
+<li>Opcode used in ID stage</li>
+<li>Temporal separation matches pipeline stages</li>
+</ul>
+
+<strong>Benefit:</strong>
+
+<ul>
+<li>funct field processed later (EX stage)</li>
+<li>Opcode processed early (ID stage)</li>
+<li>Separating them simplifies each stage</li>
+<li>Avoids large opcode (keeps decode simple)</li>
+</ul>
+
+<strong>Alternative Design:</strong>
+
+<ul>
+<li>Include funct in opcode</li>
+<li>Larger opcode field needed</li>
+<li>More complex decode logic</li>
+<li>Slower ID stage</li>
+<li>Worse pipeline balance</li>
+</ul>
+
+<h3>4.4 Load/Store Addressing Mode</h3>
+
+<strong>MIPS Addressing:</strong>
+
+<ul>
+<li>Base register + offset</li>
+<li>Address = $rs + immediate</li>
+<li>Calculation: Simple addition</li>
+</ul>
+
+<strong>Pipeline Fit:</strong>
+
+<ul>
+<li>Address calculation: EX stage (ALU)</li>
+<li>Memory access: MEM stage (next cycle)</li>
+<li>Clean separation into two stages</li>
+</ul>
+
+<strong>Design Philosophy:</strong>
+
+<ul>
+<li>ISA designed with pipeline in mind</li>
+<li>Not optimized for single-cycle</li>
+<li>Performance through pipelining</li>
+</ul>
+
+<strong>MIPS vs Other ISAs:</strong>
+
+<ul>
+<li>MIPS: Designed for pipelining from start</li>
+<li>x86: Complex instructions, harder to pipeline</li>
+<li>ARM: Similar philosophy to MIPS</li>
+<li>RISC principles support pipelining</li>
+</ul>
+
+<p>---</p>
+
+<h2>5. Instruction-Level Parallelism (ILP)</h2>
+
+<h3>5.1 Parallel Execution Concept</h3>
+
+<strong>Definition:</strong>
+
+<ul>
+<li>Multiple instructions executing simultaneously</li>
+<li>Each at different pipeline stage</li>
+<li>Overlapping execution</li>
+</ul>
+
+<strong>Example at Steady State:</strong>
+
+</code>`<code>
+<p>Time Window: 800-1000 ps</p>
+
+<p>Instruction A: WB stage (writing result)</p>
+<p>Instruction B: MEM stage (memory access)</p>
+<p>Instruction C: EX stage (ALU operation)</p>
+<p>Instruction D: ID stage (decode, register read)</p>
+<p>Instruction E: IF stage (fetch)</p>
+
+<p>Five instructions active simultaneously!</p>
+</code>`<code>
+
+<strong>Instruction-Level Parallelism (ILP):</strong>
+
+<ul>
+<li>Lowest granularity of parallelism</li>
+<li>Inside CPU microarchitecture</li>
+<li>Transparent to software</li>
+<li>Hardware manages parallelism</li>
+</ul>
+
+<h3>5.2 Levels of Parallelism</h3>
+
+<strong>Instruction-Level Parallelism:</strong>
+
+<ul>
+<li>Multiple instructions in pipeline</li>
+<li>Same program/thread</li>
+<li>Within CPU core</li>
+<li>Microsecond/nanosecond scale</li>
+</ul>
+
+<strong>Thread-Level Parallelism:</strong>
+
+<ul>
+<li>Multiple threads on same core</li>
+<li>Context switching</li>
+<li>OS-managed</li>
+<li>Millisecond scale</li>
+</ul>
+
+<strong>Program-Level Parallelism:</strong>
+
+<ul>
+<li>Multiple programs/processes</li>
+<li>Multi-core execution</li>
+<li>OS-scheduled</li>
+<li>Varied time scales</li>
+</ul>
+
+<strong>Application-Level Parallelism:</strong>
+
+<ul>
+<li>Distributed computing</li>
+<li>Multiple machines</li>
+<li>Network communication</li>
+<li>Seconds to minutes scale</li>
+</ul>
+
+<strong>ILP Focus:</strong>
+
+<ul>
+<li>Fine-grained parallelism</li>
+<li>Hardware implementation</li>
+<li>Transparent to programmer (mostly)</li>
+<li>Foundation for all higher levels</li>
+</ul>
+
+<p>---</p>
+
+<h2>6. Pipeline Hazards: Structural Hazards</h2>
+
+<h3>6.1 Hazard Definition</h3>
+
+<strong>General Concept:</strong>
+
+<ul>
+<li>Situations preventing next instruction from starting</li>
+<li>Violates basic pipelining goal</li>
+<li>Reduces throughput</li>
+<li>Requires pipeline stalls (bubbles)</li>
+</ul>
+
+<strong>Three Categories:</strong>
+
+<p>1. <strong>Structural Hazards:</strong> Hardware resource busy</p>
+<p>2. <strong>Data Hazards:</strong> Need data from previous instruction</p>
+<p>3. <strong>Control Hazards:</strong> Decision depends on previous result</p>
+
+<h3>6.2 Structural Hazard: Single Memory</h3>
+
+<strong>Scenario:</strong>
+
+<ul>
+<li>Single memory device for both instructions and data</li>
+<li>No separate instruction/data memory</li>
+<li>Same device holds program and data</li>
+</ul>
+
+<strong>Conflict Example:</strong>
+
+</code>`<code>
+<p>Time:    0-200   200-400  400-600  600-800</p>
+<p>LW $1:   IF      ID       EX       MEM</p>
+<p>LW $2:           IF       ID       EX</p>
+<p>LW $3:                    IF       ID</p>
+<p>LW $4:                             IF  ← CONFLICT!</p>
+
+<p>At 600-800 ps:</p>
+<ul>
+<li>LW $1 needs data memory (MEM stage)</li>
+<li>LW $4 needs instruction memory (IF stage)</li>
+<li>Same physical memory device!</li>
+<li>Cannot access simultaneously</li>
+</ul>
+</code>`<code>
+
+<strong>Problem:</strong>
+
+<ul>
+<li>Memory can only service one request per cycle</li>
+<li>Instruction fetch AND data access conflict</li>
+<li>Hardware resource (memory) busy</li>
+</ul>
+
+<h3>6.3 Pipeline Stall (Bubble)</h3>
+
+<strong>Solution: Insert Bubble</strong>
+
+</code>`<code>
+<p>Time:    0-200   200-400  400-600  600-800  800-1000  1000-1200</p>
+<p>LW $1:   IF      ID       EX       MEM      WB</p>
+<p>LW $2:           IF       ID       EX       [BUBBLE]  MEM</p>
+<p>LW $3:                    IF       ID       EX        [BUBBLE]</p>
+<p>LW $4:                             IF       [BUBBLE]  ID</p>
+</code>`<code>
+
+<strong>Bubble Characteristics:</strong>
+
+<ul>
+<li>No instruction in that pipeline stage</li>
+<li>Like air bubble in water pipeline</li>
+<li>Hardware idle for that stage</li>
+<li>Wastes one clock cycle</li>
+<li>Propagates through pipeline stages</li>
+</ul>
+
+<strong>Impact:</strong>
+
+<ul>
+<li>One instruction delayed</li>
+<li>Subsequent instructions delayed</li>
+<li>Throughput reduced</li>
+<li>Performance loss</li>
+</ul>
+
+<strong>Bubble Analogy:</strong>
+
+<ul>
+<li>Water pipeline: Continuous flow</li>
+<li>Air bubble: Break in flow</li>
+<li>Takes time to propagate through</li>
+<li>Reduces effective flow rate</li>
+</ul>
+
+<h3>6.4 Solutions to Structural Hazards</h3>
+
+<strong>Solution 1: Separate Memories</strong>
+
+<ul>
+<li>Instruction memory separate from data memory</li>
+<li>Harvard architecture</li>
+<li>Simultaneous access possible</li>
+<li>No structural hazard</li>
+</ul>
+
+<strong>Solution 2: Separate Caches</strong>
+
+<ul>
+<li>Single main memory</li>
+<li>Separate instruction cache (I-cache)</li>
+<li>Separate data cache (D-cache)</li>
+<li>Cache: Fast buffer between CPU and memory</li>
+<li>Caches can be accessed simultaneously</li>
+<li>Details in future lectures (memory hierarchy)</li>
+</ul>
+
+<strong>Design Recommendation:</strong>
+
+<ul>
+<li>Modern processors use separate caches</li>
+<li>Necessary for high-performance pipelining</li>
+<li>Small area overhead for large performance gain</li>
+</ul>
+
+<p>---</p>
+
+<h2>7. Data Hazards</h2>
+
+<h3>7.1 Data Hazard Definition</h3>
+
+<strong>Concept:</strong>
+
+<ul>
+<li>Subsequent instruction needs data from previous instruction</li>
+<li>Data not yet available (still being computed/written)</li>
+<li>Reading too early → wrong value</li>
+<li>Writing too early → data corruption</li>
+</ul>
+
+<strong>Example:</strong>
+
+</code>`<code>assembly
+<p>ADD $s0, $t0, $t1      # $s0 = $t0 + $t1</p>
+<p>SUB $t2, $s0, $t3      # $t2 = $s0 - $t3 (uses $s0 from ADD)</p>
+</code>`<code>
+
+<strong>Problem:</strong>
+
+<ul>
+<li>ADD computes $s0 value in EX stage</li>
+<li>SUB needs $s0 value in ID stage (register read)</li>
+<li>Timing mismatch</li>
+</ul>
+
+<h3>7.2 Data Hazard Example Analysis</h3>
+
+<strong>Instruction Sequence:</strong>
+
+</code>`<code>assembly
+<p>ADD $s0, $t0, $t1</p>
+<p>SUB $t2, $s0, $t3</p>
+</code>`<code>
+
+<strong>Pipeline Without Stalls:</strong>
+
+</code>`<code>
+<p>Time:    0-200   200-400  400-600  600-800  800-1000</p>
+<p>ADD:     IF      ID       EX       MEM      WB</p>
+<p>SUB:             IF       ID       EX       MEM</p>
+<p>↑</p>
+<p>Reads $s0 here (old value!)</p>
+
+<p>ADD writes $s0 here ↓</p>
+</code>`<code>
+
+<strong>Problem Timeline:</strong>
+
+<ul>
+<li>200-400: ADD reads $t0, $t1; SUB fetched</li>
+<li>400-600: ADD computes in ALU; SUB reads registers (gets OLD $s0!)</li>
+<li>600-800: ADD result available but not in register yet</li>
+<li>800-1000: ADD writes $s0 to register (first half of cycle)</li>
+</ul>
+
+<p>SUB reads $s0 at 400-600, but correct value not available until 800-1000!</p>
+
+<h3>7.3 Solution 1: Pipeline Stalls</h3>
+
+<strong>Insert Two Bubbles:</strong>
+
+</code>`<code>
+<p>Time:    0-200   200-400  400-600  600-800  800-1000  1000-1200  1200-1400</p>
+<p>ADD:     IF      ID       EX       MEM      WB</p>
+<p>[BUBBLE]                  IF       [BUBBLE] [BUBBLE]</p>
+<p>[BUBBLE]                           IF       [BUBBLE]</p>
+<p>SUB:                                         IF        ID</p>
+</code>`<code>
+
+<strong>Result:</strong>
+
+<ul>
+<li>SUB fetched at 1000-1200</li>
+<li>SUB reads registers at 1200-1400 (second half at 1200)</li>
+<li>ADD writes $s0 at 800-1000 (first half at 800)</li>
+<li>Sufficient time gap: Correct value available</li>
+</ul>
+
+<strong>Cost:</strong>
+
+<ul>
+<li>Two clock cycles wasted</li>
+<li>Throughput reduced</li>
+<li>Performance penalty</li>
+</ul>
+
+<strong>Critical Timing:</strong>
+
+<ul>
+<li>Register write: First half of WB cycle</li>
+<li>Register read: Second half of ID cycle</li>
+<li>Enables back-to-back reading of just-written value</li>
+</ul>
+
+<h3>7.4 Solution 2: Forwarding (Bypassing)</h3>
+
+<strong>Key Observation:</strong>
+
+<ul>
+<li>ADD result available after EX stage (400-600)</li>
+<li>Result at ALU output</li>
+<li>Not yet written to register file</li>
+<li>But SUB's ALU operation at 600-800</li>
+<li>Can forward ALU output directly to ALU input!</li>
+</ul>
+
+<strong>Forwarding Logic:</strong>
+
+</code>`<code>
+<p>Time:    0-200   200-400  400-600  600-800  800-1000</p>
+<p>ADD:     IF      ID       EX       MEM      WB</p>
+<p>SUB:             IF       ID       EX       MEM</p>
+<p>↑        ↑</p>
+<p>Read regs   Use forwarded value!</p>
+</code>`<code>
+
+<strong>Implementation:</strong>
+
+<ul>
+<li>Multiplexer at ALU input</li>
+<li>Selects between:</li>
+</ul>
+<p>- Register file output (normal path)</p>
+<p>- Forwarded value from previous ALU output</p>
+<ul>
+<li>Control logic detects dependency</li>
+<li>Routes correct value</li>
+</ul>
+
+<strong>Benefit:</strong>
+
+<ul>
+<li>Eliminates two stalls</li>
+<li>No performance penalty</li>
+<li>Requires additional hardware:</li>
+</ul>
+<p>- Forwarding multiplexers</p>
+<p>- Forwarding detection logic</p>
+<p>- Forwarding paths (wires)</p>
+<p>- Pipeline registers to hold values</p>
+
+<strong>Complexity:</strong>
+
+<ul>
+<li>Careful synchronization required</li>
+<li>Detect true dependencies</li>
+<li>Avoid false positives</li>
+<li>Additional control signals</li>
+</ul>
+
+<strong>Result:</strong>
+
+<ul>
+<li>SUB can execute immediately after ADD</li>
+<li>No stalls needed</li>
+<li>Correct value forwarded</li>
+</ul>
+
+<h3>7.5 Load-Use Data Hazard</h3>
+
+<strong>Special Case:</strong>
+
+</code>`<code>assembly
+<p>LW  $s0, 0($t0)        # Load from memory into $s0</p>
+<p>SUB $t2, $s0, $t3      # Use $s0 immediately</p>
+</code>`<code>
+
+<strong>Problem:</strong>
+
+<ul>
+<li>Load result available after MEM stage (data from memory)</li>
+<li>SUB needs value in EX stage</li>
+<li>Even forwarding can't help!</li>
+</ul>
+
+<strong>Timeline:</strong>
+
+</code>`<code>
+<p>Time:    0-200   200-400  400-600  600-800  800-1000</p>
+<p>LW:      IF      ID       EX       MEM      WB</p>
+<p>SUB:             IF       ID       EX       MEM</p>
+<p>↑        ↑</p>
+<p>Need value   Value first available here!</p>
+</code>`<code>
+
+<p>LW result available at 600-800, but SUB's EX at 600-800 (simultaneous!)</p>
+
+<strong>Unavoidable Stall:</strong>
+
+</code>`<code>
+<p>Time:    0-200   200-400  400-600  600-800  800-1000  1000-1200</p>
+<p>LW:      IF      ID       EX       MEM      WB</p>
+<p>[BUBBLE]                  IF       [BUBBLE] ID</p>
+<p>SUB:                                         IF        ID</p>
+</code>`<code>
+
+<strong>One stall bubble required:</strong>
+
+<ul>
+<li>Cannot be eliminated by forwarding</li>
+<li>Can forward from MEM to EX (saves one stall vs two)</li>
+<li>But at least one stall unavoidable</li>
+</ul>
+
+<h3>7.6 Compiler Solution: Code Reordering</h3>
+
+<strong>C Code Example:</strong>
+
+</code>`<code>c
+<p>a = b + e;</p>
+<p>c = b + f;</p>
+</code>`<code>
+
+<strong>Naive Assembly (Load-Use Hazards):</strong>
+
+</code>`<code>assembly
+<p>LW   $t1, 0($t0)    # Load b into $t1</p>
+<p>LW   $t2, 4($t0)    # Load e into $t2</p>
+<p>ADD  $t3, $t1, $t2  # a = b + e ← HAZARD: uses $t2 immediately after LW</p>
+<p>SW   $t3, 8($t0)    # Store a</p>
+
+<p>LW   $t4, 12($t0)   # Load f into $t4</p>
+<p>ADD  $t5, $t1, $t4  # c = b + f ← HAZARD: uses $t4 immediately after LW</p>
+<p>SW   $t5, 16($t0)   # Store c</p>
+</code>`<code>
+
+<strong>Total:</strong> 7 instructions + 2 stalls = 9 clock cycles
+
+<strong>Optimized Assembly (Reordered):</strong>
+
+</code>`<code>assembly
+<p>LW   $t1, 0($t0)    # Load b into $t1</p>
+<p>LW   $t2, 4($t0)    # Load e into $t2</p>
+<p>LW   $t4, 12($t0)   # Load f into $t4 ← Moved here!</p>
+<p>ADD  $t3, $t1, $t2  # a = b + e ← No hazard! $t2 available</p>
+<p>SW   $t3, 8($t0)    # Store a ← Moved here!</p>
+<p>ADD  $t5, $t1, $t4  # c = b + f ← No hazard! $t4 available</p>
+<p>SW   $t5, 16($t0)   # Store c</p>
+</code>`<code>
+
+<strong>Total:</strong> 7 instructions + 0 stalls = 7 clock cycles
+
+<strong>Technique:</strong>
+
+<ul>
+<li>Load f earlier (between loading b and e)</li>
+<li>Fills stall slot with useful work</li>
+<li>Store a before second ADD (fills another gap)</li>
+<li>No bubbles needed</li>
+</ul>
+
+<strong>Savings:</strong> 2 clock cycles (22% improvement)
+
+<strong>Compiler Responsibility:</strong>
+
+<ul>
+<li>Analyze dependencies</li>
+<li>Reorder instructions safely</li>
+<li>Fill stall slots with independent instructions</li>
+<li>Maintain program semantics</li>
+</ul>
+
+<strong>Programmer Awareness:</strong>
+
+<ul>
+<li>Understand pipeline behavior</li>
+<li>Write code amenable to reordering</li>
+<li>Separate dependent instructions when possible</li>
+<li>Help compiler optimize</li>
+</ul>
+
+<p>---</p>
+
+<h2>8. Control Hazards</h2>
+
+<h3>8.1 Control Hazard Definition</h3>
+
+<strong>Concept:</strong>
+
+<ul>
+<li>Branch/Jump outcome determines next instruction</li>
+<li>Decision depends on previous computation</li>
+<li>Can't fetch next instruction until decision made</li>
+<li>Pipeline must wait</li>
+</ul>
+
+<strong>Example:</strong>
+
+</code>`<code>assembly
+<p>BEQ $1, $2, target     # Branch if $1 == $2</p>
+<p>ADD $3, $4, $5         # Next sequential instruction</p>
+<p>...</p>
+<p>target: SUB $6, $7, $8 # Branch target</p>
+</code>`<code>
+
+<strong>Which instruction to fetch after BEQ?</strong>
+
+<ul>
+<li>ADD if branch NOT taken</li>
+<li>SUB if branch IS taken</li>
+<li>Decision requires comparison: $1 vs $2</li>
+</ul>
+
+<h3>8.2 Branch Execution in Pipeline</h3>
+
+<strong>Branch Instruction:</strong>
+
+</code>`<code>assembly
+<p>BEQ $1, $2, 40         # Branch 40 instructions ahead if equal</p>
+</code>`<code>
+
+<strong>Pipeline Stages:</strong>
+
+<p>1. IF: Fetch BEQ instruction</p>
+<p>2. ID: Read $1, $2 from register file</p>
+<p>3. EX: ALU compares (subtract $2 from $1, check zero flag)</p>
+<p>4. Result available after EX stage</p>
+
+<strong>Problem:</strong>
+
+<ul>
+<li>Next instruction fetch at cycle 2 (IF for next instruction)</li>
+<li>Branch outcome known at cycle 3 (after EX)</li>
+<li>Must guess which instruction to fetch!</li>
+</ul>
+
+<strong>Without Optimization:</strong>
+
+</code>`<code>
+<p>Time:    0-200   200-400  400-600  600-800</p>
+<p>BEQ:     IF      ID       EX       MEM</p>
+<p>???:             IF       ???</p>
+</code>`<code>
+
+<p>Two bubbles required if wait for outcome</p>
+
+<h3>8.3 Solution 1: Early Branch Resolution</h3>
+
+<strong>Add Hardware in ID Stage:</strong>
+
+<ul>
+<li>Small adder for comparison</li>
+<li>Compute branch condition early (ID instead of EX)</li>
+<li>Subtract $1 - $2 in ID stage</li>
+<li>Parallel to register read</li>
+</ul>
+
+<strong>Modified Pipeline:</strong>
+
+</code>`<code>
+<p>Time:    0-200   200-400  400-600</p>
+<p>BEQ:     IF      ID       EX</p>
+<p>↑</p>
+<p>Decision here!</p>
+<p>Next:            IF</p>
+</code>`<code>
+
+<strong>Benefit:</strong>
+
+<ul>
+<li>Decision after ID (one cycle earlier)</li>
+<li>Only one bubble needed (vs two)</li>
+<li>Better performance</li>
+</ul>
+
+<strong>Cost:</strong>
+
+<ul>
+<li>Additional adder hardware</li>
+<li>Extra combinational logic in ID stage</li>
+<li>More complex ID stage</li>
+</ul>
+
+<strong>Limitation:</strong>
+
+<ul>
+<li>Still one unavoidable stall</li>
+<li>Can't know outcome in same cycle as fetch</li>
+</ul>
+
+<h3>8.4 Solution 2: Branch Prediction</h3>
+
+<strong>Static Branch Prediction:</strong>
+
+<ul>
+<li>Guess branch outcome</li>
+<li>Fetch based on guess</li>
+<li>If correct: No penalty</li>
+<li>If wrong: Discard fetched instruction, fetch correct one</li>
+</ul>
+
+<strong>Strategy: Predict Not Taken</strong>
+
+<ul>
+<li>Assume branch will NOT be taken</li>
+<li>Always fetch PC + 4 (sequential instruction)</li>
+<li>Proceed normally if correct</li>
+<li>Stall and correct if wrong</li>
+</ul>
+
+<strong>Example (Prediction Correct):</strong>
+
+</code>`<code>assembly
+<p>ADD  $3, $4, $5</p>
+<p>BEQ  $1, $2, 14        # Actually NOT taken</p>
+<p>LW   $8, 0($9)         # Fetch this (prediction: not taken)</p>
+</code>`<code>
+
+<strong>Timeline:</strong>
+
+</code>`<code>
+<p>Time:    0-200   200-400  400-600  600-800</p>
+<p>ADD:     IF      ID       EX       MEM</p>
+<p>BEQ:             IF      ID       EX</p>
+<p>LW:                      IF       ID</p>
+<p>↑ Fetched based on prediction</p>
+</code>`<code>
+
+<p>At 400-600 (after BEQ's ID):</p>
+
+<ul>
+<li>Determine branch NOT taken</li>
+<li>Prediction correct!</li>
+<li>LW continues normally</li>
+<li>No stall!</li>
+</ul>
+
+<strong>Example (Prediction Incorrect):</strong>
+
+</code>`<code>assembly
+<p>ADD  $3, $4, $5</p>
+<p>BEQ  $1, $2, 14        # Actually IS taken</p>
+<p>LW   $8, 0($9)         # Fetched (but shouldn't execute)</p>
+<p>...</p>
+<p>target: SUB $6, $7, $8 # Should execute this instead</p>
+</code>`<code>
+
+<strong>Timeline:</strong>
+
+</code>`<code>
+<p>Time:    0-200   200-400  400-600  600-800</p>
+<p>ADD:     IF      ID       EX       MEM</p>
+<p>BEQ:             IF      ID       EX</p>
+<p>LW:                      IF       [DISCARD]</p>
+<p>SUB:                              IF</p>
+</code>`<code>
+
+<p>At 400-600 (after BEQ's ID):</p>
+
+<ul>
+<li>Determine branch IS taken</li>
+<li>Prediction wrong!</li>
+<li>Discard LW (clear pipeline stage)</li>
+<li>Fetch SUB from branch target</li>
+<li>One bubble inserted</li>
+</ul>
+
+<strong>Result Analysis:</strong>
+
+<ul>
+<li>Correct prediction: Save one cycle</li>
+<li>Incorrect prediction: Same as no prediction (one stall)</li>
+<li>Net benefit if prediction often correct</li>
+<li>No additional penalty for wrong guess</li>
+</ul>
+
+<h3>8.5 Static Branch Prediction Strategies</h3>
+
+<strong>Simple Static: Always Predict Not Taken</strong>
+
+<ul>
+<li>Fixed prediction</li>
+<li>Ignore branch type</li>
+<li>Ignore branch history</li>
+<li>Simple hardware</li>
+</ul>
+
+<strong>Program Behavior-Based Static:</strong>
+
+<ul>
+<li>Analyze typical branch patterns</li>
+<li>Make predictions based on code structure</li>
+</ul>
+
+<strong>Backward Branches:</strong>
+
+<ul>
+<li>Usually taken</li>
+<li>Example: Loops</li>
+</ul>
+
+</code>`<code>assembly
+<p>loop:</p>
+<p>...</p>
+<p>BEQ $t0, $zero, loop   # Backward branch</p>
+</code>`<code>
+
+<ul>
+<li>Loop iterations: Branch taken many times</li>
+<li>Loop exit: Branch not taken once</li>
+<li>Prediction: Taken → Correct most of time</li>
+</ul>
+
+<strong>Forward Branches:</strong>
+
+<ul>
+<li>Usually not taken</li>
+<li>Example: If statements</li>
+</ul>
+
+</code>`<code>assembly
+<p>BEQ $t0, $zero, skip</p>
+<p>...                      # True case</p>
+<p>skip:</p>
+<p>...                      # After if</p>
+</code>`<code>
+
+<ul>
+<li>True case: Branch not taken</li>
+<li>False case: Branch taken</li>
+<li>Prediction depends on code style</li>
+</ul>
+
+<strong>Strategy: Backward Taken, Forward Not Taken</strong>
+
+<ul>
+<li>90%+ accuracy possible</li>
+<li>Based on empirical program analysis</li>
+<li>Requires code analysis</li>
+</ul>
+
+<h3>8.6 Dynamic Branch Prediction</h3>
+
+<strong>Concept:</strong>
+
+<ul>
+<li>Hardware learns branch behavior</li>
+<li>Predicts based on history</li>
+<li>Adapts to current code execution</li>
+<li>Not fixed prediction</li>
+</ul>
+
+<strong>Branch History Table:</strong>
+
+<ul>
+<li>Hardware table storing recent branch outcomes</li>
+<li>Indexed by branch instruction address</li>
+<li>Each entry: Branch taken or not taken recently</li>
+<li>Predicts based on recent behavior</li>
+</ul>
+
+<strong>Simple 1-Bit Predictor:</strong>
+
+<ul>
+<li>One bit per branch: Last outcome</li>
+<li>Predict same as last time</li>
+<li>Updates after each execution</li>
+</ul>
+
+<strong>Example:</strong>
+
+</code>`<code>
+<p>Loop iteration 1: Taken → Predict taken next</p>
+<p>Loop iteration 2: Taken → Predict taken next</p>
+<p>...</p>
+<p>Loop iteration 100: Taken → Predict taken next</p>
+<p>Loop exit: Not taken → Predict not taken next (wrong for next loop!)</p>
+</code>`<code>
+
+<p>Problem: Wrong twice per loop (entry and exit)</p>
+
+<strong>2-Bit Saturating Counter:</strong>
+
+<ul>
+<li>Two bits per branch: State machine</li>
+<li>Four states:</li>
+</ul>
+<p>- 00: Strongly not taken</p>
+<p>- 01: Weakly not taken</p>
+<p>- 10: Weakly taken</p>
+<p>- 11: Strongly taken</p>
+<ul>
+<li>Change prediction after two consecutive wrong predictions</li>
+<li>More stable</li>
+</ul>
+
+<strong>Advanced Predictors:</strong>
+
+<ul>
+<li>Correlating predictors (look at multiple branches)</li>
+<li>Two-level adaptive predictors</li>
+<li>Tournament predictors (combine multiple algorithms)</li>
+<li>Very high accuracy (>95%)</li>
+</ul>
+
+<strong>Hardware Cost:</strong>
+
+<ul>
+<li>Branch history table (memory)</li>
+<li>Prediction logic (comparators, counters)</li>
+<li>Update logic</li>
+<li>Worthwhile for performance gain</li>
+</ul>
+
+<p>---</p>
+
+<h2>9. Summary and Key Concepts</h2>
+
+<h3>9.1 Pipelining Benefits</h3>
+
+<strong>Performance Improvement:</strong>
+
+<ul>
+<li>Throughput increased by number of stages</li>
+<li>5-stage pipeline → 4-5× speedup</li>
+<li>Latency unchanged or slightly worse</li>
+<li>Overlapping execution key</li>
+</ul>
+
+<strong>Hardware Utilization:</strong>
+
+<ul>
+<li>All stages active in steady state</li>
+<li>Parallel processing</li>
+<li>Maximum efficiency</li>
+</ul>
+
+<h3>9.2 Pipeline Challenges</h3>
+
+<strong>Hazards:</strong>
+
+<p>1. <strong>Structural:</strong> Hardware resource conflicts</p>
+<p>2. <strong>Data:</strong> Instruction dependencies</p>
+<p>3. <strong>Control:</strong> Branch/jump decisions</p>
+
+<strong>Solutions:</strong>
+
+<ul>
+<li>Structural: Separate memories/caches</li>
+<li>Data: Forwarding, stalls, code reordering</li>
+<li>Control: Early resolution, branch prediction</li>
+</ul>
+
+<h3>9.3 MIPS Design Philosophy</h3>
+
+<strong>ISA Designed for Pipelining:</strong>
+
+<ul>
+<li>Fixed 32-bit instruction length</li>
+<li>Regular instruction formats</li>
+<li>Separate funct field</li>
+<li>Simple addressing modes</li>
+<li>Balanced pipeline stages</li>
+</ul>
+
+<strong>Performance Through Hardware:</strong>
+
+<ul>
+<li>Pipelining fundamental to MIPS</li>
+<li>Not optimized for single-cycle</li>
+<li>Hardware complexity for software simplicity</li>
+</ul>
+
+<h3>9.4 Key Takeaways</h3>
+
+<p>1. Pipelining improves throughput, not latency</p>
+<p>2. Steady state determines peak performance</p>
+<p>3. Pipeline fill time overhead for small programs</p>
+<p>4. Hazards reduce pipelining efficiency</p>
+<p>5. Forwarding eliminates many data hazards</p>
+<p>6. Load-use hazard always requires one stall</p>
+<p>7. Branch prediction crucial for control flow</p>
+<p>8. Compiler optimization reduces stalls</p>
+<p>9. ISA design significantly impacts pipeline efficiency</p>
+<p>10. ILP fundamental to modern processor performance</p>
+
+<p>---</p>
+
+<h2>10. Important Formulas and Metrics</h2>
+
+<h3>Speedup Calculation</h3>
+
+</code>`<code>
+<p>Speedup = Non-pipelined Time / Pipelined Time</p>
+
+<p>Ideal Speedup = Number of Pipeline Stages</p>
+
+<p>Actual Speedup = Number of Stages / (1 + Hazard Impact)</p>
+</code>`<code>
+
+<h3>Throughput</h3>
+
+</code>`<code>
+<p>Throughput = 1 instruction / Clock Period</p>
+
+<p>Throughput Improvement = Clock Period (non-pipelined) / Clock Period (pipelined)</p>
+</code>`<code>
+
+<h3>Pipeline Performance</h3>
+
+</code>`<code>
+<p>Time = (Number of Instructions + Stages - 1) × Clock Period</p>
+
+<p>CPI (Cycles Per Instruction) = 1 + Stall Cycles per Instruction</p>
+
+<p>Effective CPI = 1 + (Structural Stalls + Data Stalls + Control Stalls)</p>
+</code>`<code>
+
+<h3>Branch Prediction Accuracy</h3>
+
+</code>`<code>
+<p>Accuracy = Correct Predictions / Total Branches</p>
+
+<p>Stall Reduction = Accuracy × Cycles Saved per Correct Prediction</p>
+</code>``
+
+<p>---</p>
+
+<h2>Key Takeaways</h2>
+
+<p>1. <strong>Pipelining improves throughput, not latency</strong>—individual instructions take same or longer time, but more instructions complete per unit time.</p>
+
+<p>2. <strong>Five-stage MIPS pipeline</strong>: Instruction Fetch (IF), Instruction Decode (ID), Execute (EX), Memory Access (MEM), Write-Back (WB).</p>
+
+<p>3. <strong>Ideal speedup equals number of stages</strong>—five-stage pipeline theoretically achieves 5× speedup over single-cycle design.</p>
+
+<p>4. <strong>Assembly line analogy clarifies concept</strong>—like manufacturing, each stage works on different item simultaneously for maximum efficiency.</p>
+
+<p>5. <strong>Pipeline registers store intermediate results</strong> between stages, enabling independent operation and preventing data corruption.</p>
+
+<p>6. <strong>Three hazard types threaten pipeline efficiency</strong>: Structural (resource conflicts), Data (register dependencies), Control (branch/jump delays).</p>
+
+<p>7. <strong>Structural hazards resolved by hardware duplication</strong>—separate instruction and data caches eliminate memory access conflicts.</p>
+
+<p>8. <strong>Data hazards occur when instructions depend on previous results</strong>—forwarding (bypassing) allows ALU results to skip write-back stage.</p>
+
+<p>9. <strong>Forwarding paths connect pipeline stages directly</strong>, enabling result use before register file write completes.</p>
+
+<p>10. <strong>Load-use hazard requires one-cycle stall</strong>—memory data unavailable in time for immediate ALU use even with forwarding.</p>
+
+<p>11. <strong>Compiler code reordering can eliminate some stalls</strong>—moving independent instructions into load delay slots maintains pipeline flow.</p>
+
+<p>12. <strong>Control hazards arise from branch/jump instructions</strong>—don't know next PC until branch resolves in third cycle.</p>
+
+<p>13. <strong>Branch delay of 3 cycles</strong> in basic pipeline—fetch/decode/execute complete before decision known, wasting 3 instruction slots.</p>
+
+<p>14. <strong>Early branch resolution reduces penalty</strong>—dedicated comparison hardware in ID stage cuts delay to 1 cycle.</p>
+
+<p>15. <strong>Static branch prediction</strong> assumes direction (e.g., always not-taken)—simple but limited effectiveness.</p>
+
+<p>16. <strong>Dynamic branch prediction</strong> learns patterns from history—branch target buffer with 2-bit saturating counters achieves >90% accuracy.</p>
+
+<p>17. <strong>Two-bit counters prevent single misprediction disruption</strong>—requires two wrong predictions to change direction, handling loop patterns well.</p>
+
+<p>18. <strong>Pipeline performance</strong> = 1 CPI + Structural Stalls + Data Stalls + Control Stalls—minimizing hazards approaches ideal throughput.</p>
+
+<p>19. <strong>Modern processors use sophisticated prediction</strong>—multi-level predictors, pattern history tables, and return address stacks minimize control hazards.</p>
+
+<p>20. <strong>Pipeline complexity trades off with performance</strong>—deeper pipelines increase throughput but amplify hazard penalties and design difficulty.</p>
+
+<h2>Summary</h2>
+
+<p>Pipelining revolutionizes processor performance by applying manufacturing assembly-line principles to instruction execution, allowing multiple instructions to occupy different pipeline stages simultaneously. The five-stage MIPS pipeline (IF, ID, EX, MEM, WB) theoretically achieves 5× speedup by keeping all hardware components busy every cycle, transforming the inefficient single-cycle design where most hardware sat idle most of the time. However, three hazard types threaten this ideal performance: structural hazards from resource conflicts (solved by hardware duplication like separate instruction and data caches), data hazards from register dependencies (addressed by forwarding paths that bypass results directly between stages, though load-use cases still require one-cycle stalls), and control hazards from branches that don't resolve until the third cycle (mitigated by early branch resolution hardware, static prediction strategies, and sophisticated dynamic branch predictors using two-bit saturating counters that achieve over 90% accuracy). The effectiveness of forwarding demonstrates how careful hardware design can eliminate most data hazard stalls, while compiler optimizations like instruction reordering can fill remaining delay slots with useful work. Branch prediction evolution from simple static schemes to complex dynamic predictors with branch target buffers reflects the critical importance of minimizing control hazards in modern high-performance processors. Pipeline registers between stages serve as the crucial mechanism enabling independent stage operation, storing intermediate results and control signals while preventing data corruption across instruction overlaps. While pipelining introduces significant design complexity compared to single-cycle implementations, the dramatic performance improvements—approaching 5× speedup in practice—justify this added sophistication, making pipelining universal in modern processor architectures from embedded systems to supercomputers. Understanding these hazards and their solutions provides essential foundation for comprehending real-world processor implementations and the tradeoffs between pipeline depth, clock frequency, and hazard penalties that define contemporary computer architecture.</p>
+
+            
+            <div class="lecture-nav">
+                <a href="lecture-11.html" class="nav-btn">← Previous Lecture</a>
+                <a href="lecture-13.html" class="nav-btn">Next Lecture →</a>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 CO224 Computer Architecture Lecture Series. All rights reserved.</p>
+            <p>Department of Computer Engineering, University of Peradeniya</p>
+        </div>
+    </footer>
+</body>
+</html>

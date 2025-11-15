@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lecture 7: Function Call and Return - CO224 Computer Architecture</title>
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="lecture-header">
+        <div class="container">
+            <a href="../index.html" class="back-link">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                    <polyline points="12 19 5 12 12 5"></polyline>
+                </svg>
+                Back to All Lectures
+            </a>
+            <h1 class="lecture-title">Lecture 7: Function Call and Return</h1>
+            <p class="lecture-meta">CO224 - Computer Architecture</p>
+        </div>
+    </header>
+
+    <main class="lecture-content-area container">
+        <div class="content-body">
+            <h1>Lecture 7: Function Call and Return</h1>
+
+<h2>Introduction</h2>
+
+<p>Function calling is a fundamental mechanism that enables modular programming and code reuse. This lecture explores how ARM assembly implements function calls, covering parameter passing, return value handling, the call stack, register preservation conventions, and recursion. Understanding these mechanisms is essential for translating high-level function-based programs into assembly and for comprehending how processors manage execution context across function boundaries.</p>
+
+<p>---</p>
+
+<h2>1. Function Calling Fundamentals</h2>
+
+<h3>1.1 Function Calling Steps</h3>
+
+<strong>Complete Call Sequence</strong>
+
+<p>1. <strong>Place parameters</strong> in argument registers (R0-R3)</p>
+<p>2. <strong>Transfer control</strong> to callee function using BL</p>
+<p>3. <strong>Acquire stack storage</strong> for temporary values</p>
+<p>4. <strong>Back up registers</strong> that need preservation (R4-R11)</p>
+<p>5. <strong>Perform function operations</strong> (the actual work)</p>
+<p>6. <strong>Place result</strong> in return register (R0)</p>
+<p>7. <strong>Restore backed-up registers</strong> from stack</p>
+<p>8. <strong>Return to caller</strong> using MOV PC, LR</p>
+
+<strong>Why This Complexity?</strong>
+
+<ul>
+<li>Enables nested and recursive function calls</li>
+<li>Protects caller's data in registers</li>
+<li>Provides local storage for function variables</li>
+<li>Supports arbitrary call depth</li>
+</ul>
+
+<h3>1.2 Why Use Functions?</h3>
+
+<strong>Benefits</strong>
+
+<ul>
+<li><strong>Code reuse</strong>: Write once, call many times</li>
+<li><strong>Modularity</strong>: Break complex problems into manageable pieces</li>
+<li><strong>Abstraction</strong>: Hide implementation details</li>
+<li><strong>Maintainability</strong>: Easier to debug and modify</li>
+</ul>
+
+<strong>Example</strong>
+
+<p>``<code>c</p>
+<p>int add(int a, int b) {</p>
+<p>return a + b;</p>
+<p>}</p>
+
+<p>int main() {</p>
+<p>int result = add(5, 3);  // Function call</p>
+<p>}</p>
+</code>`<code>
+
+<h2>2. ARM Register Conventions</h2>
+
+<h3>2.1 Register Usage Rules</h3>
+
+<strong>Register Classification</strong>
+
+</code>`<code>
+<p>R0-R1:   Arguments and return results</p>
+<p>- Caller does NOT expect these preserved</p>
+<p>- Scratch registers</p>
+
+<p>R2-R3:   Additional arguments</p>
+<p>- Also scratch registers</p>
+<p>- Caller does NOT expect preservation</p>
+
+<p>R4-R11:  Local variables</p>
+<p>- MUST be preserved across function calls</p>
+<p>- Callee saves if it uses these registers</p>
+
+<p>R12:     Intra-procedure-call scratch register</p>
+<p>- Can be corrupted by function calls</p>
+<p>- Not preserved</p>
+
+<p>R13 (SP): Stack Pointer</p>
+<p>- Points to top of stack</p>
+<p>- MUST always be valid</p>
+
+<p>R14 (LR): Link Register</p>
+<p>- Stores return address</p>
+<p>- Set by BL instruction</p>
+
+<p>R15 (PC): Program Counter</p>
+<p>- Next instruction address</p>
+<p>- Modified to return from function</p>
+</code>`<code>
+
+<h3>2.2 Shared Register File</h3>
+
+<strong>Key Concept</strong>
+
+<ul>
+<li>ALL functions share the SAME 16 registers</li>
+<li>No separate register sets per function</li>
+<li>Registers are a shared resource requiring careful management</li>
+</ul>
+
+<strong>Implications</strong>
+
+<ul>
+<li>Functions must coordinate register usage</li>
+<li>Conventions prevent conflicts</li>
+<li>Callee must preserve certain registers (R4-R11)</li>
+<li>Caller can assume R4-R11 unchanged after call</li>
+</ul>
+
+<strong>Example Scenario</strong>
+
+</code>`<code>assembly
+<p>main:</p>
+<p>MOV R4, #10      ; main uses R4</p>
+<p>MOV R0, #5       ; Pass argument</p>
+<p>BL function      ; Call function</p>
+<p>; R4 still contains 10 (guaranteed)</p>
+<p>ADD R5, R4, R0   ; Use preserved R4 and return value</p>
+
+<p>function:</p>
+<p>; Must preserve R4 if we use it</p>
+<p>; Can freely modify R0-R3, R12</p>
+<p>MOV R0, #20      ; Return value</p>
+<p>MOV PC, LR       ; Return</p>
+</code>`<code>
+
+<h2>3. Function Call Instructions</h2>
+
+<h3>3.1 Branch and Link (BL)</h3>
+
+<strong>Syntax</strong>
+
+</code>`<code>assembly
+<p>BL function_label    ; Branch and Link</p>
+</code>`<code>
+
+<strong>Operation</strong>
+
+<p>1. <strong>Save return address</strong>: LR = address of next instruction</p>
+<p>2. <strong>Jump to function</strong>: PC = function_label address</p>
+
+<strong>Example</strong>
+
+</code>`<code>assembly
+<p>MOV R0, #10      ; Address: 0x1000</p>
+<p>BL fun           ; Address: 0x1004</p>
+<p>ADD R1, R0, #5   ; Address: 0x1008 (return point)</p>
+
+<p>fun:</p>
+<p>; LR contains 0x1008 (address after BL)</p>
+<p>; Function code here</p>
+<p>MOV PC, LR       ; Return to 0x1008</p>
+</code>`<code>
+
+<strong>Why "Link"?</strong>
+
+<ul>
+<li>Creates a "link" back to caller</li>
+<li>LR provides the connection</li>
+<li>Enables function to return</li>
+</ul>
+
+<h3>3.2 Return from Function</h3>
+
+<strong>Basic Return</strong>
+
+</code>`<code>assembly
+<p>MOV PC, LR           ; Copy LR to PC</p>
+</code>`<code>
+
+<strong>Operation</strong>
+
+<ul>
+<li>PC = LR (jump to return address)</li>
+<li>Execution continues at instruction after BL</li>
+<li>Simple and fast</li>
+</ul>
+
+<strong>Alternative (older ARM)</strong>
+
+</code>`<code>assembly
+<p>BX LR                ; Branch and Exchange</p>
+</code>`<code>
+
+<h2>4. Parameter Passing</h2>
+
+<h3>4.1 Using R0-R3</h3>
+
+<strong>Convention</strong>
+
+<ul>
+<li>First 4 arguments in R0-R3</li>
+<li>Arguments loaded before BL instruction</li>
+<li>Callee reads R0-R3 to get parameters</li>
+</ul>
+
+<strong>Example: Two Parameters</strong>
+
+</code>`<code>c
+<p>int multiply(int a, int b) {</p>
+<p>return a * b;</p>
+<p>}</p>
+
+<p>int result = multiply(6, 7);</p>
+</code>`<code>
+
+<strong>ARM Assembly</strong>
+
+</code>`<code>assembly
+<p>MOV R0, #6       ; First argument (a)</p>
+<p>MOV R1, #7       ; Second argument (b)</p>
+<p>BL multiply      ; Call function</p>
+<p>; R0 now contains result (42)</p>
+
+<p>multiply:</p>
+<p>MUL R0, R0, R1   ; R0 = R0 × R1</p>
+<p>MOV PC, LR       ; Return</p>
+</code>`<code>
+
+<h3>4.2 More Than 4 Arguments</h3>
+
+<strong>Solution: Use Stack</strong>
+
+<ul>
+<li>Arguments 1-4 in R0-R3</li>
+<li>Additional arguments pushed to stack</li>
+<li>Callee reads from stack</li>
+</ul>
+
+<strong>Example: 6 Arguments</strong>
+
+</code>`<code>c
+<p>int sum6(int a, int b, int c, int d, int e, int f) {</p>
+<p>return a + b + c + d + e + f;</p>
+<p>}</p>
+</code>`<code>
+
+<strong>ARM Assembly</strong>
+
+</code>`<code>assembly
+<p>MOV R0, #1       ; arg1</p>
+<p>MOV R1, #2       ; arg2</p>
+<p>MOV R2, #3       ; arg3</p>
+<p>MOV R3, #4       ; arg4</p>
+<p>MOV R4, #5</p>
+<p>MOV R5, #6</p>
+<p>SUB SP, SP, #8   ; Space for 2 more args</p>
+<p>STR R4, [SP, #0] ; arg5 on stack</p>
+<p>STR R5, [SP, #4] ; arg6 on stack</p>
+<p>BL sum6</p>
+<p>ADD SP, SP, #8   ; Clean up stack</p>
+
+<p>sum6:</p>
+<p>; R0-R3 have first 4 args</p>
+<p>; Load arg5 and arg6 from stack</p>
+<p>LDR R4, [SP, #0] ; arg5</p>
+<p>LDR R5, [SP, #4] ; arg6</p>
+<p>ADD R0, R0, R1</p>
+<p>ADD R0, R0, R2</p>
+<p>ADD R0, R0, R3</p>
+<p>ADD R0, R0, R4</p>
+<p>ADD R0, R0, R5</p>
+<p>MOV PC, LR</p>
+</code>`<code>
+
+<h2>5. Return Values</h2>
+
+<h3>5.1 Primary Return Register (R0)</h3>
+
+<strong>Convention</strong>
+
+<ul>
+<li>Result placed in R0</li>
+<li>Caller reads R0 after function returns</li>
+<li>Works for 32-bit values</li>
+</ul>
+
+<strong>Example</strong>
+
+</code>`<code>assembly
+<p>add:</p>
+<p>ADD R0, R0, R1   ; R0 = R0 + R1</p>
+<p>MOV PC, LR       ; Return with result in R0</p>
+
+<p>main:</p>
+<p>MOV R0, #10</p>
+<p>MOV R1, #20</p>
+<p>BL add           ; Call function</p>
+<p>; R0 now contains 30</p>
+</code>`<code>
+
+<h3>5.2 64-Bit Return Values</h3>
+
+<strong>Convention</strong>
+
+<ul>
+<li>Lower 32 bits in R0</li>
+<li>Upper 32 bits in R1</li>
+<li>Example: 64-bit integer or two 32-bit values</li>
+</ul>
+
+<strong>Example</strong>
+
+</code>`<code>c
+<p>long long multiply64(int a, int b) {</p>
+<p>return (long long)a * b;</p>
+<p>}</p>
+</code>`<code>
+
+<strong>ARM Assembly</strong>
+
+</code>`<code>assembly
+<p>multiply64:</p>
+<p>SMULL R0, R1, R0, R1  ; Signed multiply long</p>
+<p>; R0 = lower 32 bits</p>
+<p>; R1 = upper 32 bits</p>
+<p>MOV PC, LR</p>
+</code>`<code>
+
+<h2>6. The Stack</h2>
+
+<h3>6.1 Stack Structure</h3>
+
+<strong>Definition</strong>
+
+<ul>
+<li>Last In, First Out (LIFO) data structure</li>
+<li>Part of main memory</li>
+<li>Used for temporary storage</li>
+</ul>
+
+<strong>Characteristics</strong>
+
+<ul>
+<li><strong>Starts at high address</strong>: Top of memory</li>
+<li><strong>Grows downward</strong>: Toward lower addresses</li>
+<li><strong>Stack Pointer (SP/R13)</strong>: Points to top of stack</li>
+<li><strong>Dynamic size</strong>: Grows and shrinks as needed</li>
+</ul>
+
+<strong>Memory Layout</strong>
+
+</code>`<code>
+<p>High Address</p>
+<p>┌─────────┐</p>
+<p>│  Stack  │ ← SP points here</p>
+<p>│   ↓     │   (grows downward)</p>
+<p>│         │</p>
+<p>├─────────┤</p>
+<p>│  Heap   │</p>
+<p>│   ↑     │   (grows upward)</p>
+<p>├─────────┤</p>
+<p>│  Data   │   (static variables)</p>
+<p>├─────────┤</p>
+<p>│  Text   │   (instructions)</p>
+<p>└─────────┘</p>
+<p>Low Address</p>
+</code>`<code>
+
+<h3>6.2 Stack Uses</h3>
+
+<strong>Primary Purposes</strong>
+
+<p>1. <strong>Saving register values</strong> (preserve R4-R11)</p>
+<p>2. <strong>Storing local variables</strong> (arrays, structures)</p>
+<p>3. <strong>Preserving return addresses</strong> (nested calls)</p>
+<p>4. <strong>Extra function arguments</strong> (beyond R0-R3)</p>
+<p>5. <strong>Storing local arrays</strong> that don't fit in registers</p>
+
+<h2>7. Stack Operations</h2>
+
+<h3>7.1 Allocating Stack Space (Pushing)</h3>
+
+<strong>Decrement Stack Pointer</strong>
+
+</code>`<code>assembly
+<p>SUB SP, SP, #4       ; Allocate 4 bytes (1 register)</p>
+<p>SUB SP, SP, #12      ; Allocate 12 bytes (3 registers)</p>
+</code>`<code>
+
+<strong>Why Subtract?</strong>
+
+<ul>
+<li>Stack grows toward lower addresses</li>
+<li>Allocating space moves SP downward</li>
+<li>Each 32-bit register needs 4 bytes</li>
+</ul>
+
+<h3>7.2 Storing Values to Stack</h3>
+
+<strong>Single Register</strong>
+
+</code>`<code>assembly
+<p>SUB SP, SP, #4       ; Allocate space</p>
+<p>STR R4, [SP, #0]     ; Store R4 at top of stack</p>
+</code>`<code>
+
+<strong>Multiple Registers</strong>
+
+</code>`<code>assembly
+<p>SUB SP, SP, #12      ; Space for 3 registers</p>
+<p>STR R4, [SP, #0]     ; Store R4</p>
+<p>STR R5, [SP, #4]     ; Store R5</p>
+<p>STR R6, [SP, #8]     ; Store R6</p>
+</code>`<code>
+
+<strong>Push Multiple (Convenient)</strong>
+
+</code>`<code>assembly
+<p>PUSH {R4-R6}         ; Allocate and store in one instruction</p>
+</code>`<code>
+
+<h3>7.3 Loading Values from Stack</h3>
+
+<strong>Single Register</strong>
+
+</code>`<code>assembly
+<p>LDR R4, [SP, #0]     ; Load R4 from stack</p>
+<p>ADD SP, SP, #4       ; Release space</p>
+</code>`<code>
+
+<strong>Multiple Registers</strong>
+
+</code>`<code>assembly
+<p>LDR R4, [SP, #0]     ; Restore R4</p>
+<p>LDR R5, [SP, #4]     ; Restore R5</p>
+<p>LDR R6, [SP, #8]     ; Restore R6</p>
+<p>ADD SP, SP, #12      ; Release space</p>
+</code>`<code>
+
+<strong>Pop Multiple</strong>
+
+</code>`<code>assembly
+<p>POP {R4-R6}          ; Restore and release in one instruction</p>
+</code>`<code>
+
+<h3>7.4 Stack Space Lifecycle</h3>
+
+<strong>Pattern</strong>
+
+<p>1. <strong>Allocate</strong>: SUB SP, SP, #n</p>
+<p>2. <strong>Use</strong>: STR/LDR with [SP, offset]</p>
+<p>3. <strong>Release</strong>: ADD SP, SP, #n</p>
+
+<strong>Important: Balance</strong>
+
+<ul>
+<li>Every SUB must have corresponding ADD</li>
+<li>Unbalanced stack causes bugs and crashes</li>
+<li>SP must be restored before return</li>
+</ul>
+
+<h2>8. Register Preservation</h2>
+
+<h3>8.1 Why Preserve R4-R11?</h3>
+
+<strong>Problem</strong>
+
+<ul>
+<li>All functions share same registers</li>
+<li>Main function may be using R4-R11</li>
+<li>Called function needs registers for its work</li>
+<li>Must not corrupt caller's data</li>
+</ul>
+
+<strong>Solution</strong>
+
+<ul>
+<li>Callee saves R4-R11 to stack at function start</li>
+<li>Uses registers freely during execution</li>
+<li>Restores R4-R11 from stack before return</li>
+<li>Caller expects R4-R11 unchanged</li>
+</ul>
+
+<h3>8.2 Preservation Pattern</h3>
+
+<strong>Function Template</strong>
+
+</code>`<code>assembly
+<p>function:</p>
+<p>; Prologue: Save registers</p>
+<p>SUB SP, SP, #12      ; Allocate space</p>
+<p>STR R4, [SP, #0]     ; Save R4</p>
+<p>STR R5, [SP, #4]     ; Save R5</p>
+<p>STR R6, [SP, #8]     ; Save R6</p>
+
+<p>; Function body: Use R4-R6 freely</p>
+<p>; ...</p>
+
+<p>; Epilogue: Restore registers</p>
+<p>LDR R4, [SP, #0]     ; Restore R4</p>
+<p>LDR R5, [SP, #4]     ; Restore R5</p>
+<p>LDR R6, [SP, #8]     ; Restore R6</p>
+<p>ADD SP, SP, #12      ; Release space</p>
+<p>MOV PC, LR           ; Return</p>
+</code>`<code>
+
+<strong>Optimization</strong>
+
+<ul>
+<li>Only preserve registers actually used</li>
+<li>If function doesn't use R5, don't save/restore it</li>
+<li>Saves stack space and execution time</li>
+</ul>
+
+<h2>9. Nested Function Calls (Non-Leaf Functions)</h2>
+
+<h3>9.1 The Problem</h3>
+
+<strong>Leaf Function</strong>
+
+<ul>
+<li>Doesn't call other functions</li>
+<li>LR preserved automatically (not overwritten)</li>
+<li>Simple return: MOV PC, LR</li>
+</ul>
+
+<strong>Non-Leaf Function</strong>
+
+<ul>
+<li>Calls other functions</li>
+<li>BL overwrites LR with new return address</li>
+<li>Original LR lost!</li>
+<li>Cannot return to original caller</li>
+</ul>
+
+<strong>Example Problem</strong>
+
+</code>`<code>assembly
+<p>main:</p>
+<p>BL funcA         ; LR = address after this BL</p>
+
+<p>funcA:</p>
+<p>; LR contains return address to main</p>
+<p>BL funcB         ; LR OVERWRITTEN with return to funcA!</p>
+<p>MOV PC, LR       ; Returns to funcA, not main (WRONG!)</p>
+
+<p>funcB:</p>
+<p>MOV PC, LR       ; Correctly returns to funcA</p>
+</code>`<code>
+
+<h3>9.2 Solution: Save LR to Stack</h3>
+
+<strong>Pattern</strong>
+
+</code>`<code>assembly
+<p>function:</p>
+<p>; Save LR first!</p>
+<p>SUB SP, SP, #4</p>
+<p>STR LR, [SP, #0]</p>
+
+<p>; Now safe to call other functions</p>
+<p>BL other_function</p>
+
+<p>; Restore LR before return</p>
+<p>LDR LR, [SP, #0]</p>
+<p>ADD SP, SP, #4</p>
+<p>MOV PC, LR</p>
+</code>`<code>
+
+<strong>Complete Example</strong>
+
+</code>`<code>assembly
+<p>main:</p>
+<p>MOV R0, #5</p>
+<p>BL outer         ; LR = return<em>to</em>main</p>
+<p>; Execution returns here</p>
+
+<p>outer:</p>
+<p>SUB SP, SP, #4</p>
+<p>STR LR, [SP, #0] ; Save LR (return<em>to</em>main)</p>
+
+<p>MOV R1, R0</p>
+<p>ADD R0, R0, #10</p>
+<p>BL inner         ; LR = return<em>to</em>outer (overwrites!)</p>
+
+<p>ADD R0, R0, R1</p>
+<p>LDR LR, [SP, #0] ; Restore LR (return<em>to</em>main)</p>
+<p>ADD SP, SP, #4</p>
+<p>MOV PC, LR       ; Returns to main</p>
+
+<p>inner:</p>
+<p>MUL R0, R0, R0</p>
+<p>MOV PC, LR       ; Returns to outer</p>
+</code>`<code>
+
+<h2>10. Recursion Example: Factorial</h2>
+
+<h3>10.1 Factorial Function</h3>
+
+<strong>C Code</strong>
+
+</code>`<code>c
+<p>int fact(int n) {</p>
+<p>if (n <= 1)</p>
+<p>return 1;</p>
+<p>else</p>
+<p>return n * fact(n-1);</p>
+<p>}</p>
+</code>`<code>
+
+<strong>Key Points</strong>
+
+<ul>
+<li>Base case: n ≤ 1, return 1</li>
+<li>Recursive case: return n × fact(n-1)</li>
+<li>Each call creates new stack frame</li>
+<li>Stack unwinds as recursion returns</li>
+</ul>
+
+<h3>10.2 ARM Assembly Implementation</h3>
+
+</code>`<code>assembly
+<p>fact:</p>
+<p>; Save LR and n</p>
+<p>SUB SP, SP, #8</p>
+<p>STR LR, [SP, #4]     ; Save return address</p>
+<p>STR R0, [SP, #0]     ; Save n</p>
+
+<p>; Base case: if (n <= 1) return 1</p>
+<p>CMP R0, #1</p>
+<p>BGT recursive</p>
+<p>MOV R0, #1           ; Return 1</p>
+<p>B fact_end</p>
+
+<p>recursive:</p>
+<p>; Recursive case: n * fact(n-1)</p>
+<p>SUB R0, R0, #1       ; n-1</p>
+<p>BL fact              ; fact(n-1)</p>
+<p>LDR R1, [SP, #0]     ; Restore original n</p>
+<p>MUL R0, R0, R1       ; n * fact(n-1)</p>
+
+<p>fact_end:</p>
+<p>; Restore and return</p>
+<p>LDR LR, [SP, #4]</p>
+<p>ADD SP, SP, #8</p>
+<p>MOV PC, LR</p>
+</code>`<code>
+
+<h3>10.3 Stack Growth During Recursion</h3>
+
+<strong>Call: fact(3)</strong>
+
+</code>`<code>
+<p>Initial: SP = 0x1000</p>
+
+<p>fact(3) call:</p>
+<p>SP = 0x0FF8: [LR_main, 3]</p>
+
+<p>fact(2) call:</p>
+<p>SP = 0x0FF0: [LR_fact3, 2]</p>
+
+<p>fact(1) call:</p>
+<p>SP = 0x0FE8: [LR_fact2, 1]</p>
+
+<p>Base case returns 1</p>
+<p>Unwinds to fact(2): returns 1*2 = 2</p>
+<p>Unwinds to fact(3): returns 2*3 = 6</p>
+<p>Returns to main with result 6</p>
+
+<p>Final: SP = 0x1000 (restored)</p>
+</code>`<code>
+
+<strong>Stack Space Per Call</strong>
+
+<ul>
+<li>8 bytes (LR + n)</li>
+<li>fact(5) needs 5 × 8 = 40 bytes</li>
+<li>fact(10) needs 80 bytes</li>
+<li>Deep recursion can overflow stack!</li>
+</ul>
+
+<h2>11. Memory Layout and Stack vs. Heap</h2>
+
+<h3>11.1 Complete Memory Layout</h3>
+
+</code>`<code>
+<p>High Address (0xFFFFFFFF)</p>
+<p>┌──────────────┐</p>
+<p>│   Reserved   │ OS and system</p>
+<p>├──────────────┤</p>
+<p>│    Stack     │ ← SP (grows down)</p>
+<p>│      ↓       │   Automatic storage</p>
+<p>│              │   Function call data</p>
+<p>│              │   Local variables</p>
+<p>│              │</p>
+<p>│   (unused)   │</p>
+<p>│              │</p>
+<p>│      ↑       │</p>
+<p>│    Heap      │   Dynamic allocation</p>
+<p>│              │   malloc/free, new/delete</p>
+<p>├──────────────┤</p>
+<p>│ Static Data  │   Global variables</p>
+<p>│              │   String constants</p>
+<p>├──────────────┤</p>
+<p>│    Text      │   Program instructions</p>
+<p>│ (Code)       │   Read-only</p>
+<p>└──────────────┘</p>
+<p>Low Address (0x00000000)</p>
+</code>``
+
+<h3>11.2 Stack Characteristics</h3>
+
+<strong>Automatic Storage</strong>
+
+<ul>
+<li>Allocated when function called</li>
+<li>Released when function returns</li>
+<li>Managed automatically by compiler/runtime</li>
+</ul>
+
+<strong>Fast Access</strong>
+
+<ul>
+<li>Fixed addressing pattern</li>
+<li>SP always points to top</li>
+<li>Simple offset calculations</li>
+</ul>
+
+<strong>Limited Size</strong>
+
+<ul>
+<li>Typically 1-8 MB</li>
+<li>Stack overflow if exceeded</li>
+<li>Recursion depth limited</li>
+</ul>
+
+<strong>Scope</strong>
+
+<ul>
+<li>Local to function</li>
+<li>Not accessible after return</li>
+<li>Perfect for temporary data</li>
+</ul>
+
+<h3>11.3 Heap Characteristics</h3>
+
+<strong>Dynamic Allocation</strong>
+
+<ul>
+<li>malloc/free in C</li>
+<li>new/delete in C++</li>
+<li>Programmer controls lifetime</li>
+</ul>
+
+<strong>Flexible Size</strong>
+
+<ul>
+<li>Can grow large (limited by available memory)</li>
+<li>Variable-sized allocations</li>
+</ul>
+
+<strong>Manual Management</strong>
+
+<ul>
+<li>Must explicitly free memory</li>
+<li>Memory leaks if not freed</li>
+<li>Fragmentation possible</li>
+</ul>
+
+<strong>Global Scope</strong>
+
+<ul>
+<li>Persists until explicitly freed</li>
+<li>Can pass pointers across functions</li>
+<li>Suitable for data structures</li>
+</ul>
+
+<h2>Key Takeaways</h2>
+
+<p>1. <strong>Function calling requires</strong> parameter passing, return value handling, and register preservation.</p>
+
+<p>2. <strong>R0-R3 for arguments and returns</strong> - caller doesn't expect preservation.</p>
+
+<p>3. <strong>R4-R11 must be preserved</strong> by callee if used, protecting caller's data.</p>
+
+<p>4. <strong>BL instruction</strong> saves return address in LR and jumps to function.</p>
+
+<p>5. <strong>Return via MOV PC, LR</strong> copies link register to program counter.</p>
+
+<p>6. <strong>Stack is LIFO structure</strong> growing downward from high addresses, pointed to by SP.</p>
+
+<p>7. <strong>Stack usage</strong> includes saving registers, local variables, return addresses, and extra arguments.</p>
+
+<p>8. <strong>Allocate with SUB SP, release with ADD SP</strong> - must balance allocations and releases.</p>
+
+<p>9. <strong>Non-leaf functions</strong> must save LR to stack before making nested calls.</p>
+
+<p>10. <strong>Recursion</strong> creates multiple stack frames, one per call, unwinding as calls return.</p>
+
+<p>11. <strong>Stack vs. Heap</strong> - stack is automatic/local/fast/limited, heap is manual/global/flexible/larger.</p>
+
+<p>12. <strong>Register conventions</strong> enable modularity and prevent conflicts in shared register file.</p>
+
+<h2>Summary</h2>
+
+<p>Function calling mechanisms enable modular programming by providing structured ways to pass control, data, and return values between code sections. ARM's register conventions balance efficiency (passing arguments in registers) with safety (preserving callee-saved registers). The stack provides essential temporary storage for register preservation, local variables, and handling nested calls including recursion. Understanding these mechanisms is crucial for translating high-level function-based code to assembly, optimizing performance, and debugging stack-related issues. The interplay between registers, stack, and calling conventions forms the foundation for understanding how real programs execute, preparing us for more advanced topics like exception handling, operating systems, and compiler optimization.</p>
+
+            
+            <div class="lecture-nav">
+                <a href="lecture-06.html" class="nav-btn">← Previous Lecture</a>
+                <a href="lecture-08.html" class="nav-btn">Next Lecture →</a>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 CO224 Computer Architecture Lecture Series. All rights reserved.</p>
+            <p>Department of Computer Engineering, University of Peradeniya</p>
+        </div>
+    </footer>
+</body>
+</html>
