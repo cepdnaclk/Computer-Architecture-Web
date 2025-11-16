@@ -1,6 +1,6 @@
-# CO224 - Computer Architecture Lecture Series Website
+# Lectures on Computer Architecture
 
-A professional, static GitHub Pages website for the CO224 Computer Architecture lecture series. This website provides easy access to lecture notes, downloadable materials, and organized content for students following the YouTube lecture series.
+A professional, static GitHub Pages website for the "Lectures on Computer Architecture" lecture series. This website provides easy access to lecture notes, downloadable materials, and organized content for students following the lecture series.
 
 ## 🌟 Features
 
@@ -29,7 +29,7 @@ CO224-Web/
 │   └── ... (20 lectures)
 │   └── img/                # Images used in lectures
 ├── materials/              # Downloadable materials
-│   ├── CO224-Complete-Notes.pdf (add your PDF here)
+│   ├── Lectures-Complete-Notes.pdf (add your PDF here)
 │   └── supplementary.zip (add your materials here)
 ├── convert_lectures.py     # Python script to convert MD to HTML
 └── _config.yml             # GitHub Pages configuration

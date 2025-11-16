@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Simple local web server to preview the CO224 website before deployment.
+Simple local web server to preview the Lectures on Computer Architecture website before deployment.
 Run this script and open http://localhost:8000 in your browser.
 """
 
@@ -23,7 +23,7 @@ def main():
     os.chdir(os.path.dirname(os.path.abspath(__file__)))
     
     print("=" * 60)
-    print("CO224 Website Local Preview Server")
+    print("Lectures on Computer Architecture — Local Preview Server")
     print("=" * 60)
     print(f"\n🌐 Starting server at http://localhost:{PORT}")
     print("\n📱 Preview your website:")

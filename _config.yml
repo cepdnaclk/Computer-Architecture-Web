@@ -9,10 +9,10 @@ exclude:
   - Lectures/
 
 # Site settings
-title: "CO224 - Computer Architecture"
+title: "Lectures on Computer Architecture"
 description: "A Comprehensive Lecture Series on Computer Architecture"
 url: "https://cepdnaclk.github.io"
-baseurl: "/CO224-Web"
+baseurl: "/lectures-on-computer-architecture"
 
 # Build settings
 markdown: kramdown
