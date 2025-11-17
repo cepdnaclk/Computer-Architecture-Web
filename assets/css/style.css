@@ -422,6 +422,127 @@ section {
   color: var(--text-light);
 }
 
+.lecture-links {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 0.75rem;
+}
+
+.lecture-link-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.4rem 0.9rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  text-decoration: none;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.lecture-link-btn svg {
+  width: 16px;
+  height: 16px;
+}
+
+.video-link {
+  background: #ff0000;
+  color: white;
+}
+
+.video-link:hover {
+  background: #cc0000;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(255, 0, 0, 0.2);
+}
+
+.notes-link {
+  background: var(--primary-color);
+  color: white;
+}
+
+.notes-link:hover {
+  background: var(--accent-color);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+/* ===========================
+   Video Thumbnail Section
+   =========================== */
+.video-container {
+  margin: 2rem 0 3rem 0;
+  background: var(--bg-white);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.video-thumbnail {
+  position: relative;
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.video-thumbnail:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+.video-play-overlay {
+  position: relative;
+  display: block;
+  cursor: pointer;
+}
+
+.video-play-overlay img {
+  width: 100%;
+  height: auto;
+  display: block;
+  background: #000;
+}
+
+.play-button {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  transition: transform 0.2s ease;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+}
+
+.video-play-overlay:hover .play-button {
+  transform: translate(-50%, -50%) scale(1.1);
+}
+
+.video-info {
+  margin-top: 1rem;
+  text-align: center;
+}
+
+.video-notice {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--text-light);
+  font-size: 0.9rem;
+  margin: 0;
+  padding: 0.5rem 1rem;
+  background: #f3f4f6;
+  border-radius: 6px;
+}
+
+.video-notice svg {
+  flex-shrink: 0;
+  color: var(--primary-color);
+}
+
 /* ===========================
    About & Disclaimer
    =========================== */
@@ -698,6 +819,21 @@ footer p {
 
   .content-body {
     padding: 1.5rem;
+  }
+
+  .video-container {
+    padding: 1rem;
+    margin: 1.5rem 0 2rem 0;
+  }
+
+  .video-notice {
+    font-size: 0.85rem;
+    padding: 0.5rem 0.75rem;
+  }
+
+  .play-button svg {
+    width: 54px;
+    height: 38px;
   }
 
   .lecture-nav {
