@@ -68,9 +68,10 @@ This lecture transitions from instruction set architecture (ISA) to microarchite
 
 **R-Type Format**
 
-
+```
 [Opcode][RS][RT][RD][SHAMT][Funct]
  6 bits  5   5   5    5      6 bits
+```
 
 
 Fields:
@@ -84,9 +85,10 @@ Fields:
 
 **I-Type Format**
 
-
+```
 [Opcode][RS][RT][Immediate]
  6 bits  5   5   16 bits
+```
 
 
 Fields:
@@ -98,9 +100,10 @@ Fields:
 
 **J-Type Format**
 
-
+```
 [Opcode][Address]
  6 bits  26 bits
+```
 
 
 Fields:
@@ -181,7 +184,7 @@ Fields:
 
 **Clock Period and Frequency**
 
-
+```
 Clock Period (T): Duration of one cycle
 Clock Rate (f): Cycles per second
 
@@ -190,6 +193,7 @@ Relationship: f = 1/T
 Example:
 T = 250 ps = 0.25 ns
 f = 1/(250 × 10^-12) = 4 GHz
+```
 
 
 ### 2.5 Register Operations
@@ -207,11 +211,12 @@ f = 1/(250 × 10^-12) = 4 GHz
 
 **Timing Example**
 
-
+```
 Clock: __|‾|__|‾|__|‾|__
 Write:  ‾‾‾‾|___|‾‾‾‾‾
 Data:   [A][B][C][D][E]
 State:  [A][A][A][D][D]
+```
 
 
 ### 2.6 Critical Path and Clock Period
@@ -223,7 +228,7 @@ State:  [A][A][A][D][D]
 
 **Clock Period Constraint**
 
-
+```
 Clock Period ≥ Longest Path Delay
 
 Path: Register → Combinational Logic → Register
@@ -233,6 +238,7 @@ Must allow time for:
 2. Combinational logic computation
 3. Result reaching next register input
 4. Setup time before next clock edge
+```
 
 
 **Critical Path**
@@ -427,7 +433,7 @@ Must allow time for:
 
 **Function Field Encoding**:
 
-
+```
 Funct     | Operation | ALU Control
 ----------|-----------|-------------
 0x20      | ADD       | 0010
@@ -435,6 +441,7 @@ Funct     | Operation | ALU Control
 0x24      | AND       | 0000
 0x25      | OR        | 0001
 0x2A      | SLT       | 0111
+```
 
 
 **ALU Control Logic**:
@@ -471,9 +478,10 @@ Funct     | Operation | ALU Control
 
 **Examples**:
 
-
+```
 16-bit: 0x0005 → 32-bit: 0x00000005 (+5)
 16-bit: 0xFFFB → 32-bit: 0xFFFFFFFB (-5)
+```
 
 
 **Hardware**: Simple wire replication (fast)
@@ -488,9 +496,10 @@ Funct     | Operation | ALU Control
 
 **ALUSrc Signal**:
 
-
+```
 ALUSrc = 0: Use register (R-type, branch)
 ALUSrc = 1: Use immediate (I-type)
+```
 
 
 ## 6. Load/Store Instruction Datapath
@@ -507,9 +516,10 @@ ALUSrc = 1: Use immediate (I-type)
 
 **Examples**:
 
-
+```
 LW $t1, 8($t0)    # Load from $t0 + 8
 SW $t2, -4($sp)   # Store to $sp - 4
+```
 
 
 ### 6.2 Load Word (LW)
@@ -626,9 +636,10 @@ SW $t2, -4($sp)   # Store to $sp - 4
 
 **Step 4: PC Update Decision**
 
-
+```
 BEQ: PCSrc = Branch AND Zero
 BNE: PCSrc = Branch AND NOT(Zero)
+```
 
 
 **Multiplexer**:
@@ -726,7 +737,7 @@ BNE: PCSrc = Branch AND NOT(Zero)
 
 **Path for Load Word** (longest):
 
-
+```
 1. Instruction fetch:     200 ps
 2. Register read:         150 ps
 3. Sign extend:           50 ps
@@ -736,6 +747,7 @@ BNE: PCSrc = Branch AND NOT(Zero)
 7. Multiplexer:           25 ps
 8. Register write setup:  100 ps
 Total:                    950 ps
+```
 
 
 **Clock Period**: Must be ≥ 950 ps
