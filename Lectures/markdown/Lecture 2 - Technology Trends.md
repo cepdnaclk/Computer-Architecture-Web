@@ -201,8 +201,12 @@ The relentless march toward smaller dimensions:
 - **2006:** 65 nanometer
 - **2008:** 45 nanometer (very famous generation, many developments)
 - **Continuing:** 32 nm, 22 nm processes
-- **Current (2021):** 7 nanometer and 5 nanometer in production
-- **Future Roadmap:** 3 nanometer, 2 nanometer, 1 nanometer under discussion
+- **2013 Actual:** 22 nm achieved
+- **2015 Target:** 16 nm achieved
+- **2019 Target:** 12 nm achieved
+- **2023 Target:** 7 nm achieved
+- **2028 Target:** 5 nm exceeded
+- **Future Roadmap:** 3nm and 2nm are currently in production, future is 1nm and sub-1nm
 
 ### 3.2 What is "Feature Size"?
 
@@ -1972,7 +1976,7 @@ Physical layout shows clear quadrant organization:
 
 ## Summary
 
-This lecture provided a comprehensive examination of computer technology evolution from the 1970s to present day. Moore's Law, predicting transistor count doubling every two years, served as the guiding principle for the semiconductor industry and enabled the transformation of computers from room-sized machines to powerful pocket devices.
+This lecture provides a comprehensive examination of computer technology evolution from the 1970s to present day. Moore's Law, predicting transistor count doubling every two years, serves as the guiding principle for the semiconductor industry and enables the transformation of computers from room-sized machines to powerful pocket devices.
 
 The progression of manufacturing technology steadily reduced feature sizes from 90 nanometers to current 7nm and 5nm processes. Smaller transistors provided two key advantages: more transistors per chip enabling complex functionality, and faster switching speeds enabling higher clock frequencies. Clock rates grew exponentially from 12.5 MHz in 1982 to 3.6 GHz in 2004.
 

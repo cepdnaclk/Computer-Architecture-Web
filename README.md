@@ -1,6 +1,8 @@
 # Lectures on Computer Architecture
 
-A comprehensive guide by Isuru Nawinne about this book - a professional, static GitHub Pages website for the "Lectures on Computer Architecture" lecture series. This website provides easy access to lecture notes, downloadable materials, and organized content for students following the lecture series.
+A comprehensive lecture series by Dr. Isuru Nawinne - a professional, static GitHub Pages website for the "Lectures on Computer Architecture" course. This website provides easy access to lecture notes, downloadable materials, and organized content for students following the lecture series.
+
+Hands-on practical series to complement the lecture series, providing practical experience with processor microarchitecture and memory systems using Verilog. Students build their own processors and implement memory hierarchy with caching.
 
 ## 🌟 Features
 
