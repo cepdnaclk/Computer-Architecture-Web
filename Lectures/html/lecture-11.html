@@ -52,14 +52,16 @@
             </div>
 
             
-<h2>Introduction</h2>
+<em>By Dr. Isuru Nawinne</em>
+
+<h2>11.1 Introduction</h2>
 
 <p>This lecture completes the single-cycle MIPS processor design by providing comprehensive analysis of control signals for all instruction types (R-type, Branch, Load, Store, Jump), introducing detailed timing analysis with concrete delay values, and demonstrating the fundamental performance limitations that motivate the evolution toward multi-cycle and pipelined implementations. We build upon previous datapath and control unit knowledge to create a functioning processor while understanding why single-cycle design, though conceptually simple, proves inefficient in practice.</p>
 
 
-<h2>1. Lecture Overview and Context</h2>
+<h2>11.2 Lecture Overview and Context</h2>
 
-<h3>1.1 Recap from Previous Lectures</h3>
+<h3>11.2.1 Recap from Previous Lectures</h3>
 
 <p>The foundational work completed in previous lectures includes:</p>
 
@@ -82,7 +84,7 @@
 <li>Performance limitations of single-cycle design</li>
 </ul>
 
-<h3>1.2 Instruction Subset Review</h3>
+<h3>11.2.2 Instruction Subset Review</h3>
 
 <strong>Selected Instructions for Study:</strong>
 
@@ -104,9 +106,9 @@
 </ul>
 
 
-<h2>2. Control Unit Inputs and Outputs</h2>
+<h2>11.3 Control Unit Inputs and Outputs</h2>
 
-<h3>2.1 Control Unit Inputs</h3>
+<h3>11.3.1 Control Unit Inputs</h3>
 
 <strong>Total Input Bits:</strong> 12 bits
 
@@ -136,7 +138,7 @@
 <li>Combined with ALUOp for final ALU control signal</li>
 </ul>
 
-<h3>2.2 Control Unit Outputs</h3>
+<h3>11.3.2 Control Unit Outputs</h3>
 
 <strong>Total Output Bits:</strong> 9 bits (8 signals, one is 2-bit)
 
@@ -166,9 +168,9 @@
 </ul>
 
 
-<h2>3. R-Type Instruction Detailed Analysis</h2>
+<h2>11.4 R-Type Instruction Detailed Analysis</h2>
 
-<h3>3.1 Instruction Format</h3>
+<h3>11.4.1 Instruction Format</h3>
 
 <strong>Encoding Structure (32 bits):</strong>
 
@@ -191,7 +193,7 @@
 
 <strong>Operation:</strong> <code>$1 = $2 + $3</code>
 
-<h3>3.2 Datapath Elements Used</h3>
+<h3>11.4.2 Datapath Elements Used</h3>
 
 <strong>Active Elements (shown in black):</strong>
 
@@ -216,7 +218,7 @@
 <li>Shift Left 2: Not used</li>
 </ul>
 
-<h3>3.3 Control Signal Values for R-Type</h3>
+<h3>11.4.3 Control Signal Values for R-Type</h3>
 
 <strong>Exercise Example: ADD $1, $2, $3</strong>
 
@@ -290,7 +292,7 @@
 <li>Essential for saving computation result</li>
 </ul>
 
-<h3>3.4 Execution Steps for R-Type</h3>
+<h3>11.4.4 Execution Steps for R-Type</h3>
 
 <strong>Step 1: Instruction Fetch</strong>
 
@@ -346,9 +348,9 @@
 </ul>
 
 
-<h2>4. Branch If Equal Instruction Detailed Analysis</h2>
+<h2>11.5 Branch If Equal Instruction Detailed Analysis</h2>
 
-<h3>4.1 Instruction Format</h3>
+<h3>11.5.1 Instruction Format</h3>
 
 <strong>Encoding Structure (32 bits):</strong>
 
@@ -369,7 +371,7 @@
 
 <strong>Operation:</strong> <code>If ($1 == $2) then PC = PC + 4 + (100 × 4)</code>
 
-<h3>4.2 Datapath Elements Used</h3>
+<h3>11.5.2 Datapath Elements Used</h3>
 
 <strong>Active Elements:</strong>
 
@@ -394,7 +396,7 @@
 <li>ALU Result (except Zero flag): Not used</li>
 </ul>
 
-<h3>4.3 Control Signal Values for BEQ</h3>
+<h3>11.5.3 Control Signal Values for BEQ</h3>
 
 <strong>Exercise Example: BEQ $1, $2, 100</strong>
 
@@ -469,7 +471,7 @@
 <li>If =1, would corrupt register file</li>
 </ul>
 
-<h3>4.4 Branch Target Calculation</h3>
+<h3>11.5.4 Branch Target Calculation</h3>
 
 <strong>Word Offset to Byte Offset:</strong>
 
@@ -509,9 +511,9 @@
 
 
 
-<h2>5. Load Word Instruction Detailed Analysis</h2>
+<h2>11.6 Load Word Instruction Detailed Analysis</h2>
 
-<h3>5.1 Instruction Format</h3>
+<h3>11.6.1 Instruction Format</h3>
 
 <strong>Encoding Structure (32 bits):</strong>
 
@@ -532,7 +534,7 @@
 
 <strong>Operation:</strong> <code>$8 = Memory[$9 + 32]</code>
 
-<h3>5.2 Datapath Elements Used</h3>
+<h3>11.6.2 Datapath Elements Used</h3>
 
 <strong>Active Elements:</strong>
 
@@ -555,7 +557,7 @@
 <li>Branch circuitry: Not used</li>
 </ul>
 
-<h3>5.3 Control Signal Values for LW</h3>
+<h3>11.6.3 Control Signal Values for LW</h3>
 
 <strong>Exercise Example: LW $8, 32($9)</strong>
 
@@ -639,7 +641,7 @@
 <li>If 0: Data lost, load ineffective</li>
 </ul>
 
-<h3>5.4 Critical Path for Load Word</h3>
+<h3>11.6.4 Critical Path for Load Word</h3>
 
 <strong>Longest Delay in Single-Cycle:</strong>
 
@@ -659,9 +661,9 @@
 </ul>
 
 
-<h2>6. Store Word Instruction Detailed Analysis</h2>
+<h2>11.7 Store Word Instruction Detailed Analysis</h2>
 
-<h3>6.1 Instruction Format</h3>
+<h3>11.7.1 Instruction Format</h3>
 
 <strong>Encoding Structure (32 bits):</strong>
 
@@ -684,7 +686,7 @@
 
 <em>Note: Fixed error in lecture (was "$32", should be "32")</em>
 
-<h3>6.2 Datapath Elements Used</h3>
+<h3>11.7.2 Datapath Elements Used</h3>
 
 <strong>Active Elements:</strong>
 
@@ -714,7 +716,7 @@
 <li>NO register write operation</li>
 </ul>
 
-<h3>6.3 Control Signal Values for SW</h3>
+<h3>11.7.3 Control Signal Values for SW</h3>
 
 <strong>Exercise Example: SW $8, 32($9)</strong>
 
@@ -796,7 +798,7 @@
 <li>Same as Load Word</li>
 </ul>
 
-<h3>6.4 Important Lesson: Don't Care vs Zero</h3>
+<h3>11.7.4 Important Lesson: Don't Care vs Zero</h3>
 
 <strong>Student Confusion:</strong>
 <em>"RegDst = 0 is not wrong, but best answer is X"</em>
@@ -819,9 +821,9 @@
 </ul>
 
 
-<h2>7. Jump Instruction Integration</h2>
+<h2>11.8 Jump Instruction Integration</h2>
 
-<h3>7.1 Instruction Format</h3>
+<h3>11.8.1 Instruction Format</h3>
 
 <strong>Encoding Structure (32 bits):</strong>
 
@@ -848,7 +850,7 @@
 
 <strong>Operation:</strong> <code>PC = {PC+4[31:28], Address, 2'b00}</code>
 
-<h3>7.2 Jump Target Address Calculation</h3>
+<h3>11.8.2 Jump Target Address Calculation</h3>
 
 <strong>Word Address to Byte Address:</strong>
 
@@ -897,7 +899,7 @@
 <li>For larger jumps: Use jump register (JR) instruction</li>
 </ul>
 
-<h3>7.3 Additional Datapath Hardware</h3>
+<h3>11.8.3 Additional Datapath Hardware</h3>
 
 <strong>New Components:</strong>
 
@@ -947,7 +949,7 @@
 <li>Output: Final next PC value</li>
 </ul>
 
-<h3>7.4 Jump Control Signal</h3>
+<h3>11.8.4 Jump Control Signal</h3>
 
 <strong>Jump Signal:</strong>
 
@@ -986,7 +988,7 @@
 <li>Additional logic needed for return address</li>
 </ul>
 
-<h3>7.5 Complete Datapath with Jump</h3>
+<h3>11.8.5 Complete Datapath with Jump</h3>
 
 <strong>All Instruction Types Supported:</strong>
 
@@ -1017,9 +1019,9 @@
 </ul>
 
 
-<h2>8. Timing Analysis with Concrete Delays</h2>
+<h2>11.9 Timing Analysis with Concrete Delays</h2>
 
-<h3>8.1 Assumed Component Delays</h3>
+<h3>11.9.1 Assumed Component Delays</h3>
 
 <strong>Delay Values (in nanoseconds):</strong>
 
@@ -1045,7 +1047,7 @@
 <li>Combinational logic relatively fast</li>
 </ul>
 
-<h3>8.2 Critical Path Analysis</h3>
+<h3>11.9.2 Critical Path Analysis</h3>
 
 <strong>Definition:</strong>
 
@@ -1063,7 +1065,7 @@
 <li>All instructions take same time (worst case)</li>
 </ul>
 
-<h3>8.3 Load Word Instruction Timing</h3>
+<h3>11.9.3 Load Word Instruction Timing</h3>
 
 <strong>Step-by-Step Delay Calculation:</strong>
 
@@ -1145,7 +1147,7 @@
 <li>Determines clock period for ALL instructions</li>
 </ul>
 
-<h3>8.4 Store Word Instruction Timing</h3>
+<h3>11.9.4 Store Word Instruction Timing</h3>
 
 <strong>Step-by-Step Delay:</strong>
 
@@ -1177,7 +1179,7 @@
 <li>Wastes 2 ns per Store instruction</li>
 </ul>
 
-<h3>8.5 Arithmetic Instruction Timing (ADD, SUB, AND, OR)</h3>
+<h3>11.9.5 Arithmetic Instruction Timing (ADD, SUB, AND, OR)</h3>
 
 <strong>Step-by-Step Delay:</strong>
 
@@ -1205,7 +1207,7 @@
 <li>Wastes 2 ns = 28.6% time wasted per R-type instruction</li>
 </ul>
 
-<h3>8.6 Branch Instruction Timing</h3>
+<h3>11.9.6 Branch Instruction Timing</h3>
 
 <strong>Step-by-Step Delay:</strong>
 
@@ -1236,7 +1238,7 @@
 <li>Fast like R-type</li>
 </ul>
 
-<h3>8.7 Jump Instruction Timing</h3>
+<h3>11.9.7 Jump Instruction Timing</h3>
 
 <strong>Step-by-Step Delay:</strong>
 
@@ -1260,7 +1262,7 @@
 <li>Wastes 5 ns waiting for clock period!</li>
 </ul>
 
-<h3>8.8 Timing Summary Table</h3>
+<h3>11.9.8 Timing Summary Table</h3>
 
 <p>| Instruction Type   | Time Required | Wasted Time | Efficiency |</p>
 <p>| ------------------ | ------------- | ----------- | ---------- |</p>
@@ -1282,9 +1284,9 @@
 </ul>
 
 
-<h2>9. Performance Analysis</h2>
+<h2>11.10 Performance Analysis</h2>
 
-<h3>9.1 Program Composition Example</h3>
+<h3>11.10.1 Program Composition Example</h3>
 
 <strong>Typical MIPS Program Profile:</strong>
 
@@ -1295,7 +1297,7 @@
 <p>| Store Word       | 11%        | 5 ns             | 7 ns             |</p>
 <p>| Branch           | 19%        | 5 ns             | 7 ns             |</p>
 
-<h3>9.2 Average Time Calculation</h3>
+<h3>11.10.2 Average Time Calculation</h3>
 
 <strong>Variable Time (Ideal):</strong>
 
@@ -1319,7 +1321,7 @@
 <p>Waste = 22.3% of time</p>
 
 
-<h3>9.3 Critical Path Problem</h3>
+<h3>11.10.3 Critical Path Problem</h3>
 
 <strong>Critical Path Determination:</strong>
 
@@ -1343,7 +1345,7 @@
 <li>Design is inefficient</li>
 </ul>
 
-<h3>9.4 Clock Period Inflexibility</h3>
+<h3>11.10.4 Clock Period Inflexibility</h3>
 
 <strong>Single-Cycle Constraint:</strong>
 
@@ -1373,9 +1375,9 @@
 <p>| Load        | 100.0%     | 0%    |</p>
 
 
-<h2>10. Path to Better Performance: Multi-Cycle Design</h2>
+<h2>11.11 Path to Better Performance: Multi-Cycle Design</h2>
 
-<h3>10.1 Multi-Cycle Concept</h3>
+<h3>11.11.1 Multi-Cycle Concept</h3>
 
 <strong>Basic Idea:</strong>
 
@@ -1395,7 +1397,7 @@
 <li>More efficient resource utilization</li>
 </ul>
 
-<h3>10.2 Stage Division</h3>
+<h3>11.11.2 Stage Division</h3>
 
 <strong>Typical Stages:</strong>
 
@@ -1449,7 +1451,7 @@
 <li><strong>Jump</strong>: IF, ID (skip EX, MEM, WB) = 2 cycles</li>
 </ul>
 
-<h3>10.3 Clock Period in Multi-Cycle</h3>
+<h3>11.11.3 Clock Period in Multi-Cycle</h3>
 
 <strong>Determining Clock Period:</strong>
 
@@ -1473,7 +1475,7 @@
 <strong>Clock Period:</strong> 2 ns (vs 7 ns single-cycle)
 <strong>Clock Frequency:</strong> 500 MHz (vs 143 MHz single-cycle)
 
-<h3>10.4 Performance Comparison</h3>
+<h3>11.11.4 Performance Comparison</h3>
 
 <strong>Single-Cycle:</strong>
 
@@ -1534,7 +1536,7 @@
 <p>Speedup = 7 / 5.65 = 1.24× faster</p>
 
 
-<h3>10.5 Design Challenge</h3>
+<h3>11.11.5 Design Challenge</h3>
 
 <strong>Stage Balancing:</strong>
 
@@ -1558,9 +1560,9 @@
 </ul>
 
 
-<h2>11. Preview: Pipelining</h2>
+<h2>11.12 Preview: Pipelining</h2>
 
-<h3>11.1 Next Step Beyond Multi-Cycle</h3>
+<h3>11.12.1 Next Step Beyond Multi-Cycle</h3>
 
 <strong>Pipelining Concept:</strong>
 
@@ -1594,7 +1596,7 @@
 <li>More complex control</li>
 </ul>
 
-<h3>11.2 Coming Next</h3>
+<h3>11.12.2 Coming Next</h3>
 
 <strong>Topics:</strong>
 

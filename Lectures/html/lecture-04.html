@@ -52,14 +52,16 @@
             </div>
 
             
-<h2>Introduction</h2>
+<em>By Dr. Kisaru Liyanage</em>
+
+<h2>4.1 Introduction</h2>
 
 <p>This lecture introduces ARM assembly language programming, providing the foundation for understanding how high-level programs translate to machine code. We explore the ARM instruction set architecture (ISA), focusing on its RISC design philosophy, register organization, basic instruction formats, and the toolchain used for development. Understanding assembly language is essential for comprehending how processors execute programs and for optimizing performance-critical code.</p>
 
 
-<h2>1. ARM Architecture Overview</h2>
+<h2>4.2 ARM Architecture Overview</h2>
 
-<h3>1.1 RISC Philosophy</h3>
+<h3>4.2.1 RISC Philosophy</h3>
 
 <strong>Reduced Instruction Set Computer (RISC)</strong>
 
@@ -94,7 +96,7 @@
 <li>Consistent design across instruction types</li>
 </ul>
 
-<h3>1.2 ARM Registers</h3>
+<h3>4.2.2 ARM Registers</h3>
 
 <strong>General-Purpose Registers</strong>
 
@@ -109,7 +111,7 @@
 
 <strong>Register Usage Conventions</strong>
 <img src="../img/Chapter%202%20ARM%20Conventions.jpg" alt="Computer System Abstraction Layers" width="600">
-<!--
+
 <p>R0-R3:   Argument/result registers</p>
 <p>- Pass parameters to functions</p>
 <p>- Return values from functions</p>
@@ -134,7 +136,7 @@
 <p>R15 (PC): Program Counter</p>
 <p>- Always points to next instruction</p>
 <p>- Modifying PC changes execution flow</p>
--->
+
 
 <strong>Why So Many Registers?</strong>
 
@@ -145,7 +147,7 @@
 <li>Improves performance through locality</li>
 </ul>
 
-<h3>1.3 Memory Organization</h3>
+<h3>4.2.3 Memory Organization</h3>
 
 <strong>Little-Endian Byte Ordering</strong>
 
@@ -176,9 +178,9 @@
 <li>Instructions and data in same address space (Von Neumann architecture)</li>
 </ul>
 
-<h2>2. ARM Instruction Format</h2>
+<h2>4.3 ARM Instruction Format</h2>
 
-<h3>2.1 Instruction Structure</h3>
+<h3>4.3.1 Instruction Structure</h3>
 
 <strong>Fixed 32-Bit Length</strong>
 
@@ -211,7 +213,7 @@
 </ul>
 
 
-<h3>2.2 Instruction Types</h3>
+<h3>4.3.2 Instruction Types</h3>
 
 <strong>Data Processing Instructions</strong>
 
@@ -239,7 +241,7 @@
 <li>Return: MOV PC, LR</li>
 </ul>
 
-<h3>2.3 Operand Types</h3>
+<h3>4.3.3 Operand Types</h3>
 
 <strong>Register Operands</strong>
 
@@ -271,9 +273,9 @@
 </code>`<code>
 
 
-<h2>3. Basic ARM Instructions</h2>
+<h2>4.4 Basic ARM Instructions</h2>
 
-<h3>3.1 Arithmetic Instructions</h3>
+<h3>4.4.1 Arithmetic Instructions</h3>
 
 <strong>Addition</strong>
 
@@ -312,7 +314,7 @@
 </code>`<code>
 
 
-<h3>3.2 Logical Instructions</h3>
+<h3>4.4.2 Logical Instructions</h3>
 
 <strong>AND Operation</strong>
 
@@ -375,7 +377,7 @@
 </code>`<code>
 
 
-<h3>3.3 Shift Operations</h3>
+<h3>4.4.3 Shift Operations</h3>
 
 <strong>Logical Shift Left (LSL)</strong>
 
@@ -432,9 +434,9 @@
 </code>`<code>
 
 
-<h2>4. Memory Access Instructions</h2>
+<h2>4.5 Memory Access Instructions</h2>
 
-<h3>4.1 Load Instructions</h3>
+<h3>4.5.1 Load Instructions</h3>
 
 <strong>Load Word (LDR)</strong>
 
@@ -486,7 +488,7 @@
 </code>`<code>
 
 
-<h3>4.2 Store Instructions</h3>
+<h3>4.5.2 Store Instructions</h3>
 
 <strong>Store Word (STR)</strong>
 
@@ -524,7 +526,7 @@
 </code>`<code>
 
 
-<h3>4.3 Addressing Modes</h3>
+<h3>4.5.3 Addressing Modes</h3>
 
 <strong>Offset Addressing</strong>
 
@@ -553,9 +555,9 @@
 </code>`<code>
 
 
-<h2>5. Assembly Program Structure</h2>
+<h2>4.6 Assembly Program Structure</h2>
 
-<h3>5.1 Directives</h3>
+<h3>4.6.1 Directives</h3>
 
 <strong>Section Directives</strong>
 
@@ -582,7 +584,7 @@
 </code>`<code>
 
 
-<h3>5.2 Labels</h3>
+<h3>4.6.2 Labels</h3>
 
 <strong>Purpose</strong>
 
@@ -604,7 +606,7 @@
 </code>`<code>
 
 
-<h3>5.3 Simple Program Example</h3>
+<h3>4.6.3 Simple Program Example</h3>
 
 </code>`<code>assembly
 <p>.text</p>
@@ -623,9 +625,9 @@
 </code>`<code>
 
 
-<h2>6. ARM Development Tools</h2>
+<h2>4.7 ARM Development Tools</h2>
 
-<h3>6.1 Toolchain Components</h3>
+<h3>4.7.1 Toolchain Components</h3>
 
 <strong>Cross-Compiler</strong>
 
@@ -657,7 +659,7 @@
 <li>Useful for testing without ARM hardware</li>
 </ul>
 
-<h3>6.2 Compilation Process</h3>
+<h3>4.7.2 Compilation Process</h3>
 
 <strong>From C to Executable</strong>
 
@@ -697,7 +699,7 @@
 </code>`<code>
 
 
-<h3>6.3 Debugging and Inspection</h3>
+<h3>4.7.3 Debugging and Inspection</h3>
 
 <strong>GDB (GNU Debugger)</strong>
 
@@ -727,9 +729,9 @@
 </code>`<code>
 
 
-<h2>7. Programming in ARM Assembly</h2>
+<h2>4.8 Programming in ARM Assembly</h2>
 
-<h3>7.1 Translating C to ARM</h3>
+<h3>4.8.1 Translating C to ARM</h3>
 
 <strong>C Code:</strong>
 
@@ -767,7 +769,7 @@
 </code>`<code>
 
 
-<h3>7.2 Common Patterns</h3>
+<h3>4.8.2 Common Patterns</h3>
 
 <strong>Clearing a Register</strong>
 

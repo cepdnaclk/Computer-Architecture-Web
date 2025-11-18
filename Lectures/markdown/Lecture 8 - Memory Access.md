@@ -1,13 +1,15 @@
 # Lecture 8: Memory Access and String Operations
 
-## Introduction
+*By Dr. Kisaru Liyanage*
+
+## 8.1 Introduction
 
 This lecture explores character data handling, string operations, and the compilation/linking/loading process. We examine byte and half-word memory operations, implement string manipulation functions, use library functions like scanf and printf, and understand how programs transform from source code to executable binaries. These topics bridge high-level programming concepts and low-level assembly implementation, essential for systems programming and understanding program execution.
 
 
-## 1. Character Data and Encoding
+## 8.2 Character Data and Encoding
 
-### 1.1 ASCII Encoding
+### 8.2.1 ASCII Encoding
 
 **Basic 7-Bit Standard**
 
@@ -27,7 +29,7 @@ This lecture explores character data handling, string operations, and the compil
 ```
 
 
-### 1.2 Latin-1 Encoding
+### 8.2.2 Latin-1 Encoding
 
 **Extended 8-Bit Standard**
 
@@ -36,7 +38,7 @@ This lecture explores character data handling, string operations, and the compil
 - Adds 96 additional graphic characters
 - European language support (accented characters)
 
-### 1.3 Unicode Encoding
+### 8.2.3 Unicode Encoding
 
 **Modern Universal Standard**
 
@@ -53,9 +55,9 @@ This lecture explores character data handling, string operations, and the compil
 - Mathematical and technical symbols
 - Historical scripts and languages
 
-## 2. Byte Load/Store Operations
+## 8.3 Byte Load/Store Operations
 
-### 2.1 Load Register Byte (LDRB)
+### 8.3.1 Load Register Byte (LDRB)
 
 **Syntax**
 
@@ -87,7 +89,7 @@ LDRB R0, [R1]
 - Accessing packed data structures
 - I/O port access
 
-### 2.2 Store Register Byte (STRB)
+### 8.3.2 Store Register Byte (STRB)
 
 **Syntax**
 
@@ -111,7 +113,7 @@ STRB R0, [R1]        ; Memory[0x2000] = 0x41
 ```
 
 
-### 2.3 Load Register Signed Byte (LDRSB)
+### 8.3.3 Load Register Signed Byte (LDRSB)
 
 **Syntax**
 
@@ -146,7 +148,7 @@ LDRSB R0, [R1, #1]
 - Temperature values
 - Signed offsets or deltas
 
-### 2.4 Memory Alignment
+### 8.3.4 Memory Alignment
 
 **LDRB Advantages**
 
@@ -161,9 +163,9 @@ LDRSB R0, [R1, #1]
 - Invalid: 1, 2, 3, 5, 6, 7, 9...
 - Unaligned access causes errors or performance penalties
 
-## 3. Half-Word Load/Store Operations
+## 8.4 Half-Word Load/Store Operations
 
-### 3.1 Load Register Half-word (LDRH)
+### 8.4.1 Load Register Half-word (LDRH)
 
 **Syntax**
 
@@ -193,7 +195,7 @@ LDRH R0, [R1]
 - Unicode characters (UTF-16)
 - 16-bit data types
 
-### 3.2 Store Register Half-word (STRH)
+### 8.4.2 Store Register Half-word (STRH)
 
 **Syntax**
 
@@ -217,7 +219,7 @@ STRH R0, [R1]
 ```
 
 
-### 3.3 Load Register Signed Half-word (LDRSH)
+### 8.4.3 Load Register Signed Half-word (LDRSH)
 
 **Syntax**
 
@@ -241,9 +243,9 @@ LDRSH R0, [R1]
 ```
 
 
-## 4. String Copy Example (strcpy)
+## 8.5 String Copy Example (strcpy)
 
-### 4.1 C Implementation
+### 8.5.1 C Implementation
 
 **Code**
 
@@ -263,7 +265,7 @@ void strcpy(char x[], char y[]) {
 2. Stop when null terminator ('\\0') encountered
 3. Null terminator also copied
 
-### 4.2 ARM Assembly Implementation
+### 8.5.2 ARM Assembly Implementation
 
 **Register Allocation**
 
@@ -317,7 +319,7 @@ done:
 ```
 
 
-### 4.3 Key Points
+### 8.5.3 Key Points
 
 **Why LDRB/STRB?**
 
@@ -334,9 +336,9 @@ done:
 - `[R2, #0]` uses immediate offset (hash symbol)
 - Cannot use `[R2, R3]` directly without proper syntax
 
-## 5. Library Functions: scanf and printf
+## 8.6 Library Functions: scanf and printf
 
-### 5.1 scanf Function
+### 8.6.1 scanf Function
 
 **Purpose**
 
@@ -390,7 +392,7 @@ formatS: .asciz "%d"
 ```
 
 
-### 5.2 printf Function
+### 8.6.2 printf Function
 
 **Purpose**
 
@@ -439,7 +441,7 @@ formatP: .asciz "Result: %d\\n"
 ```
 
 
-### 5.3 Data Section and Format Strings
+### 8.6.3 Data Section and Format Strings
 
 **Data Section**
 
@@ -469,7 +471,7 @@ LDR R0, =formatS     ; Loads ADDRESS of formatS into R0
 - Assembler converts to appropriate instruction(s)
 - Loads memory address (pointer), not content
 
-### 5.4 scanf vs printf Argument Differences
+### 8.6.4 scanf vs printf Argument Differences
 
 **scanf: Needs Addresses**
 
@@ -492,7 +494,7 @@ BL printf
 - scanf modifies variables (needs addresses to write to)
 - printf only reads values (copies values)
 
-### 5.5 Calling Convention Rules
+### 8.6.5 Calling Convention Rules
 
 **Follow Exact Order**
 
@@ -507,9 +509,9 @@ BL printf
 - Understand parameter types and order
 - Match assembly to C function prototype
 
-## 6. Compilation, Linking, and Loading
+## 8.7 Compilation, Linking, and Loading
 
-### 6.1 Translation Overview
+### 8.7.1 Translation Overview
 
 **Complete Process**
 
@@ -526,7 +528,7 @@ Executable (a.out)
 Memory (running program)
 
 
-### 6.2 Compiler
+### 8.7.2 Compiler
 
 **Function**
 
@@ -559,7 +561,7 @@ add:
 ```
 
 
-### 6.3 Assembler
+### 8.7.3 Assembler
 
 **Function**
 
@@ -605,7 +607,7 @@ add:
 - Maps machine code to source code lines
 - Used by debuggers (gdb)
 
-### 6.4 Linker
+### 8.7.4 Linker
 
 **Function**
 
@@ -635,7 +637,7 @@ program.o:      lib.o:          Result:
 - Fix relocatable addresses
 - May leave some for loader
 
-### 6.5 Static vs Dynamic Linking
+### 8.7.5 Static vs Dynamic Linking
 
 **Static Linking**
 
@@ -682,7 +684,7 @@ program.o:      lib.o:          Result:
 - Must be present on system
 - Example: msvcrt.dll (C runtime library)
 
-### 6.6 Loader
+### 8.7.6 Loader
 
 **Function**
 
@@ -744,9 +746,9 @@ program.o:      lib.o:          Result:
 - Calls main() function
 - When main returns, calls exit()
 
-## 7. Lab Exercise Topics
+## 8.8 Exercises
 
-### 7.1 Common String Operations
+### 8.8.1 Common String Operations
 
 **String Length**
 
@@ -774,7 +776,7 @@ void strrev(char *s) {
 ```
 
 
-### 7.2 Integer I/O
+### 8.8.2 Integer I/O
 
 **Read Two Integers, Print Sum**
 
@@ -791,7 +793,7 @@ void strrev(char *s) {
 ```
 
 
-### 7.3 Skills Required
+### 8.8.3 Skills Required
 
 - Character data handling (LDRB/STRB)
 - String manipulation

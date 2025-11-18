@@ -1,13 +1,15 @@
-# Lecture 5: Number Representation and Data Processing
+# Lecture 5: Number Representation and Instruction Encoding
 
-## Introduction
+*By Dr. Kisaru Liyanage*
+
+## 5.1 Introduction
 
 This lecture delves into how computers represent and manipulate data at the binary level. We explore number systems, two's complement representation for signed integers, instruction encoding formats in ARM assembly, and logical operations for bit manipulation. Understanding these fundamentals is essential for programming efficiently in assembly language and comprehending how processors execute arithmetic and logical operations.
 
 
-## 1. Number Representation Systems
+## 5.2 Number Representation Systems
 
-### 1.1 Unsigned Binary Integers
+### 5.2.1 Unsigned Binary Integers
 
 **Binary System Basics**
 
@@ -43,7 +45,7 @@ Example: 10110101
 ```
 
 
-### 1.2 Two's Complement Representation
+### 5.2.2 Two's Complement Representation
 
 **Purpose of Two's Complement**
 
@@ -109,7 +111,7 @@ Method 2 (Subtraction):
   - Has no positive counterpart!
   - Negating gives overflow
 
-### 1.3 Sign Extension
+### 5.2.3 Sign Extension
 
 **Purpose**
 
@@ -149,7 +151,7 @@ LDRSB R0, [R1]    ; R0 = 0xFFFFFFAB (sign-extended if bit 7 = 1)
 ```
 
 
-### 1.4 Hexadecimal Notation
+### 5.2.4 Hexadecimal Notation
 
 **Why Hexadecimal?**
 
@@ -204,9 +206,9 @@ LDR R2, =0xDEADBEEF  ; R2 = 3735928559
 ```
 
 
-## 2. ARM Instruction Encoding
+## 5.3 ARM Instruction Encoding
 
-### 2.1 Fixed-Length Instructions
+### 5.3.1 Fixed-Length Instructions
 
 **32-Bit Instruction Format**
 
@@ -226,7 +228,7 @@ LDR R2, =0xDEADBEEF  ; R2 = 3735928559
 - Immediate values limited in size
 - Code density lower than variable-length (e.g., x86)
 
-### 2.2 Data Processing Instruction Format
+### 5.3.2 Data Processing Instruction Format
 
 **Format Structure**
 
@@ -294,7 +296,7 @@ Result: 0xE0810002
 ```
 
 
-### 2.3 Data Transfer Instruction Format
+### 5.3.3 Data Transfer Instruction Format
 
 **Format Structure**
 
@@ -362,7 +364,7 @@ Result: 0xE5910004
 ```
 
 
-### 2.4 Immediate Value Encoding
+### 5.3.4 Immediate Value Encoding
 
 **Challenge**
 
@@ -414,9 +416,9 @@ Immediate=0xFF, Rotation=12:
   ```
   
 
-## 3. Logical Operations
+## 5.4 Logical Operations
 
-### 3.1 Bitwise AND
+### 5.4.1 Bitwise AND
 
 **Operation**
 
@@ -475,7 +477,7 @@ BEQ bit_clear        ; Branch if bit was clear
 ```
 
 
-### 3.2 Bitwise OR
+### 5.4.2 Bitwise OR
 
 **Operation**
 
@@ -525,7 +527,7 @@ ORR R0, R1, R2           ; Combine
 ```
 
 
-### 3.3 Bitwise XOR (Exclusive OR)
+### 5.4.3 Bitwise XOR (Exclusive OR)
 
 **Operation**
 
@@ -591,7 +593,7 @@ EOR R0, R0, R1
 ```
 
 
-### 3.4 Bitwise NOT
+### 5.4.4 Bitwise NOT
 
 **Operation**
 
@@ -627,7 +629,7 @@ ADD R1, R1, #1       ; Add 1
 ```
 
 
-### 3.5 Shift Operations
+### 5.4.5 Shift Operations
 
 **Logical Shift Left (LSL)**
 
@@ -704,9 +706,9 @@ AND R0, R0, #0x80    ; Keep only bit 7
 ```
 
 
-## 4. Practical Bit Manipulation Examples
+## 5.5 Practical Bit Manipulation Examples
 
-### 4.1 Extracting Bit Fields
+### 5.5.1 Extracting Bit Fields
 
 **Extract bits 16-23**
 
@@ -723,7 +725,7 @@ AND R0, R0, #0x3F    ; Mask to 6 bits (0b111111)
 ```
 
 
-### 4.2 Setting and Clearing Bits
+### 5.5.2 Setting and Clearing Bits
 
 **Set bits 8-15**
 
@@ -745,7 +747,7 @@ EOR R1, R1, #0xFF    ; Toggle lower byte
 ```
 
 
-### 4.3 Checking Flags
+### 5.5.3 Checking Flags
 
 **Check if any of bits 4-7 are set**
 
@@ -766,7 +768,7 @@ BEQ pattern_match
 ```
 
 
-### 4.4 Color Packing/Unpacking
+### 5.5.4 Color Packing/Unpacking
 
 **Pack RGB values (8 bits each)**
 

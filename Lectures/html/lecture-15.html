@@ -52,14 +52,16 @@
             </div>
 
             
-<h2>Introduction</h2>
+<em>By Dr. Isuru Nawinne</em>
+
+<h2>15.1 Introduction</h2>
 
 <p>This lecture provides a comprehensive, step‑by‑step examination of how a direct‑mapped cache services read and write requests, differentiates hits from misses, and preserves data correctness. We finish the full read path (including stall + block fetch sequence), analyze write hits and misses, and introduce the write‑through policy as the simplest consistency mechanism between cache and main memory. Performance consequences of constant memory writes, the need for high hit rates, and the motivation for more advanced write‑back policies (next lecture) are emphasized. By the end you will understand exactly what the cache controller must do (state transitions, signals, data/tag/valid updates) for every access type and why write policies are a central architectural tradeoff.</p>
 
 
-<h2>1. Lecture Introduction and Recap</h2>
+<h2>15.2 Lecture Introduction and Recap</h2>
 
-<h3>1.1 Previous Lecture Review</h3>
+<h3>15.2.1 Previous Lecture Review</h3>
 
 <h4>Memory Systems Foundation</h4>
 
@@ -104,7 +106,7 @@
 <p>└── Remaining bits for block identification</p>
 
 
-<h3>1.2 Today's Focus</h3>
+<h3>15.2.2 Today's Focus</h3>
 
 <ul>
 <li>Complete discussion of read miss handling</li>
@@ -115,9 +117,9 @@
 </ul>
 
 
-<h2>2. Cache Read Access - Complete Process</h2>
+<h2>15.3 Cache Read Access - Complete Process</h2>
 
-<h3>2.1 Read Access Input Signals</h3>
+<h3>15.3.1 Read Access Input Signals</h3>
 
 <strong>From CPU to Cache Controller:</strong>
 
@@ -126,7 +128,7 @@
 <p>- Indicates this is a read operation (not write)</p>
 <p>- Part of memory control signals</p>
 
-<h3>2.2 Cache Read Steps (Detailed)</h3>
+<h3>15.3.2 Cache Read Steps (Detailed)</h3>
 
 <h4>Step 1: Address Decomposition</h4>
 
@@ -196,7 +198,7 @@
 <li>Multiplexer extracts correct word from block</li>
 </ul>
 
-<h3>2.3 Timing Optimization</h3>
+<h3>15.3.3 Timing Optimization</h3>
 
 <strong>Parallel Operations:</strong>
 
@@ -207,7 +209,7 @@
 <li>Reduces overall hit latency</li>
 </ul>
 
-<h3>2.4 Read Hit Outcome</h3>
+<h3>15.3.4 Read Hit Outcome</h3>
 
 <ul>
 <li>Selected word is correct data</li>
@@ -218,7 +220,7 @@
 <li>Pipeline continues uninterrupted</li>
 </ul>
 
-<h3>2.5 Pipeline Integration</h3>
+<h3>15.3.5 Pipeline Integration</h3>
 
 <ul>
 <li>In MIPS pipeline, MEM stage accesses memory</li>
@@ -228,9 +230,9 @@
 </ul>
 
 
-<h2>3. Cache Read Miss Handling</h2>
+<h2>15.4 Cache Read Miss Handling</h2>
 
-<h3>3.1 Read Miss Scenario</h3>
+<h3>15.4.1 Read Miss Scenario</h3>
 
 <h4>Miss Conditions</h4>
 
@@ -243,7 +245,7 @@
 3. <strong>Both conditions</strong>
 <p>- Tag mismatch AND invalid entry</p>
 
-<h3>3.2 Read Miss Response Required Actions</h3>
+<h3>15.4.2 Read Miss Response Required Actions</h3>
 
 <h4>Action 1: STALL THE CPU</h4>
 
@@ -352,7 +354,7 @@
 <li>Pipeline unfreezes and continues</li>
 </ul>
 
-<h3>3.3 Total Read Miss Time</h3>
+<h3>15.4.3 Total Read Miss Time</h3>
 
 <strong>Formula:</strong>
 
@@ -375,7 +377,7 @@
 <li>Total: 1 + 50 = 51 cycles</li>
 </ul>
 
-<h3>3.4 Performance Impact</h3>
+<h3>15.4.4 Performance Impact</h3>
 
 <ul>
 <li>Single miss causes 50+ cycle stall</li>
@@ -383,7 +385,7 @@
 <li>Emphasizes need for high hit rate (> 99.9%)</li>
 </ul>
 
-<h3>3.5 Question: What About the Old Block?</h3>
+<h3>15.4.5 Question: What About the Old Block?</h3>
 
 <strong>The Deferred Question:</strong>
 
@@ -403,9 +405,9 @@
 </ul>
 
 
-<h2>4. Cache Write Access - Introduction</h2>
+<h2>15.5 Cache Write Access - Introduction</h2>
 
-<h3>4.1 Write Access Input Signals</h3>
+<h3>15.5.1 Write Access Input Signals</h3>
 
 <strong>From CPU to Cache Controller:</strong>
 
@@ -415,7 +417,7 @@
 
 <p>Three inputs vs. two for read (no data input needed for read).</p>
 
-<h3>4.2 Write Access Process</h3>
+<h3>15.5.2 Write Access Process</h3>
 
 <h4>Step 1: Address Decomposition</h4>
 
@@ -466,7 +468,7 @@
 <li>Use offset to determine which word in block</li>
 </ul>
 
-<h3>4.3 Writing Mechanism</h3>
+<h3>15.5.3 Writing Mechanism</h3>
 
 <strong>Input:</strong>
 
@@ -504,7 +506,7 @@
 <li>Demultiplexer enabled by write signal</li>
 </ul>
 
-<h3>4.4 Critical Question: Can Write and Tag Compare Happen in Parallel?</h3>
+<h3>15.5.4 Critical Question: Can Write and Tag Compare Happen in Parallel?</h3>
 
 <h4>For Read (Previous Discussion)</h4>
 
@@ -551,9 +553,9 @@
 </ul>
 
 
-<h2>5. Write Policies - Introduction</h2>
+<h2>15.6 Write Policies - Introduction</h2>
 
-<h3>5.1 The Data Consistency Problem</h3>
+<h3>15.6.1 The Data Consistency Problem</h3>
 
 <strong>Scenario:</strong>
 
@@ -574,7 +576,7 @@
 <li>Data coherence problem</li>
 </ul>
 
-<h3>5.2 Why This Matters</h3>
+<h3>15.6.2 Why This Matters</h3>
 
 <ul>
 <li>Future access to same address: Which value is correct?</li>
@@ -584,15 +586,15 @@
 <li>Must maintain data consistency across hierarchy</li>
 </ul>
 
-<h3>5.3 Two Fundamental Write Policies</h3>
+<h3>15.6.3 Two Fundamental Write Policies</h3>
 
 <p>1. <strong>Write-Through</strong> (discussed this lecture)</p>
 <p>2. <strong>Write-Back</strong> (mentioned, detailed in next lecture)</p>
 
 
-<h2>6. Write-Through Policy</h2>
+<h2>15.7 Write-Through Policy</h2>
 
-<h3>6.1 Write-Through Definition</h3>
+<h3>15.7.1 Write-Through Definition</h3>
 
 <strong>Policy Statement:</strong>
 
@@ -610,7 +612,7 @@
 <li>Ensures cache and memory always consistent</li>
 </ul>
 
-<h3>6.2 Write-Through Process</h3>
+<h3>15.7.2 Write-Through Process</h3>
 
 <h4>Write Hit with Write-Through</h4>
 
@@ -632,7 +634,7 @@
 <p>7. Clear stall signal</p>
 <p>8. Both levels updated</p>
 
-<h3>6.3 Advantages of Write-Through</h3>
+<h3>15.7.3 Advantages of Write-Through</h3>
 
 <h4>Advantage 1: SIMPLICITY</h4>
 
@@ -717,7 +719,7 @@
 <li>Typically similar delays → Nearly 2× speedup</li>
 </ul>
 
-<h3>6.4 Disadvantages of Write-Through</h3>
+<h3>15.7.4 Disadvantages of Write-Through</h3>
 
 <h4>Disadvantage 1: EXCESSIVE WRITE TRAFFIC</h4>
 
@@ -811,9 +813,9 @@
 </ul>
 
 
-<h2>7. Resolving the Old Block Question</h2>
+<h2>15.8 Resolving the Old Block Question</h2>
 
-<h3>7.1 The Question Revisited</h3>
+<h3>15.8.1 The Question Revisited</h3>
 
 <strong>Original Question:</strong>
 
@@ -829,7 +831,7 @@
 <li>Is it safe to discard old block?</li>
 </ul>
 
-<h3>7.2 Answer with Write-Through Policy</h3>
+<h3>15.8.2 Answer with Write-Through Policy</h3>
 
 <strong>YES, Safe to Discard</strong>
 
@@ -852,7 +854,7 @@
 <li>No data loss</li>
 </ul>
 
-<h3>7.3 Example Scenario</h3>
+<h3>15.8.3 Example Scenario</h3>
 
 <p>1. Block A in cache at index 3</p>
 <p>2. Block A modified several times</p>
@@ -865,14 +867,14 @@
 <p>9. Block A's data safe in memory</p>
 <p>10. Later access to Block A: Miss, fetch from memory again</p>
 
-<h3>7.4 Comparison with Invalid Entry</h3>
+<h3>15.8.4 Comparison with Invalid Entry</h3>
 
 <ul>
 <li>If miss due to invalid bit: Obviously safe to replace</li>
 <li>If miss due to tag mismatch: Safe because of write-through</li>
 </ul>
 
-<h3>7.5 Contrast with Future Policy (Teaser)</h3>
+<h3>15.8.5 Contrast with Future Policy (Teaser)</h3>
 
 <ul>
 <li>With other write policies (write-back), answer may differ</li>
@@ -890,9 +892,9 @@
 </ul>
 
 
-<h2>8. Parallelism in Write Access with Write-Through</h2>
+<h2>15.9 Parallelism in Write Access with Write-Through</h2>
 
-<h3>8.1 The Parallel Write Problem Solved</h3>
+<h3>15.9.1 The Parallel Write Problem Solved</h3>
 
 <strong>Original Concern:</strong>
 
@@ -902,7 +904,7 @@
 <li>But risk corrupting data if tag mismatch</li>
 </ul>
 
-<h3>8.2 With Write-Through Policy</h3>
+<h3>15.9.2 With Write-Through Policy</h3>
 
 <h4>Case 1: Write Hit</h4>
 
@@ -929,7 +931,7 @@
 <li>End result: Cache fixed, memory correct</li>
 </ul>
 
-<h3>8.3 Key Insight</h3>
+<h3>15.9.3 Key Insight</h3>
 
 <ul>
 <li>Write-through to memory preserves correctness</li>
@@ -939,7 +941,7 @@
 <li>Memory never corrupted</li>
 </ul>
 
-<h3>8.4 Timeline for Write Miss</h3>
+<h3>15.9.4 Timeline for Write Miss</h3>
 
 
 <p>Cycle 1: Write to cache (possibly wrong block) + Tag compare</p>
@@ -949,7 +951,7 @@
 <p>Result: Cache correct, memory correct</p>
 
 
-<h3>8.5 Safety Guarantee</h3>
+<h3>15.9.5 Safety Guarantee</h3>
 
 <ul>
 <li><strong>Memory write:</strong> Targets address from address bus (always correct)</li>
@@ -959,7 +961,7 @@
 <li><strong>In both cases:</strong> End state correct</li>
 </ul>
 
-<h3>8.6 Performance Benefit</h3>
+<h3>15.9.6 Performance Benefit</h3>
 
 <ul>
 <li>Saved cycles on write hit path</li>
@@ -968,7 +970,7 @@
 <li>Critical for frequent write hits</li>
 </ul>
 
-<h3>8.7 Enabled by Write-Through</h3>
+<h3>15.9.7 Enabled by Write-Through</h3>
 
 <ul>
 <li>Only possible because memory updated on every write</li>
@@ -978,9 +980,9 @@
 </ul>
 
 
-<h2>9. Summary of Cache Operations</h2>
+<h2>15.10 Summary of Cache Operations</h2>
 
-<h3>9.1 Complete Cache Operation Overview</h3>
+<h3>15.10.1 Complete Cache Operation Overview</h3>
 
 <h4>READ HIT</h4>
 
@@ -1030,7 +1032,7 @@
 <li>Even slower than read miss!</li>
 </ul>
 
-<h3>9.2 Performance Characteristics</h3>
+<h3>15.10.2 Performance Characteristics</h3>
 
 <p>| Case                                           | Time        | Comment                                                           |</p>
 <p>| ---------------------------------------------- | ----------- | ----------------------------------------------------------------- |</p>
@@ -1048,9 +1050,9 @@
 </ul>
 
 
-<h2>10. Write-Through Policy Evaluation</h2>
+<h2>15.11 Write-Through Policy Evaluation</h2>
 
-<h3>10.1 Summary of Write-Through</h3>
+<h3>15.11.1 Summary of Write-Through</h3>
 
 <strong>Mechanism:</strong>
 
@@ -1068,7 +1070,7 @@
 <li>Straightforward consistency maintenance</li>
 </ul>
 
-<h3>10.2 Advantages</h3>
+<h3>15.11.2 Advantages</h3>
 
 <p>| Advantage                    | Description                                                                                                               |</p>
 <p>| ---------------------------- | ------------------------------------------------------------------------------------------------------------------------- |</p>
@@ -1077,7 +1079,7 @@
 <p>| <strong>3. Data Safety</strong>           | No data loss on block replacement, memory has all updates, crash recovery simpler, I/O devices see correct data           |</p>
 <p>| <strong>4. Enables Optimizations</strong> | Can overlap write and tag compare, reduces hit latency, safe due to memory backup                                         |</p>
 
-<h3>10.3 Disadvantages</h3>
+<h3>15.11.3 Disadvantages</h3>
 
 <p>| Disadvantage               | Description                                                                                                                                |</p>
 <p>| -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |</p>
@@ -1086,7 +1088,7 @@
 <p>| <strong>3. Power Consumption</strong>   | Every write powers up memory, unnecessary power usage, battery drain in mobile devices, heat generation                                    |</p>
 <p>| <strong>4. Memory Wear</strong>         | Flash/SSD: Limited write cycles, accelerated wear-out, reduced memory lifespan, particularly bad for SSDs                                  |</p>
 
-<h3>10.4 When Write-Through Used</h3>
+<h3>15.11.4 When Write-Through Used</h3>
 
 <h4>Suitable Applications</h4>
 
@@ -1117,9 +1119,9 @@
 </ul>
 
 
-<h2>11. The Need for Alternative Write Policies</h2>
+<h2>15.12 The Need for Alternative Write Policies</h2>
 
-<h3>11.1 The Performance Problem</h3>
+<h3>15.12.1 The Performance Problem</h3>
 
 <h4>Write-Heavy Programs</h4>
 
@@ -1135,11 +1137,12 @@
 
 <strong>Example Code:</strong>
 
-<p>c</p>
+<p>``<code>c</p>
 <p>for (int i = 0; i < 1000; i++) {</p>
 <p>array[i] = compute(i);  // Store in every iteration</p>
 <p>sum += array[i];         // Read, accumulate, store</p>
 <p>}</p>
+</code>``
 
 
 <h4>With Write-Through</h4>
@@ -1154,7 +1157,7 @@
 <li><strong>Performance: 10× slower than necessary!</strong></li>
 </ul>
 
-<h3>11.2 Pipeline Impact</h3>
+<h3>15.12.2 Pipeline Impact</h3>
 
 <ul>
 <li>Pipelining designed to execute 1 instruction/cycle (ideal)</li>
@@ -1163,7 +1166,7 @@
 <li>Completely defeats pipelining benefits</li>
 </ul>
 
-<h3>11.3 Comparison with Read Operations</h3>
+<h3>15.12.3 Comparison with Read Operations</h3>
 
 <p>| Operation  | Time        | Frequency | Acceptability    |</p>
 <p>| ---------- | ----------- | --------- | ---------------- |</p>
@@ -1172,7 +1175,7 @@
 <p>| Write hit  | 50 cycles   | Frequent  | <strong>Unacceptable</strong> |</p>
 <p>| Write miss | 100+ cycles | Rare      | Terrible         |</p>
 
-<h3>11.4 The Contradiction</h3>
+<h3>15.12.4 The Contradiction</h3>
 
 <ul>
 <li>Spent lectures optimizing pipeline</li>
@@ -1182,7 +1185,7 @@
 <li>"Doesn't add up" - need better solution</li>
 </ul>
 
-<h3>11.5 Question Raised</h3>
+<h3>15.12.5 Question Raised</h3>
 
 <strong>"What can we do to avoid this situation?"</strong>
 
@@ -1194,7 +1197,7 @@
 
 <p>> "Exactly! That becomes a different write policy."</p>
 
-<h3>11.6 Teaser for Next Lecture</h3>
+<h3>15.12.6 Teaser for Next Lecture</h3>
 
 <ul>
 <li>Alternative policy: <strong>Write-Back</strong></li>
@@ -1206,9 +1209,9 @@
 </ul>
 
 
-<h2>12. Lecture Conclusion</h2>
+<h2>15.13 Lecture Conclusion</h2>
 
-<h3>12.1 Topics Covered</h3>
+<h3>15.13.1 Topics Covered</h3>
 
 <h4>1. Complete Read Access Process</h4>
 
@@ -1282,7 +1285,7 @@
 <li>Need better policy</li>
 </ul>
 
-<h3>12.2 Next Lecture Preview</h3>
+<h3>15.13.2 Next Lecture Preview</h3>
 
 <strong>Topics to Cover:</strong>
 

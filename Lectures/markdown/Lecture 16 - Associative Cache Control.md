@@ -1,26 +1,28 @@
 # Lecture 16: Cache Write Policies and Associative Caches
 
-## Introduction
+*By Dr. Isuru Nawinne*
+
+## 16.1 Introduction
 
 This lecture explores advanced cache design techniques that significantly impact memory system performance. We examine write policies—specifically write-through and write-back strategies—understanding how each handles the critical challenge of maintaining consistency between cache and main memory while balancing performance and complexity. The lecture then progresses to associative cache organizations, from direct-mapped through set-associative to fully-associative designs, revealing how different levels of associativity affect hit rates, access latency, and hardware complexity. Through detailed examples and performance analysis, we discover how modern cache systems make strategic trade-offs between speed, capacity utilization, and implementation cost to achieve optimal memory hierarchy performance.
 
 
-## 1. Recap: Write Access in Direct Mapped Cache
+## 16.2 Recap: Write Access in Direct Mapped Cache
 
-### Write-Through Policy
+### 16.2.1 Write-Through Policy
 
 - When a write access occurs, the cache controller determines if it's a hit or miss through tag comparison
 - On a write hit: The block is in cache, update it. The cache copy becomes different from memory (inconsistent)
 - Write-through solution: Always write to both cache and memory simultaneously
 - On a write miss: Stall the CPU, fetch the missing block from memory, update the cache, and write to memory
 
-### Advantages of Write-Through
+### 16.2.2 Advantages of Write-Through
 
 - Simple to implement - straightforward cache controller design
 - Old blocks can be discarded without concern since memory is always up-to-date
 - Can overlap writing and tag comparison operations since corrupted data can be safely discarded on a miss
 
-### Disadvantages of Write-Through
+### 16.2.3 Disadvantages of Write-Through
 
 - Generates heavy write traffic to memory
 - Every cache write triggers a memory write
@@ -28,7 +30,7 @@ This lecture explores advanced cache design techniques that significantly impact
 - Inefficient when programs have many store instructions
 - CPU must stall for 10-100 clock cycles on each memory write
 
-### Write Buffer Solution
+### 16.2.4 Write Buffer Solution
 
 - A FIFO (First In First Out) queue between cache and memory
 - Cache puts write requests in the buffer instead of directly to memory
@@ -37,22 +39,22 @@ This lecture explores advanced cache design techniques that significantly impact
 - Works well for burst writes (short sequences of writes with gaps between)
 - Limitation: If CPU generates continuous writes, buffer fills up and CPU must still stall
 
-## 2. Write-Back Policy
+## 16.3 Write-Back Policy
 
-### Basic Concept
+### 16.3.1 Basic Concept
 
 - Write to cache only, not to memory immediately
 - Allow cache and memory to be inconsistent
 - Write blocks back to memory only when evicted from cache
 
-### Dirty Bit
+### 16.3.2 Dirty Bit
 
 - An additional bit array in cache structure (alongside valid, tag, data)
 - Tracks whether a cache block has been modified
 - Set when block is written to cache
 - Indicates that memory copy is not up-to-date
 
-### Write-Back Operations
+### 16.3.3 Write-Back Operations
 
 **On Write Hit:**
 
@@ -76,30 +78,30 @@ This lecture explores advanced cache design techniques that significantly impact
 - Fetch new block from memory
 - Update cache entry only (not memory)
 
-### Advantages of Write-Back
+### 16.3.4 Advantages of Write-Back
 
 - Significantly reduces write traffic to memory
 - More efficient when programs have many write accesses
 - Cache is fast; only writing to cache most of the time
 - Write buffer can be used for evicted dirty blocks
 
-### Disadvantages of Write-Back
+### 16.3.5 Disadvantages of Write-Back
 
 - More complex cache controller
 - Need to maintain and check dirty bit
 - More hardware required
 - More logic in controller design
 
-### Write-Back Cache Structure
+### 16.3.6 Write-Back Cache Structure
 
 - Data array
 - Tag array
 - Valid bit array
 - Dirty bit array (new addition)
 
-## 3. Cache Performance
+## 16.4 Cache Performance
 
-### Average Access Time Formula
+### 16.4.1 Average Access Time Formula
 
 
 T_avg = Hit Latency + Miss Rate × Miss Penalty
@@ -112,7 +114,7 @@ T_avg = Hit Latency + Miss Rate × Miss Penalty
 - Miss Penalty: Time to fetch missing block from memory
 - Can be expressed in absolute time (nanoseconds) or clock cycles
 
-### Example Calculation
+### 16.4.2 Example Calculation
 
 **Given:**
 
@@ -133,7 +135,7 @@ T_avg = 1 + (1 - 0.999) × 20 = 1 + 0.001 × 20 = 1.02 cycles
 
 This shows significant improvement from better hit rate.
 
-### Performance Example Problem
+### 16.4.3 Performance Example Problem
 
 **Given:**
 
@@ -160,15 +162,15 @@ This shows significant improvement from better hit rate.
 - Slowdown without caches: 138 / 5.44 = 25.37×
 
 
-## 4. Improving Cache Performance
+## 16.5 Improving Cache Performance
 
-### Three Factors to Improve
+### 16.5.1 Three Factors to Improve
 
 1. Hit Rate - increase the percentage of hits
 2. Hit Latency - reduce time to determine hits
 3. Miss Penalty - reduce time to fetch missing blocks
 
-### Improving Hit Rate
+### 16.5.2 Improving Hit Rate
 
 **Method 1: Larger Cache Size**
 
@@ -178,7 +180,7 @@ This shows significant improvement from better hit rate.
 - Trade-off: Higher cost (SRAM is expensive, ~$2000 per gigabyte)
 - Trade-off: More chip area required
 
-### Direct Mapped Cache Limitation
+### 16.5.3 Direct Mapped Cache Limitation
 
 - Multiple memory blocks can map to same cache index
 - Even with empty cache blocks elsewhere, conflicts cause evictions
@@ -186,16 +188,16 @@ This shows significant improvement from better hit rate.
 - But direct mapping forces eviction even when space is available
 
 
-## 5. Fully Associative Cache
+## 16.6 Fully Associative Cache
 
-### Concept
+### 16.6.1 Concept
 
 - Eliminate index field - no fixed mapping
 - A block can be placed anywhere in cache
 - Address divided into: Tag + Offset (no index)
 - Tag is larger since no index bits
 
-### Finding Blocks
+### 16.6.2 Finding Blocks
 
 - Cannot use index to locate block
 - Sequential search is too slow
@@ -203,23 +205,23 @@ This shows significant improvement from better hit rate.
 - Compare incoming tag with all stored tags simultaneously
 - Requires one comparator per cache entry
 
-### Implementation
+### 16.6.3 Implementation
 
 - Need duplicate comparator hardware for each entry
 - Practical only for small number of entries (8, 16, 32, 64)
 - As entries increase: more comparators, longer wires, more delays
 
-### Block Placement
+### 16.6.4 Block Placement
 
 - Find first available invalid entry
 - Use sequential logic to search for invalid bit
 - Takes more time than direct mapped
 
-### Block Replacement
+### 16.6.5 Block Replacement
 
 When all entries are valid, need replacement policy to choose which block to evict.
 
-### Replacement Policies
+### 16.6.6 Replacement Policies
 
 1. LRU (Least Recently Used) - IDEAL:
 
@@ -243,13 +245,13 @@ When all entries are valid, need replacement policy to choose which block to evi
    - Lower likelihood of picking LRU block
    - Used in embedded systems for simplicity and low power
 
-### Fully Associative - Advantages
+### 16.6.7 Fully Associative - Advantages
 
 - High utilization of cache space
 - Better hit rate (fewer conflict misses)
 - Can choose replacement policy based on needs
 
-### Fully Associative - Disadvantages
+### 16.6.8 Fully Associative - Disadvantages
 
 - Block placement is slow (increases miss penalty)
 - Higher power consumption
@@ -257,16 +259,16 @@ When all entries are valid, need replacement policy to choose which block to evi
 - Parallel tag comparison requires duplicate hardware
 
 
-## 6. Set Associative Cache
+## 16.7 Set Associative Cache
 
-### Concept
+### 16.7.1 Concept
 
 - Combines direct mapped and fully associative approaches
 - Add multiple "ways" - duplicate the tag/valid/data arrays
 - Each index refers to a "set" containing multiple blocks
 - Called "N-way set associative" where N is number of ways
 
-### Two-Way Set Associative
+### 16.7.2 Two-Way Set Associative
 
 - Two copies of tag/valid/data arrays
 - Each index points to a set with 2 blocks
@@ -274,7 +276,7 @@ When all entries are valid, need replacement policy to choose which block to evi
 - Tag comparison done in parallel within the set
 - Doubles cache capacity compared to direct mapped with same number of sets
 
-### Read Access Process
+### 16.7.3 Read Access Process
 
 1. Use index to select correct set (via demultiplexer)
 2. Extract both stored tags from the set
@@ -284,7 +286,7 @@ When all entries are valid, need replacement policy to choose which block to evi
 6. Select correct data block based on which way hit
 7. Use offset to select correct word within block
 
-### Important Notes
+### 16.7.4 Important Notes
 
 - Only one tag can match (each tag identifies unique block)
 - If no tags match, it's a miss
@@ -292,9 +294,9 @@ When all entries are valid, need replacement policy to choose which block to evi
 - Higher hit latency due to encoding and multiplexing delays
 
 
-## 7. Associativity Spectrum
+## 16.8 Associativity Spectrum
 
-### For an 8-Block Cache, Different Organizations
+### 16.8.1 For an 8-Block Cache, Different Organizations
 
 1-way set associative (Direct Mapped):
 
@@ -322,7 +324,7 @@ When all entries are valid, need replacement policy to choose which block to evi
 - No index field (0 bits)
 - Any block can go anywhere
 
-### Design Considerations
+### 16.8.2 Design Considerations
 
 - Choice depends on: program behavior, CPU architecture, performance goals, power budget
 - Higher associativity → better hit rate
@@ -330,9 +332,9 @@ When all entries are valid, need replacement policy to choose which block to evi
 - Higher associativity → more power consumption and cost
 
 
-## 8. Associativity Comparison Example
+## 16.9 Associativity Comparison Example
 
-### Setup
+### 16.9.1 Setup
 
 - Four-block cache (4 different blocks)
 - Block size = 1 word = 4 bytes
@@ -345,13 +347,13 @@ When all entries are valid, need replacement policy to choose which block to evi
 - All tags = 0
 - Data unknown (don't care)
 
-### Tag and Index Sizes
+### 16.9.2 Tag and Index Sizes
 
 - Direct Mapped: 4-bit tag, 2-bit index, 2-bit offset
 - 2-way Set Associative: 5-bit tag, 1-bit index, 2-bit offset
 - Fully Associative: 6-bit tag, 0-bit index, 2-bit offset
 
-### Memory Access Sequence
+### 16.9.3 Memory Access Sequence
 
 **Access 1: Block Address 0**
 
@@ -400,39 +402,39 @@ When all entries are valid, need replacement policy to choose which block to evi
 - 2-way Set Associative: 1 hit, 4 misses (one conflict miss)
 - Fully Associative: 2 hits, 3 misses (only cold misses)
 
-### Types of Misses
+### 16.9.4 Types of Misses
 
 1. Cold Misses: First access to address (unavoidable)
 2. Conflict Misses: Block evicted due to mapping, accessed again later
 
-### Key Observations
+### 16.9.5 Key Observations
 
 - Higher associativity reduces conflict misses
 - Fully associative eliminates conflict misses (only cold misses remain)
 - But higher associativity increases hit latency and cost
 
 
-## 9. Trade-Offs Summary
+## 16.10 Trade-Offs Summary
 
-### Hit Rate
+### 16.10.1 Hit Rate
 
 - Increases with higher associativity
 - Direct mapped has most conflict misses
 - Fully associative has only cold misses
 
-### Hit Latency
+### 16.10.2 Hit Latency
 
 - Increases with higher associativity
 - More comparators, encoders, multiplexers add delay
 - Direct mapped is fastest
 
-### Power and Cost
+### 16.10.3 Power and Cost
 
 - Increases with higher associativity
 - More hardware for parallel comparison
 - More complex control logic
 
-### Design Decision Factors
+### 16.10.4 Design Decision Factors
 
 - Application requirements
 - Performance goals

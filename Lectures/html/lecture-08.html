@@ -52,14 +52,16 @@
             </div>
 
             
-<h2>Introduction</h2>
+<em>By Dr. Kisaru Liyanage</em>
+
+<h2>8.1 Introduction</h2>
 
 <p>This lecture explores character data handling, string operations, and the compilation/linking/loading process. We examine byte and half-word memory operations, implement string manipulation functions, use library functions like scanf and printf, and understand how programs transform from source code to executable binaries. These topics bridge high-level programming concepts and low-level assembly implementation, essential for systems programming and understanding program execution.</p>
 
 
-<h2>1. Character Data and Encoding</h2>
+<h2>8.2 Character Data and Encoding</h2>
 
-<h3>1.1 ASCII Encoding</h3>
+<h3>8.2.1 ASCII Encoding</h3>
 
 <strong>Basic 7-Bit Standard</strong>
 
@@ -72,15 +74,16 @@
 
 <strong>ASCII Examples</strong>
 
-
+``<code>
 <p>'A' = 65 (0x41)</p>
 <p>'a' = 97 (0x61)</p>
 <p>'0' = 48 (0x30)</p>
 <p>'\n' = 10 (0x0A)</p>
 <p>'\0' = 0 (0x00) - null terminator</p>
+</code>`<code>
 
 
-<h3>1.2 Latin-1 Encoding</h3>
+<h3>8.2.2 Latin-1 Encoding</h3>
 
 <strong>Extended 8-Bit Standard</strong>
 
@@ -91,7 +94,7 @@
 <li>European language support (accented characters)</li>
 </ul>
 
-<h3>1.3 Unicode Encoding</h3>
+<h3>8.2.3 Unicode Encoding</h3>
 
 <strong>Modern Universal Standard</strong>
 
@@ -112,14 +115,15 @@
 <li>Historical scripts and languages</li>
 </ul>
 
-<h2>2. Byte Load/Store Operations</h2>
+<h2>8.3 Byte Load/Store Operations</h2>
 
-<h3>2.1 Load Register Byte (LDRB)</h3>
+<h3>8.3.1 Load Register Byte (LDRB)</h3>
 
 <strong>Syntax</strong>
 
-<p>assembly</p>
+</code>`<code>assembly
 <p>LDRB Rd, [Rn, #offset]   ; Load byte from memory</p>
+</code>`<code>
 
 
 <strong>Operation</strong>
@@ -132,11 +136,12 @@
 
 <strong>Example</strong>
 
-<p>assembly</p>
+</code>`<code>assembly
 <p>; Memory[0x1000] = 0x42 ('B')</p>
 <p>LDR R1, =0x1000</p>
 <p>LDRB R0, [R1]</p>
 <p>; R0 = 0x00000042</p>
+</code>`<code>
 
 
 <strong>Use Cases</strong>
@@ -148,12 +153,13 @@
 <li>I/O port access</li>
 </ul>
 
-<h3>2.2 Store Register Byte (STRB)</h3>
+<h3>8.3.2 Store Register Byte (STRB)</h3>
 
 <strong>Syntax</strong>
 
-<p>assembly</p>
+</code>`<code>assembly
 <p>STRB Rd, [Rn, #offset]   ; Store byte to memory</p>
+</code>`<code>
 
 
 <strong>Operation</strong>
@@ -166,18 +172,20 @@
 
 <strong>Example</strong>
 
-<p>assembly</p>
+</code>`<code>assembly
 <p>MOV R0, #0x41        ; 'A'</p>
 <p>LDR R1, =0x2000</p>
 <p>STRB R0, [R1]        ; Memory[0x2000] = 0x41</p>
+</code>`<code>
 
 
-<h3>2.3 Load Register Signed Byte (LDRSB)</h3>
+<h3>8.3.3 Load Register Signed Byte (LDRSB)</h3>
 
 <strong>Syntax</strong>
 
-<p>assembly</p>
+</code>`<code>assembly
 <p>LDRSB Rd, [Rn, #offset]  ; Load signed byte</p>
+</code>`<code>
 
 
 <strong>Operation</strong>
@@ -190,7 +198,7 @@
 
 <strong>Example</strong>
 
-<p>assembly</p>
+</code>`<code>assembly
 <p>; Memory[0x1000] = 0xFE (-2 in signed byte)</p>
 <p>LDR R1, =0x1000</p>
 <p>LDRSB R0, [R1]</p>
@@ -199,6 +207,7 @@
 <p>; Memory[0x1001] = 0x7F (+127)</p>
 <p>LDRSB R0, [R1, #1]</p>
 <p>; R0 = 0x0000007F (+127)</p>
+</code>`<code>
 
 
 <strong>When to Use</strong>
@@ -209,7 +218,7 @@
 <li>Signed offsets or deltas</li>
 </ul>
 
-<h3>2.4 Memory Alignment</h3>
+<h3>8.3.4 Memory Alignment</h3>
 
 <strong>LDRB Advantages</strong>
 
@@ -228,14 +237,15 @@
 <li>Unaligned access causes errors or performance penalties</li>
 </ul>
 
-<h2>3. Half-Word Load/Store Operations</h2>
+<h2>8.4 Half-Word Load/Store Operations</h2>
 
-<h3>3.1 Load Register Half-word (LDRH)</h3>
+<h3>8.4.1 Load Register Half-word (LDRH)</h3>
 
 <strong>Syntax</strong>
 
-<p>assembly</p>
+</code>`<code>assembly
 <p>LDRH Rd, [Rn, #offset]   ; Load 16 bits</p>
+</code>`<code>
 
 
 <strong>Operation</strong>
@@ -247,11 +257,12 @@
 
 <strong>Example</strong>
 
-<p>assembly</p>
+</code>`<code>assembly
 <p>; Memory[0x1000-0x1001] = 0xABCD</p>
 <p>LDR R1, =0x1000</p>
 <p>LDRH R0, [R1]</p>
 <p>; R0 = 0x0000ABCD</p>
+</code>`<code>
 
 
 <strong>Use Cases</strong>
@@ -262,12 +273,13 @@
 <li>16-bit data types</li>
 </ul>
 
-<h3>3.2 Store Register Half-word (STRH)</h3>
+<h3>8.4.2 Store Register Half-word (STRH)</h3>
 
 <strong>Syntax</strong>
 
-<p>assembly</p>
+</code>`<code>assembly
 <p>STRH Rd, [Rn, #offset]   ; Store 16 bits</p>
+</code>`<code>
 
 
 <strong>Operation</strong>
@@ -279,19 +291,21 @@
 
 <strong>Example</strong>
 
-<p>assembly</p>
+</code>`<code>assembly
 <p>MOV R0, #0x1234</p>
 <p>LDR R1, =0x2000</p>
 <p>STRH R0, [R1]</p>
 <p>; Memory[0x2000-0x2001] = 0x1234</p>
+</code>`<code>
 
 
-<h3>3.3 Load Register Signed Half-word (LDRSH)</h3>
+<h3>8.4.3 Load Register Signed Half-word (LDRSH)</h3>
 
 <strong>Syntax</strong>
 
-<p>assembly</p>
+</code>`<code>assembly
 <p>LDRSH Rd, [Rn, #offset]  ; Load signed 16-bit</p>
+</code>`<code>
 
 
 <strong>Operation</strong>
@@ -304,25 +318,27 @@
 
 <strong>Example</strong>
 
-<p>assembly</p>
+</code>`<code>assembly
 <p>; Memory = 0x8000 (-32768 as signed 16-bit)</p>
 <p>LDRSH R0, [R1]</p>
 <p>; R0 = 0xFFFF8000 (-32768 as signed 32-bit)</p>
+</code>`<code>
 
 
-<h2>4. String Copy Example (strcpy)</h2>
+<h2>8.5 String Copy Example (strcpy)</h2>
 
-<h3>4.1 C Implementation</h3>
+<h3>8.5.1 C Implementation</h3>
 
 <strong>Code</strong>
 
-<p>c</p>
+</code>`<code>c
 <p>void strcpy(char x[], char y[]) {</p>
 <p>int i = 0;</p>
 <p>while ((x[i] = y[i]) != '\\0') {</p>
 <p>i++;</p>
 <p>}</p>
 <p>}</p>
+</code>`<code>
 
 
 <strong>Algorithm</strong>
@@ -331,22 +347,23 @@
 <p>2. Stop when null terminator ('\\0') encountered</p>
 <p>3. Null terminator also copied</p>
 
-<h3>4.2 ARM Assembly Implementation</h3>
+<h3>8.5.2 ARM Assembly Implementation</h3>
 
 <strong>Register Allocation</strong>
 
-
+</code>`<code>
 <p>R0: Base address of x (destination)</p>
 <p>R1: Base address of y (source)</p>
 <p>R4: Loop counter i</p>
 <p>R2: Address of y[i]</p>
 <p>R3: Value of y[i]</p>
 <p>R12: Address of x[i]</p>
+</code>`<code>
 
 
 <strong>Complete Assembly</strong>
 
-<p>assembly</p>
+</code>`<code>assembly
 <p>strcpy:</p>
 <p>; Prologue: Save R4 (must preserve)</p>
 <p>SUB SP, SP, #4</p>
@@ -381,9 +398,10 @@
 <p>LDR R4, [SP, #0]</p>
 <p>ADD SP, SP, #4</p>
 <p>MOV PC, LR           ; Return</p>
+</code>`<code>
 
 
-<h3>4.3 Key Points</h3>
+<h3>8.5.3 Key Points</h3>
 
 <strong>Why LDRB/STRB?</strong>
 
@@ -402,13 +420,13 @@
 <strong>Offsets Are Immediate</strong>
 
 <ul>
-<li><code>[R2, #0]</code> uses immediate offset (hash symbol)</li>
-<li>Cannot use <code>[R2, R3]</code> directly without proper syntax</li>
+<li></code>[R2, #0]<code> uses immediate offset (hash symbol)</li>
+<li>Cannot use </code>[R2, R3]<code> directly without proper syntax</li>
 </ul>
 
-<h2>5. Library Functions: scanf and printf</h2>
+<h2>8.6 Library Functions: scanf and printf</h2>
 
-<h3>5.1 scanf Function</h3>
+<h3>8.6.1 scanf Function</h3>
 
 <strong>Purpose</strong>
 
@@ -419,8 +437,9 @@
 
 <strong>C Signature</strong>
 
-<p>c</p>
+</code>`<code>c
 <p>int scanf(const char *format, ...);</p>
+</code>`<code>
 
 
 <strong>Arguments</strong>
@@ -435,14 +454,15 @@
 
 <strong>C Code</strong>
 
-<p>c</p>
+</code>`<code>c
 <p>int x;</p>
 <p>scanf("%d", &x);  // Note: &x (address of x)</p>
+</code>`<code>
 
 
 <strong>ARM Assembly</strong>
 
-<p>assembly</p>
+</code>`<code>assembly
 <p>.data</p>
 <p>formatS: .asciz "%d"</p>
 
@@ -461,9 +481,10 @@
 
 <p>; Value now stored at [SP]</p>
 <p>LDR R2, [SP, #0]     ; R2 = x</p>
+</code>`<code>
 
 
-<h3>5.2 printf Function</h3>
+<h3>8.6.2 printf Function</h3>
 
 <strong>Purpose</strong>
 
@@ -474,8 +495,9 @@
 
 <strong>C Signature</strong>
 
-<p>c</p>
+</code>`<code>c
 <p>int printf(const char *format, ...);</p>
+</code>`<code>
 
 
 <strong>Arguments</strong>
@@ -489,13 +511,14 @@
 
 <strong>C Code</strong>
 
-<p>c</p>
+</code>`<code>c
 <p>printf("Result: %d\\n", result);</p>
+</code>`<code>
 
 
 <strong>ARM Assembly</strong>
 
-<p>assembly</p>
+</code>`<code>assembly
 <p>.data</p>
 <p>formatP: .asciz "Result: %d\\n"</p>
 
@@ -511,18 +534,20 @@
 
 <p>; Call printf</p>
 <p>BL printf</p>
+</code>`<code>
 
 
-<h3>5.3 Data Section and Format Strings</h3>
+<h3>8.6.3 Data Section and Format Strings</h3>
 
 <strong>Data Section</strong>
 
-<p>assembly</p>
+</code>`<code>assembly
 <p>.data</p>
 <p>formatS: .asciz "%d"      ; Input format</p>
 <p>formatP: .asciz "Result: %d\\n"  ; Output format</p>
 <p>array: .word 1, 2, 3, 4   ; Array</p>
 <p>message: .asciz "Hello"   ; String</p>
+</code>`<code>
 
 
 <strong>.asciz Directive</strong>
@@ -535,8 +560,9 @@
 
 <strong>Pseudo-Operation: LDR Rd, =label</strong>
 
-<p>assembly</p>
+</code>`<code>assembly
 <p>LDR R0, =formatS     ; Loads ADDRESS of formatS into R0</p>
+</code>`<code>
 
 
 <ul>
@@ -545,21 +571,22 @@
 <li>Loads memory address (pointer), not content</li>
 </ul>
 
-<h3>5.4 scanf vs printf Argument Differences</h3>
+<h3>8.6.4 scanf vs printf Argument Differences</h3>
 
 <strong>scanf: Needs Addresses</strong>
 
-<p>assembly</p>
+</code>`<code>assembly
 <p>SUB SP, SP, #4</p>
 <p>MOV R1, SP           ; R1 = address (where to store)</p>
 <p>BL scanf</p>
-
+</code>`<code>
 
 <strong>printf: Needs Values</strong>
 
-<p>assembly</p>
+</code>`<code>assembly
 <p>LDR R1, [SP]         ; R1 = value (what to print)</p>
 <p>BL printf</p>
+</code>`<code>
 
 
 <strong>Why This Difference?</strong>
@@ -569,7 +596,7 @@
 <li>printf only reads values (copies values)</li>
 </ul>
 
-<h3>5.5 Calling Convention Rules</h3>
+<h3>8.6.5 Calling Convention Rules</h3>
 
 <strong>Follow Exact Order</strong>
 
@@ -588,17 +615,18 @@
 <li>Match assembly to C function prototype</li>
 </ul>
 
-<h2>6. Compilation, Linking, and Loading</h2>
+<h2>8.7 Compilation, Linking, and Loading</h2>
 
-<h3>6.1 Translation Overview</h3>
+<h3>8.7.1 Translation Overview</h3>
 
 <strong>Complete Process</strong>
 
 
 <p>C Program (.c)</p>
 <p>↓ [Compiler]</p>
-<p>Assembly (.s)</p>
+</code>`<code>assembly
 <p>↓ [Assembler]</p>
+</code>`<code>
 <p>Object Module (.o)</p>
 <p>↓ [Linker]</p>
 <p>Executable (a.out)</p>
@@ -606,7 +634,7 @@
 <p>Memory (running program)</p>
 
 
-<h3>6.2 Compiler</h3>
+<h3>8.7.2 Compiler</h3>
 
 <strong>Function</strong>
 
@@ -628,21 +656,22 @@
 
 <strong>Example</strong>
 
-<p>c</p>
+</code>`<code>c
 <p>int add(int a, int b) {</p>
 <p>return a + b;</p>
 <p>}</p>
-
+</code>`<code>
 
 <p>↓ Compiler</p>
 
-<p>assembly</p>
+</code>`<code>assembly
 <p>add:</p>
 <p>ADD R0, R0, R1</p>
 <p>MOV PC, LR</p>
+</code>`<code>
 
 
-<h3>6.3 Assembler</h3>
+<h3>8.7.3 Assembler</h3>
 
 <strong>Function</strong>
 
@@ -702,7 +731,7 @@
 <li>Used by debuggers (gdb)</li>
 </ul>
 
-<h3>6.4 Linker</h3>
+<h3>8.7.4 Linker</h3>
 
 <strong>Function</strong>
 
@@ -715,10 +744,11 @@
 
 <strong>1. Merge Segments</strong>
 
-
+</code>`<code>
 <p>program.o:      lib.o:          Result:</p>
 <p>[Text1]         [Text2]     →   [Text1+Text2]</p>
 <p>[Data1]         [Data2]     →   [Data1+Data2]</p>
+</code>`<code>
 
 
 <strong>2. Resolve Labels</strong>
@@ -737,7 +767,7 @@
 <li>May leave some for loader</li>
 </ul>
 
-<h3>6.5 Static vs Dynamic Linking</h3>
+<h3>8.7.5 Static vs Dynamic Linking</h3>
 
 <strong>Static Linking</strong>
 
@@ -798,7 +828,7 @@
 <li>Example: msvcrt.dll (C runtime library)</li>
 </ul>
 
-<h3>6.6 Loader</h3>
+<h3>8.7.6 Loader</h3>
 
 <strong>Function</strong>
 
@@ -846,8 +876,9 @@
 
 <strong>Example</strong>
 
-<p>bash</p>
+</code>`<code>bash
 <p>./program arg1 arg2</p>
+</code>`<code>
 
 
 <ul>
@@ -875,24 +906,25 @@
 <li>When main returns, calls exit()</li>
 </ul>
 
-<h2>7. Lab Exercise Topics</h2>
+<h2>8.8 Exercises</h2>
 
-<h3>7.1 Common String Operations</h3>
+<h3>8.8.1 Common String Operations</h3>
 
 <strong>String Length</strong>
 
-<p>c</p>
+</code>`<code>c
 <p>int strlen(char *s) {</p>
 <p>int len = 0;</p>
 <p>while (s[len] != '\\0')</p>
 <p>len++;</p>
 <p>return len;</p>
 <p>}</p>
+</code>`<code>
 
 
 <strong>String Reverse</strong>
 
-<p>c</p>
+</code>`<code>c
 <p>void strrev(char *s) {</p>
 <p>int len = strlen(s);</p>
 <p>for (int i = 0; i < len/2; i++) {</p>
@@ -901,25 +933,27 @@
 <p>s[len-1-i] = temp;</p>
 <p>}</p>
 <p>}</p>
+</code>`<code>
 
 
-<h3>7.2 Integer I/O</h3>
+<h3>8.8.2 Integer I/O</h3>
 
 <strong>Read Two Integers, Print Sum</strong>
 
-<p>assembly</p>
+</code>`<code>assembly
 <p>; Read x and y</p>
 <p>; Print x + y</p>
-
+</code>`<code>
 
 <strong>Read n, Print 1 to n</strong>
 
-<p>assembly</p>
+</code>`<code>assembly
 <p>; Read n</p>
 <p>; Loop from 1 to n, print each</p>
+</code>``
 
 
-<h3>7.3 Skills Required</h3>
+<h3>8.8.3 Skills Required</h3>
 
 <ul>
 <li>Character data handling (LDRB/STRB)</li>

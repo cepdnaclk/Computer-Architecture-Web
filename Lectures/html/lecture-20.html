@@ -52,15 +52,17 @@
             </div>
 
             
-<h2>Introduction</h2>
+<em>By Dr. Swarnalatha Radhakrishnan</em>
+
+<h2>20.1 Introduction</h2>
 
 <p>This lecture completes our exploration of computer architecture by examining storage devices and input/output (I/O) systems that enable computers to interact with external devices and provide persistent data storage beyond volatile main memory. We explore storage technologies from mechanical magnetic disks to solid-state flash memory, understanding their performance characteristics, reliability metrics, and cost tradeoffs. The lecture covers I/O communication methods including polling, interrupts, and direct memory access (DMA), analyzes RAID configurations that improve both performance and dependability, and examines how storage systems connect to processors through memory-mapped I/O or dedicated I/O instructions. Understanding these peripheral systems reveals how complete computer systems integrate computation, memory, and external interaction into cohesive platforms.</p>
 
-<h2>1. I/O Device Characteristics</h2>
+<h2>20.2 I/O Device Characteristics</h2>
 
 <p>I/O devices can be characterized by three fundamental factors:</p>
 
-<h3>1. Behavior</h3>
+<h3>20.2.1 Behavior</h3>
 
 <strong>Input Devices</strong>:
 
@@ -83,7 +85,7 @@
 <li>Examples: disks, flash drives</li>
 </ul>
 
-<h3>2. Partner</h3>
+<h3>20.2.2 Partner</h3>
 
 <strong>Human Devices</strong>:
 
@@ -99,7 +101,7 @@
 <li>Examples: networks, controllers</li>
 </ul>
 
-<h3>3. Data Rate</h3>
+<h3>20.2.3 Data Rate</h3>
 
 <ul>
 <li>Measured in bytes per second or transfers per second</li>
@@ -107,9 +109,9 @@
 <li>Affects system design and communication methods</li>
 </ul>
 
-<h2>2. I/O Bus Connections</h2>
+<h2>20.3 I/O Bus Connections</h2>
 
-<h3>Simplified System Architecture</h3>
+<h3>20.3.1 Simplified System Architecture</h3>
 
 <h4>Components</h4>
 
@@ -142,11 +144,11 @@
 
 <p>Multiple controllers allow parallel device operation while sharing common interconnect.</p>
 
-<h2>3. Dependability</h2>
+<h2>20.4 Dependability</h2>
 
 <p>Critical for I/O systems, especially storage devices.</p>
 
-<h3>Why Dependability Matters</h3>
+<h3>20.4.1 Why Dependability Matters</h3>
 
 <ul>
 <li>Storage devices hold data that must be reliable</li>
@@ -155,7 +157,7 @@
 <li>Systems must continue functioning despite component failures</li>
 </ul>
 
-<h3>Dependability is Particularly Important For</h3>
+<h3>20.4.2 Dependability is Particularly Important For</h3>
 
 <ul>
 <li>Storage devices (data integrity)</li>
@@ -163,9 +165,9 @@
 <li>Systems with high availability requirements</li>
 </ul>
 
-<h2>4. Service States</h2>
+<h2>20.5 Service States</h2>
 
-<h3>Two Primary States</h3>
+<h3>20.5.1 Two Primary States</h3>
 
 <h4>1. Service Accomplishment State</h4>
 
@@ -183,16 +185,16 @@
 <li>Requires repair/restoration</li>
 </ul>
 
-<h3>State Transitions</h3>
+<h3>20.5.2 State Transitions</h3>
 
 <ul>
 <li><strong>From Service Accomplishment to Service Interruption</strong>: Due to failure</li>
 <li><strong>From Service Interruption to Service Accomplishment</strong>: After restoration/repair</li>
 </ul>
 
-<h2>5. Fault Terminology</h2>
+<h2>20.6 Fault Terminology</h2>
 
-<h3>Fault Definition</h3>
+<h3>20.6.1 Fault Definition</h3>
 
 <strong>Characteristics</strong>:
 
@@ -204,16 +206,16 @@
 <li>May produce correct or wrong output</li>
 </ul>
 
-<h3>Distinction</h3>
+<h3>20.6.2 Distinction</h3>
 
 <ul>
 <li><strong>Component failure ≠ System failure</strong></li>
 <li>Fault tolerance allows operation despite faults</li>
 </ul>
 
-<h2>6. Dependability Measures</h2>
+<h2>20.7 Dependability Measures</h2>
 
-<h3>Key Metrics</h3>
+<h3>20.7.1 Key Metrics</h3>
 
 <h4>1. MTTF (Mean Time To Failure)</h4>
 
@@ -269,16 +271,16 @@
 <li>Expressed as percentage or decimal</li>
 </ul>
 
-<h2>7. Improving Availability</h2>
+<h2>20.8 Improving Availability</h2>
 
-<h3>Two Approaches</h3>
+<h3>20.8.1 Two Approaches</h3>
 
 <ul>
 <li>MTTF</li>
 <li>MTTR</li>
 </ul>
 
-<h2>8. Increase MTTF (Mean Time To Failure)</h2>
+<h2>20.9 Increase MTTF (Mean Time To Failure)</h2>
 
 <h4>a) Fault Avoidance</h4>
 
@@ -313,9 +315,9 @@
 <li>Replace before failure</li>
 </ul>
 
-<h2>9. Reduce MTTR (Mean Time To Repair)</h2>
+<h2>20.10 Reduce MTTR (Mean Time To Repair)</h2>
 
-<h3>Methods</h3>
+<h3>20.10.1 Methods</h3>
 
 <ul>
 <li>Improve tools and processes for diagnosis</li>
@@ -326,7 +328,7 @@
 <li>Skilled maintenance personnel</li>
 </ul>
 
-<h3>Example Problems</h3>
+<h3>20.10.2 Example Problems</h3>
 
 <ul>
 <li>Book provides examples with specific MTTF and MTTR values</li>
@@ -335,11 +337,11 @@
 <li>Students should practice these calculations</li>
 </ul>
 
-<h2>10. Magnetic Disk Storage</h2>
+<h2>20.11 Magnetic Disk Storage</h2>
 
 <p>Traditional secondary storage technology using magnetic recording.</p>
 
-<h3>Physical Structure</h3>
+<h3>20.11.1 Physical Structure</h3>
 
 <h4>Disk Shape</h4>
 
@@ -366,7 +368,7 @@
 <li>Smallest addressable unit on disk</li>
 </ul>
 
-<h3>Sector Contents</h3>
+<h3>20.11.2 Sector Contents</h3>
 
 <ul>
 <li><strong>Sector ID</strong> (identification)</li>
@@ -379,9 +381,9 @@
 <li><strong>Gaps</strong> between sectors (unused spaces)</li>
 </ul>
 
-<h2>11. Disk Access Process</h2>
+<h2>20.12 Disk Access Process</h2>
 
-<h3>Access Components and Timing</h3>
+<h3>20.12.1 Access Components and Timing</h3>
 
 <h4>1. Queuing Delay</h4>
 
@@ -430,7 +432,7 @@
 <li>Generally small (fraction of millisecond)</li>
 </ul>
 
-<h3>Access Coordination</h3>
+<h3>20.12.2 Access Coordination</h3>
 
 <ul>
 <li>Processor initiates access</li>
@@ -440,9 +442,9 @@
 <li>Much slower than memory access</li>
 </ul>
 
-<h2>12. Disk Access Example Calculation</h2>
+<h2>20.13 Disk Access Example Calculation</h2>
 
-<h3>Given Parameters</h3>
+<h3>20.13.1 Given Parameters</h3>
 
 <ul>
 <li><strong>Sector size</strong>: 512 bytes</li>
@@ -453,7 +455,7 @@
 <li>Assume idle disk (no queuing)</li>
 </ul>
 
-<h3>Average Read Time Calculation</h3>
+<h3>20.13.2 Average Read Time Calculation</h3>
 
 <h4>1. Seek Time</h4>
 
@@ -483,7 +485,7 @@
 <li>0.2 ms (given)</li>
 </ul>
 
-<h3>Total Average Read Time</h3>
+<h3>20.13.3 Total Average Read Time</h3>
 
 
 <p>Total = 4 + 2 + 0.005 + 0.2 = 6.2 milliseconds</p>
@@ -503,7 +505,7 @@
 <li>Significant variation based on access patterns</li>
 </ul>
 
-<h3>Additional Examples</h3>
+<h3>20.13.5 Additional Examples</h3>
 
 <ul>
 <li>Book provides more practice problems</li>
@@ -511,11 +513,11 @@
 <li>Understand impact of each component on total time</li>
 </ul>
 
-<h2>13. Flash Storage</h2>
+<h2>20.14 Flash Storage</h2>
 
 <p>Modern non-volatile semiconductor storage technology.</p>
 
-<h3>Characteristics</h3>
+<h3>20.14.1 Characteristics</h3>
 
 <h4>Advantages</h4>
 
@@ -537,9 +539,9 @@
 <li>Technology cost higher</li>
 </ul>
 
-<h2>14. Types of Flash Storage</h2>
+<h2>20.15 Types of Flash Storage</h2>
 
-<h3>1. NOR Flash</h3>
+<h3>20.15.1 NOR Flash</h3>
 
 <h4>Structure</h4>
 
@@ -565,7 +567,7 @@
 <li>Execute-in-place applications</li>
 </ul>
 
-<h3>2. NAND Flash</h3>
+<h3>20.15.2 NAND Flash</h3>
 
 <h4>Structure</h4>
 
@@ -595,11 +597,11 @@
 
 <strong>Note</strong>: Values in lecture slides may be outdated as flash storage technology rapidly evolves.
 
-<h2>15. Memory-Mapped I/O</h2>
+<h2>20.16 Memory-Mapped I/O</h2>
 
 <p>Method of accessing I/O devices using memory addresses.</p>
 
-<h3>Concept</h3>
+<h3>20.16.1 Concept</h3>
 
 <ul>
 <li>Reserve some address space for I/O devices</li>
@@ -608,7 +610,7 @@
 <li>Address decoder distinguishes between memory and I/O</li>
 </ul>
 
-<h3>Example with 8 Address Lines</h3>
+<h3>20.16.2 Example with 8 Address Lines</h3>
 
 <ul>
 <li><strong>Total addressable locations</strong>: 256 (2^8)</li>
@@ -617,7 +619,7 @@
 <li>Same load/store instructions access both</li>
 </ul>
 
-<h3>Access Mechanism</h3>
+<h3>20.16.3 Access Mechanism</h3>
 
 <ul>
 <li>Use load/store instructions for both memory and I/O</li>
@@ -627,7 +629,7 @@
 <li>Protection mechanism prevents user programs from direct access</li>
 </ul>
 
-<h3>Advantages</h3>
+<h3>20.16.4 Advantages</h3>
 
 <ul>
 <li>Unified programming model</li>
@@ -635,18 +637,18 @@
 <li>Simpler instruction set</li>
 </ul>
 
-<h3>Disadvantages</h3>
+<h3>20.16.5 Disadvantages</h3>
 
 <ul>
 <li>Reduces available memory address space</li>
 <li>Must reserve addresses for I/O</li>
 </ul>
 
-<h2>16. I/O Instructions</h2>
+<h2>20.17 I/O Instructions</h2>
 
 <p>Alternative to memory-mapped I/O: separate I/O instructions.</p>
 
-<h3>Characteristics</h3>
+<h3>20.17.1 Characteristics</h3>
 
 <ul>
 <li>Separate instructions specifically for I/O operations</li>
@@ -657,7 +659,7 @@
 <p>- Same address can refer to I/O device</p>
 <p>- Instruction type determines which is accessed</p>
 
-<h3>Access Control</h3>
+<h3>20.17.2 Access Control</h3>
 
 <ul>
 <li>I/O instructions can only execute in kernel mode</li>
@@ -666,7 +668,7 @@
 <li>Operating system mediates I/O access</li>
 </ul>
 
-<h3>Example Architecture</h3>
+<h3>20.17.3 Example Architecture</h3>
 
 <ul>
 <li><strong>x86 (Intel/AMD processors)</strong></li>
@@ -674,7 +676,7 @@
 <li>Separate I/O address space</li>
 </ul>
 
-<h3>Advantages</h3>
+<h3>20.17.4 Advantages</h3>
 
 <ul>
 <li>Full memory address space available</li>
@@ -682,18 +684,18 @@
 <li>Clear distinction between memory and I/O</li>
 </ul>
 
-<h3>Disadvantages</h3>
+<h3>20.17.5 Disadvantages</h3>
 
 <ul>
 <li>More complex instruction set</li>
 <li>Additional instructions needed</li>
 </ul>
 
-<h2>17. Polling</h2>
+<h2>20.18 Polling</h2>
 
 <p>Method for processor to communicate with I/O devices.</p>
 
-<h3>How Polling Works</h3>
+<h3>20.18.1 How Polling Works</h3>
 
 <h4>1. Periodically Check I/O Status Register</h4>
 
@@ -719,7 +721,7 @@
 <li>Retry or report error</li>
 </ul>
 
-<h3>Characteristics</h3>
+<h3>20.18.2 Characteristics</h3>
 
 <h4>When Used</h4>
 
@@ -764,7 +766,7 @@
 <li>CPU time wasted on idle devices</li>
 </ul>
 
-<h3>Programming Model</h3>
+<h3>20.18.3 Programming Model</h3>
 
 <ul>
 <li>Can write program to:</li>
@@ -776,11 +778,11 @@
 <li>Simple control flow</li>
 </ul>
 
-<h2>18. Interrupts</h2>
+<h2>20.19 Interrupts</h2>
 
 <p>Alternative to polling: device-initiated communication.</p>
 
-<h3>How Interrupts Work</h3>
+<h3>20.19.1 How Interrupts Work</h3>
 
 <h4>1. Device Initialization</h4>
 
@@ -806,7 +808,7 @@
 <li>Returns to original program</li>
 </ul>
 
-<h3>Characteristics</h3>
+<h3>20.19.2 Characteristics</h3>
 
 <h4>Asynchronous</h4>
 
@@ -834,7 +836,7 @@
 <li>High-priority interrupts can preempt low-priority handlers</li>
 </ul>
 
-<h3>Advantages</h3>
+<h3>20.19.3 Advantages</h3>
 
 <strong>Efficient CPU Use</strong>:
 
@@ -856,7 +858,7 @@
 <li>Quick response to device events</li>
 </ul>
 
-<h3>Disadvantages</h3>
+<h3>20.19.4 Disadvantages</h3>
 
 <strong>More Complex Hardware</strong>:
 
@@ -872,7 +874,7 @@
 <li>Handler invocation takes time</li>
 </ul>
 
-<h3>Execution Model</h3>
+<h3>20.19.5 Execution Model</h3>
 
 <ul>
 <li>Main program running</li>
@@ -885,13 +887,13 @@
 <p>- State restored</p>
 <p>- Resume main program at next instruction</p>
 
-<h2>19. I/O Data Transfer Methods</h2>
+<h2>20.20 I/O Data Transfer Methods</h2>
 
 <p>Three approaches for transferring data between memory and I/O:</p>
 
-<h2>20. Polling-Driven I/O</h2>
+<h2>20.21 Polling-Driven I/O</h2>
 
-<h3>Process</h3>
+<h3>20.21.1 Process</h3>
 
 <ul>
 <li>CPU polls device repeatedly</li>
@@ -899,7 +901,7 @@
 <li>CPU moves data between memory and I/O registers</li>
 </ul>
 
-<h3>Issues</h3>
+<h3>20.21.2 Issues</h3>
 
 <ul>
 <li>Time consuming</li>
@@ -908,9 +910,9 @@
 <li>Wastes CPU cycles</li>
 </ul>
 
-<h2>21. Interrupt-Driven I/O</h2>
+<h2>20.22 Interrupt-Driven I/O</h2>
 
-<h3>Process</h3>
+<h3>20.22.1 Process</h3>
 
 <ul>
 <li>Device interrupts when ready</li>
@@ -918,7 +920,7 @@
 <li>CPU transfers data between memory and I/O registers</li>
 </ul>
 
-<h3>Issues</h3>
+<h3>20.22.2 Issues</h3>
 
 <ul>
 <li>Still CPU-intensive for data transfer</li>
@@ -926,9 +928,9 @@
 <li>Better than polling but still inefficient for bulk transfers</li>
 </ul>
 
-<h2>22. Direct Memory Access (DMA)</h2>
+<h2>20.23 Direct Memory Access (DMA)</h2>
 
-<h3>Process</h3>
+<h3>20.23.1 Process</h3>
 
 <strong>Setup</strong>:
 
@@ -939,7 +941,7 @@
 <li>DMA controller transfers data autonomously</li>
 </ul>
 
-<h3>DMA Operation</h3>
+<h3>20.23.2 DMA Operation</h3>
 
 <strong>CPU Provides</strong>:
 
@@ -964,7 +966,7 @@
 <li>Error occurrence</li>
 </ul>
 
-<h3>Advantages</h3>
+<h3>20.23.3 Advantages</h3>
 
 <ul>
 <li>CPU free to do other work</li>
@@ -973,7 +975,7 @@
 <li>Reduces CPU overhead significantly</li>
 </ul>
 
-<h3>When Used</h3>
+<h3>20.23.4 When Used</h3>
 
 <ul>
 <li>High-speed devices (disks, network)</li>
@@ -981,7 +983,7 @@
 <li>When CPU time is valuable</li>
 </ul>
 
-<h3>Comparison</h3>
+<h3>20.23.5 Comparison</h3>
 
 <ul>
 <li><strong>Polling</strong>: Simple, predictable, inefficient</li>
@@ -989,11 +991,11 @@
 <li><strong>DMA</strong>: Most efficient, essential for high-performance I/O</li>
 </ul>
 
-<h2>23. RAID (Redundant Array of Independent Disks)</h2>
+<h2>20.24 RAID (Redundant Array of Independent Disks)</h2>
 
 <p>Technology to improve storage performance and dependability.</p>
 
-<h3>Purpose</h3>
+<h3>20.24.1 Purpose</h3>
 
 <ul>
 <li>Improve performance through parallelism</li>
@@ -1001,7 +1003,7 @@
 <li>Use multiple disks together as single logical unit</li>
 </ul>
 
-<h3>Benefits</h3>
+<h3>20.24.2 Benefits</h3>
 
 <h4>Performance Improvement</h4>
 

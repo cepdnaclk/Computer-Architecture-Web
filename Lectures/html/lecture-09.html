@@ -52,14 +52,16 @@
             </div>
 
             
-<h2>Introduction</h2>
+<em>By Dr. Isuru Nawinne</em>
+
+<h2>9.1 Introduction</h2>
 
 <p>This lecture transitions from instruction set architecture (ISA) to microarchitecture—the hardware implementation of the ISA. We explore how to build a processor that executes MIPS instructions, covering instruction formats, digital logic fundamentals, datapath construction, and single-cycle processor design. Understanding microarchitecture reveals how software instructions translate to hardware operations and provides the foundation for studying advanced processor designs including pipelining and superscalar execution.</p>
 
 
-<h2>1. Course Context and MIPS ISA</h2>
+<h2>9.2 Course Context and MIPS ISA</h2>
 
-<h3>1.1 Transition to Hardware Implementation</h3>
+<h3>9.2.1 Transition to Hardware Implementation</h3>
 
 <strong>Previous Focus</strong>: ARM ISA
 
@@ -86,7 +88,7 @@
 <li>Concepts apply to all processors</li>
 </ul>
 
-<h3>1.2 MIPS Instruction Categories</h3>
+<h3>9.2.2 MIPS Instruction Categories</h3>
 
 <strong>Three Instruction Types</strong> (based on encoding)
 
@@ -124,7 +126,7 @@
 <li>Different classification philosophy</li>
 </ul>
 
-<h3>1.3 MIPS Instruction Encoding</h3>
+<h3>9.2.3 MIPS Instruction Encoding</h3>
 
 <strong>Fixed 32-Bit Length</strong>
 
@@ -136,9 +138,10 @@
 
 <strong>R-Type Format</strong>
 
-
+``<code>
 <p>[Opcode][RS][RT][RD][SHAMT][Funct]</p>
 <p>6 bits  5   5   5    5      6 bits</p>
+</code>`<code>
 
 
 <p>Fields:</p>
@@ -154,9 +157,10 @@
 
 <strong>I-Type Format</strong>
 
-
+</code>`<code>
 <p>[Opcode][RS][RT][Immediate]</p>
 <p>6 bits  5   5   16 bits</p>
+</code>`<code>
 
 
 <p>Fields:</p>
@@ -170,9 +174,10 @@
 
 <strong>J-Type Format</strong>
 
-
+</code>`<code>
 <p>[Opcode][Address]</p>
 <p>6 bits  26 bits</p>
+</code>`<code>
 
 
 <p>Fields:</p>
@@ -182,9 +187,9 @@
 <li><strong>Address</strong>: 26-bit jump target (word address)</li>
 </ul>
 
-<h2>2. Digital Logic Review</h2>
+<h2>9.3 Digital Logic Review</h2>
 
-<h3>2.1 Information Encoding</h3>
+<h3>9.3.1 Information Encoding</h3>
 
 <strong>Binary Representation</strong>
 
@@ -202,7 +207,7 @@
 <li>Parallel transmission within CPU</li>
 </ul>
 
-<h3>2.2 Combinational Elements</h3>
+<h3>9.3.2 Combinational Elements</h3>
 
 <strong>Definition</strong>
 
@@ -216,9 +221,9 @@
 
 <ul>
 <li>AND, OR, NOT gates</li>
-<li>Multiplexers: <code>Y = (S == 0) ? I0 : I1</code></li>
-<li>Adders: <code>Y = A + B</code></li>
-<li>ALU: <code>Y = function(A, B, operation)</code></li>
+<li>Multiplexers: </code>Y = (S == 0) ? I0 : I1<code></li>
+<li>Adders: </code>Y = A + B<code></li>
+<li>ALU: </code>Y = function(A, B, operation)<code></li>
 </ul>
 
 <strong>Characteristics</strong>
@@ -229,7 +234,7 @@
 <li>Asynchronous operation (no clock needed)</li>
 </ul>
 
-<h3>2.3 Sequential Elements (State Elements)</h3>
+<h3>9.3.3 Sequential Elements (State Elements)</h3>
 
 <strong>Definition</strong>
 
@@ -256,7 +261,7 @@
 <li>Output depends on history</li>
 </ul>
 
-<h3>2.4 Clocking and Timing</h3>
+<h3>9.3.4 Clocking and Timing</h3>
 
 <strong>Clock Signal</strong>
 
@@ -275,7 +280,7 @@
 
 <strong>Clock Period and Frequency</strong>
 
-
+</code>`<code>
 <p>Clock Period (T): Duration of one cycle</p>
 <p>Clock Rate (f): Cycles per second</p>
 
@@ -284,9 +289,10 @@
 <p>Example:</p>
 <p>T = 250 ps = 0.25 ns</p>
 <p>f = 1/(250 × 10^-12) = 4 GHz</p>
+</code>`<code>
 
 
-<h3>2.5 Register Operations</h3>
+<h3>9.3.5 Register Operations</h3>
 
 <strong>Basic Register</strong>
 
@@ -305,14 +311,15 @@
 
 <strong>Timing Example</strong>
 
-
+</code>`<code>
 Clock: <em></em>|‾|<em></em>|‾|<em></em>|‾|<em></em>
 <p>Write:  ‾‾‾‾|<em></em>_|‾‾‾‾‾</p>
 <p>Data:   [A][B][C][D][E]</p>
 <p>State:  [A][A][A][D][D]</p>
+</code>`<code>
 
 
-<h3>2.6 Critical Path and Clock Period</h3>
+<h3>9.3.6 Critical Path and Clock Period</h3>
 
 <strong>Combinational Logic Delay</strong>
 
@@ -323,7 +330,7 @@ Clock: <em></em>|‾|<em></em>|‾|<em></em>|‾|<em></em>
 
 <strong>Clock Period Constraint</strong>
 
-
+</code>`<code>
 <p>Clock Period ≥ Longest Path Delay</p>
 
 <p>Path: Register → Combinational Logic → Register</p>
@@ -333,6 +340,7 @@ Clock: <em></em>|‾|<em></em>|‾|<em></em>|‾|<em></em>
 <p>2. Combinational logic computation</p>
 <p>3. Result reaching next register input</p>
 <p>4. Setup time before next clock edge</p>
+</code>`<code>
 
 
 <strong>Critical Path</strong>
@@ -351,9 +359,9 @@ Clock: <em></em>|‾|<em></em>|‾|<em></em>|‾|<em></em>
 <li>All instructions take same time (inefficient!)</li>
 </ul>
 
-<h2>3. CPU Execution Stages</h2>
+<h2>9.4 CPU Execution Stages</h2>
 
-<h3>3.1 Instruction Fetch (IF)</h3>
+<h3>9.4.1 Instruction Fetch (IF)</h3>
 
 <strong>Purpose</strong>: Retrieve next instruction from memory
 
@@ -373,7 +381,7 @@ Clock: <em></em>|‾|<em></em>|‾|<em></em>|‾|<em></em>
 <li>Data bus from memory to CPU</li>
 </ul>
 
-<h3>3.2 Instruction Decode (ID)</h3>
+<h3>9.4.2 Instruction Decode (ID)</h3>
 
 <strong>Purpose</strong>: Interpret instruction and extract fields
 
@@ -408,7 +416,7 @@ Clock: <em></em>|‾|<em></em>|‾|<em></em>|‾|<em></em>
 <li>Determines datapath activation</li>
 </ul>
 
-<h3>3.3 Execute (EX)</h3>
+<h3>9.4.3 Execute (EX)</h3>
 
 <strong>Purpose</strong>: Perform operation or calculate address
 
@@ -438,7 +446,7 @@ Clock: <em></em>|‾|<em></em>|‾|<em></em>|‾|<em></em>
 <li>Result determines branch decision</li>
 </ul>
 
-<h3>3.4 Memory Access (MEM)</h3>
+<h3>9.4.4 Memory Access (MEM)</h3>
 
 <strong>Purpose</strong>: Read or write data memory
 
@@ -462,7 +470,7 @@ Clock: <em></em>|‾|<em></em>|‾|<em></em>|‾|<em></em>
 <p>2. Get data from RT register</p>
 <p>3. Write data to memory</p>
 
-<h3>3.5 Register Write-Back (WB)</h3>
+<h3>9.4.5 Register Write-Back (WB)</h3>
 
 <strong>Purpose</strong>: Write result to destination register
 
@@ -482,7 +490,7 @@ Clock: <em></em>|‾|<em></em>|‾|<em></em>|‾|<em></em>
 <li>Multiplexer selects appropriate source</li>
 </ul>
 
-<h3>3.6 PC Update</h3>
+<h3>9.4.6 PC Update</h3>
 
 <strong>Purpose</strong>: Determine next instruction address
 
@@ -498,9 +506,9 @@ Clock: <em></em>|‾|<em></em>|‾|<em></em>|‾|<em></em>
 <li>Update happens at clock edge</li>
 </ul>
 
-<h2>4. R-Type Instruction Datapath</h2>
+<h2>9.5 R-Type Instruction Datapath</h2>
 
-<h3>4.1 Register File</h3>
+<h3>9.5.1 Register File</h3>
 
 <strong>Structure</strong>:
 
@@ -528,9 +536,9 @@ Clock: <em></em>|‾|<em></em>|‾|<em></em>|‾|<em></em>
 <li>Synchronized (clock edge)</li>
 </ul>
 
-<h3>4.2 R-Type Execution Flow</h3>
+<h3>9.5.2 R-Type Execution Flow</h3>
 
-<strong>Instruction</strong>: <code>ADD $t0, $t1, $t2</code> (R0 = R1 + R2)
+<strong>Instruction</strong>: </code>ADD $t0, $t1, $t2<code> (R0 = R1 + R2)
 
 <strong>Step 1: Register Read</strong>
 
@@ -557,11 +565,11 @@ Clock: <em></em>|‾|<em></em>|‾|<em></em>|‾|<em></em>
 <li>At clock edge: Result written</li>
 </ul>
 
-<h3>4.3 ALU Control</h3>
+<h3>9.5.3 ALU Control</h3>
 
 <strong>Function Field Encoding</strong>:
 
-
+</code>`<code>
 <p>Funct     | Operation | ALU Control</p>
 <p>----------|-----------|-------------</p>
 <p>0x20      | ADD       | 0010</p>
@@ -569,6 +577,7 @@ Clock: <em></em>|‾|<em></em>|‾|<em></em>|‾|<em></em>
 <p>0x24      | AND       | 0000</p>
 <p>0x25      | OR        | 0001</p>
 <p>0x2A      | SLT       | 0111</p>
+</code>`<code>
 
 
 <strong>ALU Control Logic</strong>:
@@ -579,9 +588,9 @@ Clock: <em></em>|‾|<em></em>|‾|<em></em>|‾|<em></em>
 <li>Combinational logic (lookup table)</li>
 </ul>
 
-<h2>5. I-Type Instruction Datapath</h2>
+<h2>9.6 I-Type Instruction Datapath</h2>
 
-<h3>5.1 Differences from R-Type</h3>
+<h3>9.6.1 Differences from R-Type</h3>
 
 <strong>Operand Sources</strong>:
 
@@ -598,7 +607,7 @@ Clock: <em></em>|‾|<em></em>|‾|<em></em>|‾|<em></em>
 <li>Immediate: 16-bit operand</li>
 </ul>
 
-<h3>5.2 Sign Extension</h3>
+<h3>9.6.2 Sign Extension</h3>
 
 <strong>Problem</strong>: 16-bit immediate, 32-bit ALU
 
@@ -611,14 +620,15 @@ Clock: <em></em>|‾|<em></em>|‾|<em></em>|‾|<em></em>
 
 <strong>Examples</strong>:
 
-
+</code>`<code>
 <p>16-bit: 0x0005 → 32-bit: 0x00000005 (+5)</p>
 <p>16-bit: 0xFFFB → 32-bit: 0xFFFFFFFB (-5)</p>
+</code>`<code>
 
 
 <strong>Hardware</strong>: Simple wire replication (fast)
 
-<h3>5.3 Multiplexer for ALU Input</h3>
+<h3>9.6.3 Multiplexer for ALU Input</h3>
 
 <strong>ALU Input B Selection</strong>:
 
@@ -630,14 +640,15 @@ Clock: <em></em>|‾|<em></em>|‾|<em></em>|‾|<em></em>
 
 <strong>ALUSrc Signal</strong>:
 
-
+</code>`<code>
 <p>ALUSrc = 0: Use register (R-type, branch)</p>
 <p>ALUSrc = 1: Use immediate (I-type)</p>
+</code>`<code>
 
 
-<h2>6. Load/Store Instruction Datapath</h2>
+<h2>9.7 Load/Store Instruction Datapath</h2>
 
-<h3>6.1 Address Calculation</h3>
+<h3>9.7.1 Address Calculation</h3>
 
 <strong>Formula</strong>: Address = Base + Offset
 
@@ -651,12 +662,13 @@ Clock: <em></em>|‾|<em></em>|‾|<em></em>|‾|<em></em>
 
 <strong>Examples</strong>:
 
-
+</code>`<code>
 <p>LW $t1, 8($t0)    # Load from $t0 + 8</p>
 <p>SW $t2, -4($sp)   # Store to $sp - 4</p>
+</code>`<code>
 
 
-<h3>6.2 Load Word (LW)</h3>
+<h3>9.7.2 Load Word (LW)</h3>
 
 <strong>Instruction Format</strong>:
 
@@ -680,7 +692,7 @@ Clock: <em></em>|‾|<em></em>|‾|<em></em>|‾|<em></em>
 <li>Fetch → Register Read → ALU → Memory → Register Write</li>
 </ul>
 
-<h3>6.3 Store Word (SW)</h3>
+<h3>9.7.3 Store Word (SW)</h3>
 
 <strong>Instruction Format</strong>:
 
@@ -705,7 +717,7 @@ Clock: <em></em>|‾|<em></em>|‾|<em></em>|‾|<em></em>
 <li>No register write stage</li>
 </ul>
 
-<h3>6.4 Data Memory</h3>
+<h3>9.7.4 Data Memory</h3>
 
 <strong>Interface</strong>:
 
@@ -730,9 +742,9 @@ Clock: <em></em>|‾|<em></em>|‾|<em></em>|‾|<em></em>
 <li>Select: MemtoReg signal</li>
 </ul>
 
-<h2>7. Branch Instruction Datapath</h2>
+<h2>9.8 Branch Instruction Datapath</h2>
 
-<h3>7.1 Branch Types</h3>
+<h3>9.8.1 Branch Types</h3>
 
 <strong>BEQ (Branch if Equal)</strong>:
 
@@ -748,7 +760,7 @@ Clock: <em></em>|‾|<em></em>|‾|<em></em>|‾|<em></em>
 <li>Branch if RS != RT</li>
 </ul>
 
-<h3>7.2 Branch Target Calculation</h3>
+<h3>9.8.2 Branch Target Calculation</h3>
 
 <strong>Components</strong>:
 
@@ -771,7 +783,7 @@ Clock: <em></em>|‾|<em></em>|‾|<em></em>|‾|<em></em>
 <li>Shift left 2 (wire routing, no hardware!)</li>
 </ul>
 
-<h3>7.3 Branch Execution</h3>
+<h3>9.8.3 Branch Execution</h3>
 
 <strong>Step 1: Register Comparison</strong>
 
@@ -798,9 +810,10 @@ Clock: <em></em>|‾|<em></em>|‾|<em></em>|‾|<em></em>
 
 <strong>Step 4: PC Update Decision</strong>
 
-
+</code>`<code>
 <p>BEQ: PCSrc = Branch AND Zero</p>
 <p>BNE: PCSrc = Branch AND NOT(Zero)</p>
+</code>`<code>
 
 
 <strong>Multiplexer</strong>:
@@ -811,7 +824,7 @@ Clock: <em></em>|‾|<em></em>|‾|<em></em>|‾|<em></em>
 <li>Select: PCSrc</li>
 </ul>
 
-<h3>7.4 Sign Extension and Shifting</h3>
+<h3>9.8.4 Sign Extension and Shifting</h3>
 
 <strong>Sign Extension</strong>: Preserves signed offset
 
@@ -829,9 +842,9 @@ Clock: <em></em>|‾|<em></em>|‾|<em></em>|‾|<em></em>
 <li>NO actual shifter hardware!</li>
 </ul>
 
-<h2>8. Complete Single-Cycle Datapath</h2>
+<h2>9.9 Complete Single-Cycle Datapath</h2>
 
-<h3>8.1 Integrated Components</h3>
+<h3>9.9.1 Integrated Components</h3>
 
 <strong>Instruction Fetch</strong>:
 
@@ -887,7 +900,7 @@ Clock: <em></em>|‾|<em></em>|‾|<em></em>|‾|<em></em>
 <li>Next PC (PC+4 vs branch target)</li>
 </ul>
 
-<h3>8.2 Control Signals</h3>
+<h3>9.9.2 Control Signals</h3>
 
 <strong>Generated by Control Unit</strong>:
 
@@ -900,7 +913,7 @@ Clock: <em></em>|‾|<em></em>|‾|<em></em>|‾|<em></em>
 <p>7. RegWrite: Register write enable</p>
 <p>8. ALUOp: ALU operation type</p>
 
-<h3>8.3 Parallel Operations</h3>
+<h3>9.9.3 Parallel Operations</h3>
 
 <strong>Key Insight</strong>: Hardware operates in PARALLEL
 
@@ -918,11 +931,11 @@ Clock: <em></em>|‾|<em></em>|‾|<em></em>|‾|<em></em>
 <li>Multiplexer doesn't select it (ALUSrc = 0)</li>
 </ul>
 
-<h3>8.4 Critical Path Analysis</h3>
+<h3>9.9.4 Critical Path Analysis</h3>
 
 <strong>Path for Load Word</strong> (longest):
 
-
+</code>`<code>
 <p>1. Instruction fetch:     200 ps</p>
 <p>2. Register read:         150 ps</p>
 <p>3. Sign extend:           50 ps</p>
@@ -932,6 +945,7 @@ Clock: <em></em>|‾|<em></em>|‾|<em></em>|‾|<em></em>
 <p>7. Multiplexer:           25 ps</p>
 <p>8. Register write setup:  100 ps</p>
 <p>Total:                    950 ps</p>
+</code>``
 
 
 <strong>Clock Period</strong>: Must be ≥ 950 ps
@@ -945,7 +959,7 @@ Clock: <em></em>|‾|<em></em>|‾|<em></em>|‾|<em></em>
 <li>Wasted time per fast instruction</li>
 </ul>
 
-<h3>8.5 Single-Cycle Disadvantages</h3>
+<h3>9.9.5 Single-Cycle Disadvantages</h3>
 
 <strong>Inefficiency</strong>:
 

@@ -1,13 +1,15 @@
 # Lecture 10: Processor Control
 
-## Introduction
+*By Dr. Isuru Nawinne*
+
+## 10.1 Introduction
 
 This lecture completes the single-cycle MIPS processor design by exploring the control unit—the component that generates control signals based on instruction opcodes. We examine ALU control generation using a two-stage approach, design the main control unit, analyze control signal purposes, and create truth tables mapping instructions to control patterns. Understanding control unit design reveals how hardware interprets instructions and orchestrates datapath operations, completing our understanding of processor implementation.
 
 
-## 1. Control Unit Overview
+## 10.2 Control Unit Overview
 
-### 1.1 Recap of Datapath Components
+### 10.2.1 Recap of Datapath Components
 
 **Previously Covered**:
 
@@ -20,7 +22,7 @@ This lecture completes the single-cycle MIPS processor design by exploring the c
 - Sign Extender (16-bit to 32-bit)
 - Shifter (branch offset left 2)
 
-### 1.2 Control Unit Purpose
+### 10.2.2 Control Unit Purpose
 
 **Function**: Generate control signals based on instruction
 
@@ -37,7 +39,7 @@ This lecture completes the single-cycle MIPS processor design by exploring the c
 - ALU operation
 - Branch decision
 
-### 1.3 Instruction Subset for Study
+### 10.2.3 Instruction Subset for Study
 
 **Selected Instructions**:
 
@@ -52,9 +54,9 @@ This lecture completes the single-cycle MIPS processor design by exploring the c
 - Representative of most control signals
 - Excludes: Jump instructions, I-type arithmetic
 
-## 2. ALU Operations for Different Instructions
+## 10.3 ALU Operations for Different Instructions
 
-### 2.1 Load/Store Instructions
+### 10.3.1 Load/Store Instructions
 
 **Address Calculation**:
 
@@ -80,7 +82,7 @@ SW $t2, -4($sp)   # Address = $sp + (-4)
 ```
 
 
-### 2.2 Branch Instructions
+### 10.3.2 Branch Instructions
 
 **Comparison Operation**:
 
@@ -107,7 +109,7 @@ Zero = 0: RS != RT, don't take branch
 ```
 
 
-### 2.3 R-Type Instructions
+### 10.3.3 R-Type Instructions
 
 **Variable Operations**: Determined by funct field
 
@@ -132,9 +134,9 @@ Funct    | Operation | ALU Control
 ```
 
 
-## 3. ALU Control Signal
+## 10.4 ALU Control Signal
 
-### 3.1 Signal Format
+### 10.4.1 Signal Format
 
 **4-Bit Signal**: Specifies ALU operation
 
@@ -156,7 +158,7 @@ Funct    | Operation | ALU Control
 - Could use 3 bits for 8 operations
 - 4-bit standard allows expansion
 
-### 3.2 Control Signal Usage by Instruction
+### 10.4.2 Control Signal Usage by Instruction
 
 **Load/Store**:
 
@@ -176,9 +178,9 @@ Funct    | Operation | ALU Control
 - Must decode funct field
 - Different operations need different controls
 
-## 4. Two-Stage ALU Control Generation
+## 10.5 Two-Stage ALU Control Generation
 
-### 4.1 Design Rationale
+### 10.5.1 Design Rationale
 
 **Why Two Stages?**
 
@@ -200,7 +202,7 @@ Funct    | Operation | ALU Control
 - Stage 2: ALU control (operation-specific)
 - Cleaner design separation
 
-### 4.2 Stage 1: Generate ALUOp
+### 10.5.2 Stage 1: Generate ALUOp
 
 **Input**: Opcode (6 bits)
 
@@ -226,7 +228,7 @@ R-type         | 000000   | 10
 
 **Logic**: Purely combinational based on opcode
 
-### 4.3 Stage 2: Generate ALU Control
+### 10.5.3 Stage 2: Generate ALU Control
 
 **Inputs**:
 
@@ -257,7 +259,7 @@ ALUOp | Funct   | ALU Control | Operation
 - Simplifies logic design
 - Reduces gate count
 
-### 4.4 Complete ALU Control Path
+### 10.5.4 Complete ALU Control Path
 
 **Flow Diagram**:
 
@@ -283,9 +285,9 @@ Instruction Opcode (6 bits)
 - Localized R-type complexity
 - Easier to verify
 
-## 5. Main Control Signals
+## 10.6 Main Control Signals
 
-### 5.1 Complete Signal List
+### 10.6.1 Complete Signal List
 
 **Signals Generated**:
 
@@ -300,7 +302,7 @@ Instruction Opcode (6 bits)
 
 **Total**: 9 control bits from main control
 
-### 5.2 RegDst (Register Destination)
+### 10.6.2 RegDst (Register Destination)
 
 **Purpose**: Select which field specifies write destination
 
@@ -332,7 +334,7 @@ ADD $t2, $t3, $t4  # Write to $t2 (RD) → RegDst = 1
 ```
 
 
-### 5.3 Branch
+### 10.6.3 Branch
 
 **Purpose**: Indicate if instruction is branch
 
@@ -359,7 +361,7 @@ For BNE:
 ```
 
 
-### 5.4 MemRead
+### 10.6.4 MemRead
 
 **Purpose**: Enable reading from data memory
 
@@ -377,7 +379,7 @@ MemRead = 1: Read from memory (LW)
 - When high: Memory outputs data
 - When low: Memory read inactive
 
-### 5.5 MemtoReg (Memory to Register)
+### 10.6.5 MemtoReg (Memory to Register)
 
 **Purpose**: Select source of register write data
 
@@ -403,7 +405,7 @@ LW $t1, 8($t0)     # $t1 = memory data → MemtoReg = 1
 ```
 
 
-### 5.6 MemWrite
+### 10.6.6 MemWrite
 
 **Purpose**: Enable writing to data memory
 
@@ -421,7 +423,7 @@ MemWrite = 1: Write to memory (SW)
 - When high: Data written (on clock edge)
 - When low: Memory write disabled
 
-### 5.7 ALUSrc (ALU Source)
+### 10.6.7 ALUSrc (ALU Source)
 
 **Purpose**: Select second ALU operand source
 
@@ -447,7 +449,7 @@ LW $t1, 8($t0)     # Use imm 8 → ALUSrc = 1
 ```
 
 
-### 5.8 RegWrite
+### 10.6.8 RegWrite
 
 **Purpose**: Enable writing to register file
 
@@ -469,9 +471,9 @@ Branch:    RegWrite = 0 (no write)
 ```
 
 
-## 6. Control Signal Truth Table
+## 10.7 Control Signal Truth Table
 
-### 6.1 Complete Table
+### 10.7.1 Complete Table
 
 ```
 Instruction | RegDst | ALUSrc | MemtoReg | RegWrite | MemRead | MemWrite | Branch | ALUOp
@@ -489,7 +491,7 @@ Branch Eq   |   X    |   0    |    X     |    0     |    0    |    0     |   1  
 - **1**: Signal high/true/select input 1
 - **X**: Don't Care (not used, can be anything)
 
-### 6.2 R-Type Control
+### 10.7.2 R-Type Control
 
 **Settings**:
 
@@ -519,7 +521,7 @@ ALUOp = 10:     Consult funct field
 - Branch target (computed but not used)
 - Sign extender (operates but ignored)
 
-### 6.3 Load Word Control
+### 10.7.3 Load Word Control
 
 **Settings**:
 
@@ -549,7 +551,7 @@ ALUOp = 00:     ALU performs ADD
 
 - Fetch → Reg Read → Sign Extend → ALU → Memory → Reg Write
 
-### 6.4 Store Word Control
+### 10.7.4 Store Word Control
 
 **Settings**:
 
@@ -571,7 +573,7 @@ ALUOp = 00:     ALU performs ADD
 - Memory write instead of read
 - No register write stage
 
-### 6.5 Branch if Equal Control
+### 10.7.5 Branch if Equal Control
 
 **Settings**:
 
@@ -608,9 +610,9 @@ Else:
 ```
 
 
-## 7. Control Unit Implementation
+## 10.8 Control Unit Implementation
 
-### 7.1 Input to Control Unit
+### 10.8.1 Input to Control Unit
 
 **Primary Input**: Opcode (bits 26-31, 6 bits)
 
@@ -622,7 +624,7 @@ Else:
 - Only for R-type (opcode = 000000)
 - Specifies ALU operation
 
-### 7.2 Combinational Logic Design
+### 10.8.2 Combinational Logic Design
 
 **Method**: Standard digital logic techniques
 
@@ -642,7 +644,7 @@ RegWrite = (opcode == 000000) OR (opcode == 100011)
 ```
 
 
-### 7.3 Control Unit Structure
+### 10.8.3 Control Unit Structure
 
 **ROM-Based Implementation**:
 
@@ -668,7 +670,7 @@ RegWrite = (opcode == 000000) OR (opcode == 100011)
 - More flexible but slower
 - Used in CISC (e.g., x86)
 
-### 7.4 Timing Considerations
+### 10.8.4 Timing Considerations
 
 **Signal Generation Time**:
 
@@ -688,16 +690,16 @@ RegWrite = (opcode == 000000) OR (opcode == 100011)
 - Typically small vs. ALU/memory
 - Well-designed control has minimal impact
 
-## 8. Why Separate MemRead and MemWrite?
+## 10.9 Why Separate MemRead and MemWrite?
 
-### 8.1 Initial Observation
+### 10.9.1 Initial Observation
 
 **Question**: Seem mutually exclusive—why not one signal?
 
 - Could use: 0 = Read, 1 = Write
 - Appears redundant
 
-### 8.2 Answer: Yes, Separate Signals Needed
+### 10.9.2 Answer: Yes, Separate Signals Needed
 
 **Timing Control**:
 
@@ -721,7 +723,7 @@ MemRead=0, MemWrite=0: No access
 ```
 
 
-### 8.3 Future: Pipelined Processors
+### 10.9.3 Future: Pipelined Processors
 
 **Concurrent Access**:
 
@@ -735,7 +737,7 @@ MemRead=0, MemWrite=0: No access
 - Enables simultaneous access
 - Separate signals control independent ports
 
-### 8.4 Design Philosophy
+### 10.9.4 Design Philosophy
 
 **Orthogonality**:
 
@@ -749,9 +751,9 @@ MemRead=0, MemWrite=0: No access
 - Allows memory optimization
 - Standard practice
 
-## 9. Complete Datapath with Control
+## 10.10 Complete Datapath with Control
 
-### 9.1 Integrated System
+### 10.10.1 Integrated System
 
 **Components Connected**:
 
@@ -772,7 +774,7 @@ MemRead=0, MemWrite=0: No access
 - Inputs: ALUOp, Funct
 - Output: ALU Control (4 bits)
 
-### 9.2 Example: Load Word Execution
+### 10.10.2 Example: Load Word Execution
 
 **Instruction**: `LW $t1, 8($t0)`
 

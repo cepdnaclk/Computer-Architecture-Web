@@ -1,14 +1,16 @@
 # Lecture 2: Technology Trends, Moore's Law, and Computer System Organization
 
-## Introduction
+*By Dr. Isuru Nawinne*
+
+## 2.1 Introduction
 
 The evolution of computer technology over the past 50 years has been nothing short of revolutionary. From room-sized scientific calculators to powerful smartphones in our pockets, this transformation has been guided by a prediction made by Intel co-founder Gordon Moore. This lecture examines the technological trends that enabled this revolution, the physical limitations that eventually constrained traditional scaling approaches, and the architectural innovations that emerged in response.
 
 We will trace the exponential growth in transistor density, explore how smaller feature sizes enabled both more complex circuits and faster operation, understand why clock frequencies stopped increasing around 2004, and see how the industry pivoted to multi-core architectures. Finally, we'll examine how computer systems are organized into three layers (hardware, system software, and application software) and follow the complete translation process from high-level code to binary execution.
 
-## 1. Moore's Law - Foundation of Computer Technology Evolution
+## 2.2 Moore's Law - Foundation of Computer Technology Evolution
 
-### 1.1 Who Was Gordon Moore?
+### 2.2.1 Who Was Gordon Moore?
 
 **Background and Influence:**
 
@@ -23,7 +25,7 @@ We will trace the exponential growth in transistor density, explore how smaller 
 - Influenced competing manufacturers
 - Created benchmark for technology expectations
 
-### 1.2 Moore's Law Definition
+### 2.2.2 Moore's Law Definition
 
 **The Prediction:**
 
@@ -45,7 +47,7 @@ Moore's Law is NOT a physical law like the law of gravity. It is an observation 
 - Became guiding principle for semiconductor industry
 - Influenced research priorities and manufacturing investments
 
-### 1.3 Impact of Moore's Law
+### 2.2.3 Impact of Moore's Law
 
 **Computer Evolution Enabled:**
 
@@ -90,9 +92,9 @@ Moore's Law made computationally intensive applications possible:
 - Enabled digital transformation of industries
 - Created new fields and destroyed old ones
 
-## 2. Technology Scaling - Historical Data
+## 2.3 Technology Scaling - Historical Data
 
-### 2.1 Transistor Count Growth (1970-2010)
+### 2.3.1 Transistor Count Growth (1970-2010)
 
 **Chart Analysis:**
 
@@ -122,7 +124,7 @@ Tracking actual transistor counts across processor generations:
 - Guided investment in manufacturing technology
 - Set performance expectations for consumers
 
-### 2.2 The x86 Architecture
+### 2.3.2 The x86 Architecture
 
 **Origin and Naming:**
 
@@ -154,7 +156,7 @@ The architecture evolved through multiple generations while maintaining compatib
 - Old programs run on new processors
 - Balanced innovation with stability
 
-### 2.3 Historical Context
+### 2.3.3 Historical Context
 
 **Early Computing Era (1985-1990):**
 
@@ -178,9 +180,9 @@ The architecture evolved through multiple generations while maintaining compatib
 - Enabled productivity for non-technical users
 - Set expectations for modern computing
 
-## 3. Feature Size Scaling - Lithography Improvements
+## 2.4 Feature Size Scaling - Lithography Improvements
 
-### 3.1 What Made Transistor Count Increase Possible?
+### 2.4.1 What Made Transistor Count Increase Possible?
 
 **The Answer: Smaller Transistors**
 
@@ -208,7 +210,7 @@ The relentless march toward smaller dimensions:
 - **2028 Target:** 5 nm exceeded
 - **Future Roadmap:** 3nm and 2nm are currently in production, future is 1nm and sub-1nm
 
-### 3.2 What is "Feature Size"?
+### 2.4.2 What is "Feature Size"?
 
 **Original Definition:**
 
@@ -240,7 +242,7 @@ Different terms referring to approximately the same concept:
 - 3D structures don't have simple linear measurements
 - Marketing convenience over physical precision
 
-### 3.3 How Tiny Are Transistors?
+### 2.4.3 How Tiny Are Transistors?
 
 **Mind-Boggling Scale:**
 
@@ -257,7 +259,7 @@ Putting modern transistor sizes in perspective:
 - Atomic-level precision required
 - Remarkable engineering achievement
 
-### 3.4 Transistor Structure
+### 2.4.4 Transistor Structure
 
 **Basic Components:**
 
@@ -279,9 +281,9 @@ Putting modern transistor sizes in perspective:
 - Function of transistor geometry and materials
 - Critical parameter for circuit performance
 
-## 4. Technology Roadmaps - ITRS Predictions
+## 2.5 Technology Roadmaps - ITRS Predictions
 
-### 4.1 ITRS Organization
+### 2.5.1 ITRS Organization
 
 **International Technology Roadmap for Semiconductors:**
 
@@ -307,7 +309,7 @@ The roadmaps considered multiple factors:
 - Guided industry research priorities
 - Dissolved in 2015 due to paradigm shift
 
-### 4.2 Original Roadmap (2001)
+### 2.5.2 Original Roadmap (2001)
 
 **Optimistic Projections:**
 
@@ -325,7 +327,7 @@ The initial roadmap predicted steady exponential decrease in feature size:
 - Continued improvements in lithography
 - Economic sustainability of smaller features
 
-### 4.3 Revised Roadmap (2013)
+### 2.5.3 Revised Roadmap (2013)
 
 **Adjusted Expectations:**
 
@@ -344,7 +346,7 @@ By 2013, reality required revised predictions:
 - Physical and economic challenges becoming apparent
 - Need for alternative approaches emerging
 
-### 4.4 Final Roadmap (2015)
+### 2.5.4 Final Roadmap (2015)
 
 **Dramatic Shift in Direction:**
 
@@ -363,7 +365,7 @@ The 2015 roadmap marked a fundamental change:
 - Industry acknowledgment of new paradigm
 - End of traditional Moore's Law scaling
 
-### 4.5 Why the Change? - 3D Technology
+### 2.5.5 Why the Change? - 3D Technology
 
 **Major Paradigm Shift (2013-2015):**
 
@@ -395,7 +397,7 @@ The industry pivoted to a fundamentally different approach:
 - Advanced packaging techniques
 - Thermal management solutions
 
-### 4.6 Dissolution of ITRS (2015)
+### 2.5.6 Dissolution of ITRS (2015)
 
 **Reasons for Dissolution:**
 
@@ -421,9 +423,9 @@ Modern approaches include:
 - More complex and diverse strategies
 - Higher costs per transistor (economic Moore's Law ending)
 
-## 5. Why Smaller Transistors Improve Performance
+## 2.6 Why Smaller Transistors Improve Performance
 
-### 5.1 Reason 1: More Complex Circuits
+### 2.6.1 Reason 1: More Complex Circuits
 
 **Increased Transistor Budget:**
 
@@ -455,7 +457,7 @@ More transistors available on chip enables more sophisticated functionality.
 - More parallel functional units
 - Hardware accelerators for specific tasks
 
-### 5.2 Reason 2: Faster Switching
+### 2.6.2 Reason 2: Faster Switching
 
 **Electrical Advantages of Smaller Size:**
 
@@ -495,9 +497,9 @@ The relationship between size and speed involves:
 - Lower RC time constants
 - Improved frequency response
 
-## 6. Clock Rate Trends - The Power Wall
+## 2.7 Clock Rate Trends - The Power Wall
 
-### 6.1 Clock Rate Increases (1982-2004)
+### 2.7.1 Clock Rate Increases (1982-2004)
 
 **Exponential Growth Era:**
 
@@ -520,7 +522,7 @@ Processor clock frequencies increased dramatically for over two decades:
 - Parallel to Moore's Law for transistor count
 - Consumer expectation of continuous frequency increases
 
-### 6.2 The Turning Point (2004-2007)
+### 2.7.2 The Turning Point (2004-2007)
 
 **Sudden Deceleration:**
 
@@ -545,9 +547,9 @@ Around 2004, the decades-long trend dramatically changed:
 - Architectural innovation required
 - End of "free" performance scaling
 
-### 6.3 The Power Wall Problem
+### 2.7.3 The Power Wall Problem
 
-**Power Consumption Growth Crisis:**
+**Power Consumption Growth Crisis:
 
 As clock rates increased, power consumption grew unsustainably:
 
@@ -611,9 +613,9 @@ Various cooling methods were tried:
 - Reliability concerns
 - Not scalable to mass market
 
-### 6.4 Dynamic Power Equation
+### 2.7.4 Dynamic Power Equation
 
-**The Physics of Power Consumption:**
+**The Physics of Power Consumption:
 
 Dynamic power consumption follows this relationship:
 
@@ -664,9 +666,9 @@ Power Scaling = (Capacitance) × (Voltage²) × (Frequency)
 - Reliability constraints
 - Leakage current increases at lower voltages
 
-### 6.5 Overclocking Phenomenon
+### 2.7.5 Overclocking Phenomenon
 
-**Marketing and User Community Response:**
+**Marketing and User Community Response:
 
 Emerged prominently around early 2000s during the MHz wars:
 
@@ -710,9 +712,9 @@ Users could manually increase clock speed beyond rated specification:
 - Added revenue from premium products
 - Many processors destroyed but market remained
 
-## 7. Shift to Multi-Core Processors
+## 2.8 Shift to Multi-Core Processors
 
-### 7.1 The Challenge
+### 2.8.1 The Challenge
 
 **The Industry Dilemma:**
 
@@ -736,9 +738,9 @@ By mid-2000s, the semiconductor industry faced a paradox:
 - How to continue improving computational power?
 - How to maintain Moore's Law performance benefits?
 
-### 7.2 Solution: Multiple Processor Cores
+### 2.8.2 Solution: Multiple Processor Cores
 
-**Paradigm Shift (2004-2008):**
+**Paradigm Shift (2004-2008):
 
 Industry pivoted from single-core to multi-core architectures:
 
@@ -787,7 +789,7 @@ Instead of one powerful processor, put **multiple complete processors on same ch
 - **Power Gating:** Completely shut down unused cores
 - **Thermal Management:** Distribute heat across die
 
-### 7.3 The Plan
+### 2.8.3 The Plan
 
 **Initial Industry Vision:**
 
@@ -823,7 +825,7 @@ Following Moore's Law principle for core counts:
 - Not the hundreds predicted
 - Growth much slower than initial projections
 
-### 7.4 Why Multi-Core Growth Slowed
+### 2.8.4 Why Multi-Core Growth Slowed
 
 **The Fundamental Problem: Parallel Programming Difficulty**
 
@@ -927,7 +929,7 @@ If parallel programming not done well:
 - **Worse Performance:** Overhead exceeds benefits
 - **Unpredictable Results:** Race conditions cause incorrect output
 
-### 7.5 Instruction-Level Parallelism vs Multi-Core Parallelism
+### 2.8.5 Instruction-Level Parallelism vs Multi-Core Parallelism
 
 **Instruction-Level Parallelism (ILP):**
 
@@ -985,7 +987,7 @@ If parallel programming not done well:
 | Applicability | All code  | Limited patterns |
 | Overhead      | Hidden    | Must manage      |
 
-### 7.6 Impact on Software Development
+### 2.8.6 Impact on Software Development
 
 **For Regular Programmers:**
 
@@ -1028,9 +1030,9 @@ If parallel programming not done well:
 - Gap between industry needs and graduate preparation
 - Specialized training for HPC (high-performance computing)
 
-## 8. Computer System Organization - Three Layers
+## 2.9 Computer System Organization - Three Layers
 
-### 8.1 Hardware Layer (Bottom)
+### 2.9.1 Hardware Layer (Bottom)
 
 **Physical Components:**
 
@@ -1096,9 +1098,9 @@ If parallel programming not done well:
 - Interact with peripherals and external world
 - Provide computational substrate
 
-### 8.2 System Software Layer (Middle)
+### 2.9.2 System Software Layer (Middle)
 
-**Tool Chain Components:**
+**Tool Chain Components:
 
 **Compiler:**
 
@@ -1219,7 +1221,7 @@ Programmers don't need to worry about:
 - Network communication without protocol details
 - Device I/O without hardware specifics
 
-### 8.3 Application Software Layer (Top)
+### 2.9.3 Application Software Layer (Top)
 
 **User-Level Programs:**
 
@@ -1268,9 +1270,9 @@ Programmers don't need to worry about:
 - Highest productivity for programmers
 - Requires compilation/interpretation to execute
 
-## 9. From High-Level Code to Machine Code - The Translation Process
+## 2.10 From High-Level Code to Machine Code - The Translation Process
 
-### 9.1 Example: Swap Function in C
+### 2.10.1 Example: Swap Function in C
 
 **Source Code:**
 
@@ -1297,7 +1299,7 @@ void swap(int v[], int k) {
 2. Copy v[k+1] to v[k]
 3. Copy temporary to v[k+1]
 
-### 9.2 After Compilation - MIPS Assembly Code
+### 2.10.2 After Compilation - MIPS Assembly Code
 
 **Assembly Translation:**
 
@@ -1345,7 +1347,7 @@ SW   $15, 4($2)     # Store temp to v[k+1]
 - Register-to-register operations
 - Explicit memory addressing
 
-### 9.3 After Assembly - Machine Code
+### 2.10.3 After Assembly - Machine Code
 
 **Binary Representation:**
 
@@ -1404,9 +1406,9 @@ In the immediate value 4:
 - Loaded into memory when program executes
 - CPU fetches and executes instructions sequentially
 
-## 10. Program Execution - Inside the CPU
+## 2.11 Program Execution - Inside the CPU
 
-### 10.1 Block Diagram of Computer
+### 2.11.1 Block Diagram of Computer
 
 **System Components:**
 
@@ -1466,7 +1468,7 @@ In the immediate value 4:
 - Output sent to I/O devices
 - Results displayed or saved
 
-### 10.2 Inside the CPU - Two Main Components
+### 2.11.2 Inside the CPU - Two Main Components
 
 **Datapath:**
 
@@ -1527,7 +1529,7 @@ In the immediate value 4:
 - **Control** monitors **Datapath** status
 - Together implement instruction execution
 
-### 10.3 Execution Process (Conveyor Belt Analogy)
+### 2.11.3 Execution Process (Conveyor Belt Analogy)
 
 **Instruction Execution Cycle:**
 
@@ -1577,7 +1579,7 @@ In the immediate value 4:
 - Continuous movement through system
 - Pipelining overlaps multiple instructions (discussed in later lectures)
 
-### 10.4 Cache Memory
+### 2.11.4 Cache Memory
 
 **Purpose and Motivation:**
 
@@ -1633,9 +1635,9 @@ In the immediate value 4:
 - Write policies
 - Cache coherency in multi-core
 
-## 11. Real CPU Layout - AMD Barcelona Example
+## 2.12 Real CPU Layout - AMD Barcelona Example
 
-### 11.1 Overview
+### 2.12.1 Overview
 
 **AMD Barcelona Processor:**
 
@@ -1653,7 +1655,7 @@ In the immediate value 4:
 - Reveals organizational decisions
 - Educational value for understanding architecture
 
-### 11.2 Four Processor Cores
+### 2.12.2 Four Processor Cores
 
 **Core Distribution:**
 
@@ -1671,7 +1673,7 @@ Physical layout shows clear quadrant organization:
 - **Thermal Distribution:** Spreads heat across die
 - **Interconnect Balance:** Equal distances to shared resources
 
-### 11.3 Inside Each Core
+### 2.12.3 Inside Each Core
 
 **Floating-Point Unit (FPU):**
 
@@ -1800,7 +1802,7 @@ Physical layout shows clear quadrant organization:
 - Interface to L3 cache or memory
 - May use different associativity than L1
 
-### 11.4 Shared Components
+### 2.12.4 Shared Components
 
 **North Bridge (Central Hub):**
 
@@ -1864,7 +1866,7 @@ Physical layout shows clear quadrant organization:
 - Lower pin count than parallel buses
 - NUMA (Non-Uniform Memory Access) support for multi-socket systems
 
-### 11.5 Additional Information 
+### 2.12.5 Additional Information 
 
 **WikiChip Database:** https://en.wikichip.org
 

@@ -1,13 +1,15 @@
 # Lecture 3: Understanding Performance
 
-## Introduction
+*By Dr. Isuru Nawinne*
+
+## 3.1 Introduction
 
 Understanding computer performance is fundamental to computer architecture and system design. This lecture explores how performance is measured, the factors that influence it, and the principles that guide performance optimization. We examine the metrics used to evaluate systems, the mathematical relationships between performance factors, and Amdahl's Law—a critical principle for understanding the limits of performance improvements.
 
 
-## 1. Defining and Measuring Performance
+## 3.2 Defining and Measuring Performance
 
-### 1.1 Response Time vs. Throughput
+### 3.2.1 Response Time vs. Throughput
 
 **Response Time (Execution Time)**
 
@@ -30,7 +32,7 @@ Understanding computer performance is fundamental to computer architecture and s
 - Different optimization strategies for each metric
 - System design must balance both considerations
 
-### 1.2 Performance Definition
+### 3.2.2 Performance Definition
 
 **Mathematical Definition**
 
@@ -56,9 +58,9 @@ Example: If System A is 2× faster than System B:
 - Execution Time_B / Execution Time_A = 2
 - System A takes half the time of System B
 
-## 2. CPU Time and Performance Factors
+## 3.3 CPU Time and Performance Factors
 
-### 2.1 Components of Execution Time
+### 3.3.1 Components of Execution Time
 
 **Total Execution Time**
 
@@ -73,7 +75,7 @@ Example: If System A is 2× faster than System B:
 - Directly reflects processor and memory system performance
 - Most relevant for comparing processor architectures
 
-### 2.2 The CPU Time Equation
+### 3.3.2 The CPU Time Equation
 
 **Basic Formula**
 
@@ -104,7 +106,7 @@ CPU Time = 10 × 10^9 cycles / (4 × 10^9 cycles/sec)
          = 2.5 seconds
 
 
-### 2.3 Instruction Count and CPI
+### 3.3.3 Instruction Count and CPI
 
 **Cycles Per Instruction (CPI)**
 
@@ -136,9 +138,9 @@ CPU Time = (Instruction Count × CPI) / Clock Rate
 - CPI: Determined by processor implementation (microarchitecture)
 - Clock Rate: Determined by hardware technology and organization
 
-## 3. Understanding CPI in Detail
+## 3.4 Understanding CPI in Detail
 
-### 3.1 CPI Variability
+### 3.4.1 CPI Variability
 
 **Different Instructions, Different CPIs**
 
@@ -158,7 +160,7 @@ Where:
 - CPI_i = cycles per instruction for instruction type i
 - Instruction Count_i = number of times instruction i executed
 
-### 3.2 CPI Example Calculation
+### 3.4.2 CPI Example Calculation
 
 **Given:**
 
@@ -177,7 +179,7 @@ Total Cycles = (50,000 × 1) + (30,000 × 3) + (20,000 × 2)
 Average CPI = 180,000 / 100,000 = 1.8
 
 
-### 3.3 Instruction Classes
+### 3.4.3 Instruction Classes
 
 **Common Instruction Categories**
 
@@ -193,9 +195,9 @@ Average CPI = 180,000 / 100,000 = 1.8
 - Control flow: 1-2 cycles (correct prediction) or more (misprediction)
 - Floating-point: 2-20+ cycles depending on operation
 
-## 4. Performance Optimization Principles
+## 3.5 Performance Optimization Principles
 
-### 4.1 Make the Common Case Fast
+### 3.5.1 Make the Common Case Fast
 
 **Core Principle**
 
@@ -217,7 +219,7 @@ Average CPI = 180,000 / 100,000 = 1.8
 - Accept slower performance for rare cases
 - Trade-offs guided by usage patterns
 
-### 4.2 Amdahl's Law
+### 3.5.2 Amdahl's Law
 
 **The Fundamental Principle**
 The speedup that can be achieved by improving a particular part of a system is limited by the fraction of time that part is used.
@@ -240,7 +242,7 @@ Where:
 Execution Time_new = Execution Time_old × [(1 - P) + (P / S)]
 
 
-### 4.3 Amdahl's Law Examples
+### 3.5.3 Amdahl's Law Examples
 
 **Example 1: Multiply Operation Speedup**
 
@@ -284,7 +286,7 @@ Speedup_overall = 1 / [(1 - 0.30) + (0.30 / 100)]
 
 **Key Insight:** Even with 100× improvement, overall speedup is only 1.42× because only 30% of execution benefits.
 
-### 4.4 Implications of Amdahl's Law
+### 3.5.4 Implications of Amdahl's Law
 
 **Limitations of Parallelization**
 
@@ -312,9 +314,9 @@ If 90% of program parallelizes perfectly:
 
 The 10% serial portion ultimately limits speedup to 10×.
 
-## 5. Complete Performance Analysis
+## 3.6 Complete Performance Analysis
 
-### 5.1 The Complete Performance Equation
+### 3.6.1 The Complete Performance Equation
 
 **Bringing It All Together**
 
@@ -351,7 +353,7 @@ CPU Time = (Instructions) × (Cycles/Instruction) × (Seconds/Cycle)
 - Power constraints: Higher frequency requires more power
 - Cooling limitations: Heat dissipation capacity
 
-### 5.2 Performance Comparison Example
+### 3.6.2 Performance Comparison Example
 
 **Scenario:**
 Compare two implementations of the same ISA
@@ -378,7 +380,7 @@ CPU Time_B = (1 × 10^6 instructions) × (3.0 cycles/instruction) / (3 × 10^9 c
 
 **Result:** Both systems have identical performance despite different clock rates and CPIs.
 
-### 5.3 Trade-offs in Design
+### 3.6.3 Trade-offs in Design
 
 **Clock Rate vs. CPI Trade-off**
 
@@ -398,9 +400,9 @@ CPU Time_B = (1 × 10^6 instructions) × (3.0 cycles/instruction) / (3 × 10^9 c
 - Power = Capacitance × Voltage² × Frequency
 - Mobile systems prioritize power over peak performance
 
-## 6. Practical Performance Considerations
+## 3.7 Practical Performance Considerations
 
-### 6.1 Benchmarking
+### 3.7.1 Benchmarking
 
 **Purpose of Benchmarks**
 
@@ -420,7 +422,7 @@ CPU Time_B = (1 × 10^6 instructions) × (3.0 cycles/instruction) / (3 × 10^9 c
 - Can be optimized for unfairly
 - Need multiple benchmarks for complete picture
 
-### 6.2 Performance Metrics in Practice
+### 3.7.2 Performance Metrics in Practice
 
 **MIPS (Million Instructions Per Second)**
 
@@ -443,7 +445,7 @@ MIPS = Instruction Count / (Execution Time × 10^6)
 - Energy efficiency (performance per watt)
 - Performance per dollar
 
-### 6.3 Power and Energy Considerations
+### 3.7.3 Power and Energy Considerations
 
 **Power Wall**
 

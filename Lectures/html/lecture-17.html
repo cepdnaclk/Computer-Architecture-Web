@@ -52,16 +52,18 @@
             </div>
 
             
-<h2>Introduction</h2>
+<em>By Dr. Isuru Nawinne</em>
+
+<h2>17.1 Introduction</h2>
 
 <p>This lecture explores cache hierarchies in modern computer systems, examining how multiple levels of cache work together to optimize memory access performance through careful balance of hit latency versus hit rate. We analyze real-world implementations including Intel's Skylake architecture, understanding the design decisions behind multi-level cache organizations where L1 caches prioritize speed, L2 caches balance capacity and latency, and L3 caches provide large shared storage across processor cores. The examination of associativity tradeoffs—from direct-mapped through set-associative to fully associative designs—reveals how hardware complexity, power consumption, and performance interact in practical cache systems.</p>
 
 
-<h2>1. Recap: Associativity Comparison Results</h2>
+<h2>17.2 Recap: Associativity Comparison Results</h2>
 
 <p>From the previous lecture's example using a 4-block cache with three different organizations:</p>
 
-<h3>Direct Mapped Cache</h3>
+<h3>17.2.1 Direct Mapped Cache</h3>
 
 <ul>
 <li><strong>Result</strong>: 5 misses, 0 hits</li>
@@ -71,7 +73,7 @@
 <li><strong>Hit rate</strong>: 0% in this example</li>
 </ul>
 
-<h3>2-Way Set Associative Cache</h3>
+<h3>17.2.2 2-Way Set Associative Cache</h3>
 
 <ul>
 <li><strong>Result</strong>: 4 misses, 1 hit</li>
@@ -81,7 +83,7 @@
 <li><strong>Hit rate</strong>: 20% - better than direct mapped</li>
 </ul>
 
-<h3>Fully Associative Cache (4-way)</h3>
+<h3>17.2.3 Fully Associative Cache (4-way)</h3>
 
 <ul>
 <li><strong>Result</strong>: 3 misses, 2 hits</li>
@@ -91,7 +93,7 @@
 <li><strong>Hit rate</strong>: 40% - best performance</li>
 </ul>
 
-<h3>Key Observations</h3>
+<h3>17.2.4 Key Observations</h3>
 
 <ul>
 <li>Higher associativity → better hit rate</li>
@@ -102,9 +104,9 @@
 </ul>
 
 
-<h2>2. Cache Configuration Parameters</h2>
+<h2>17.3 Cache Configuration Parameters</h2>
 
-<h3>Primary Parameters</h3>
+<h3>17.3.1 Primary Parameters</h3>
 
 <h4>1. Block Size</h4>
 
@@ -133,13 +135,13 @@
 <li>N-way = N blocks per set</li>
 </ul>
 
-<h3>Cache Size Calculation</h3>
+<h3>17.3.2 Cache Size Calculation</h3>
 
 
 <p>Total Cache Size = Block Size × Set Size × Associativity</p>
 
 
-<h3>Secondary Parameters</h3>
+<h3>17.3.3 Secondary Parameters</h3>
 
 <h4>4. Replacement Policy</h4>
 
@@ -165,7 +167,7 @@
 <li>Communication protocols</li>
 </ul>
 
-<h3>Configuration Definition</h3>
+<h3>17.3.4 Configuration Definition</h3>
 
 <ul>
 <li>Fixing values for all these parameters defines a specific cache configuration</li>
@@ -174,9 +176,9 @@
 </ul>
 
 
-<h2>3. Improving Cache Performance</h2>
+<h2>17.4 Improving Cache Performance</h2>
 
-<h3>Average Access Time Equation</h3>
+<h3>17.4.1 Average Access Time Equation</h3>
 
 
 <p>T_avg = Hit Latency + Miss Rate × Miss Penalty</p>
@@ -185,9 +187,9 @@
 <p>Three main factors can be optimized as below.</p>
 
 
-<h2>4. Hit Rate Improvement</h2>
+<h2>17.5 Hit Rate Improvement</h2>
 
-<h3>Method 1: Increase Cache Size</h3>
+<h3>17.5.1 Method 1: Increase Cache Size</h3>
 
 <strong>Approach</strong>:
 
@@ -206,7 +208,7 @@
 <li>Practical limit on how much cache can be added</li>
 </ul>
 
-<h3>Method 2: Increase Associativity</h3>
+<h3>17.5.2 Method 2: Increase Associativity</h3>
 
 <strong>Benefits</strong>:
 
@@ -224,7 +226,7 @@
 <li>Increases hardware cost</li>
 </ul>
 
-<h3>Method 3: Cache Prefetching</h3>
+<h3>17.5.3 Method 3: Cache Prefetching</h3>
 
 <strong>Concept</strong>:
 
@@ -261,9 +263,9 @@
 </ul>
 
 
-<h2>5. Hit Latency Optimization</h2>
+<h2>17.6 Hit Latency Optimization</h2>
 
-<h3>Relationship with Hit Rate</h3>
+<h3>17.6.1 Relationship with Hit Rate</h3>
 
 <strong>Fundamental Trade-off</strong>:
 
@@ -290,16 +292,16 @@
 </ul>
 
 
-<h2>6. Miss Penalty Improvement</h2>
+<h2>17.7 Miss Penalty Improvement</h2>
 
-<h3>Miss Penalty Definition</h3>
+<h3>17.7.1 Miss Penalty Definition</h3>
 
 <ul>
 <li>Time spent servicing a cache miss</li>
 <li>Time to fetch missing block from memory</li>
 </ul>
 
-<h3>Method 1: Optimize Communication</h3>
+<h3>17.7.2 Method 1: Optimize Communication</h3>
 
 <ul>
 <li>Improve bus technology between cache and memory</li>
@@ -310,7 +312,7 @@
 <li>This assumes best possible communication is already in place</li>
 </ul>
 
-<h3>Method 2: Cache Hierarchy (Main Focus)</h3>
+<h3>17.7.3 Method 2: Cache Hierarchy (Main Focus)</h3>
 
 <ul>
 <li>Use multiple levels of cache</li>
@@ -319,13 +321,13 @@
 </ul>
 
 
-<h2>7. Cache Hierarchy (Multi-Level Caches)</h2>
+<h2>17.8 Cache Hierarchy (Multi-Level Caches)</h2>
 
-<h3>Concept</h3>
+<h3>17.8.1 Concept</h3>
 
 <p>Instead of a single cache between CPU and memory, use multiple cache levels: L1, L2, L3, etc., with each level serving as backup for the level above.</p>
 
-<h3>Terminology</h3>
+<h3>17.8.2 Terminology</h3>
 
 <ul>
 <li><strong>L1 (Level 1)</strong>: Top-level cache, closest to CPU</li>
@@ -335,14 +337,14 @@
 <li><strong>Last-level cache</strong>: Slowest (but still fast), largest</li>
 </ul>
 
-<h3>Operation</h3>
+<h3>17.8.3 Operation</h3>
 
 <p>1. CPU requests data from L1</p>
 <p>2. L1 miss → request goes to L2 (not directly to memory)</p>
 <p>3. L2 miss → request goes to L3 (if exists)</p>
 <p>4. Last-level miss → request goes to main memory</p>
 
-<h3>Benefits</h3>
+<h3>17.8.4 Benefits</h3>
 
 <ul>
 <li>Reduced effective miss penalty for L1</li>
@@ -351,7 +353,7 @@
 <li>Overall average miss penalty greatly reduced</li>
 </ul>
 
-<h3>Effective Miss Penalty</h3>
+<h3>17.8.5 Effective Miss Penalty</h3>
 
 <p>For L1 cache:</p>
 
@@ -367,7 +369,7 @@
 <li>Effective penalty much less than going to memory</li>
 </ul>
 
-<h3>Example Calculation</h3>
+<h3>17.8.6 Example Calculation</h3>
 
 <p>Given:</p>
 
@@ -383,9 +385,9 @@
 
 
 
-<h2>8. Optimization Strategies for Multi-Level Caches</h2>
+<h2>17.9 Optimization Strategies for Multi-Level Caches</h2>
 
-<h3>Why Not One Big Cache?</h3>
+<h3>17.9.1 Why Not One Big Cache?</h3>
 
 <ul>
 <li>Different levels can be optimized for different goals</li>
@@ -394,13 +396,13 @@
 </ul>
 
 
-<h2>9. L1 Cache Optimization - Optimize for Hit Latency</h2>
+<h2>17.10 L1 Cache Optimization - Optimize for Hit Latency</h2>
 
-<h3>Goal</h3>
+<h3>17.10.1 Goal</h3>
 
 <p>Minimize hit latency</p>
 
-<h3>Rationale</h3>
+<h3>17.10.2 Rationale</h3>
 
 <ul>
 <li>Critical for CPU clock cycle time</li>
@@ -409,7 +411,7 @@
 <li>Lower L1 hit latency → shorter clock cycle → higher CPU frequency</li>
 </ul>
 
-<h3>Characteristics</h3>
+<h3>17.10.3 Characteristics</h3>
 
 <ul>
 <li>Small size</li>
@@ -418,7 +420,7 @@
 <li>Accept moderate hit rate (e.g., 95%)</li>
 </ul>
 
-<h3>Trade-off</h3>
+<h3>17.10.4 Trade-off</h3>
 
 <ul>
 <li>Sacrifice some hit rate for speed</li>
@@ -427,13 +429,13 @@
 </ul>
 
 
-<h2>10. L2 Cache Optimization - Optimize for Hit Rate</h2>
+<h2>17.11 L2 Cache Optimization - Optimize for Hit Rate</h2>
 
-<h3>Goal</h3>
+<h3>17.11.1 Goal</h3>
 
 <p>Maximize hit rate</p>
 
-<h3>Rationale</h3>
+<h3>17.11.2 Rationale</h3>
 
 <ul>
 <li>Serve most L1 misses</li>
@@ -441,7 +443,7 @@
 <li>Reduce effective L1 miss penalty</li>
 </ul>
 
-<h3>Characteristics</h3>
+<h3>17.11.3 Characteristics</h3>
 
 <ul>
 <li>Larger size</li>
@@ -450,7 +452,7 @@
 <li>Can tolerate higher hit latency</li>
 </ul>
 
-<h3>Trade-off</h3>
+<h3>17.11.4 Trade-off</h3>
 
 <ul>
 <li>Higher latency acceptable</li>
@@ -459,13 +461,13 @@
 </ul>
 
 
-<h2>11. Associativity Comparison</h2>
+<h2>17.12 Associativity Comparison</h2>
 
 <strong>Question</strong>: Which level has higher associativity?
 
 <strong>Answer</strong>: L2 (and L3 if present) have higher associativity
 
-<h3>Reasoning</h3>
+<h3>17.12.1 Reasoning</h3>
 
 <ul>
 <li>L2 optimized for hit rate</li>
@@ -474,7 +476,7 @@
 <li>Lower associativity → faster access</li>
 </ul>
 
-<h3>Combined Effect</h3>
+<h3>17.12.2 Combined Effect</h3>
 
 <ul>
 <li><strong>L1</strong>: Fast but moderate hit rate (e.g., 95-98%)</li>
@@ -487,9 +489,9 @@
 <strong>Overall result</strong>: Much better average performance
 
 
-<h2>12. Physical Implementation of Cache Hierarchy</h2>
+<h2>17.13 Physical Implementation of Cache Hierarchy</h2>
 
-<h3>L1 Cache</h3>
+<h3>17.13.1 L1 Cache</h3>
 
 <ul>
 <li>Almost always on-chip (inside CPU die)</li>
@@ -500,7 +502,7 @@
 <p>- L1 instruction cache (L1-I)</p>
 <p>- L1 data cache (L1-D)</p>
 
-<h3>L2 Cache</h3>
+<h3>17.13.2 L2 Cache</h3>
 
 <ul>
 <li>Usually on-chip (same die as CPU)</li>
@@ -510,7 +512,7 @@
 <li>If multi-core: may be per-core or shared</li>
 </ul>
 
-<h3>L3 Cache</h3>
+<h3>17.13.3 L3 Cache</h3>
 
 <ul>
 <li>Common in multi-processor/multi-core systems</li>
@@ -520,7 +522,7 @@
 <li>Largest cache level</li>
 </ul>
 
-<h3>Design Variations</h3>
+<h3>17.13.4 Design Variations</h3>
 
 <p>Different implementations based on:</p>
 
@@ -533,11 +535,11 @@
 </ul>
 
 
-<h2>13. Real World Example: Intel Skylake Architecture</h2>
+<h2>17.14 Real World Example: Intel Skylake Architecture</h2>
 
 <strong>Source</strong>: wikichip.org
 
-<h3>Architecture Overview</h3>
+<h3>17.14.1 Architecture Overview</h3>
 
 <ul>
 <li>Mainstream Intel architecture from ~2015</li>
@@ -545,7 +547,7 @@
 <li>Standard desktop/PC processors</li>
 </ul>
 
-<h3>Dual-Core Layout Analysis</h3>
+<h3>17.14.2 Dual-Core Layout Analysis</h3>
 
 <h4>Execution Units</h4>
 
@@ -568,7 +570,7 @@
 <li>Control logic</li>
 </ul>
 
-<h3>Cache Implementation</h3>
+<h3>17.14.3 Cache Implementation</h3>
 
 <h4>L1 Data Cache</h4>
 
@@ -600,7 +602,7 @@
 <li>Serves both L1-I and L1-D misses</li>
 </ul>
 
-<h3>Memory Hierarchy</h3>
+<h3>17.14.4 Memory Hierarchy</h3>
 
 <ul>
 <li>Separate buffers for load and store instructions</li>
@@ -609,7 +611,7 @@
 <li>Connection to L3 cache (if present) via bus</li>
 </ul>
 
-<h3>Design Observations</h3>
+<h3>17.14.5 Design Observations</h3>
 
 <ul>
 <li>Physical placement matches logical function</li>
@@ -620,7 +622,7 @@
 <li>Even more area for pipeline optimization</li>
 </ul>
 
-<h3>Why Higher L1 Associativity Here?</h3>
+<h3>17.14.6 Why Higher L1 Associativity Here?</h3>
 
 <ul>
 <li>8-way seems high for L1</li>
@@ -631,7 +633,7 @@
 <li>Depends on overall CPU design</li>
 </ul>
 
-<h3>Multi-Core Configuration</h3>
+<h3>17.14.7 Multi-Core Configuration</h3>
 
 <ul>
 <li>Each core has own L1-I and L1-D</li>
@@ -640,7 +642,7 @@
 <li>L3 connects via bus system</li>
 </ul>
 
-<h3>Additional Features</h3>
+<h3>17.14.8 Additional Features</h3>
 
 <ul>
 <li>Physical register files (integer and vector)</li>
@@ -651,9 +653,9 @@
 </ul>
 
 
-<h2>14. Recommendations for Further Study</h2>
+<h2>17.15 Recommendations for Further Study</h2>
 
-<h3>Resource: wikichip.org</h3>
+<h3>17.15.1 Resource: wikichip.org</h3>
 
 <strong>Content Available</strong>:
 

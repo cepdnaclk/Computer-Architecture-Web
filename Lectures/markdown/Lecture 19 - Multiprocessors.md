@@ -1,18 +1,20 @@
 # Lecture 19: Multiprocessors
 
-## Introduction
+*By Dr. Isuru Nawinne*
+
+## 19.1 Introduction
 
 Multiprocessor systems represent a fundamental paradigm shift in computer architecture, using multiple processors on the same chip to execute multiple programs or threads simultaneously when traditional performance improvement techniques—clock frequency scaling and instruction-level parallelism—reached physical and practical limits. This lecture explores the evolution toward multiprocessor architectures driven by power walls and parallelism walls, examines the critical challenge of cache coherence that arises when multiple processors maintain private caches of shared memory, and analyzes solutions including bus snooping protocols like MESI and scalable directory-based coherence schemes. We compare architectural organizations from uniform memory access (UMA) to non-uniform memory access (NUMA), understanding how different designs balance simplicity, performance, and scalability for systems ranging from dual-core smartphones to thousand-processor supercomputers.
 
 
-## 1. Introduction to Multiprocessors
+## 19.2 Introduction to Multiprocessors
 
 Multiprocessor systems address performance limitations encountered with single processor systems by employing multiple processors on the same chip to execute multiple programs or threads simultaneously.
 
 
-## 2. Performance Evolution Background
+## 19.3 Performance Evolution Background
 
-### Historical Performance Improvements
+### 19.3.1 Historical Performance Improvementsvements
 
 #### Early Methods: Clock Frequency Scaling
 
@@ -45,7 +47,7 @@ Multiprocessor systems address performance limitations encountered with single p
 - Hit "parallelism wall"
 - Can't exploit more parallelism beyond program's inherent limits
 
-### Moore's Law Context
+### 19.3.2 Moore's Law Context
 
 **Observation**:
 
@@ -57,21 +59,21 @@ Multiprocessor systems address performance limitations encountered with single p
 **Solution**: Multiple processors on same chip
 
 
-## 3. Multiprocessor Approach
+## 19.4 Multiprocessor Approach
 
-### Key Characteristics
+### 19.4.1 Key Characteristics
 
 - Multiple processor cores on same chip
 - Execute multiple instruction streams simultaneously
 - Run multiple programs/threads in real time (true parallelism)
 - Different from single processor illusion of parallelism
 
-### Terminology
+### 19.4.2 Terminology
 
 - **Processing Elements (PE)**: Common term for individual processors
 - Each PE is a complete CPU with fetch, decode, execute units
 
-### Key Problem: Communication Between Processors
+### 19.4.3 Key Problem: Communication Between Processors
 
 - Multiple processors executing simultaneously
 - Programs often need to communicate/share data
@@ -79,9 +81,9 @@ Multiprocessor systems address performance limitations encountered with single p
 - Communication is central design challenge
 
 
-## 4. Shared Memory Multiprocessors (SMM)
+## 19.5 Shared Memory Multiprocessors (SMM)
 
-### Most Common Approach
+### 19.5.1 Most Common Approach
 
 **Architecture**:
 
@@ -89,7 +91,7 @@ Multiprocessor systems address performance limitations encountered with single p
 - All processors access same physical address space
 - Memory device connected via common bus/interconnect
 
-### Operating System Role
+### 19.5.2 Operating System Role
 
 **Responsibilities**:
 
@@ -99,7 +101,7 @@ Multiprocessor systems address performance limitations encountered with single p
 - Performs workload balancing
 - Ensures processors access only authorized memory portions
 
-### Workload Balancing
+### 19.5.3 Workload Balancing
 
 **Purpose**:
 
@@ -109,9 +111,9 @@ Multiprocessor systems address performance limitations encountered with single p
 - Maximize overall system utilization
 
 
-## 5. Memory Contention Problem
+## 19.6 Memory Contention Problem
 
-### Inherent Issue
+### 19.6.1 Inherent Issue
 
 **Challenge**:
 
@@ -121,7 +123,7 @@ Multiprocessor systems address performance limitations encountered with single p
 - Synchronization overhead
 - Access time increases with contention
 
-### Effect on Performance
+### 19.6.2 Effect on Performance
 
 **Bottleneck**:
 
@@ -132,9 +134,9 @@ Multiprocessor systems address performance limitations encountered with single p
 - Limits scalability
 
 
-## 6. Uniform Memory Access (UMA)
+## 19.7 Uniform Memory Access (UMA)
 
-### Definition
+### 19.7.1 Definition
 
 **Characteristics**:
 
@@ -143,21 +145,21 @@ Multiprocessor systems address performance limitations encountered with single p
 - Access time independent of which processor is accessing
 - By design, no difference in access time (ignoring contention)
 
-### Also Known As
+### 19.7.2 Also Known As
 
 - **Symmetric Multiprocessors (SMP)**
 - Both terms used interchangeably
 
-### Key Properties
+### 19.7.3 Key Properties
 
 - Shared address space
 - Uniform view of memory by all processors
 - All processors experience same average latency
 
 
-## 7. Solution to Contention: Caches
+## 19.8 Solution to Contention: Caches
 
-### Using Local Caches
+### 19.8.1 Using Local Caches
 
 **Approach**:
 
@@ -167,23 +169,23 @@ Multiprocessor systems address performance limitations encountered with single p
 - Only small percentage (misses) go to main memory
 - Reduces bus/memory contention significantly
 
-### Benefits
+### 19.8.2 Benefits
 
 - Exploits locality in programs
 - Minimizes memory accesses
 - Reduces bottleneck effect
 - Allows better scalability
 
-### New Problem: Cache Coherence
+### 19.8.3 New Problem: Cache Coherence
 
 - Shared data blocks can be in multiple caches
 - Updates in one cache not automatically reflected in others
 - Need mechanism to maintain consistency
 
 
-## 8. Cache Coherence Problem
+## 19.9 Cache Coherence Problem
 
-### The Issue
+### 19.9.1 The Issue
 
 **Scenario**:
 
@@ -193,7 +195,7 @@ Multiprocessor systems address performance limitations encountered with single p
 - Processors see different values for same address
 - Data becomes incoherent
 
-### Example Sequence
+### 19.9.2 Example Sequence
 
 1. **PE1 reads X (value = 1)** → Cached in PE1
 2. **PE2 reads X (value = 1)** → Cached in PE2
@@ -202,21 +204,21 @@ Multiprocessor systems address performance limitations encountered with single p
 5. PE2 still sees X = 1 (stale data)
 6. **Inconsistency**: Same address, different values
 
-### With Write-Through Policy
+### 19.9.3 With Write-Through Policy
 
 - PE1 writes X = 0 → Cache and memory updated
 - Memory has correct value
 - But PE2 cache still has old value (X = 1)
 - Coherence still lost
 
-### With Write-Back Policy
+### 19.9.4 With Write-Back Policy
 
 - PE1 writes X = 0 → Only cache updated
 - Memory still has old value (X = 1)
 - PE2 cache still has old value (X = 1)
 - Both memory and PE2 incoherent with PE1
 
-### Requirement
+### 19.9.5 Requirement
 
 - Cache coherence MUST be maintained
 - Otherwise parallel programs execute incorrectly
@@ -224,11 +226,11 @@ Multiprocessor systems address performance limitations encountered with single p
 - Latest updates must be visible to all processors
 
 
-## 9. Bus Snooping
+## 19.10 Bus Snooping
 
 Common technique for cache coherence in SMP systems.
 
-### What is Bus Snooping?
+### 19.10.1 What is Bus Snooping?
 
 **Mechanism**:
 
@@ -237,7 +239,7 @@ Common technique for cache coherence in SMP systems.
 - Separate from memory bus
 - Cache controllers communicate through snoop bus
 
-### How It Works
+### 19.10.2 How It Works
 
 1. Cache controller performs write to address
 2. Broadcasts address information on snoop bus
@@ -245,22 +247,22 @@ Common technique for cache coherence in SMP systems.
 4. Controllers check if they have same address cached
 5. If yes, take action based on protocol
 
-### Key Feature
+### 19.10.3 Key Feature
 
 - All caches monitor (snoop on) the bus
 - Detect writes by other processors
 - Take appropriate action to maintain coherence
 
 
-## 10. Write Invalidate Protocol
+## 19.11 Write Invalidate Protocol
 
-### Approach
+### 19.11.1 Approach
 
 - When write detected, invalidate own copy
 - Group of protocols using this approach
 - Most common and easiest to implement
 
-### Mechanism
+### 19.11.2 Mechanism
 
 #### On Write by Processor
 
@@ -273,13 +275,13 @@ Common technique for cache coherence in SMP systems.
 2. If yes: Mark block as INVALID (clear valid bit)
 3. Next access will be miss
 
-### With Write-Through Policy
+### 19.11.3 With Write-Through Policy
 
 - Memory always has up-to-date value
 - On miss after invalidation: Fetch from memory
 - Straightforward implementation
 
-### With Write-Back Policy
+### 19.11.4 With Write-Back Policy
 
 **Challenge**:
 
@@ -296,7 +298,7 @@ Common technique for cache coherence in SMP systems.
 - More efficient than going to memory
 - Avoids slow memory access
 
-### Complexity
+### 19.11.5 Complexity
 
 **Trade-offs**:
 
@@ -307,9 +309,9 @@ Common technique for cache coherence in SMP systems.
 - But better performance (less memory traffic)
 
 
-## 11. Write Update Protocol
+## 19.12 Write Update Protocol
 
-### Alternative Approach
+### 19.12.1 Alternative Approach
 
 **Concept**:
 
@@ -317,7 +319,7 @@ Common technique for cache coherence in SMP systems.
 - Also called Write Broadcast
 - Different action when write detected
 
-### Mechanism
+### 19.12.2 Mechanism
 
 #### On Write by Processor
 
@@ -330,7 +332,7 @@ Common technique for cache coherence in SMP systems.
 2. If yes: Update own copy with new data
 3. Keep block VALID
 
-### Benefits
+### 19.12.3 Benefits
 
 - No miss on next access to same address
 - Data already updated in all caches
@@ -344,16 +346,16 @@ Common technique for cache coherence in SMP systems.
 - Higher power consumption
 - More bus traffic
 
-### Comparison
+### 19.12.5 Comparison
 
 - Simpler than write invalidate with write-back
 - Fewer cache misses
 - Higher bus bandwidth requirement
 
 
-## 12. Real Protocol Implementations
+## 19.13 Real Protocol Implementations
 
-### Historical Protocols
+### 19.13.1 Historical Protocols
 
 #### Write Once Protocol
 
@@ -386,7 +388,7 @@ Common technique for cache coherence in SMP systems.
 - **Write policy**: Mixed (write-back for private data, write-through for shared data)
 - Used in DEC Firefly and Sun SPARC systems
 
-### Most Common Combination
+### 19.13.2 Most Common Combination
 
 - Write invalidate protocols
 - Write-back policy
@@ -395,13 +397,13 @@ Common technique for cache coherence in SMP systems.
 - Good balance of performance and complexity
 
 
-## 13. MESI Protocol Details
+## 19.14 MESI Protocol Details
 
 Named after four states: **Modified, Exclusive, Shared, Invalid**
 
 Most popular cache coherency protocol, used in Intel Pentium and IBM PowerPC processors.
 
-### Four Block States (Requires 2 Bits)
+### 19.14.1 Four Block States (Requires 2 Bits)
 
 #### 1. INVALID (I)
 
@@ -432,9 +434,9 @@ Most popular cache coherency protocol, used in Intel Pentium and IBM PowerPC pro
 - Block is "dirty"
 
 
-## 14. MESI Protocol State Transitions
+## 19.15 MESI Protocol State Transitions
 
-### Example with PE1, PE2, PE3
+### 19.15.1 Example with PE1, PE2, PE3
 
 **Initial State**: Variable X = 1 in memory, all cache entries invalid
 
@@ -507,7 +509,7 @@ Most popular cache coherency protocol, used in Intel Pentium and IBM PowerPC pro
 - Memory: X = 0 (updated)
 - All consistent
 
-### Key Points
+### 19.15.2 Key Points
 
 - Coherency maintained throughout
 - Invalidations prevent stale data reads
@@ -516,9 +518,9 @@ Most popular cache coherency protocol, used in Intel Pentium and IBM PowerPC pro
 - Write-backs occur when transitioning from Modified to Shared
 
 
-## 15. Scalability of UMA Systems
+## 19.16 Scalability of UMA Systems
 
-### Limitation
+### 19.16.1 Limitation
 
 **Challenges**:
 
@@ -527,13 +529,13 @@ Most popular cache coherency protocol, used in Intel Pentium and IBM PowerPC pro
 - Snoop bus becomes bottleneck
 - Memory bus also becomes bottleneck
 
-### Practical Limit
+### 19.16.2 Practical Limit
 
 - Up to ~32 processing elements with bus-based design
 - Not a hard threshold but approximate practical limit
 - Beyond this, contention significantly degrades performance
 
-### Alternative Interconnects
+### 19.16.3 Alternative Interconnectsconnects
 
 #### Crossbar Switches
 
@@ -548,16 +550,16 @@ Most popular cache coherency protocol, used in Intel Pentium and IBM PowerPC pro
 - Can connect multiple memory banks simultaneously
 - Increases scalability
 
-### Improved Scalability
+### 19.16.4 Improved Scalability
 
 - With crossbar networks: Up to ~256 processing elements
 - Still limited but much better than bus-based
 - Trade-off: More complex hardware
 
 
-## 16. Non-Uniform Memory Access (NUMA)
+## 19.17 Non-Uniform Memory Access (NUMA)
 
-### Designed for Even Higher Scalability
+### 19.17.1 Designed for Even Higher Scalability
 
 **Goals**:
 
@@ -566,7 +568,7 @@ Most popular cache coherency protocol, used in Intel Pentium and IBM PowerPC pro
 - Still uses shared memory model
 - Communication through shared address space
 
-### Key Difference from UMA
+### 19.17.2 Key Difference from UMA
 
 **Non-Uniform Access Times**:
 
@@ -574,7 +576,7 @@ Most popular cache coherency protocol, used in Intel Pentium and IBM PowerPC pro
 - Different processors experience different latencies
 - Memory perspective is non-uniform
 
-### Architecture
+### 19.17.3 Architecture
 
 **Structure**:
 
@@ -583,13 +585,13 @@ Most popular cache coherency protocol, used in Intel Pentium and IBM PowerPC pro
 - Slower to access remote memory (other processors' local memory)
 - But all memory accessible by all processors (shared address space)
 
-### Access Time Difference
+### 19.17.4 Access Time Difference
 
 - Remote memory access: 4-5 times more cycles than local
 - Significant performance impact
 - Programming must consider locality
 
-### Operating System Role
+### 19.17.5 Operating System Role
 
 **Optimization Responsibilities**:
 
@@ -600,9 +602,9 @@ Most popular cache coherency protocol, used in Intel Pentium and IBM PowerPC pro
 - Global optimization problem
 
 
-## 17. Two Types of NUMA
+## 19.18 Two Types of NUMA
 
-### 1. NC-NUMA (Non-Cached NUMA)
+### 19.18.1 1. NC-NUMA (Non-Cached NUMA)
 
 **Characteristics**:
 
@@ -610,7 +612,7 @@ Most popular cache coherency protocol, used in Intel Pentium and IBM PowerPC pro
 - Processors directly access memory
 - Simpler but slower
 
-### 2. CC-NUMA (Cache-Coherent NUMA)
+### 19.18.2 2. CC-NUMA (Cache-Coherent NUMA)
 
 **Characteristics**:
 
@@ -621,11 +623,11 @@ Most popular cache coherency protocol, used in Intel Pentium and IBM PowerPC pro
 - Solution: Directory-based coherence
 
 
-## 18. Directory-Based Cache Coherence
+## 19.19 Directory-Based Cache Coherence
 
 Used in CC-NUMA systems for scalable cache coherence.
 
-### What is Directory?
+### 19.19.1 What is Directory?
 
 **Definition**:
 
@@ -634,7 +636,7 @@ Used in CC-NUMA systems for scalable cache coherence.
 - Stores information about which blocks are cached where
 - Can be in memory or separate hardware
 
-### Purpose
+### 19.19.2 Purpose
 
 **Functionality**:
 
@@ -643,7 +645,7 @@ Used in CC-NUMA systems for scalable cache coherence.
 - Enables coherence without bus snooping
 - Scalable to thousands of processors
 
-### Organization
+### 19.19.3 Organization
 
 **Distributed Structure**:
 
@@ -653,7 +655,7 @@ Used in CC-NUMA systems for scalable cache coherence.
 - Information about which caches have those blocks
 - Blocks from other address ranges tracked in other directories
 
-### Operation
+### 19.19.4 Operation
 
 **Access Process**:
 
@@ -663,7 +665,7 @@ Used in CC-NUMA systems for scalable cache coherence.
 - Directory provides information about block locations
 - Can then send invalidations or updates as needed
 
-### Write Policy
+### 19.19.5 Write Policy
 
 - Typically use write-through policy
 

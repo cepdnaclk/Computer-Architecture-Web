@@ -52,14 +52,16 @@
             </div>
 
             
-<h2>Introduction</h2>
+<em>By Dr. Isuru Nawinne</em>
+
+<h2>3.1 Introduction</h2>
 
 <p>Understanding computer performance is fundamental to computer architecture and system design. This lecture explores how performance is measured, the factors that influence it, and the principles that guide performance optimization. We examine the metrics used to evaluate systems, the mathematical relationships between performance factors, and Amdahl's Law—a critical principle for understanding the limits of performance improvements.</p>
 
 
-<h2>1. Defining and Measuring Performance</h2>
+<h2>3.2 Defining and Measuring Performance</h2>
 
-<h3>1.1 Response Time vs. Throughput</h3>
+<h3>3.2.1 Response Time vs. Throughput</h3>
 
 <strong>Response Time (Execution Time)</strong>
 
@@ -88,7 +90,7 @@
 <li>System design must balance both considerations</li>
 </ul>
 
-<h3>1.2 Performance Definition</h3>
+<h3>3.2.2 Performance Definition</h3>
 
 <strong>Mathematical Definition</strong>
 
@@ -118,9 +120,9 @@
 <li>System A takes half the time of System B</li>
 </ul>
 
-<h2>2. CPU Time and Performance Factors</h2>
+<h2>3.3 CPU Time and Performance Factors</h2>
 
-<h3>2.1 Components of Execution Time</h3>
+<h3>3.3.1 Components of Execution Time</h3>
 
 <strong>Total Execution Time</strong>
 
@@ -139,7 +141,7 @@
 <li>Most relevant for comparing processor architectures</li>
 </ul>
 
-<h3>2.2 The CPU Time Equation</h3>
+<h3>3.3.2 The CPU Time Equation</h3>
 
 <strong>Basic Formula</strong>
 
@@ -172,7 +174,7 @@
 <p>= 2.5 seconds</p>
 
 
-<h3>2.3 Instruction Count and CPI</h3>
+<h3>3.3.3 Instruction Count and CPI</h3>
 
 <strong>Cycles Per Instruction (CPI)</strong>
 
@@ -208,9 +210,9 @@
 <li>Clock Rate: Determined by hardware technology and organization</li>
 </ul>
 
-<h2>3. Understanding CPI in Detail</h2>
+<h2>3.4 Understanding CPI in Detail</h2>
 
-<h3>3.1 CPI Variability</h3>
+<h3>3.4.1 CPI Variability</h3>
 
 <strong>Different Instructions, Different CPIs</strong>
 
@@ -234,7 +236,7 @@
 <li>Instruction Count_i = number of times instruction i executed</li>
 </ul>
 
-<h3>3.2 CPI Example Calculation</h3>
+<h3>3.4.2 CPI Example Calculation</h3>
 
 <strong>Given:</strong>
 
@@ -255,7 +257,7 @@
 <p>Average CPI = 180,000 / 100,000 = 1.8</p>
 
 
-<h3>3.3 Instruction Classes</h3>
+<h3>3.4.3 Instruction Classes</h3>
 
 <strong>Common Instruction Categories</strong>
 
@@ -273,9 +275,9 @@
 <li>Floating-point: 2-20+ cycles depending on operation</li>
 </ul>
 
-<h2>4. Performance Optimization Principles</h2>
+<h2>3.5 Performance Optimization Principles</h2>
 
-<h3>4.1 Make the Common Case Fast</h3>
+<h3>3.5.1 Make the Common Case Fast</h3>
 
 <strong>Core Principle</strong>
 
@@ -303,7 +305,7 @@
 <li>Trade-offs guided by usage patterns</li>
 </ul>
 
-<h3>4.2 Amdahl's Law</h3>
+<h3>3.5.2 Amdahl's Law</h3>
 
 <strong>The Fundamental Principle</strong>
 <p>The speedup that can be achieved by improving a particular part of a system is limited by the fraction of time that part is used.</p>
@@ -328,7 +330,7 @@
 <p>Execution Time<em>new = Execution Time</em>old × [(1 - P) + (P / S)]</p>
 
 
-<h3>4.3 Amdahl's Law Examples</h3>
+<h3>3.5.3 Amdahl's Law Examples</h3>
 
 <strong>Example 1: Multiply Operation Speedup</strong>
 
@@ -376,7 +378,7 @@
 
 <strong>Key Insight:</strong> Even with 100× improvement, overall speedup is only 1.42× because only 30% of execution benefits.
 
-<h3>4.4 Implications of Amdahl's Law</h3>
+<h3>3.5.4 Implications of Amdahl's Law</h3>
 
 <strong>Limitations of Parallelization</strong>
 
@@ -408,9 +410,9 @@
 
 <p>The 10% serial portion ultimately limits speedup to 10×.</p>
 
-<h2>5. Complete Performance Analysis</h2>
+<h2>3.6 Complete Performance Analysis</h2>
 
-<h3>5.1 The Complete Performance Equation</h3>
+<h3>3.6.1 The Complete Performance Equation</h3>
 
 <strong>Bringing It All Together</strong>
 
@@ -453,7 +455,7 @@
 <li>Cooling limitations: Heat dissipation capacity</li>
 </ul>
 
-<h3>5.2 Performance Comparison Example</h3>
+<h3>3.6.2 Performance Comparison Example</h3>
 
 <strong>Scenario:</strong>
 <p>Compare two implementations of the same ISA</p>
@@ -482,7 +484,7 @@
 
 <strong>Result:</strong> Both systems have identical performance despite different clock rates and CPIs.
 
-<h3>5.3 Trade-offs in Design</h3>
+<h3>3.6.3 Trade-offs in Design</h3>
 
 <strong>Clock Rate vs. CPI Trade-off</strong>
 
@@ -508,9 +510,9 @@
 <li>Mobile systems prioritize power over peak performance</li>
 </ul>
 
-<h2>6. Practical Performance Considerations</h2>
+<h2>3.7 Practical Performance Considerations</h2>
 
-<h3>6.1 Benchmarking</h3>
+<h3>3.7.1 Benchmarking</h3>
 
 <strong>Purpose of Benchmarks</strong>
 
@@ -536,7 +538,7 @@
 <li>Need multiple benchmarks for complete picture</li>
 </ul>
 
-<h3>6.2 Performance Metrics in Practice</h3>
+<h3>3.7.2 Performance Metrics in Practice</h3>
 
 <strong>MIPS (Million Instructions Per Second)</strong>
 
@@ -563,7 +565,7 @@
 <li>Performance per dollar</li>
 </ul>
 
-<h3>6.3 Power and Energy Considerations</h3>
+<h3>3.7.3 Power and Energy Considerations</h3>
 
 <strong>Power Wall</strong>
 

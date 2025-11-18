@@ -1,14 +1,16 @@
 # Lecture 20: Storage and Input/Output Systems
 
-## Introduction
+*By Dr. Swarnalatha Radhakrishnan*
+
+## 20.1 Introduction
 
 This lecture completes our exploration of computer architecture by examining storage devices and input/output (I/O) systems that enable computers to interact with external devices and provide persistent data storage beyond volatile main memory. We explore storage technologies from mechanical magnetic disks to solid-state flash memory, understanding their performance characteristics, reliability metrics, and cost tradeoffs. The lecture covers I/O communication methods including polling, interrupts, and direct memory access (DMA), analyzes RAID configurations that improve both performance and dependability, and examines how storage systems connect to processors through memory-mapped I/O or dedicated I/O instructions. Understanding these peripheral systems reveals how complete computer systems integrate computation, memory, and external interaction into cohesive platforms.
 
-## 1. I/O Device Characteristics
+## 20.2 I/O Device Characteristics
 
 I/O devices can be characterized by three fundamental factors:
 
-### 1. Behavior
+### 20.2.1 Behavior
 
 **Input Devices**:
 
@@ -25,7 +27,7 @@ I/O devices can be characterized by three fundamental factors:
 - Store and retrieve data
 - Examples: disks, flash drives
 
-### 2. Partner
+### 20.2.2 Partner
 
 **Human Devices**:
 
@@ -37,15 +39,15 @@ I/O devices can be characterized by three fundamental factors:
 - Communicate with other machines
 - Examples: networks, controllers
 
-### 3. Data Rate
+### 20.2.3 Data Rate
 
 - Measured in bytes per second or transfers per second
 - Wide variation across device types
 - Affects system design and communication methods
 
-## 2. I/O Bus Connections
+## 20.3 I/O Bus Connections
 
-### Simplified System Architecture
+### 20.3.1 Simplified System Architecture
 
 #### Components
 
@@ -72,26 +74,26 @@ I/O devices can be characterized by three fundamental factors:
 
 Multiple controllers allow parallel device operation while sharing common interconnect.
 
-## 3. Dependability
+## 20.4 Dependability
 
 Critical for I/O systems, especially storage devices.
 
-### Why Dependability Matters
+### 20.4.1 Why Dependability Matters
 
 - Storage devices hold data that must be reliable
 - Users depend on devices being available
 - Data loss is unacceptable
 - Systems must continue functioning despite component failures
 
-### Dependability is Particularly Important For
+### 20.4.2 Dependability is Particularly Important For
 
 - Storage devices (data integrity)
 - Critical systems (servers, embedded systems)
 - Systems with high availability requirements
 
-## 4. Service States
+## 20.5 Service States
 
-### Two Primary States
+### 20.5.1 Two Primary States
 
 #### 1. Service Accomplishment State
 
@@ -105,14 +107,14 @@ Critical for I/O systems, especially storage devices.
 - Not providing service
 - Requires repair/restoration
 
-### State Transitions
+### 20.5.2 State Transitions
 
 - **From Service Accomplishment to Service Interruption**: Due to failure
 - **From Service Interruption to Service Accomplishment**: After restoration/repair
 
-## 5. Fault Terminology
+## 20.6 Fault Terminology
 
-### Fault Definition
+### 20.6.1 Fault Definition
 
 **Characteristics**:
 
@@ -122,14 +124,14 @@ Critical for I/O systems, especially storage devices.
 - System can continue running with faulty component
 - May produce correct or wrong output
 
-### Distinction
+### 20.6.2 Distinction
 
 - **Component failure ≠ System failure**
 - Fault tolerance allows operation despite faults
 
-## 6. Dependability Measures
+## 20.7 Dependability Measures
 
-### Key Metrics
+### 20.7.1 Key Metrics
 
 #### 1. MTTF (Mean Time To Failure)
 
@@ -177,14 +179,14 @@ Availability = MTTF / (MTTF + MTTR)
 - Ratio of operational time to total time
 - Expressed as percentage or decimal
 
-## 7. Improving Availability
+## 20.8 Improving Availability
 
-### Two Approaches
+### 20.8.1 Two Approaches
 
 - MTTF
 - MTTR
 
-## 8. Increase MTTF (Mean Time To Failure)
+## 20.9 Increase MTTF (Mean Time To Failure)
 
 #### a) Fault Avoidance
 
@@ -213,9 +215,9 @@ Availability = MTTF / (MTTF + MTTR)
 - Monitor component health
 - Replace before failure
 
-## 9. Reduce MTTR (Mean Time To Repair)
+## 20.10 Reduce MTTR (Mean Time To Repair)
 
-### Methods
+### 20.10.1 Methods
 
 - Improve tools and processes for diagnosis
 - Better diagnostic capabilities
@@ -224,18 +226,18 @@ Availability = MTTF / (MTTF + MTTR)
 - Automated recovery systems
 - Skilled maintenance personnel
 
-### Example Problems
+### 20.10.2 Example Problems
 
 - Book provides examples with specific MTTF and MTTR values
 - Calculate availability
 - Analyze improvement strategies
 - Students should practice these calculations
 
-## 10. Magnetic Disk Storage
+## 20.11 Magnetic Disk Storage
 
 Traditional secondary storage technology using magnetic recording.
 
-### Physical Structure
+### 20.11.1 Physical Structure
 
 #### Disk Shape
 
@@ -256,7 +258,7 @@ Traditional secondary storage technology using magnetic recording.
 - Portion between two separation lines = one sector
 - Smallest addressable unit on disk
 
-### Sector Contents
+### 20.11.2 Sector Contents
 
 - **Sector ID** (identification)
 - **Data** (512 bytes to 4096 bytes typical)
@@ -265,9 +267,9 @@ Traditional secondary storage technology using magnetic recording.
   - Corrects recording errors
 - **Gaps** between sectors (unused spaces)
 
-## 11. Disk Access Process
+## 20.12 Disk Access Process
 
-### Access Components and Timing
+### 20.12.1 Access Components and Timing
 
 #### 1. Queuing Delay
 
@@ -306,7 +308,7 @@ Traditional secondary storage technology using magnetic recording.
 - Error checking
 - Generally small (fraction of millisecond)
 
-### Access Coordination
+### 20.12.2 Access Coordination
 
 - Processor initiates access
 - Memory Management Unit (MMU) handles translation
@@ -314,9 +316,9 @@ Traditional secondary storage technology using magnetic recording.
 - Reading page from disk to memory: millions of cycles
 - Much slower than memory access
 
-## 12. Disk Access Example Calculation
+## 20.13 Disk Access Example Calculation
 
-### Given Parameters
+### 20.13.1 Given Parameters
 
 - **Sector size**: 512 bytes
 - **Rotational speed**: 15,000 RPM (rotations per minute)
@@ -325,7 +327,7 @@ Traditional secondary storage technology using magnetic recording.
 - **Controller overhead**: 0.2 milliseconds
 - Assume idle disk (no queuing)
 
-### Average Read Time Calculation
+### 20.13.2 Average Read Time Calculation
 
 #### 1. Seek Time
 
@@ -347,7 +349,7 @@ Traditional secondary storage technology using magnetic recording.
 
 - 0.2 ms (given)
 
-### Total Average Read Time
+### 20.13.3 Total Average Read Time
 
 
 Total = 4 + 2 + 0.005 + 0.2 = 6.2 milliseconds
@@ -363,17 +365,17 @@ Total = 4 + 2 + 0.005 + 0.2 = 6.2 milliseconds
 - With 1 ms seek: Total = **3.2 ms**
 - Significant variation based on access patterns
 
-### Additional Examples
+### 20.13.5 Additional Examples
 
 - Book provides more practice problems
 - Students should try different scenarios
 - Understand impact of each component on total time
 
-## 13. Flash Storage
+## 20.14 Flash Storage
 
 Modern non-volatile semiconductor storage technology.
 
-### Characteristics
+### 20.14.1 Characteristics
 
 #### Advantages
 
@@ -391,9 +393,9 @@ Modern non-volatile semiconductor storage technology.
 - Limited write cycles (wears out over time)
 - Technology cost higher
 
-## 14. Types of Flash Storage
+## 20.15 Types of Flash Storage
 
-### 1. NOR Flash
+### 20.15.1 NOR Flash
 
 #### Structure
 
@@ -413,7 +415,7 @@ Modern non-volatile semiconductor storage technology.
 - Code storage
 - Execute-in-place applications
 
-### 2. NAND Flash
+### 20.15.2 NAND Flash
 
 #### Structure
 
@@ -437,25 +439,25 @@ Modern non-volatile semiconductor storage technology.
 
 **Note**: Values in lecture slides may be outdated as flash storage technology rapidly evolves.
 
-## 15. Memory-Mapped I/O
+## 20.16 Memory-Mapped I/O
 
 Method of accessing I/O devices using memory addresses.
 
-### Concept
+### 20.16.1 Concept
 
 - Reserve some address space for I/O devices
 - I/O device registers appear as memory locations
 - Same address space as memory
 - Address decoder distinguishes between memory and I/O
 
-### Example with 8 Address Lines
+### 20.16.2 Example with 8 Address Lines
 
 - **Total addressable locations**: 256 (2^8)
 - **Reserve 128 locations for memory**
 - **Reserve 128 locations for I/O devices**
 - Same load/store instructions access both
 
-### Access Mechanism
+### 20.16.3 Access Mechanism
 
 - Use load/store instructions for both memory and I/O
 - Operating system controls access
@@ -463,22 +465,22 @@ Method of accessing I/O devices using memory addresses.
 - Can make I/O addresses accessible only to kernel
 - Protection mechanism prevents user programs from direct access
 
-### Advantages
+### 20.16.4 Advantages
 
 - Unified programming model
 - Same instructions for memory and I/O
 - Simpler instruction set
 
-### Disadvantages
+### 20.16.5 Disadvantages
 
 - Reduces available memory address space
 - Must reserve addresses for I/O
 
-## 16. I/O Instructions
+## 20.17 I/O Instructions
 
 Alternative to memory-mapped I/O: separate I/O instructions.
 
-### Characteristics
+### 20.17.1 Characteristics
 
 - Separate instructions specifically for I/O operations
 - Distinct from load/store (memory) instructions
@@ -487,35 +489,35 @@ Alternative to memory-mapped I/O: separate I/O instructions.
   - Same address can refer to I/O device
   - Instruction type determines which is accessed
 
-### Access Control
+### 20.17.2 Access Control
 
 - I/O instructions can only execute in kernel mode
 - User programs cannot directly access I/O
 - Protection mechanism
 - Operating system mediates I/O access
 
-### Example Architecture
+### 20.17.3 Example Architecture
 
 - **x86 (Intel/AMD processors)**
 - Has special IN and OUT instructions for I/O
 - Separate I/O address space
 
-### Advantages
+### 20.17.4 Advantages
 
 - Full memory address space available
 - No address space conflict
 - Clear distinction between memory and I/O
 
-### Disadvantages
+### 20.17.5 Disadvantages
 
 - More complex instruction set
 - Additional instructions needed
 
-## 17. Polling
+## 20.18 Polling
 
 Method for processor to communicate with I/O devices.
 
-### How Polling Works
+### 20.18.1 How Polling Works
 
 #### 1. Periodically Check I/O Status Register
 
@@ -535,7 +537,7 @@ Method for processor to communicate with I/O devices.
 - Error handling
 - Retry or report error
 
-### Characteristics
+### 20.18.2 Characteristics
 
 #### When Used
 
@@ -570,7 +572,7 @@ Method for processor to communicate with I/O devices.
 - Multiple devices difficult to manage
 - CPU time wasted on idle devices
 
-### Programming Model
+### 20.18.3 Programming Model
 
 - Can write program to:
   - Read status bit from device
@@ -578,11 +580,11 @@ Method for processor to communicate with I/O devices.
   - Make decisions based on status
 - Simple control flow
 
-## 18. Interrupts
+## 20.19 Interrupts
 
 Alternative to polling: device-initiated communication.
 
-### How Interrupts Work
+### 20.19.1 How Interrupts Work
 
 #### 1. Device Initialization
 
@@ -602,7 +604,7 @@ Alternative to polling: device-initiated communication.
 - Services device request
 - Returns to original program
 
-### Characteristics
+### 20.19.2 Characteristics
 
 #### Asynchronous
 
@@ -624,7 +626,7 @@ Alternative to polling: device-initiated communication.
 - Devices needing urgent attention get higher priority
 - High-priority interrupts can preempt low-priority handlers
 
-### Advantages
+### 20.19.3 Advantages
 
 **Efficient CPU Use**:
 
@@ -640,7 +642,7 @@ Alternative to polling: device-initiated communication.
 
 - Quick response to device events
 
-### Disadvantages
+### 20.19.4 Disadvantages
 
 **More Complex Hardware**:
 
@@ -652,7 +654,7 @@ Alternative to polling: device-initiated communication.
 - Save/restore processor state
 - Handler invocation takes time
 
-### Execution Model
+### 20.19.5 Execution Model
 
 - Main program running
 - Instruction completes
@@ -663,42 +665,42 @@ Alternative to polling: device-initiated communication.
   - State restored
   - Resume main program at next instruction
 
-## 19. I/O Data Transfer Methods
+## 20.20 I/O Data Transfer Methods
 
 Three approaches for transferring data between memory and I/O:
 
-## 20. Polling-Driven I/O
+## 20.21 Polling-Driven I/O
 
-### Process
+### 20.21.1 Process
 
 - CPU polls device repeatedly
 - When ready, CPU transfers data
 - CPU moves data between memory and I/O registers
 
-### Issues
+### 20.21.2 Issues
 
 - Time consuming
 - CPU fully involved in transfer
 - Inefficient for high-speed devices
 - Wastes CPU cycles
 
-## 21. Interrupt-Driven I/O
+## 20.22 Interrupt-Driven I/O
 
-### Process
+### 20.22.1 Process
 
 - Device interrupts when ready
 - CPU services interrupt
 - CPU transfers data between memory and I/O registers
 
-### Issues
+### 20.22.2 Issues
 
 - Still CPU-intensive for data transfer
 - CPU must move every byte
 - Better than polling but still inefficient for bulk transfers
 
-## 22. Direct Memory Access (DMA)
+## 20.23 Direct Memory Access (DMA)
 
-### Process
+### 20.23.1 Process
 
 **Setup**:
 
@@ -707,7 +709,7 @@ Three approaches for transferring data between memory and I/O:
 - Processor hands off transfer job to DMA controller
 - DMA controller transfers data autonomously
 
-### DMA Operation
+### 20.23.2 DMA Operation
 
 **CPU Provides**:
 
@@ -726,36 +728,36 @@ Three approaches for transferring data between memory and I/O:
 - Completion of transfer
 - Error occurrence
 
-### Advantages
+### 20.23.3 Advantages
 
 - CPU free to do other work
 - Efficient bulk data transfers
 - Essential for high-speed devices
 - Reduces CPU overhead significantly
 
-### When Used
+### 20.23.4 When Used
 
 - High-speed devices (disks, network)
 - Large data transfers
 - When CPU time is valuable
 
-### Comparison
+### 20.23.5 Comparison
 
 - **Polling**: Simple, predictable, inefficient
 - **Interrupts**: Responsive, better than polling, CPU still involved in transfer
 - **DMA**: Most efficient, essential for high-performance I/O
 
-## 23. RAID (Redundant Array of Independent Disks)
+## 20.24 RAID (Redundant Array of Independent Disks)
 
 Technology to improve storage performance and dependability.
 
-### Purpose
+### 20.24.1 Purpose
 
 - Improve performance through parallelism
 - Improve dependability through redundancy
 - Use multiple disks together as single logical unit
 
-### Benefits
+### 20.24.2 Benefits
 
 #### Performance Improvement
 

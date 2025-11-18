@@ -52,14 +52,16 @@
             </div>
 
             
-<h2>Introduction</h2>
+<em>By Dr. Isuru Nawinne</em>
+
+<h2>13.1 Introduction</h2>
 
 <p>This lecture provides comprehensive, cycle-by-cycle analysis of MIPS five-stage pipeline operation, examining how instructions flow through pipeline stages with detailed attention to the pipeline registers that store intermediate results between stages. We explore the critical role of these registers in enabling independent stage operation, trace complete execution sequences for load and store instructions, analyze timing constraints and delay contributions, and work through practical exercises calculating clock frequencies and optimizing pipeline performance. This detailed examination reveals the hardware mechanisms that transform the conceptual pipeline model into functioning silicon.</p>
 
 
-<h2>1. Lecture Introduction and Recap</h2>
+<h2>13.2 Lecture Introduction and Recap</h2>
 
-<h3>1.1 Previous Topics Review</h3>
+<h3>13.2.1 Previous Topics Review</h3>
 
 <strong>Pipelining Concept:</strong>
 
@@ -93,7 +95,7 @@
 <li>Control: Early branch resolution, prediction</li>
 </ul>
 
-<h3>1.2 Today's Focus</h3>
+<h3>13.2.2 Today's Focus</h3>
 
 <strong>Detailed Pipeline Analysis:</strong>
 
@@ -107,9 +109,9 @@
 </ul>
 
 
-<h2>2. Five-Stage MIPS Pipeline Review</h2>
+<h2>13.3 Five-Stage MIPS Pipeline Review</h2>
 
-<h3>2.1 Stage 1: Instruction Fetch (IF)</h3>
+<h3>13.3.1 Stage 1: Instruction Fetch (IF)</h3>
 
 <strong>Operations:</strong>
 
@@ -134,7 +136,7 @@
 <li>Both operations (memory read, PC+4 calculation) occur in parallel</li>
 </ul>
 
-<h3>2.2 Stage 2: Instruction Decode / Register Read (ID)</h3>
+<h3>13.3.2 Stage 2: Instruction Decode / Register Read (ID)</h3>
 
 <strong>Operations:</strong>
 
@@ -173,7 +175,7 @@
 <li>Must be preserved through pipeline</li>
 </ul>
 
-<h3>2.3 Stage 3: Execution (EX)</h3>
+<h3>13.3.3 Stage 3: Execution (EX)</h3>
 
 <strong>Operations:</strong>
 
@@ -200,7 +202,7 @@
 <li>Multiple functions depending on instruction type</li>
 </ul>
 
-<h3>2.4 Stage 4: Memory Access (MEM)</h3>
+<h3>13.3.4 Stage 4: Memory Access (MEM)</h3>
 
 <strong>Operations:</strong>
 
@@ -226,7 +228,7 @@
 <li>Critical path component</li>
 </ul>
 
-<h3>2.5 Stage 5: Write Back (WB)</h3>
+<h3>13.3.5 Stage 5: Write Back (WB)</h3>
 
 <strong>Operations:</strong>
 
@@ -253,9 +255,9 @@
 </ul>
 
 
-<h2>3. Pipeline Registers: Necessity and Function</h2>
+<h2>13.4 Pipeline Registers: Necessity and Function</h2>
 
-<h3>3.1 Problem Without Pipeline Registers</h3>
+<h3>13.4.1 Problem Without Pipeline Registers</h3>
 
 <strong>Scenario:</strong>
 
@@ -281,7 +283,7 @@
 <li>Pipeline cannot function correctly</li>
 </ul>
 
-<h3>3.2 Pipeline Register Purpose</h3>
+<h3>13.4.2 Pipeline Register Purpose</h3>
 
 <strong>Key Function:</strong>
 
@@ -311,7 +313,7 @@
 <li>No additional register needed</li>
 </ul>
 
-<h3>3.3 Pipeline Register Contents</h3>
+<h3>13.4.3 Pipeline Register Contents</h3>
 
 <strong>IF/ID Pipeline Register:</strong>
 
@@ -354,7 +356,7 @@
 <li><strong>Total:</strong> ~75+ bits</li>
 </ul>
 
-<h3>3.4 Timing: Writing and Reading Pipeline Registers</h3>
+<h3>13.4.4 Timing: Writing and Reading Pipeline Registers</h3>
 
 <strong>At Rising Clock Edge:</strong>
 
@@ -383,9 +385,9 @@
 </ul>
 
 
-<h2>4. Load Word Instruction: Detailed Cycle-by-Cycle Analysis</h2>
+<h2>13.5 Load Word Instruction: Detailed Cycle-by-Cycle Analysis</h2>
 
-<h3>4.1 Load Word Instruction Format</h3>
+<h3>13.5.1 Load Word Instruction Format</h3>
 
 <strong>Encoding:</strong>
 
@@ -408,7 +410,7 @@
 <li>Load from memory into $8</li>
 </ul>
 
-<h3>4.2 Clock Cycle 1: Instruction Fetch (IF)</h3>
+<h3>13.5.2 Clock Cycle 1: Instruction Fetch (IF)</h3>
 
 <strong>Start of Cycle:</strong>
 
@@ -445,7 +447,7 @@
 
 <strong>Total Stage Time:</strong> ~200+ ps (instruction memory dominant)
 
-<h3>4.3 Clock Cycle 2: Instruction Decode / Register Read (ID)</h3>
+<h3>13.5.3 Clock Cycle 2: Instruction Decode / Register Read (ID)</h3>
 
 <strong>Start of Cycle (Rising Edge):</strong>
 
@@ -495,7 +497,7 @@
 
 <strong>Total Stage Time:</strong> ~60 + 90 = ~150 ps (register read dominant)
 
-<h3>4.4 Clock Cycle 3: Execution (EX)</h3>
+<h3>13.5.4 Clock Cycle 3: Execution (EX)</h3>
 
 <strong>Start of Cycle:</strong>
 
@@ -534,7 +536,7 @@
 
 <strong>Total Stage Time:</strong> ~30 + 30 + 20 + 90 = ~170 ps (ALU dominant)
 
-<h3>4.5 Clock Cycle 4: Memory Access (MEM)</h3>
+<h3>13.5.5 Clock Cycle 4: Memory Access (MEM)</h3>
 
 <strong>Start of Cycle:</strong>
 
@@ -570,7 +572,7 @@
 
 <strong>Total Stage Time:</strong> ~30 + 30 + 250 = ~310 ps (memory READ dominant!)
 
-<h3>4.6 Clock Cycle 5: Write Back (WB)</h3>
+<h3>13.5.6 Clock Cycle 5: Write Back (WB)</h3>
 
 <strong>Start of Cycle:</strong>
 
@@ -610,7 +612,7 @@
 
 <strong>Total Stage Time:</strong> ~30 + 30 + 20 = ~80 ps (shortest stage!)
 
-<h3>4.7 Load Word Complete Pipeline Summary</h3>
+<h3>13.5.7 Load Word Complete Pipeline Summary</h3>
 
 <p>| Cycle | Stage | Operations                    | Dominant Delay | Time                  |</p>
 <p>| ----- | ----- | ----------------------------- | -------------- | --------------------- |</p>
@@ -641,9 +643,9 @@
 </ul>
 
 
-<h2>5. Store Word Instruction: Key Differences</h2>
+<h2>13.6 Store Word Instruction: Key Differences</h2>
 
-<h3>5.1 Store Word Instruction Format</h3>
+<h3>13.6.1 Store Word Instruction Format</h3>
 
 <strong>Encoding:</strong>
 
@@ -673,7 +675,7 @@
 <li>RT value needed for memory write</li>
 </ul>
 
-<h3>5.2 Stages IF, ID, EX: Same as Load Word</h3>
+<h3>13.6.2 Stages IF, ID, EX: Same as Load Word</h3>
 
 <strong>Instruction Fetch:</strong> Identical to LW
 
@@ -692,7 +694,7 @@
 <li>ALU operation same</li>
 </ul>
 
-<h3>5.3 Memory Access Stage: KEY DIFFERENCE</h3>
+<h3>13.6.3 Memory Access Stage: KEY DIFFERENCE</h3>
 
 <strong>Start of Cycle:</strong>
 
@@ -734,7 +736,7 @@
 <p>| MemWrite            | 0    | 1                 |</p>
 <p>| RegWrite (WB stage) | 1    | <strong>0 ← CRITICAL!</strong> |</p>
 
-<h3>5.4 Write Back Stage: NO OPERATION</h3>
+<h3>13.6.4 Write Back Stage: NO OPERATION</h3>
 
 <strong>Store Word WB Stage:</strong>
 
@@ -783,9 +785,9 @@
 <p>| 5     | WB    | Nothing (bubble)     | RegWrite=0, stage idle        |</p>
 
 
-<h2>6. Common Pipeline Diagram Errors</h2>
+<h2>13.7 Common Pipeline Diagram Errors</h2>
 
-<h3>6.1 Error 1: Write Register Address Source</h3>
+<h3>13.7.1 Error 1: Write Register Address Source</h3>
 
 <strong>Incorrect Diagram Shows:</strong>
 
@@ -838,7 +840,7 @@
 <li>Essential for correctness</li>
 </ul>
 
-<h3>6.2 Error 2: Incorrect Memory Access Indication</h3>
+<h3>13.7.2 Error 2: Incorrect Memory Access Indication</h3>
 
 <strong>Diagram Error from Textbook:</strong>
 
@@ -877,7 +879,7 @@
 <li>Memory data forwarded to WB</li>
 </ul>
 
-<h3>6.3 Error 3: Store Word Memory Read</h3>
+<h3>13.7.3 Error 3: Store Word Memory Read</h3>
 
 <strong>Another Common Error:</strong>
 
@@ -903,9 +905,9 @@
 </ul>
 
 
-<h2>7. Multi-Clock-Cycle Pipeline Diagrams</h2>
+<h2>13.8 Multi-Clock-Cycle Pipeline Diagrams</h2>
 
-<h3>7.1 Single-Clock vs Multi-Clock Diagrams</h3>
+<h3>13.8.1 Single-Clock vs Multi-Clock Diagrams</h3>
 
 <strong>Single-Clock-Cycle Diagram:</strong>
 
@@ -925,7 +927,7 @@
 <li>Good for understanding overall flow</li>
 </ul>
 
-<h3>7.2 Traditional Multi-Cycle Diagram</h3>
+<h3>13.8.2 Traditional Multi-Cycle Diagram</h3>
 
 <strong>Format:</strong>
 
@@ -955,7 +957,7 @@
 <li>Delays and timing</li>
 </ul>
 
-<h3>7.3 Enhanced Multi-Cycle Diagram with Resources</h3>
+<h3>13.8.3 Enhanced Multi-Cycle Diagram with Resources</h3>
 
 <strong>Format:</strong>
 
@@ -1000,9 +1002,9 @@
 </ul>
 
 
-<h2>8. Timing and Clock Frequency Analysis</h2>
+<h2>13.9 Timing and Clock Frequency Analysis</h2>
 
-<h3>8.1 Component Delays (Typical Values)</h3>
+<h3>13.9.1 Component Delays (Typical Values)</h3>
 
 <p>| Component               | Delay (picoseconds) |</p>
 <p>| ----------------------- | ------------------- |</p>
@@ -1028,7 +1030,7 @@
 <li>Pipeline register overhead (60 ps per stage)</li>
 </ul>
 
-<h3>8.2 Stage Timing Calculation</h3>
+<h3>13.9.2 Stage Timing Calculation</h3>
 
 <strong>Stage 1: Instruction Fetch (IF)</strong>
 
@@ -1083,7 +1085,7 @@
 <p>Total: 60 + 20 + 30 = 110 ps</p>
 
 
-<h3>8.3 Clock Frequency Determination</h3>
+<h3>13.9.3 Clock Frequency Determination</h3>
 
 <strong>Minimum Clock Period:</strong>
 
@@ -1116,7 +1118,7 @@
 <strong>Average utilization:</strong> ~60%
 <strong>Wasted time:</strong> ~40% average
 
-<h3>8.4 Performance Improvement Strategies</h3>
+<h3>13.9.4 Performance Improvement Strategies</h3>
 
 <strong>Strategy 1: Pipeline Balancing</strong>
 
@@ -1169,9 +1171,9 @@
 </ul>
 
 
-<h2>9. Practical Exercises and Solutions</h2>
+<h2>13.10 Practical Exercises and Solutions</h2>
 
-<h3>9.1 Exercise: Maximum Clock Frequency Calculation</h3>
+<h3>13.10.1 Exercise: Maximum Clock Frequency Calculation</h3>
 
 <strong>Given Component Delays:</strong>
 
@@ -1212,7 +1214,7 @@
 <p>= 3.226 GHz</p>
 
 
-<h3>9.2 Exercise: Improving Clock Frequency</h3>
+<h3>13.10.2 Exercise: Improving Clock Frequency</h3>
 
 <strong>Question:</strong> Suggest mechanisms to increase clock frequency. Discuss negative impacts.
 
@@ -1286,7 +1288,7 @@
 <p>- Clock skew issues</p>
 <p>- Less reliable</p>
 
-<h3>9.3 Exercise: ALU Optimization Impact</h3>
+<h3>13.10.3 Exercise: ALU Optimization Impact</h3>
 
 <strong>Question:</strong> ALU time shortened by 25%. Does it affect speedup?
 
@@ -1332,7 +1334,7 @@
 <li>May reduce latency slightly (instruction-by-instruction)</li>
 </ul>
 
-<h3>9.4 Exercise: Pipeline Speedup Calculation</h3>
+<h3>13.10.4 Exercise: Pipeline Speedup Calculation</h3>
 
 <strong>Given:</strong>
 
@@ -1393,9 +1395,9 @@
 </ul>
 
 
-<h2>10. Summary and Key Takeaways</h2>
+<h2>13.11 Summary and Key Takeaways</h2>
 
-<h3>10.1 Pipeline Operation Fundamentals</h3>
+<h3>13.11.1 Pipeline Operation Fundamentals</h3>
 
 <strong>Pipeline Registers Essential:</strong>
 
@@ -1415,7 +1417,7 @@
 <li>Throughput limited by slowest stage</li>
 </ul>
 
-<h3>10.2 Design Principles</h3>
+<h3>13.11.2 Design Principles</h3>
 
 <strong>Make Common Case Fast:</strong>
 
@@ -1441,7 +1443,7 @@
 <li>Essential for correctness</li>
 </ul>
 
-<h3>10.3 Common Mistakes to Avoid</h3>
+<h3>13.11.3 Common Mistakes to Avoid</h3>
 
 <strong>Write Register Address:</strong>
 
@@ -1467,7 +1469,7 @@
 <li>Understand shading conventions</li>
 </ul>
 
-<h3>10.4 Performance Considerations</h3>
+<h3>13.11.4 Performance Considerations</h3>
 
 <strong>Critical Path Analysis:</strong>
 
@@ -1489,7 +1491,7 @@
 <p>- Hazards and stalls</p>
 <p>- Pipeline fill/drain time</p>
 
-<h3>10.5 Looking Ahead</h3>
+<h3>13.11.5 Looking Ahead</h3>
 
 <strong>Memory Hierarchy (Next Topics):</strong>
 
@@ -1512,7 +1514,7 @@
 </ul>
 
 
-<h2>11. Important Formulas</h2>
+<h2>13.12 Important Formulas</h2>
 
 <h3>Clock Period</h3>
 

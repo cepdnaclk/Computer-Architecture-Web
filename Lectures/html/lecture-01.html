@@ -52,19 +52,21 @@
             </div>
 
             
-<h2>Introduction</h2>
+<em>By Dr. Isuru Nawinne</em>
+
+<h2>1.1 Introduction</h2>
 
 <p>This lecture introduces the fundamental concepts of computer system abstractions, exploring the relationship between hardware and software while providing an overview of the lecture series structure and topics. We examine how computer systems are built as hierarchies of abstractions, each hiding complexity while providing services to the levels above.</p>
 
-<h2>The Big Picture of Computer Systems</h2>
+<h2>1.2 The Big Picture of Computer Systems</h2>
 
-<h3>Cross-Section of a Computer System (Top to Bottom)</h3>
+<h3>1.2.1 Cross-Section of a Computer System (Top to Bottom)</h3>
 
 <img src="../img/Chapter%201%20Computer%20Abstractions%20and%20Technology.jpg" alt="Computer System Abstraction Layers" width="600">
 
 <em>The diagram above illustrates the complete hierarchy from problems and algorithms at the human level, through the compilation toolchain (Compiler/Assembler/Linker), down to the ISA, microarchitecture (RTL), functional units, logic gates, transistors, and finally the silicon substrate. Each colored layer represents a different abstraction level.</em>
 
-<h4>Human-Related Level (Gray)</h4>
+<h3>1.2.2 Human-Related Level (Gray)</h3>
 
 <ul>
 <li><strong>Problems</strong>: Real-world challenges to be solved</li>
@@ -72,7 +74,7 @@
 <li><strong>Programming Languages</strong>: Tools to express algorithms</li>
 </ul>
 
-<h4>System Level (Blue)</h4>
+<h3>1.2.3 System Level (Blue)</h3>
 
 <ul>
 <li><strong>Compilers</strong>: Translate high-level code to assembly</li>
@@ -81,28 +83,28 @@
 <li><strong>Instruction Set Architecture (ISA)</strong>: The hardware-software interface</li>
 </ul>
 
-<h4>RTL (Register Transfer Level) - Red/Orange</h4>
+<h3>1.2.4 RTL (Register Transfer Level) - Red/Orange</h3>
 
 <ul>
 <li><strong>Microarchitecture</strong>: The processor's internal organization</li>
 <li><strong>Functional Units</strong>: Building blocks that perform operations</li>
 </ul>
 
-<h4>Logic Level (Green)</h4>
+<h3>1.2.5 Logic Level (Green)</h3>
 
 <ul>
 <li><strong>Gate-level circuits</strong>: Digital logic implementations</li>
 <li><strong>Logic gates</strong>: AND, OR, NAND, NOR, XOR, etc.</li>
 </ul>
 
-<h4>Circuit Level (Light Gray)</h4>
+<h3>1.2.6 Circuit Level (Light Gray)</h3>
 
 <ul>
 <li><strong>Transistors</strong>: BJT, CMOS devices</li>
 <li><strong>Voltage levels and currents</strong>: Electrical signals</li>
 </ul>
 
-<h4>Substrate Level (Black)</h4>
+<h3>1.2.7 Substrate Level (Black)</h3>
 
 <ul>
 <li><strong>Semiconductors</strong>: Base materials</li>
@@ -110,7 +112,7 @@
 <li><strong>Electron currents</strong>: Physical phenomena</li>
 </ul>
 
-<h3>Purpose of Computer Systems</h3>
+<h3>1.2.8 Purpose of Computer Systems</h3>
 
 <ul>
 <li>Built to solve problems (like any engineering system)</li>
@@ -119,9 +121,9 @@
 <li>Each level hides complexity from the level above</li>
 </ul>
 
-<h2>2. Instruction Set Architecture (ISA) - The Key Interface</h2>
+<h2>1.3 Instruction Set Architecture (ISA) - The Key Interface</h2>
 
-<h3>What is an ISA?</h3>
+<h3>1.3.1 What is an ISA?</h3>
 
 <strong>Definition</strong>:
 
@@ -132,7 +134,7 @@
 <li>The critical interface between hardware and software</li>
 </ul>
 
-<h3>Example Instructions in an ISA</h3>
+<h3>1.3.2 Example Instructions in an ISA</h3>
 
 <ul>
 <li>Add two numbers together</li>
@@ -143,7 +145,7 @@
 <li>All basic operations are well-defined in the ISA</li>
 </ul>
 
-<h3>Importance of ISA</h3>
+<h3>1.3.3 Importance of ISA</h3>
 
 <ul>
 <li>Microarchitecture is built to support a specific ISA</li>
@@ -152,9 +154,9 @@
 <li>ISA is the key point combining software with hardware</li>
 </ul>
 
-<h2>3. From Problem to Execution - The Translation Chain</h2>
+<h2>1.4 From Problem to Execution - The Translation Chain</h2>
 
-<h3>High-Level Process</h3>
+<h3>1.4.1 High-Level Process</h3>
 
 
 <p>Problem → Algorithm → Programming Language (C, Python, etc.)</p>
@@ -170,7 +172,7 @@
 <p>Runs on Microarchitecture (CPU)</p>
 
 
-<h3>Tool Chain Components</h3>
+<h3>1.4.2 Tool Chain Components</h3>
 
 <h4>Compiler</h4>
 
@@ -197,7 +199,7 @@
 <li><strong>Process</strong>: Resolves external references</li>
 </ul>
 
-<h3>Architecture-Specific Compilation</h3>
+<h3>1.4.3 Architecture-Specific Compilation</h3>
 
 <ul>
 <li>If targeting ARM processor: Use ARM toolchain</li>
@@ -206,9 +208,9 @@
 <li>Cannot run ARM code on MIPS processor directly</li>
 </ul>
 
-<h2>4. Writing Programs at Different Levels</h2>
+<h2>1.5 Writing Programs at Different Levels</h2>
 
-<h3>Machine Code (Binary)</h3>
+<h3>1.5.1 Machine Code (Binary)</h3>
 
 <strong>Characteristics</strong>:
 
@@ -219,7 +221,7 @@
 <li>Error-prone and time-consuming</li>
 </ul>
 
-<h3>Assembly Language</h3>
+<h3>1.5.2 Assembly Language</h3>
 
 <strong>Characteristics</strong>:
 
@@ -231,7 +233,7 @@
 <li>Used in CO224 labs for ARM assembly programming</li>
 </ul>
 
-<h3>High-Level Languages (C, Python, etc.)</h3>
+<h3>1.5.3 High-Level Languages (C, Python, etc.)</h3>
 
 <strong>Characteristics</strong>:
 
@@ -242,9 +244,9 @@
 <li>Provides abstractions hiding hardware details</li>
 </ul>
 
-<h2>5. Microarchitecture Details</h2>
+<h2>1.6 Microarchitecture Details</h2>
 
-<h3>What is Microarchitecture?</h3>
+<h3>1.6.1 What is Microarchitecture?</h3>
 
 <strong>Definition</strong>:
 
@@ -255,7 +257,7 @@
 <li>Performs operations in actual hardware</li>
 </ul>
 
-<h3>Hierarchy of Microarchitecture Components</h3>
+<h3>1.6.2 Hierarchy of Microarchitecture Components</h3>
 
 <h4>Microarchitecture Level</h4>
 
@@ -302,9 +304,9 @@
 <li>Combined to create transistors</li>
 </ul>
 
-<h2>6. Abstraction Concept</h2>
+<h2>1.7 Abstraction Concept</h2>
 
-<h3>What is an Abstraction?</h3>
+<h3>1.7.1 What is an Abstraction?</h3>
 
 <strong>Key Principles</strong>:
 
@@ -316,7 +318,7 @@
 <li>Encapsulates details and defines specific characteristics</li>
 </ul>
 
-<h3>Hardware Abstraction Hierarchy (Bottom to Top)</h3>
+<h3>1.7.2 Hardware Abstraction Hierarchy (Bottom to Top)</h3>
 
 <h4>1. Substrate (Silicon, Germanium)</h4>
 
@@ -354,7 +356,7 @@
 <li>Understands machine instructions</li>
 </ul>
 
-<h3>Software Abstraction Hierarchy (Bottom to Top)</h3>
+<h3>1.7.3 Software Abstraction Hierarchy (Bottom to Top)</h3>
 
 <h4>1. Machine Instructions (Binary)</h4>
 
@@ -388,7 +390,7 @@
 <li>Highest level abstraction</li>
 </ul>
 
-<h3>Relationships Between Hardware and Software Abstractions</h3>
+<h3>1.7.4 Relationships Between Hardware and Software Abstractions</h3>
 
 <h4>Voltage Levels ↔ Logic Levels</h4>
 
@@ -421,7 +423,7 @@
 <li><strong>Microarchitecture</strong> ↔ Instructions (understands)</li>
 </ul>
 
-<h3>Complete System</h3>
+<h3>1.7.5 Complete System</h3>
 
 <ul>
 <li>All abstractions together create "the computer"</li>
@@ -431,9 +433,9 @@
 <li>Computer systems are everywhere due to these abstractions</li>
 </ul>
 
-<h2>7. Performance Theme</h2>
+<h2>1.8 Performance Theme</h2>
 
-<h3>Throughout the lecture series</h3>
+<h3>1.8.1 Throughout the Lecture Series</h3>
 
 <p>Performance is a recurring theme that will be touched upon in every topic:</p>
 

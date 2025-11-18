@@ -1,61 +1,63 @@
 # Lecture 1: Computer Abstractions and Technology
 
-## Introduction
+*By Dr. Isuru Nawinne*
+
+## 1.1 Introduction
 
 This lecture introduces the fundamental concepts of computer system abstractions, exploring the relationship between hardware and software while providing an overview of the lecture series structure and topics. We examine how computer systems are built as hierarchies of abstractions, each hiding complexity while providing services to the levels above.
 
-## The Big Picture of Computer Systems
+## 1.2 The Big Picture of Computer Systems
 
-### Cross-Section of a Computer System (Top to Bottom)
+### 1.2.1 Cross-Section of a Computer System (Top to Bottom)
 
 <img src="../img/Chapter%201%20Computer%20Abstractions%20and%20Technology.jpg" alt="Computer System Abstraction Layers" width="600">
 
 _The diagram above illustrates the complete hierarchy from problems and algorithms at the human level, through the compilation toolchain (Compiler/Assembler/Linker), down to the ISA, microarchitecture (RTL), functional units, logic gates, transistors, and finally the silicon substrate. Each colored layer represents a different abstraction level._
 
-#### Human-Related Level (Gray)
+### 1.2.2 Human-Related Level (Gray)
 
 - **Problems**: Real-world challenges to be solved
 - **Algorithms**: Step-by-step solutions to problems
 - **Programming Languages**: Tools to express algorithms
 
-#### System Level (Blue)
+### 1.2.3 System Level (Blue)
 
 - **Compilers**: Translate high-level code to assembly
 - **Assemblers**: Convert assembly to machine code
 - **Linkers**: Combine programs with libraries
 - **Instruction Set Architecture (ISA)**: The hardware-software interface
 
-#### RTL (Register Transfer Level) - Red/Orange
+### 1.2.4 RTL (Register Transfer Level) - Red/Orange
 
 - **Microarchitecture**: The processor's internal organization
 - **Functional Units**: Building blocks that perform operations
 
-#### Logic Level (Green)
+### 1.2.5 Logic Level (Green)
 
 - **Gate-level circuits**: Digital logic implementations
 - **Logic gates**: AND, OR, NAND, NOR, XOR, etc.
 
-#### Circuit Level (Light Gray)
+### 1.2.6 Circuit Level (Light Gray)
 
 - **Transistors**: BJT, CMOS devices
 - **Voltage levels and currents**: Electrical signals
 
-#### Substrate Level (Black)
+### 1.2.7 Substrate Level (Black)
 
 - **Semiconductors**: Base materials
 - **P-type and N-type semiconductors**: Doped materials
 - **Electron currents**: Physical phenomena
 
-### Purpose of Computer Systems
+### 1.2.8 Purpose of Computer Systems
 
 - Built to solve problems (like any engineering system)
 - Process: **Problems → Algorithms → Programs → Machine Code → Execution**
 - Each level provides services to the level above
 - Each level hides complexity from the level above
 
-## 2. Instruction Set Architecture (ISA) - The Key Interface
+## 1.3 Instruction Set Architecture (ISA) - The Key Interface
 
-### What is an ISA?
+### 1.3.1 What is an ISA?
 
 **Definition**:
 
@@ -64,7 +66,7 @@ _The diagram above illustrates the complete hierarchy from problems and algorith
 - Examples: ARM version 8, MIPS, x86
 - The critical interface between hardware and software
 
-### Example Instructions in an ISA
+### 1.3.2 Example Instructions in an ISA
 
 - Add two numbers together
 - Subtract one number from another
@@ -73,16 +75,16 @@ _The diagram above illustrates the complete hierarchy from problems and algorith
 - Store a number from CPU into memory
 - All basic operations are well-defined in the ISA
 
-### Importance of ISA
+### 1.3.3 Importance of ISA
 
 - Microarchitecture is built to support a specific ISA
 - Programs must be written using instructions from the target ISA
 - Compilers translate high-level code to ISA instructions
 - ISA is the key point combining software with hardware
 
-## 3. From Problem to Execution - The Translation Chain
+## 1.4 From Problem to Execution - The Translation Chain
 
-### High-Level Process
+### 1.4.1 High-Level Process
 
 
 Problem → Algorithm → Programming Language (C, Python, etc.)
@@ -98,7 +100,7 @@ Machine Code / Binary Image
 Runs on Microarchitecture (CPU)
 
 
-### Tool Chain Components
+### 1.4.2 Tool Chain Components
 
 #### Compiler
 
@@ -119,16 +121,16 @@ Runs on Microarchitecture (CPU)
 - **Output**: Creates final executable
 - **Process**: Resolves external references
 
-### Architecture-Specific Compilation
+### 1.4.3 Architecture-Specific Compilation
 
 - If targeting ARM processor: Use ARM toolchain
 - If targeting MIPS processor: Use MIPS toolchain
 - Machine code is specific to the target ISA
 - Cannot run ARM code on MIPS processor directly
 
-## 4. Writing Programs at Different Levels
+## 1.5 Writing Programs at Different Levels
 
-### Machine Code (Binary)
+### 1.5.1 Machine Code (Binary)
 
 **Characteristics**:
 
@@ -137,7 +139,7 @@ Runs on Microarchitecture (CPU)
 - Very difficult for humans to write
 - Error-prone and time-consuming
 
-### Assembly Language
+### 1.5.2 Assembly Language
 
 **Characteristics**:
 
@@ -147,7 +149,7 @@ Runs on Microarchitecture (CPU)
 - Easier than machine code but still difficult for large programs
 - Used in CO224 labs for ARM assembly programming
 
-### High-Level Languages (C, Python, etc.)
+### 1.5.3 High-Level Languages (C, Python, etc.)
 
 **Characteristics**:
 
@@ -156,9 +158,9 @@ Runs on Microarchitecture (CPU)
 - Requires compiler to translate to assembly/machine code
 - Provides abstractions hiding hardware details
 
-## 5. Microarchitecture Details
+## 1.6 Microarchitecture Details
 
-### What is Microarchitecture?
+### 1.6.1 What is Microarchitecture?
 
 **Definition**:
 
@@ -167,7 +169,7 @@ Runs on Microarchitecture (CPU)
 - Understands meaning of ones and zeros
 - Performs operations in actual hardware
 
-### Hierarchy of Microarchitecture Components
+### 1.6.2 Hierarchy of Microarchitecture Components
 
 #### Microarchitecture Level
 
@@ -202,9 +204,9 @@ Runs on Microarchitecture (CPU)
 - P-type and N-type semiconductors
 - Combined to create transistors
 
-## 6. Abstraction Concept
+## 1.7 Abstraction Concept
 
-### What is an Abstraction?
+### 1.7.1 What is an Abstraction?
 
 **Key Principles**:
 
@@ -214,7 +216,7 @@ Runs on Microarchitecture (CPU)
 - Each level doesn't worry about details above or below
 - Encapsulates details and defines specific characteristics
 
-### Hardware Abstraction Hierarchy (Bottom to Top)
+### 1.7.2 Hardware Abstraction Hierarchy (Bottom to Top)
 
 #### 1. Substrate (Silicon, Germanium)
 
@@ -242,7 +244,7 @@ Runs on Microarchitecture (CPU)
 - Deals with instructions
 - Understands machine instructions
 
-### Software Abstraction Hierarchy (Bottom to Top)
+### 1.7.3 Software Abstraction Hierarchy (Bottom to Top)
 
 #### 1. Machine Instructions (Binary)
 
@@ -268,7 +270,7 @@ Runs on Microarchitecture (CPU)
 - Represent solutions to problems
 - Highest level abstraction
 
-### Relationships Between Hardware and Software Abstractions
+### 1.7.4 Relationships Between Hardware and Software Abstractions
 
 #### Voltage Levels ↔ Logic Levels
 
@@ -293,7 +295,7 @@ Runs on Microarchitecture (CPU)
 - **Functional Units** ↔ Numbers (deal with)
 - **Microarchitecture** ↔ Instructions (understands)
 
-### Complete System
+### 1.7.5 Complete System
 
 - All abstractions together create "the computer"
 - Can deconstruct algorithm down to voltage levels
@@ -301,9 +303,9 @@ Runs on Microarchitecture (CPU)
 - Tight coupling between hardware and software abstractions
 - Computer systems are everywhere due to these abstractions
 
-## 7. Performance Theme
+## 1.8 Performance Theme
 
-### Throughout the lecture series
+### 1.8.1 Throughout the Lecture Series
 
 Performance is a recurring theme that will be touched upon in every topic:
 

@@ -52,19 +52,21 @@
             </div>
 
             
-<h2>Introduction</h2>
+<em>By Dr. Isuru Nawinne</em>
+
+<h2>19.1 Introduction</h2>
 
 <p>Multiprocessor systems represent a fundamental paradigm shift in computer architecture, using multiple processors on the same chip to execute multiple programs or threads simultaneously when traditional performance improvement techniques—clock frequency scaling and instruction-level parallelism—reached physical and practical limits. This lecture explores the evolution toward multiprocessor architectures driven by power walls and parallelism walls, examines the critical challenge of cache coherence that arises when multiple processors maintain private caches of shared memory, and analyzes solutions including bus snooping protocols like MESI and scalable directory-based coherence schemes. We compare architectural organizations from uniform memory access (UMA) to non-uniform memory access (NUMA), understanding how different designs balance simplicity, performance, and scalability for systems ranging from dual-core smartphones to thousand-processor supercomputers.</p>
 
 
-<h2>1. Introduction to Multiprocessors</h2>
+<h2>19.2 Introduction to Multiprocessors</h2>
 
 <p>Multiprocessor systems address performance limitations encountered with single processor systems by employing multiple processors on the same chip to execute multiple programs or threads simultaneously.</p>
 
 
-<h2>2. Performance Evolution Background</h2>
+<h2>19.3 Performance Evolution Background</h2>
 
-<h3>Historical Performance Improvements</h3>
+<h3>19.3.1 Historical Performance Improvementsvements</h3>
 
 <h4>Early Methods: Clock Frequency Scaling</h4>
 
@@ -105,7 +107,7 @@
 <li>Can't exploit more parallelism beyond program's inherent limits</li>
 </ul>
 
-<h3>Moore's Law Context</h3>
+<h3>19.3.2 Moore's Law Context</h3>
 
 <strong>Observation</strong>:
 
@@ -119,9 +121,9 @@
 <strong>Solution</strong>: Multiple processors on same chip
 
 
-<h2>3. Multiprocessor Approach</h2>
+<h2>19.4 Multiprocessor Approach</h2>
 
-<h3>Key Characteristics</h3>
+<h3>19.4.1 Key Characteristics</h3>
 
 <ul>
 <li>Multiple processor cores on same chip</li>
@@ -130,14 +132,14 @@
 <li>Different from single processor illusion of parallelism</li>
 </ul>
 
-<h3>Terminology</h3>
+<h3>19.4.2 Terminology</h3>
 
 <ul>
 <li><strong>Processing Elements (PE)</strong>: Common term for individual processors</li>
 <li>Each PE is a complete CPU with fetch, decode, execute units</li>
 </ul>
 
-<h3>Key Problem: Communication Between Processors</h3>
+<h3>19.4.3 Key Problem: Communication Between Processors</h3>
 
 <ul>
 <li>Multiple processors executing simultaneously</li>
@@ -147,9 +149,9 @@
 </ul>
 
 
-<h2>4. Shared Memory Multiprocessors (SMM)</h2>
+<h2>19.5 Shared Memory Multiprocessors (SMM)</h2>
 
-<h3>Most Common Approach</h3>
+<h3>19.5.1 Most Common Approach</h3>
 
 <strong>Architecture</strong>:
 
@@ -159,7 +161,7 @@
 <li>Memory device connected via common bus/interconnect</li>
 </ul>
 
-<h3>Operating System Role</h3>
+<h3>19.5.2 Operating System Role</h3>
 
 <strong>Responsibilities</strong>:
 
@@ -171,7 +173,7 @@
 <li>Ensures processors access only authorized memory portions</li>
 </ul>
 
-<h3>Workload Balancing</h3>
+<h3>19.5.3 Workload Balancing</h3>
 
 <strong>Purpose</strong>:
 
@@ -183,9 +185,9 @@
 </ul>
 
 
-<h2>5. Memory Contention Problem</h2>
+<h2>19.6 Memory Contention Problem</h2>
 
-<h3>Inherent Issue</h3>
+<h3>19.6.1 Inherent Issue</h3>
 
 <strong>Challenge</strong>:
 
@@ -197,7 +199,7 @@
 <li>Access time increases with contention</li>
 </ul>
 
-<h3>Effect on Performance</h3>
+<h3>19.6.2 Effect on Performance</h3>
 
 <strong>Bottleneck</strong>:
 
@@ -210,9 +212,9 @@
 </ul>
 
 
-<h2>6. Uniform Memory Access (UMA)</h2>
+<h2>19.7 Uniform Memory Access (UMA)</h2>
 
-<h3>Definition</h3>
+<h3>19.7.1 Definition</h3>
 
 <strong>Characteristics</strong>:
 
@@ -223,14 +225,14 @@
 <li>By design, no difference in access time (ignoring contention)</li>
 </ul>
 
-<h3>Also Known As</h3>
+<h3>19.7.2 Also Known As</h3>
 
 <ul>
 <li><strong>Symmetric Multiprocessors (SMP)</strong></li>
 <li>Both terms used interchangeably</li>
 </ul>
 
-<h3>Key Properties</h3>
+<h3>19.7.3 Key Properties</h3>
 
 <ul>
 <li>Shared address space</li>
@@ -239,9 +241,9 @@
 </ul>
 
 
-<h2>7. Solution to Contention: Caches</h2>
+<h2>19.8 Solution to Contention: Caches</h2>
 
-<h3>Using Local Caches</h3>
+<h3>19.8.1 Using Local Caches</h3>
 
 <strong>Approach</strong>:
 
@@ -253,7 +255,7 @@
 <li>Reduces bus/memory contention significantly</li>
 </ul>
 
-<h3>Benefits</h3>
+<h3>19.8.2 Benefits</h3>
 
 <ul>
 <li>Exploits locality in programs</li>
@@ -262,7 +264,7 @@
 <li>Allows better scalability</li>
 </ul>
 
-<h3>New Problem: Cache Coherence</h3>
+<h3>19.8.3 New Problem: Cache Coherence</h3>
 
 <ul>
 <li>Shared data blocks can be in multiple caches</li>
@@ -271,9 +273,9 @@
 </ul>
 
 
-<h2>8. Cache Coherence Problem</h2>
+<h2>19.9 Cache Coherence Problem</h2>
 
-<h3>The Issue</h3>
+<h3>19.9.1 The Issue</h3>
 
 <strong>Scenario</strong>:
 
@@ -285,7 +287,7 @@
 <li>Data becomes incoherent</li>
 </ul>
 
-<h3>Example Sequence</h3>
+<h3>19.9.2 Example Sequence</h3>
 
 <p>1. <strong>PE1 reads X (value = 1)</strong> → Cached in PE1</p>
 <p>2. <strong>PE2 reads X (value = 1)</strong> → Cached in PE2</p>
@@ -294,7 +296,7 @@
 <p>5. PE2 still sees X = 1 (stale data)</p>
 <p>6. <strong>Inconsistency</strong>: Same address, different values</p>
 
-<h3>With Write-Through Policy</h3>
+<h3>19.9.3 With Write-Through Policy</h3>
 
 <ul>
 <li>PE1 writes X = 0 → Cache and memory updated</li>
@@ -303,7 +305,7 @@
 <li>Coherence still lost</li>
 </ul>
 
-<h3>With Write-Back Policy</h3>
+<h3>19.9.4 With Write-Back Policy</h3>
 
 <ul>
 <li>PE1 writes X = 0 → Only cache updated</li>
@@ -312,7 +314,7 @@
 <li>Both memory and PE2 incoherent with PE1</li>
 </ul>
 
-<h3>Requirement</h3>
+<h3>19.9.5 Requirement</h3>
 
 <ul>
 <li>Cache coherence MUST be maintained</li>
@@ -322,11 +324,11 @@
 </ul>
 
 
-<h2>9. Bus Snooping</h2>
+<h2>19.10 Bus Snooping</h2>
 
 <p>Common technique for cache coherence in SMP systems.</p>
 
-<h3>What is Bus Snooping?</h3>
+<h3>19.10.1 What is Bus Snooping?</h3>
 
 <strong>Mechanism</strong>:
 
@@ -337,7 +339,7 @@
 <li>Cache controllers communicate through snoop bus</li>
 </ul>
 
-<h3>How It Works</h3>
+<h3>19.10.2 How It Works</h3>
 
 <p>1. Cache controller performs write to address</p>
 <p>2. Broadcasts address information on snoop bus</p>
@@ -345,7 +347,7 @@
 <p>4. Controllers check if they have same address cached</p>
 <p>5. If yes, take action based on protocol</p>
 
-<h3>Key Feature</h3>
+<h3>19.10.3 Key Feature</h3>
 
 <ul>
 <li>All caches monitor (snoop on) the bus</li>
@@ -354,9 +356,9 @@
 </ul>
 
 
-<h2>10. Write Invalidate Protocol</h2>
+<h2>19.11 Write Invalidate Protocol</h2>
 
-<h3>Approach</h3>
+<h3>19.11.1 Approach</h3>
 
 <ul>
 <li>When write detected, invalidate own copy</li>
@@ -364,7 +366,7 @@
 <li>Most common and easiest to implement</li>
 </ul>
 
-<h3>Mechanism</h3>
+<h3>19.11.2 Mechanism</h3>
 
 <h4>On Write by Processor</h4>
 
@@ -377,7 +379,7 @@
 <p>2. If yes: Mark block as INVALID (clear valid bit)</p>
 <p>3. Next access will be miss</p>
 
-<h3>With Write-Through Policy</h3>
+<h3>19.11.3 With Write-Through Policy</h3>
 
 <ul>
 <li>Memory always has up-to-date value</li>
@@ -385,7 +387,7 @@
 <li>Straightforward implementation</li>
 </ul>
 
-<h3>With Write-Back Policy</h3>
+<h3>19.11.4 With Write-Back Policy</h3>
 
 <strong>Challenge</strong>:
 
@@ -406,7 +408,7 @@
 <li>Avoids slow memory access</li>
 </ul>
 
-<h3>Complexity</h3>
+<h3>19.11.5 Complexity</h3>
 
 <strong>Trade-offs</strong>:
 
@@ -419,9 +421,9 @@
 </ul>
 
 
-<h2>11. Write Update Protocol</h2>
+<h2>19.12 Write Update Protocol</h2>
 
-<h3>Alternative Approach</h3>
+<h3>19.12.1 Alternative Approach</h3>
 
 <strong>Concept</strong>:
 
@@ -431,7 +433,7 @@
 <li>Different action when write detected</li>
 </ul>
 
-<h3>Mechanism</h3>
+<h3>19.12.2 Mechanism</h3>
 
 <h4>On Write by Processor</h4>
 
@@ -444,7 +446,7 @@
 <p>2. If yes: Update own copy with new data</p>
 <p>3. Keep block VALID</p>
 
-<h3>Benefits</h3>
+<h3>19.12.3 Benefits</h3>
 
 <ul>
 <li>No miss on next access to same address</li>
@@ -462,7 +464,7 @@
 <li>More bus traffic</li>
 </ul>
 
-<h3>Comparison</h3>
+<h3>19.12.5 Comparison</h3>
 
 <ul>
 <li>Simpler than write invalidate with write-back</li>
@@ -471,9 +473,9 @@
 </ul>
 
 
-<h2>12. Real Protocol Implementations</h2>
+<h2>19.13 Real Protocol Implementations</h2>
 
-<h3>Historical Protocols</h3>
+<h3>19.13.1 Historical Protocols</h3>
 
 <h4>Write Once Protocol</h4>
 
@@ -516,7 +518,7 @@
 <li>Used in DEC Firefly and Sun SPARC systems</li>
 </ul>
 
-<h3>Most Common Combination</h3>
+<h3>19.13.2 Most Common Combination</h3>
 
 <ul>
 <li>Write invalidate protocols</li>
@@ -527,13 +529,13 @@
 </ul>
 
 
-<h2>13. MESI Protocol Details</h2>
+<h2>19.14 MESI Protocol Details</h2>
 
 Named after four states: <strong>Modified, Exclusive, Shared, Invalid</strong>
 
 <p>Most popular cache coherency protocol, used in Intel Pentium and IBM PowerPC processors.</p>
 
-<h3>Four Block States (Requires 2 Bits)</h3>
+<h3>19.14.1 Four Block States (Requires 2 Bits)</h3>
 
 <h4>1. INVALID (I)</h4>
 
@@ -572,9 +574,9 @@ Named after four states: <strong>Modified, Exclusive, Shared, Invalid</strong>
 </ul>
 
 
-<h2>14. MESI Protocol State Transitions</h2>
+<h2>19.15 MESI Protocol State Transitions</h2>
 
-<h3>Example with PE1, PE2, PE3</h3>
+<h3>19.15.1 Example with PE1, PE2, PE3</h3>
 
 <strong>Initial State</strong>: Variable X = 1 in memory, all cache entries invalid
 
@@ -669,7 +671,7 @@ Named after four states: <strong>Modified, Exclusive, Shared, Invalid</strong>
 <li>All consistent</li>
 </ul>
 
-<h3>Key Points</h3>
+<h3>19.15.2 Key Points</h3>
 
 <ul>
 <li>Coherency maintained throughout</li>
@@ -680,9 +682,9 @@ Named after four states: <strong>Modified, Exclusive, Shared, Invalid</strong>
 </ul>
 
 
-<h2>15. Scalability of UMA Systems</h2>
+<h2>19.16 Scalability of UMA Systems</h2>
 
-<h3>Limitation</h3>
+<h3>19.16.1 Limitation</h3>
 
 <strong>Challenges</strong>:
 
@@ -693,7 +695,7 @@ Named after four states: <strong>Modified, Exclusive, Shared, Invalid</strong>
 <li>Memory bus also becomes bottleneck</li>
 </ul>
 
-<h3>Practical Limit</h3>
+<h3>19.16.2 Practical Limit</h3>
 
 <ul>
 <li>Up to ~32 processing elements with bus-based design</li>
@@ -701,7 +703,7 @@ Named after four states: <strong>Modified, Exclusive, Shared, Invalid</strong>
 <li>Beyond this, contention significantly degrades performance</li>
 </ul>
 
-<h3>Alternative Interconnects</h3>
+<h3>19.16.3 Alternative Interconnectsconnects</h3>
 
 <h4>Crossbar Switches</h4>
 
@@ -720,7 +722,7 @@ Named after four states: <strong>Modified, Exclusive, Shared, Invalid</strong>
 <li>Increases scalability</li>
 </ul>
 
-<h3>Improved Scalability</h3>
+<h3>19.16.4 Improved Scalability</h3>
 
 <ul>
 <li>With crossbar networks: Up to ~256 processing elements</li>
@@ -729,9 +731,9 @@ Named after four states: <strong>Modified, Exclusive, Shared, Invalid</strong>
 </ul>
 
 
-<h2>16. Non-Uniform Memory Access (NUMA)</h2>
+<h2>19.17 Non-Uniform Memory Access (NUMA)</h2>
 
-<h3>Designed for Even Higher Scalability</h3>
+<h3>19.17.1 Designed for Even Higher Scalability</h3>
 
 <strong>Goals</strong>:
 
@@ -742,7 +744,7 @@ Named after four states: <strong>Modified, Exclusive, Shared, Invalid</strong>
 <li>Communication through shared address space</li>
 </ul>
 
-<h3>Key Difference from UMA</h3>
+<h3>19.17.2 Key Difference from UMA</h3>
 
 <strong>Non-Uniform Access Times</strong>:
 
@@ -752,7 +754,7 @@ Named after four states: <strong>Modified, Exclusive, Shared, Invalid</strong>
 <li>Memory perspective is non-uniform</li>
 </ul>
 
-<h3>Architecture</h3>
+<h3>19.17.3 Architecture</h3>
 
 <strong>Structure</strong>:
 
@@ -763,7 +765,7 @@ Named after four states: <strong>Modified, Exclusive, Shared, Invalid</strong>
 <li>But all memory accessible by all processors (shared address space)</li>
 </ul>
 
-<h3>Access Time Difference</h3>
+<h3>19.17.4 Access Time Difference</h3>
 
 <ul>
 <li>Remote memory access: 4-5 times more cycles than local</li>
@@ -771,7 +773,7 @@ Named after four states: <strong>Modified, Exclusive, Shared, Invalid</strong>
 <li>Programming must consider locality</li>
 </ul>
 
-<h3>Operating System Role</h3>
+<h3>19.17.5 Operating System Role</h3>
 
 <strong>Optimization Responsibilities</strong>:
 
@@ -784,9 +786,9 @@ Named after four states: <strong>Modified, Exclusive, Shared, Invalid</strong>
 </ul>
 
 
-<h2>17. Two Types of NUMA</h2>
+<h2>19.18 Two Types of NUMA</h2>
 
-<h3>1. NC-NUMA (Non-Cached NUMA)</h3>
+<h3>19.18.1 1. NC-NUMA (Non-Cached NUMA)</h3>
 
 <strong>Characteristics</strong>:
 
@@ -796,7 +798,7 @@ Named after four states: <strong>Modified, Exclusive, Shared, Invalid</strong>
 <li>Simpler but slower</li>
 </ul>
 
-<h3>2. CC-NUMA (Cache-Coherent NUMA)</h3>
+<h3>19.18.2 2. CC-NUMA (Cache-Coherent NUMA)</h3>
 
 <strong>Characteristics</strong>:
 
@@ -809,11 +811,11 @@ Named after four states: <strong>Modified, Exclusive, Shared, Invalid</strong>
 </ul>
 
 
-<h2>18. Directory-Based Cache Coherence</h2>
+<h2>19.19 Directory-Based Cache Coherence</h2>
 
 <p>Used in CC-NUMA systems for scalable cache coherence.</p>
 
-<h3>What is Directory?</h3>
+<h3>19.19.1 What is Directory?</h3>
 
 <strong>Definition</strong>:
 
@@ -824,7 +826,7 @@ Named after four states: <strong>Modified, Exclusive, Shared, Invalid</strong>
 <li>Can be in memory or separate hardware</li>
 </ul>
 
-<h3>Purpose</h3>
+<h3>19.19.2 Purpose</h3>
 
 <strong>Functionality</strong>:
 
@@ -835,7 +837,7 @@ Named after four states: <strong>Modified, Exclusive, Shared, Invalid</strong>
 <li>Scalable to thousands of processors</li>
 </ul>
 
-<h3>Organization</h3>
+<h3>19.19.3 Organization</h3>
 
 <strong>Distributed Structure</strong>:
 
@@ -847,7 +849,7 @@ Named after four states: <strong>Modified, Exclusive, Shared, Invalid</strong>
 <li>Blocks from other address ranges tracked in other directories</li>
 </ul>
 
-<h3>Operation</h3>
+<h3>19.19.4 Operation</h3>
 
 <strong>Access Process</strong>:
 
@@ -859,7 +861,7 @@ Named after four states: <strong>Modified, Exclusive, Shared, Invalid</strong>
 <li>Can then send invalidations or updates as needed</li>
 </ul>
 
-<h3>Write Policy</h3>
+<h3>19.19.5 Write Policy</h3>
 
 <ul>
 <li>Typically use write-through policy</li>

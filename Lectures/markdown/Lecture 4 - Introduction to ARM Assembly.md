@@ -1,13 +1,15 @@
 # Lecture 4: Introduction to ARM Assembly
 
-## Introduction
+*By Dr. Kisaru Liyanage*
+
+## 4.1 Introduction
 
 This lecture introduces ARM assembly language programming, providing the foundation for understanding how high-level programs translate to machine code. We explore the ARM instruction set architecture (ISA), focusing on its RISC design philosophy, register organization, basic instruction formats, and the toolchain used for development. Understanding assembly language is essential for comprehending how processors execute programs and for optimizing performance-critical code.
 
 
-## 1. ARM Architecture Overview
+## 4.2 ARM Architecture Overview
 
-### 1.1 RISC Philosophy
+### 4.2.1 RISC Philosophy
 
 **Reduced Instruction Set Computer (RISC)**
 
@@ -38,7 +40,7 @@ This lecture introduces ARM assembly language programming, providing the foundat
 - Large register file reduces memory traffic
 - Consistent design across instruction types
 
-### 1.2 ARM Registers
+### 4.2.2 ARM Registers
 
 **General-Purpose Registers**
 
@@ -76,7 +78,7 @@ R14 (LR): Link Register
 R15 (PC): Program Counter
          - Always points to next instruction
          - Modifying PC changes execution flow
-         
+
 
 **Why So Many Registers?**
 
@@ -85,7 +87,7 @@ R15 (PC): Program Counter
 - Supports efficient function calls
 - Improves performance through locality
 
-### 1.3 Memory Organization
+### 4.2.3 Memory Organization
 
 **Little-Endian Byte Ordering**
 
@@ -110,9 +112,9 @@ Content:     78       56       34       12
 - Byte-addressable memory
 - Instructions and data in same address space (Von Neumann architecture)
 
-## 2. ARM Instruction Format
+## 4.3 ARM Instruction Format
 
-### 2.1 Instruction Structure
+### 4.3.1 Instruction Structure
 
 **Fixed 32-Bit Length**
 
@@ -141,7 +143,7 @@ Encoding includes:
 - Source register 2 (R3)
 
 
-### 2.2 Instruction Types
+### 4.3.2 Instruction Types
 
 **Data Processing Instructions**
 
@@ -163,7 +165,7 @@ Encoding includes:
 - Function call: BL (branch and link)
 - Return: MOV PC, LR
 
-### 2.3 Operand Types
+### 4.3.3 Operand Types
 
 **Register Operands**
 
@@ -193,9 +195,9 @@ SUB R3, R4, R5, LSR #1    ; R3 = R4 - (R5 >> 1)
 ```
 
 
-## 3. Basic ARM Instructions
+## 4.4 Basic ARM Instructions
 
-### 3.1 Arithmetic Instructions
+### 4.4.1 Arithmetic Instructions
 
 **Addition**
 
@@ -234,7 +236,7 @@ MUL Rd, Rn, Rm       ; Rd = Rn × Rm (lower 32 bits)
 ```
 
 
-### 3.2 Logical Instructions
+### 4.4.2 Logical Instructions
 
 **AND Operation**
 
@@ -297,7 +299,7 @@ MVN R3, R4           ; R3 = ~R4 (invert all bits)
 ```
 
 
-### 3.3 Shift Operations
+### 4.4.3 Shift Operations
 
 **Logical Shift Left (LSL)**
 
@@ -354,9 +356,9 @@ ROR R0, R1, #8       ; Rotate R1 right by 8 bits
 ```
 
 
-## 4. Memory Access Instructions
+## 4.5 Memory Access Instructions
 
-### 4.1 Load Instructions
+### 4.5.1 Load Instructions
 
 **Load Word (LDR)**
 
@@ -408,7 +410,7 @@ LDR R1, =0x12345678  ; R1 = 0x12345678 (large immediate)
 ```
 
 
-### 4.2 Store Instructions
+### 4.5.2 Store Instructions
 
 **Store Word (STR)**
 
@@ -446,7 +448,7 @@ STRH R0, [R1, #4]    ; Store lower halfword of R0 to R1+4
 ```
 
 
-### 4.3 Addressing Modes
+### 4.5.3 Addressing Modes
 
 **Offset Addressing**
 
@@ -475,9 +477,9 @@ LDR R0, [R1, R2, LSL #2] ; R0 = Memory[R1 + (R2 << 2)]
 ```
 
 
-## 5. Assembly Program Structure
+## 4.6 Assembly Program Structure
 
-### 5.1 Directives
+### 4.6.1 Directives
 
 **Section Directives**
 
@@ -504,7 +506,7 @@ LDR R0, [R1, R2, LSL #2] ; R0 = Memory[R1 + (R2 << 2)]
 ```
 
 
-### 5.2 Labels
+### 4.6.2 Labels
 
 **Purpose**
 
@@ -524,7 +526,7 @@ array:               ; Label for data
 ```
 
 
-### 5.3 Simple Program Example
+### 4.6.3 Simple Program Example
 
 ```assembly
     .text
@@ -543,9 +545,9 @@ message:
 ```
 
 
-## 6. ARM Development Tools
+## 4.7 ARM Development Tools
 
-### 6.1 Toolchain Components
+### 4.7.1 Toolchain Components
 
 **Cross-Compiler**
 
@@ -569,7 +571,7 @@ message:
 - Allows running ARM binaries on PC
 - Useful for testing without ARM hardware
 
-### 6.2 Compilation Process
+### 4.7.2 Compilation Process
 
 **From C to Executable**
 
@@ -609,7 +611,7 @@ arm-linux-gnueabi-gcc program.c -o program
 ```
 
 
-### 6.3 Debugging and Inspection
+### 4.7.3 Debugging and Inspection
 
 **GDB (GNU Debugger)**
 
@@ -639,9 +641,9 @@ arm-linux-gnueabi-nm program.o
 ```
 
 
-## 7. Programming in ARM Assembly
+## 4.8 Programming in ARM Assembly
 
-### 7.1 Translating C to ARM
+### 4.8.1 Translating C to ARM
 
 **C Code:**
 
@@ -679,7 +681,7 @@ arr:
 ```
 
 
-### 7.2 Common Patterns
+### 4.8.2 Common Patterns
 
 **Clearing a Register**
 
