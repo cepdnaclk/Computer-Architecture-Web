@@ -152,13 +152,7 @@
 
 <strong>Sequential Processing:</strong>
 
-``<code>
-<p>Time:  6pm    7pm    8pm    9pm    10pm   11pm   12am   1am    2am</p>
-<p>A:     [Wash] [Dry]  [Fold] [Pack]</p>
-<p>B:                            [Wash] [Dry]  [Fold] [Pack]</p>
-<p>C:                                                   [Wash] [Dry]  [Fold] [Pack]</p>
-<p>D:                                                                          [Wash] [Dry]  [Fold] [Pack]</p>
-</code>`<code>
+<img src="../img/Non-Pipelined.jpg" alt="Computer System Abstraction Layers" width="600">
 
 
 <p>| Metric            | Value                |</p>
@@ -188,14 +182,7 @@
 
 <strong>Pipelined Schedule:</strong>
 
-
-<p>Time:  6:00   6:30   7:00   7:30   8:00   8:30   9:00   9:30</p>
-<p>A:     [Wash] [Dry]  [Fold] [Pack]</p>
-<p>B:            [Wash] [Dry]  [Fold] [Pack]</p>
-<p>C:                   [Wash] [Dry]  [Fold] [Pack]</p>
-<p>D:                          [Wash] [Dry]  [Fold] [Pack]</p>
-<p>E:                                 [Wash] [Dry]  [Fold] [Pack]</p>
-
+<img src="../img/Pipelined.jpg" alt="Computer System Abstraction Layers" width="600">
 
 <strong>Timeline Analysis:</strong>
 
@@ -427,7 +414,7 @@
 
 <strong>Instruction Stream:</strong> All Load Word instructions
 
-</code>`<code>assembly
+<p>``<code>assembly</p>
 <p>LW $1, 0($10)</p>
 <p>LW $2, 4($10)</p>
 <p>LW $3, 8($10)</p>
@@ -1187,11 +1174,11 @@
 
 <strong>Without Optimization:</strong>
 
-
+</code>`<code>
 <p>Time:    0-200   200-400  400-600  600-800</p>
 <p>BEQ:     IF      ID       EX       MEM</p>
 <p>???:             IF       ???</p>
-
+</code>`<code>
 
 <p>Two bubbles required if wait for outcome</p>
 

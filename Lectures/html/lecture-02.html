@@ -828,10 +828,15 @@
 
 <strong>Net Effect Calculation:</strong>
 
-<p>Power Scaling = (Capacitance) × (Voltage²) × (Frequency)</p>
-<p>= (1×) × (1/5)² × (300×)</p>
-<p>= (1×) × (1/25) × (300×)</p>
-<p>= 12× power increase</p>
+
+<p>$$</p>
+<p>\begin{align*}</p>
+<p>ext{Power Scaling} &= (\text{Capacitance}) \times (\text{Voltage}^2) \times (\text{Frequency}) \\</p>
+<p>&= (1\times) \times (\frac{1}{5})^2 \times (300\times) \\</p>
+<p>&= (1\times) \times (\frac{1}{25}) \times (300\times) \\</p>
+<p>&= 12\times \text{ power increase}</p>
+<p>\end{align*}</p>
+<p>$$</p>
 
 <strong>Key Insight:</strong>
 
@@ -1633,12 +1638,14 @@
 
 <p>The compiler generates 7 MIPS instructions to implement the swap function:</p>
 
+``<code>
 <p>MUL  $2, $5, 4      # Multiply k by 4 (array index to byte offset)</p>
 <p>ADD  $2, $4, $2     # Add base address to offset (address of v[k])</p>
 <p>LW   $15, 0($2)     # Load v[k] into register $15 (temp = v[k])</p>
 <p>LW   $16, 4($2)     # Load v[k+1] into register $16</p>
 <p>SW   $16, 0($2)     # Store v[k+1] to v[k]</p>
 <p>SW   $15, 4($2)     # Store temp to v[k+1]</p>
+</code>`<code>
 
 <strong>Translation Analysis:</strong>
 
@@ -1691,14 +1698,14 @@
 
 <p>Each assembly instruction translates to 32-bit binary instruction:</p>
 
-
+</code>`<code>
 <p>00000000101000100001000000011000  # MUL $2, $5, 4</p>
 <p>00000000100000100001000000100001  # ADD $2, $4, $2</p>
 <p>10001100010011110000000000000000  # LW  $15, 0($2)</p>
 <p>10001100010100000000000000000100  # LW  $16, 4($2)</p>
 <p>10101100010100000000000000000000  # SW  $16, 0($2)</p>
 <p>10101100010011110000000000000100  # SW  $15, 4($2)</p>
-
+</code>``
 
 <strong>One-to-One Mapping:</strong>
 

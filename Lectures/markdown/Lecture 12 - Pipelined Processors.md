@@ -82,13 +82,7 @@ This lecture introduces pipelining as the primary performance enhancement techni
 
 **Sequential Processing:**
 
-```
-Time:  6pm    7pm    8pm    9pm    10pm   11pm   12am   1am    2am
-A:     [Wash] [Dry]  [Fold] [Pack]
-B:                            [Wash] [Dry]  [Fold] [Pack]
-C:                                                   [Wash] [Dry]  [Fold] [Pack]
-D:                                                                          [Wash] [Dry]  [Fold] [Pack]
-```
+<img src="../img/Non-Pipelined.jpg" alt="Computer System Abstraction Layers" width="600">
 
 
 | Metric            | Value                |
@@ -114,14 +108,7 @@ D:                                                                          [Was
 
 **Pipelined Schedule:**
 
-
-Time:  6:00   6:30   7:00   7:30   8:00   8:30   9:00   9:30
-A:     [Wash] [Dry]  [Fold] [Pack]
-B:            [Wash] [Dry]  [Fold] [Pack]
-C:                   [Wash] [Dry]  [Fold] [Pack]
-D:                          [Wash] [Dry]  [Fold] [Pack]
-E:                                 [Wash] [Dry]  [Fold] [Pack]
-
+<img src="../img/Pipelined.jpg" alt="Computer System Abstraction Layers" width="600">
 
 **Timeline Analysis:**
 
@@ -965,11 +952,11 @@ BEQ $1, $2, 40         # Branch 40 instructions ahead if equal
 
 **Without Optimization:**
 
-
+```
 Time:    0-200   200-400  400-600  600-800
 BEQ:     IF      ID       EX       MEM
 ???:             IF       ???
-
+```
 
 Two bubbles required if wait for outcome
 
