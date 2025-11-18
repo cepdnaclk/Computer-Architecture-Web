@@ -154,8 +154,10 @@
 <li>Example: 0x12345678 stored as:</li>
 </ul>
 
+``<code>
 <p>Address:  [base+0] [base+1] [base+2] [base+3]</p>
 <p>Content:     78       56       34       12</p>
+</code>`<code>
 
 
 <strong>Word Alignment</strong>
@@ -188,15 +190,16 @@
 
 <strong>Typical Instruction Fields</strong>
 
-
+</code>`<code>
 <p>[Condition][Opcode][Operands]</p>
 <p>4 bits    varies   varies</p>
-
+</code>`<code>
 
 <strong>Example: ADD Instruction</strong>
 
-
+</code>`<code>assembly
 <p>ADD R1, R2, R3    ; R1 = R2 + R3</p>
+</code>`<code>
 
 <p>Encoding includes:</p>
 <ul>
@@ -240,15 +243,16 @@
 
 <strong>Register Operands</strong>
 
-
+</code>`<code>assembly
 <p>ADD R0, R1, R2    ; R0 = R1 + R2 (all registers)</p>
-
+</code>`<code>
 
 <strong>Immediate Operands</strong>
 
-
+</code>`<code>assembly
 <p>ADD R0, R1, #5    ; R0 = R1 + 5 (# indicates immediate)</p>
 <p>MOV R2, #100      ; R2 = 100</p>
+</code>`<code>
 
 
 <strong>Immediate Value Constraints</strong>
@@ -261,9 +265,10 @@
 
 <strong>Shifted Register Operands</strong>
 
-
+</code>`<code>assembly
 <p>ADD R0, R1, R2, LSL #2    ; R0 = R1 + (R2 << 2)</p>
 <p>SUB R3, R4, R5, LSR #1    ; R3 = R4 - (R5 >> 1)</p>
+</code>`<code>
 
 
 <h2>3. Basic ARM Instructions</h2>
@@ -272,117 +277,159 @@
 
 <strong>Addition</strong>
 
-
+</code>`<code>assembly
 <p>ADD Rd, Rn, Rm       ; Rd = Rn + Rm</p>
 <p>ADD Rd, Rn, #imm     ; Rd = Rn + immediate</p>
+</code>`<code>
 
 <p>Examples:</p>
+</code>`<code>assembly
 <p>ADD R0, R1, R2       ; R0 = R1 + R2</p>
 <p>ADD R3, R3, #1       ; R3 = R3 + 1 (increment)</p>
+</code>`<code>
 
 
 <strong>Subtraction</strong>
 
-
+</code>`<code>assembly
 <p>SUB Rd, Rn, Rm       ; Rd = Rn - Rm</p>
 <p>SUB Rd, Rn, #imm     ; Rd = Rn - immediate</p>
 <p>RSB Rd, Rn, #imm     ; Rd = immediate - Rn (reverse subtract)</p>
+</code>`<code>
 
 <p>Examples:</p>
+</code>`<code>assembly
 <p>SUB R0, R1, R2       ; R0 = R1 - R2</p>
 <p>SUB R4, R4, #10      ; R4 = R4 - 10 (decrement)</p>
 <p>RSB R5, R6, #0       ; R5 = 0 - R6 (negate)</p>
+</code>`<code>
 
 
 <strong>Multiplication</strong> (covered in later tutorials)
 
-
+</code>`<code>assembly
 <p>MUL Rd, Rn, Rm       ; Rd = Rn × Rm (lower 32 bits)</p>
+</code>`<code>
 
 
 <h3>3.2 Logical Instructions</h3>
 
 <strong>AND Operation</strong>
 
-
+</code>`<code>assembly
 <p>AND Rd, Rn, Rm       ; Rd = Rn AND Rm</p>
 <p>AND Rd, Rn, #imm     ; Rd = Rn AND immediate</p>
+</code>`<code>
 
 <p>Usage: Bit masking, clearing specific bits</p>
-<p>Example: AND R0, R0, #0xFF  ; Keep only lower 8 bits</p>
+
+<p>Example:</p>
+</code>`<code>assembly
+<p>AND R0, R0, #0xFF    ; Keep only lower 8 bits</p>
+</code>`<code>
 
 
 <strong>OR Operation</strong>
 
-
+</code>`<code>assembly
 <p>ORR Rd, Rn, Rm       ; Rd = Rn OR Rm (ORR in ARM)</p>
 <p>ORR Rd, Rn, #imm     ; Rd = Rn OR immediate</p>
+</code>`<code>
 
 <p>Usage: Setting specific bits</p>
-<p>Example: ORR R1, R1, #0x80  ; Set bit 7</p>
+
+<p>Example:</p>
+</code>`<code>assembly
+<p>ORR R1, R1, #0x80    ; Set bit 7</p>
+</code>`<code>
 
 
 <strong>Exclusive OR</strong>
 
-
+</code>`<code>assembly
 <p>EOR Rd, Rn, Rm       ; Rd = Rn XOR Rm</p>
 <p>EOR Rd, Rn, #imm     ; Rd = Rn XOR immediate</p>
+</code>`<code>
 
 <p>Usage: Toggling bits, fast comparison</p>
-<p>Example: EOR R2, R2, R2     ; R2 = 0 (XOR with itself)</p>
+
+<p>Example:</p>
+</code>`<code>assembly
+<p>EOR R2, R2, R2       ; R2 = 0 (XOR with itself)</p>
+</code>`<code>
 
 
 <strong>Move and Move Not</strong>
 
-
+</code>`<code>assembly
 <p>MOV Rd, Rm           ; Rd = Rm</p>
 <p>MOV Rd, #imm         ; Rd = immediate</p>
 <p>MVN Rd, Rm           ; Rd = NOT Rm (bitwise complement)</p>
+</code>`<code>
 
 <p>Examples:</p>
+</code>`<code>assembly
 <p>MOV R0, R1           ; Copy R1 to R0</p>
 <p>MOV R2, #0           ; Clear R2</p>
 <p>MVN R3, R4           ; R3 = ~R4 (invert all bits)</p>
+</code>`<code>
 
 
 <h3>3.3 Shift Operations</h3>
 
 <strong>Logical Shift Left (LSL)</strong>
 
-
+</code>`<code>assembly
 <p>LSL Rd, Rn, #shift   ; Rd = Rn << shift</p>
 <p>MOV Rd, Rn, LSL #shift</p>
+</code>`<code>
 
 <p>Effect: Multiplies by 2^shift</p>
-<p>Example: LSL R0, R1, #2  ; R0 = R1 × 4</p>
 
+<p>Example:</p>
+</code>`<code>assembly
+<p>LSL R0, R1, #2       ; R0 = R1 × 4</p>
+</code>`<code>
 
 <strong>Logical Shift Right (LSR)</strong>
 
-
+</code>`<code>assembly
 <p>LSR Rd, Rn, #shift   ; Rd = Rn >> shift (unsigned)</p>
 <p>MOV Rd, Rn, LSR #shift</p>
+</code>`<code>
 
 <p>Effect: Divides by 2^shift (unsigned)</p>
-<p>Example: LSR R0, R1, #3  ; R0 = R1 / 8</p>
 
+<p>Example:</p>
+</code>`<code>assembly
+<p>LSR R0, R1, #3       ; R0 = R1 / 8</p>
+</code>`<code>
 
 <strong>Arithmetic Shift Right (ASR)</strong>
 
-
+</code>`<code>assembly
 <p>ASR Rd, Rn, #shift   ; Rd = Rn >> shift (signed)</p>
+</code>`<code>
 
 <p>Effect: Divides by 2^shift, preserves sign</p>
-<p>Example: ASR R0, R1, #2  ; R0 = R1 / 4 (signed)</p>
 
+<p>Example:</p>
+</code>`<code>assembly
+<p>ASR R0, R1, #2       ; R0 = R1 / 4 (signed)</p>
+</code>`<code>
 
 <strong>Rotate Right (ROR)</strong>
 
-
+</code>`<code>assembly
 <p>ROR Rd, Rn, #shift   ; Rotate Rn right by shift</p>
+</code>`<code>
 
 <p>Effect: Bits rotated off right end reappear at left</p>
-<p>Example: ROR R0, R1, #8  ; Rotate R1 right by 8 bits</p>
+
+<p>Example:</p>
+</code>`<code>assembly
+<p>ROR R0, R1, #8       ; Rotate R1 right by 8 bits</p>
+</code>`<code>
 
 
 <h2>4. Memory Access Instructions</h2>
@@ -391,102 +438,119 @@
 
 <strong>Load Word (LDR)</strong>
 
-
+</code>`<code>assembly
 <p>LDR Rd, [Rn]         ; Rd = Memory[Rn]</p>
 <p>LDR Rd, [Rn, #offset]; Rd = Memory[Rn + offset]</p>
+</code>`<code>
 
 <p>Examples:</p>
+</code>`<code>assembly
 <p>LDR R0, [R1]         ; Load word from address in R1</p>
 <p>LDR R2, [R3, #4]     ; Load from address R3+4</p>
 <p>LDR R4, [R5, #-8]    ; Load from address R5-8</p>
-
+</code>`<code>
 
 <strong>Load Byte (LDRB)</strong>
 
-
+</code>`<code>assembly
 <p>LDRB Rd, [Rn, #offset]; Load one byte, zero-extend to 32 bits</p>
+</code>`<code>
 
 <p>Example:</p>
+</code>`<code>assembly
 <p>LDRB R0, [R1]        ; R0 = (byte at R1), upper 24 bits = 0</p>
-
+</code>`<code>
 
 <strong>Load Halfword (LDRH)</strong>
 
-
+</code>`<code>assembly
 <p>LDRH Rd, [Rn, #offset]; Load 16 bits, zero-extend to 32 bits</p>
+</code>`<code>
 
 <p>Example:</p>
+</code>`<code>assembly
 <p>LDRH R0, [R1, #2]    ; R0 = (halfword at R1+2), upper 16 bits = 0</p>
-
+</code>`<code>
 
 <strong>Pseudo-Instruction for Loading Addresses</strong>
 
-
+</code>`<code>assembly
 <p>LDR Rd, =label       ; Load address of label into Rd</p>
 <p>LDR Rd, =value       ; Load 32-bit constant into Rd</p>
+</code>`<code>
 
 <p>Examples:</p>
+</code>`<code>assembly
 <p>LDR R0, =array       ; R0 = address of array</p>
 <p>LDR R1, =0x12345678  ; R1 = 0x12345678 (large immediate)</p>
+</code>`<code>
 
 
 <h3>4.2 Store Instructions</h3>
 
 <strong>Store Word (STR)</strong>
 
-
+</code>`<code>assembly
 <p>STR Rd, [Rn]         ; Memory[Rn] = Rd</p>
 <p>STR Rd, [Rn, #offset]; Memory[Rn + offset] = Rd</p>
+</code>`<code>
 
 <p>Examples:</p>
+</code>`<code>assembly
 <p>STR R0, [R1]         ; Store R0 to address in R1</p>
 <p>STR R2, [R3, #8]     ; Store R2 to address R3+8</p>
-
+</code>`<code>
 
 <strong>Store Byte (STRB)</strong>
 
-
+</code>`<code>assembly
 <p>STRB Rd, [Rn, #offset]; Store lower 8 bits of Rd</p>
+</code>`<code>
 
 <p>Example:</p>
+</code>`<code>assembly
 <p>STRB R0, [R1]        ; Store lower byte of R0 to address R1</p>
-
+</code>`<code>
 
 <strong>Store Halfword (STRH)</strong>
 
-
+</code>`<code>assembly
 <p>STRH Rd, [Rn, #offset]; Store lower 16 bits of Rd</p>
+</code>`<code>
 
 <p>Example:</p>
+</code>`<code>assembly
 <p>STRH R0, [R1, #4]    ; Store lower halfword of R0 to R1+4</p>
+</code>`<code>
 
 
 <h3>4.3 Addressing Modes</h3>
 
 <strong>Offset Addressing</strong>
 
-
+</code>`<code>assembly
 <p>LDR R0, [R1, #4]     ; R0 = Memory[R1 + 4], R1 unchanged</p>
-
+</code>`<code>
 
 <strong>Pre-indexed Addressing</strong>
 
-
+</code>`<code>assembly
 <p>LDR R0, [R1, #4]!    ; R1 = R1 + 4, then R0 = Memory[R1]</p>
 <p>; ! indicates update base register</p>
-
+</code>`<code>
 
 <strong>Post-indexed Addressing</strong>
 
-
+</code>`<code>assembly
 <p>LDR R0, [R1], #4     ; R0 = Memory[R1], then R1 = R1 + 4</p>
-
+</code>`<code>
 
 <strong>Register Offset</strong>
 
-
+</code>`<code>assembly
 <p>LDR R0, [R1, R2]     ; R0 = Memory[R1 + R2]</p>
 <p>LDR R0, [R1, R2, LSL #2] ; R0 = Memory[R1 + (R2 << 2)]</p>
+</code>`<code>
 
 
 <h2>5. Assembly Program Structure</h2>
@@ -495,26 +559,27 @@
 
 <strong>Section Directives</strong>
 
-
+</code>`<code>assembly
 <p>.text                ; Code section (instructions)</p>
 <p>.data                ; Data section (initialized variables)</p>
 <p>.bss                 ; Uninitialized data section</p>
-
+</code>`<code>
 
 <strong>Global and External</strong>
 
-
+</code>`<code>assembly
 <p>.global main         ; Make symbol visible to linker</p>
 <p>.extern printf       ; Declare external symbol</p>
-
+</code>`<code>
 
 <strong>Data Definition</strong>
 
-
+</code>`<code>assembly
 <p>.word value          ; Define 32-bit word</p>
 <p>.byte value          ; Define byte</p>
 <p>.asciz "string"      ; Define null-terminated string</p>
 <p>.space n             ; Reserve n bytes of space</p>
+</code>`<code>
 
 
 <h3>5.2 Labels</h3>
@@ -529,18 +594,19 @@
 
 <strong>Syntax</strong>
 
-
+</code>`<code>assembly
 <p>label:               ; Label for instruction</p>
 <p>MOV R0, #1</p>
 <p>ADD R1, R0, R2</p>
 
 <p>array:               ; Label for data</p>
 <p>.word 1, 2, 3, 4</p>
+</code>`<code>
 
 
 <h3>5.3 Simple Program Example</h3>
 
-<p>assembly</p>
+</code>`<code>assembly
 <p>.text</p>
 <p>.global main</p>
 
@@ -554,6 +620,7 @@
 <p>.data</p>
 <p>message:</p>
 <p>.asciz "Hello, ARM!"</p>
+</code>`<code>
 
 
 <h2>6. ARM Development Tools</h2>
@@ -563,7 +630,7 @@
 <strong>Cross-Compiler</strong>
 
 <ul>
-<li><code>arm-linux-gnueabi-gcc</code>: Compiles C to ARM code</li>
+<li></code>arm-linux-gnueabi-gcc<code>: Compiles C to ARM code</li>
 <li>Runs on x86 PC, produces ARM binaries</li>
 <li>Necessary because development machine ≠ target machine</li>
 </ul>
@@ -571,21 +638,21 @@
 <strong>Assembler</strong>
 
 <ul>
-<li><code>arm-linux-gnueabi-as</code>: Assembles ARM assembly to object code</li>
+<li></code>arm-linux-gnueabi-as<code>: Assembles ARM assembly to object code</li>
 <li>Part of binutils package</li>
 </ul>
 
 <strong>Linker</strong>
 
 <ul>
-<li><code>arm-linux-gnueabi-ld</code>: Links object files to executable</li>
+<li></code>arm-linux-gnueabi-ld<code>: Links object files to executable</li>
 <li>Resolves symbols, combines code sections</li>
 </ul>
 
 <strong>Emulator</strong>
 
 <ul>
-<li><code>qemu-arm</code>: Emulates ARM processor on x86</li>
+<li></code>qemu-arm<code>: Emulates ARM processor on x86</li>
 <li>Allows running ARM binaries on PC</li>
 <li>Useful for testing without ARM hardware</li>
 </ul>
@@ -594,7 +661,7 @@
 
 <strong>From C to Executable</strong>
 
-
+</code>`<code>
 <p>C Source (.c)</p>
 <p>↓ [gcc -S]</p>
 <p>Assembly (.s)</p>
@@ -604,11 +671,11 @@
 <p>Executable (a.out)</p>
 <p>↓ [qemu-arm]</p>
 <p>Execution</p>
-
+</code>`<code>
 
 <strong>Command Examples</strong>
 
-<p>bash</p>
+</code>`<code>bash
 <h1>Compile C to assembly</h1>
 <p>arm-linux-gnueabi-gcc -S program.c -o program.s</p>
 
@@ -620,20 +687,21 @@
 
 <h1>Run with emulator</h1>
 <p>qemu-arm program</p>
-
+</code>`<code>
 
 <strong>One-Step Compilation</strong>
 
-<p>bash</p>
+</code>`<code>bash
 <h1>Compile, assemble, and link in one command</h1>
 <p>arm-linux-gnueabi-gcc program.c -o program</p>
+</code>`<code>
 
 
 <h3>6.3 Debugging and Inspection</h3>
 
 <strong>GDB (GNU Debugger)</strong>
 
-<p>bash</p>
+</code>`<code>bash
 <h1>Debug with QEMU and GDB</h1>
 <p>qemu-arm -g 1234 program &     # Start QEMU, wait for debugger</p>
 <p>arm-linux-gnueabi-gdb program  # Start GDB</p>
@@ -642,20 +710,21 @@
 <p>(gdb) continue                 # Run to breakpoint</p>
 <p>(gdb) step                     # Execute one instruction</p>
 <p>(gdb) info registers           # Show register values</p>
-
+</code>`<code>
 
 <strong>Objdump</strong>
 
-<p>bash</p>
+</code>`<code>bash
 <h1>Disassemble binary to assembly</h1>
 <p>arm-linux-gnueabi-objdump -d program</p>
-
+</code>`<code>
 
 <strong>nm</strong>
 
-<p>bash</p>
+</code>`<code>bash
 <h1>List symbols in object file</h1>
 <p>arm-linux-gnueabi-nm program.o</p>
+</code>`<code>
 
 
 <h2>7. Programming in ARM Assembly</h2>
@@ -664,30 +733,30 @@
 
 <strong>C Code:</strong>
 
-<p>c</p>
+</code>`<code>c
 <p>int a = 5;</p>
 <p>int b = 10;</p>
 <p>int c = a + b;</p>
-
+</code>`<code>
 
 <strong>ARM Assembly:</strong>
 
-<p>assembly</p>
+</code>`<code>assembly
 <p>MOV R0, #5       ; a = 5</p>
 <p>MOV R1, #10      ; b = 10</p>
 <p>ADD R2, R0, R1   ; c = a + b</p>
-
+</code>`<code>
 
 <strong>C Code with Array:</strong>
 
-<p>c</p>
+</code>`<code>c
 <p>int arr[3] = {1, 2, 3};</p>
 <p>int x = arr[1];</p>
-
+</code>`<code>
 
 <strong>ARM Assembly:</strong>
 
-<p>assembly</p>
+</code>`<code>assembly
 <p>.data</p>
 <p>arr:</p>
 <p>.word 1, 2, 3</p>
@@ -695,44 +764,46 @@
 <p>.text</p>
 <p>LDR R0, =arr     ; R0 = address of arr</p>
 <p>LDR R1, [R0, #4] ; R1 = arr[1] (offset 4 bytes)</p>
+</code>`<code>
 
 
 <h3>7.2 Common Patterns</h3>
 
 <strong>Clearing a Register</strong>
 
-<p>assembly</p>
+</code>`<code>assembly
 <p>MOV R0, #0           ; Method 1</p>
 <p>EOR R0, R0, R0       ; Method 2 (XOR with itself)</p>
-
+</code>`<code>
 
 <strong>Negating a Value</strong>
 
-<p>assembly</p>
+</code>`<code>assembly
 <p>RSB R0, R0, #0       ; R0 = 0 - R0</p>
 <p>MVN R0, R0           ; R0 = ~R0 (bitwise, not arithmetic)</p>
 <p>ADD R0, R0, #1       ; Then add 1 (two's complement)</p>
-
+</code>`<code>
 
 <strong>Multiplying by Powers of 2</strong>
 
-<p>assembly</p>
+</code>`<code>assembly
 <p>LSL R0, R1, #3       ; R0 = R1 × 8 (faster than MUL)</p>
-
+</code>`<code>
 
 <strong>Dividing by Powers of 2</strong>
 
-<p>assembly</p>
+</code>`<code>assembly
 <p>LSR R0, R1, #2       ; R0 = R1 / 4 (unsigned)</p>
 <p>ASR R0, R1, #2       ; R0 = R1 / 4 (signed)</p>
-
+</code>`<code>
 
 <strong>Swapping Two Registers</strong>
 
-<p>assembly</p>
+</code>`<code>assembly
 <p>EOR R0, R0, R1       ; XOR-based swap (no temporary)</p>
 <p>EOR R1, R0, R1</p>
 <p>EOR R0, R0, R1</p>
+</code>``
 
 
 <h2>Key Takeaways</h2>

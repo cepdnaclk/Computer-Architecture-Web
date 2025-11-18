@@ -51,7 +51,7 @@ This lecture introduces ARM assembly language programming, providing the foundat
 
 **Register Usage Conventions**
 <img src="../img/Chapter%202%20ARM%20Conventions.jpg" alt="Computer System Abstraction Layers" width="600">
-<!-- 
+
 R0-R3:   Argument/result registers
          - Pass parameters to functions
          - Return values from functions
@@ -76,7 +76,7 @@ R14 (LR): Link Register
 R15 (PC): Program Counter
          - Always points to next instruction
          - Modifying PC changes execution flow
- -->
+         
 
 **Why So Many Registers?**
 

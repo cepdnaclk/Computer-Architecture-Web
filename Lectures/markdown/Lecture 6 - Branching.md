@@ -41,10 +41,10 @@ Control flow is what distinguishes computers from simple calculators—the abili
 
 **Example**
 
-assembly
+```assembly
 CMP R1, R2           ; Compare R1 and R2 (computes R1 - R2)
                       ; Sets flags based on result
-
+```
 
 If R1 = 5, R2 = 3:
 
@@ -60,10 +60,10 @@ If R1 = 5, R2 = 3:
 
 **Syntax**
 
-assembly
+```assembly
 CMP Rn, Rm           ; Compare Rn with Rm
 CMP Rn, #imm         ; Compare Rn with immediate
-
+```
 
 **Operation**
 
@@ -74,22 +74,22 @@ CMP Rn, #imm         ; Compare Rn with immediate
 
 **Example Usage**
 
-assembly
+```assembly
 MOV R1, #10
 MOV R2, #5
 CMP R1, R2           ; Compares 10 with 5
                       ; Result: 10 - 5 = 5 (positive, non-zero)
                       ; Z = 0, N = 0
-
+```
 
 ### 2.2 Compare Negative (CMN)
 
 **Syntax**
 
-assembly
+```assembly
 CMN Rn, Rm           ; Compare Negative
 CMN Rn, #imm
-
+```
 
 **Operation**
 
@@ -102,10 +102,10 @@ CMN Rn, #imm
 
 **Syntax**
 
-assembly
+```assembly
 TST Rn, Rm           ; Test bits
 TST Rn, #imm
-
+```
 
 **Operation**
 
@@ -116,19 +116,19 @@ TST Rn, #imm
 
 **Example: Check if bit 5 is set**
 
-assembly
+```assembly
 TST R1, #0x20        ; Test bit 5
 BEQ bit_clear        ; Branch if bit was clear (Z=1)
-
+```
 
 ### 2.4 Test Equivalence (TEQ)
 
 **Syntax**
 
-assembly
+```assembly
 TEQ Rn, Rm           ; Test Equivalence
 TEQ Rn, #imm
-
+```
 
 **Operation**
 
@@ -143,9 +143,9 @@ TEQ Rn, #imm
 
 **Syntax**
 
-assembly
+```assembly
 BEQ label            ; Branch if equal (Z=1)
-
+```
 
 **Condition**
 
@@ -154,21 +154,21 @@ BEQ label            ; Branch if equal (Z=1)
 
 **Example**
 
-assembly
+```assembly
 CMP R1, R2           ; Compare R1 and R2
 BEQ equal_label      ; Jump to equal_label if R1 == R2
 ; Code if not equal
 equal_label:
 ; Code if equal
-
+```
 
 ### 3.2 Branch if Not Equal (BNE)
 
 **Syntax**
 
-assembly
+```assembly
 BNE label            ; Branch if not equal (Z=0)
-
+```
 
 **Condition**
 
@@ -177,89 +177,89 @@ BNE label            ; Branch if not equal (Z=0)
 
 **Example**
 
-assembly
+```assembly
 CMP R3, #0
 BNE not_zero         ; Jump if R3 != 0
 ; Code if R3 is zero
 not_zero:
 ; Code if R3 is non-zero
-
+```
 
 ### 3.3 Signed Comparison Branches
 
 **Branch if Greater or Equal (BGE)**
 
-assembly
+```assembly
 BGE label            ; Branch if Rn >= Rm (signed)
                       ; Condition: N == V
-
+```
 
 **Branch if Less Than (BLT)**
 
-assembly
+```assembly
 BLT label            ; Branch if Rn < Rm (signed)
                       ; Condition: N != V
-
+```
 
 **Branch if Greater Than (BGT)**
 
-assembly
+```assembly
 BGT label            ; Branch if Rn > Rm (signed)
                       ; Condition: Z==0 AND N==V
-
+```
 
 **Branch if Less or Equal (BLE)**
 
-assembly
+```assembly
 BLE label            ; Branch if Rn <= Rm (signed)
                       ; Condition: Z==1 OR N!=V
-
+```
 
 **Example**
 
-assembly
+```assembly
 CMP R1, R2
 BGE greater_equal    ; Branch if R1 >= R2 (signed)
 ; Code if R1 < R2
 greater_equal:
 ; Code if R1 >= R2
-
+```
 
 ### 3.4 Unsigned Comparison Branches
 
 **Branch if Higher or Same (BHS)** (also called BCS - Branch if Carry Set)
 
-assembly
+```assembly
 BHS label            ; Branch if Rn >= Rm (unsigned)
                       ; Condition: C == 1
-
+```
 
 **Branch if Lower (BLO)** (also called BCC - Branch if Carry Clear)
 
-assembly
+```assembly
 BLO label            ; Branch if Rn < Rm (unsigned)
                       ; Condition: C == 0
-
+```
 
 **Branch if Higher (BHI)**
 
-assembly
+```assembly
 BHI label            ; Branch if Rn > Rm (unsigned)
                       ; Condition: C==1 AND Z==0
-
+```
 
 **Branch if Lower or Same (BLS)**
 
-assembly
+```assembly
 BLS label            ; Branch if Rn <= Rm (unsigned)
                       ; Condition: C==0 OR Z==1
-
+```
 
 ### 3.5 Signed vs. Unsigned Example
 
 **Key Difference**
 
-assembly
+```assembly
 MOV R0, #0xFFFFFFFF  ; R0 = -1 (signed) or 4,294,967,295 (unsigned)
 MOV R1, #1           ; R1 = 1
 CMP R0, R1
@@ -269,7 +269,7 @@ BLO lower_unsigned   ; BRANCH NOT TAKEN
 
 BLT less_signed      ; BRANCH TAKEN
                       ; Signed: -1 < 1
-
+```
 
 **When to Use Each**
 
@@ -280,9 +280,9 @@ BLT less_signed      ; BRANCH TAKEN
 
 **Syntax**
 
-assembly
+```assembly
 B label              ; Branch always
-
+```
 
 **Purpose**
 
@@ -293,12 +293,12 @@ B label              ; Branch always
 
 **Example**
 
-assembly
+```assembly
 B end                ; Skip this section
 ; Code to skip
 end:
 ; Continue execution here
-
+```
 
 ## 4. Labels in Assembly
 
@@ -312,10 +312,10 @@ end:
 
 **Syntax**
 
-assembly
+```assembly
 label:               ; Label definition (note colon)
     MOV R0, #1      ; Instruction at this label
-
+```
 
 **Naming Rules**
 
@@ -326,7 +326,7 @@ label:               ; Label definition (note colon)
 
 **Example**
 
-assembly
+```assembly
 start:
     MOV R0, #0
 loop:
@@ -334,7 +334,7 @@ loop:
     CMP R0, #10
     BLT loop         ; Branch to loop label
     B start          ; Branch to start label
-
+```
 
 ### 4.2 Label Resolution
 
@@ -358,56 +358,59 @@ loop:
 
 **C Code**
 
-c
+```c
 if (i == j)
     f = g + h;
 else
     f = g - h;
-
+```
 
 **ARM Assembly (Method 1: Branch on False)**
 
-assembly
+```assembly
     CMP R3, R4       ; Compare i (R3) and j (R4)
     BNE else         ; Branch to else if not equal
     ADD R0, R1, R2   ; f = g + h (then clause)
     B exit           ; Skip else clause
+
 else:
     SUB R0, R1, R2   ; f = g - h (else clause)
 exit:
     ; Continue...
-
+```
 
 **ARM Assembly (Method 2: Conditional Execution)**
 
-assembly
+```assembly
     CMP R3, R4       ; Compare i and j
     ADDEQ R0, R1, R2 ; f = g + h (executed only if equal)
     SUBNE R0, R1, R2 ; f = g - h (executed only if not equal)
+```
 
 
 ### 5.2 If-Else Ladder
 
 **C Code**
 
-c
+```c
 if (x < 0)
     result = -1;
 else if (x == 0)
     result = 0;
 else
     result = 1;
-
+```
 
 **ARM Assembly**
 
-assembly
+```assembly
     CMP R1, #0       ; Compare x with 0
     BLT negative     ; Branch if x < 0
     BEQ zero         ; Branch if x == 0
     ; x > 0
     MOV R0, #1
     B done
+
 negative:
     MOV R0, #-1
     B done
@@ -415,22 +418,22 @@ zero:
     MOV R0, #0
 done:
     ; Continue...
-
+```
 
 ### 5.3 While Loop
 
 **C Code**
 
-c
+```c
 while (i < n) {
     sum += i;
     i++;
 }
-
+```
 
 **ARM Assembly**
 
-assembly
+```assembly
 loop:
     CMP R1, R2       ; Compare i (R1) with n (R2)
     BGE end_loop     ; Exit if i >= n
@@ -439,22 +442,23 @@ loop:
     B loop           ; Branch back to loop start
 end_loop:
     ; Continue...
-
+```
 
 ### 5.4 For Loop
 
 **C Code**
 
-c
+```c
 for (i = 0; i < 10; i++) {
     sum += i;
 }
-
+```
 
 **ARM Assembly**
 
-assembly
+```assembly
     MOV R1, #0       ; i = 0 (initialization)
+
 for_loop:
     CMP R1, #10      ; Compare i with 10
     BGE end_for      ; Exit if i >= 10
@@ -463,29 +467,29 @@ for_loop:
     B for_loop       ; Branch back to loop start
 end_for:
     ; Continue...
-
+```
 
 ### 5.5 Do-While Loop
 
 **C Code**
 
-c
+```c
 do {
     sum += i;
     i++;
 } while (i < n);
-
+```
 
 **ARM Assembly**
 
-assembly
+```assembly
 do_loop:
     ADD R0, R0, R1   ; sum = sum + i (loop body first)
     ADD R1, R1, #1   ; i++
     CMP R1, R2       ; Compare i with n
     BLT do_loop      ; Branch back if i < n
     ; Continue...
-
+```
 
 **Key Difference from While**
 
@@ -498,17 +502,18 @@ do_loop:
 
 **C Code**
 
-c
+```c
 while (save[i] == k)
     i++;
-
+```
 
 **ARM Assembly**
 
-assembly
+```assembly
     ; R6 = base address of save array
     ; R3 = i (index)
     ; R5 = k (comparison value)
+
 loop:
     ADD R12, R6, R3, LSL #2  ; address = base + (i * 4)
     LDR R0, [R12, #0]        ; R0 = save[i]
@@ -518,7 +523,7 @@ loop:
     B loop                   ; Continue loop
 exit:
     ; Continue...
-
+```
 
 **Dynamic Offset Calculation**
 
@@ -530,19 +535,20 @@ exit:
 
 **C Code**
 
-c
+```c
 int sum = 0;
 for (int i = 0; i < 10; i++) {
     sum += arr[i];
 }
-
+```
 
 **ARM Assembly**
 
-assembly
+```assembly
     LDR R6, =arr     ; R6 = base address of array
     MOV R0, #0       ; sum = 0
     MOV R1, #0       ; i = 0
+
 loop:
     CMP R1, #10
     BGE done
@@ -553,7 +559,7 @@ loop:
     B loop
 done:
     ; R0 contains sum
-
+```
 
 ## 7. PC-Relative Addressing
 
@@ -649,42 +655,44 @@ At execution: PC = 0x1000 + (8 × 4) = 0x1020
 
 **Examples**
 
-assembly
+```assembly
 CMP R1, R2
 ADDEQ R0, R3, R4     ; Execute ADD only if R1 == R2
 SUBNE R0, R3, R4     ; Execute SUB only if R1 != R2
 MOVGT R5, #10        ; Execute MOV only if R1 > R2
-
+```
 
 ### 8.2 Conditional Execution Example
 
 **C Code**
 
-c
+```c
 if (a == b)
     max = a;
 else
     max = b;
-
+```
 
 **Method 1: Branching**
 
-assembly
+```assembly
     CMP R1, R2       ; Compare a and b
     BNE else
     MOV R0, R1       ; max = a
     B done
+
 else:
     MOV R0, R2       ; max = b
 done:
-
+```
 
 **Method 2: Conditional Execution**
 
-assembly
+```assembly
     CMP R1, R2       ; Compare a and b
     MOVEQ R0, R1     ; max = a (if equal)
     MOVNE R0, R2     ; max = b (if not equal)
+```
 
 
 ### 8.3 Advantages and Limitations
@@ -724,7 +732,7 @@ assembly
 
 **Example**
 
-assembly
+```assembly
 ; Basic Block 1 (entry point)
     MOV R0, #0
     MOV R1, #10
@@ -736,7 +744,7 @@ block2:
     ADD R0, R0, #1
     CMP R0, R1
     BLT block2       ; Exit point of block 2
-
+```
 
 ### 9.2 Importance in Compilation
 

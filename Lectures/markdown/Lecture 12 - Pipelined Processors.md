@@ -80,12 +80,13 @@ This lecture introduces pipelining as the primary performance enhancement techni
 
 **Sequential Processing:**
 
-
+```
 Time:  6pm    7pm    8pm    9pm    10pm   11pm   12am   1am    2am
 A:     [Wash] [Dry]  [Fold] [Pack]
 B:                            [Wash] [Dry]  [Fold] [Pack]
 C:                                                   [Wash] [Dry]  [Fold] [Pack]
 D:                                                                          [Wash] [Dry]  [Fold] [Pack]
+```
 
 
 | Metric            | Value                |
@@ -312,22 +313,23 @@ Steady State Speedup = 2n / 0.5n = 4×
 
 **Instruction Stream:** All Load Word instructions
 
-assembly
+```assembly
 LW $1, 0($10)
 LW $2, 4($10)
 LW $3, 8($10)
 LW $4, 12($10)
 ...
-
+```
 
 **Pipeline Timing Diagram:**
 
-
+```
 Time (ps):  0-200  200-400  400-600  600-800  800-1000  1000-1200
 LW $1:      IF     ID       EX       MEM      WB
 LW $2:             IF       ID       EX       MEM       WB
 LW $3:                      IF       ID       EX        MEM
 LW $4:                               IF       ID        EX
+```
 
 
 **Single-Cycle Comparison:**
@@ -337,11 +339,12 @@ LW $4:                               IF       ID        EX
 
 **Throughput Improvement:**
 
-
+```
 Non-pipelined: 1 instruction every 800 ps
 Pipelined: 1 instruction every 200 ps
 
 Speedup = 800 / 200 = 4×
+```
 
 
 **Absolute Time per Instruction:**
@@ -354,10 +357,11 @@ Speedup = 800 / 200 = 4×
 
 **Ideal Case (balanced stages):**
 
-
+```
 Time between instructions (pipelined) = Time per instruction (non-pipelined) / Number of stages
 
 Maximum Speedup = Number of Stages
+```
 
 
 **Actual Implementation:**
@@ -602,12 +606,13 @@ At 600-800 ps:
 
 **Solution: Insert Bubble**
 
-
+```
 Time:    0-200   200-400  400-600  600-800  800-1000  1000-1200
 LW $1:   IF      ID       EX       MEM      WB
 LW $2:           IF       ID       EX       [BUBBLE]  MEM
 LW $3:                    IF       ID       EX        [BUBBLE]
 LW $4:                             IF       [BUBBLE]  ID
+```
 
 
 **Bubble Characteristics:**
@@ -670,9 +675,10 @@ LW $4:                             IF       [BUBBLE]  ID
 
 **Example:**
 
-assembly
+```assembly
 ADD $s0, $t0, $t1      # $s0 = $t0 + $t1
 SUB $t2, $s0, $t3      # $t2 = $s0 - $t3 (uses $s0 from ADD)
+```
 
 
 **Problem:**
@@ -685,14 +691,14 @@ SUB $t2, $s0, $t3      # $t2 = $s0 - $t3 (uses $s0 from ADD)
 
 **Instruction Sequence:**
 
-assembly
+```assembly
 ADD $s0, $t0, $t1
 SUB $t2, $s0, $t3
-
+```
 
 **Pipeline Without Stalls:**
 
-
+```
 Time:    0-200   200-400  400-600  600-800  800-1000
 ADD:     IF      ID       EX       MEM      WB
 SUB:             IF       ID       EX       MEM
@@ -700,6 +706,7 @@ SUB:             IF       ID       EX       MEM
                     Reads $s0 here (old value!)
 
 ADD writes $s0 here ↓
+```
 
 
 **Problem Timeline:**
@@ -715,12 +722,13 @@ SUB reads $s0 at 400-600, but correct value not available until 800-1000!
 
 **Insert Two Bubbles:**
 
-
+```
 Time:    0-200   200-400  400-600  600-800  800-1000  1000-1200  1200-1400
 ADD:     IF      ID       EX       MEM      WB
 [BUBBLE]                  IF       [BUBBLE] [BUBBLE]
 [BUBBLE]                           IF       [BUBBLE]
 SUB:                                         IF        ID
+```
 
 
 **Result:**
@@ -754,12 +762,13 @@ SUB:                                         IF        ID
 
 **Forwarding Logic:**
 
-
+```
 Time:    0-200   200-400  400-600  600-800  800-1000
 ADD:     IF      ID       EX       MEM      WB
 SUB:             IF       ID       EX       MEM
                           ↑        ↑
                     Read regs   Use forwarded value!
+```
 
 
 **Implementation:**
@@ -798,10 +807,10 @@ SUB:             IF       ID       EX       MEM
 
 **Special Case:**
 
-assembly
+```assembly
 LW  $s0, 0($t0)        # Load from memory into $s0
 SUB $t2, $s0, $t3      # Use $s0 immediately
-
+```
 
 **Problem:**
 
@@ -811,23 +820,25 @@ SUB $t2, $s0, $t3      # Use $s0 immediately
 
 **Timeline:**
 
-
+```
 Time:    0-200   200-400  400-600  600-800  800-1000
 LW:      IF      ID       EX       MEM      WB
 SUB:             IF       ID       EX       MEM
                           ↑        ↑
                     Need value   Value first available here!
+```
 
 
 LW result available at 600-800, but SUB's EX at 600-800 (simultaneous!)
 
 **Unavoidable Stall:**
 
-
+```
 Time:    0-200   200-400  400-600  600-800  800-1000  1000-1200
 LW:      IF      ID       EX       MEM      WB
 [BUBBLE]                  IF       [BUBBLE] ID
 SUB:                                         IF        ID
+```
 
 
 **One stall bubble required:**
@@ -840,14 +851,15 @@ SUB:                                         IF        ID
 
 **C Code Example:**
 
-c
+```c
 a = b + e;
 c = b + f;
+```
 
 
 **Naive Assembly (Load-Use Hazards):**
 
-assembly
+```assembly
 LW   $t1, 0($t0)    # Load b into $t1
 LW   $t2, 4($t0)    # Load e into $t2
 ADD  $t3, $t1, $t2  # a = b + e ← HAZARD: uses $t2 immediately after LW
@@ -856,13 +868,14 @@ SW   $t3, 8($t0)    # Store a
 LW   $t4, 12($t0)   # Load f into $t4
 ADD  $t5, $t1, $t4  # c = b + f ← HAZARD: uses $t4 immediately after LW
 SW   $t5, 16($t0)   # Store c
+```
 
 
 **Total:** 7 instructions + 2 stalls = 9 clock cycles
 
 **Optimized Assembly (Reordered):**
 
-assembly
+```assembly
 LW   $t1, 0($t0)    # Load b into $t1
 LW   $t2, 4($t0)    # Load e into $t2
 LW   $t4, 12($t0)   # Load f into $t4 ← Moved here!
@@ -870,6 +883,7 @@ ADD  $t3, $t1, $t2  # a = b + e ← No hazard! $t2 available
 SW   $t3, 8($t0)    # Store a ← Moved here!
 ADD  $t5, $t1, $t4  # c = b + f ← No hazard! $t4 available
 SW   $t5, 16($t0)   # Store c
+```
 
 
 **Total:** 7 instructions + 0 stalls = 7 clock cycles
@@ -966,12 +980,13 @@ Two bubbles required if wait for outcome
 
 **Modified Pipeline:**
 
-
+```
 Time:    0-200   200-400  400-600
 BEQ:     IF      ID       EX
                  ↑
           Decision here!
 Next:            IF
+```
 
 
 **Benefit:**
@@ -1009,20 +1024,21 @@ Next:            IF
 
 **Example (Prediction Correct):**
 
-assembly
+```assembly
 ADD  $3, $4, $5
 BEQ  $1, $2, 14        # Actually NOT taken
 LW   $8, 0($9)         # Fetch this (prediction: not taken)
-
+```
 
 **Timeline:**
 
-
+```
 Time:    0-200   200-400  400-600  600-800
 ADD:     IF      ID       EX       MEM
 BEQ:             IF      ID       EX
 LW:                      IF       ID
                          ↑ Fetched based on prediction
+```
 
 
 At 400-600 (after BEQ's ID):
@@ -1034,22 +1050,23 @@ At 400-600 (after BEQ's ID):
 
 **Example (Prediction Incorrect):**
 
-assembly
+```assembly
 ADD  $3, $4, $5
 BEQ  $1, $2, 14        # Actually IS taken
 LW   $8, 0($9)         # Fetched (but shouldn't execute)
 ...
 target: SUB $6, $7, $8 # Should execute this instead
-
+```
 
 **Timeline:**
 
-
+```
 Time:    0-200   200-400  400-600  600-800
 ADD:     IF      ID       EX       MEM
 BEQ:             IF      ID       EX
 LW:                      IF       [DISCARD]
 SUB:                              IF
+```
 
 
 At 400-600 (after BEQ's ID):
@@ -1086,10 +1103,11 @@ At 400-600 (after BEQ's ID):
 - Usually taken
 - Example: Loops
 
-assembly
+```assembly
 loop:
     ...
     BEQ $t0, $zero, loop   # Backward branch
+```
 
 
 - Loop iterations: Branch taken many times
@@ -1101,9 +1119,10 @@ loop:
 - Usually not taken
 - Example: If statements
 
-assembly
+```assembly
     BEQ $t0, $zero, skip
     ...                      # True case
+```
 skip:
     ...                      # After if
 
@@ -1142,12 +1161,13 @@ skip:
 
 **Example:**
 
-
+```
 Loop iteration 1: Taken → Predict taken next
 Loop iteration 2: Taken → Predict taken next
 ...
 Loop iteration 100: Taken → Predict taken next
 Loop exit: Not taken → Predict not taken next (wrong for next loop!)
+```
 
 
 Problem: Wrong twice per loop (entry and exit)
@@ -1243,38 +1263,42 @@ Problem: Wrong twice per loop (entry and exit)
 
 ### Speedup Calculation
 
-
+```
 Speedup = Non-pipelined Time / Pipelined Time
 
 Ideal Speedup = Number of Pipeline Stages
 
 Actual Speedup = Number of Stages / (1 + Hazard Impact)
+```
 
 
 ### Throughput
 
-
+```
 Throughput = 1 instruction / Clock Period
 
 Throughput Improvement = Clock Period (non-pipelined) / Clock Period (pipelined)
+```
 
 
 ### Pipeline Performance
 
-
+```
 Time = (Number of Instructions + Stages - 1) × Clock Period
 
 CPI (Cycles Per Instruction) = 1 + Stall Cycles per Instruction
 
 Effective CPI = 1 + (Structural Stalls + Data Stalls + Control Stalls)
+```
 
 
 ### Branch Prediction Accuracy
 
-
+```
 Accuracy = Correct Predictions / Total Branches
 
 Stall Reduction = Accuracy × Cycles Saved per Correct Prediction
+```
 
 
 
