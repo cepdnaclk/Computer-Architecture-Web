@@ -51,6 +51,11 @@ This lecture provides comprehensive, cycle-by-cycle analysis of MIPS five-stage 
 
 ## 13.3 Five-Stage MIPS Pipeline Review
 
+<div align="center">
+  <img src="../img/Pipeline Stages.jpeg" width=600>
+  <p><em>Figure 1: Five-Stage MIPS Pipeline Architecture</em></p>
+</div>
+
 ### 13.3.1 Stage 1: Instruction Fetch (IF)
 
 **Operations:**
@@ -188,6 +193,11 @@ This lecture provides comprehensive, cycle-by-cycle analysis of MIPS five-stage 
 - Pipeline cannot function correctly
 
 ### 13.4.2 Pipeline Register Purpose
+
+<div align="center">
+  <img src="../img/Pipeline Registers.jpg" width=600>
+  <p><em>Figure 2: Pipeline Registers Between Pipeline Stages</em></p>
+</div>
 
 **Key Function:**
 

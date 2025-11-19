@@ -242,7 +242,12 @@ This lecture marks a crucial transition from CPU-centric topics to memory system
 
 ### 14.5.2 Memory Hierarchy Structure
 
+<div align="center">
+  <img src="../img/Memory Hierarchy.jpg" width=400>
+  <p><em>Figure 1: Memory Hierarchy with SRAM Cache, DRAM Main Memory, and Disk Storage</em></p>
+</div>
 
+```
 Level 1 (Top): SRAM (Cache)
 - Smallest capacity
 - Fastest speed
@@ -1217,6 +1222,11 @@ Overhead = (Tag + Valid) / Total
 - Handling context switches
 
 ## 14.15 Cache Read Access Operation
+
+<div align="center">
+  <img src="../img/Direct Mapped Read.jpg" width=600>
+  <p><em>Figure 2: Direct-Mapped Cache Read Access Process</em></p>
+</div>
 
 ### 14.15.1 Read Access Process
 
