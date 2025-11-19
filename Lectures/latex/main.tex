@@ -1,6 +1,6 @@
 % Lectures on Computer Architecture
 % Compile with pdfLaTeX
-\documentclass[11pt, a4paper]{book}
+\documentclass[11pt, a4paper, oneside]{book}
 
 % ---------- FONTS & ENCODING ----------
 \usepackage[utf8]{inputenc}
@@ -42,27 +42,23 @@
 \renewcommand{\headrulewidth}{0pt}
 \renewcommand{\footrulewidth}{0pt}
 
-% Decorative bars drawn on every page (top & bottom)
+% Decorative bars drawn on every page (full bleed to paper edge)
+% Adjusted to remove interior white margins and reach trim edges.
 \AddToShipoutPictureBG{%
   \begin{tikzpicture}[remember picture,overlay]
-    % Top thin white margin stripe above blue bar (matches sample)
-    \fill [white] (current page.north west) rectangle ([yshift=-1.1cm]current page.north east);
-    % Top blue bar (thin)
-    \fill [accentblue] ([yshift=-1.1cm]current page.north west) rectangle ([yshift=-1.45cm]current page.north east);
-    % thin dark stripe below top blue
-    \fill [black] ([yshift=-1.45cm]current page.north west) rectangle ([yshift=-1.50cm]current page.north east);
-    % Bottom thick blue bar
-    \fill [accentblue] ([yshift=1.8cm]current page.south west) rectangle ([yshift=1.2cm]current page.south east);
-    % white gap line
-    \fill [white] ([yshift=1.2cm]current page.south west) rectangle ([yshift=1.15cm]current page.south east);
-    % thin dark stripe under bottom blue
-    \fill [black] ([yshift=1.15cm]current page.south west) rectangle ([yshift=1.1cm]current page.south east);
+    % Top bar: full width flush with top edge
+    \fill [accentblue] (current page.north west) rectangle ([yshift=-0.30cm] current page.north east);
+    % Thin separator line below top bar
+    % Bottom bar enlarged (from 0.55cm to 0.90cm)
+    \fill [accentblue] (current page.south west) rectangle ([yshift=1.20cm] current page.south east);
+    % Thin separator line above enlarged bottom bar
   \end{tikzpicture}%
 }
 
 % To avoid the decorative bars covering content, push text away from top/bottom:
-\setlength{\headsep}{28pt}
-\setlength{\footskip}{48pt}
+% Reduce head/foot separation to reflect thinner bars now
+\setlength{\headsep}{20pt}
+\setlength{\footskip}{30pt}
 
 % ---------- TITLE / COVER STYLING ----------
 \usepackage{titling}
@@ -120,7 +116,8 @@
     stringstyle=\color{red!70!black}
 }
 
-% ---------- HYPERREF ----------
+% ---------- HYPERREF AND URL ----------
+\usepackage{url}
 \usepackage{hyperref}
 \hypersetup{
   colorlinks=true,
@@ -139,30 +136,190 @@
 % ----------------- COVER PAGE -----------------
 \begin{titlepage}
   \thispagestyle{empty}
-  \vspace*{2cm}
-  % "Lectures on" small blue text
-  {\Large\bfseries\color{accentblue} Lectures on\par}
-  \vspace{1.0em}
-  % Big serif title - mimic large left-aligned serif
-  {\Huge\bfseries\scshape Computer\par}
-  {\Huge\bfseries\scshape Architecture\par}
-  \vspace{2.5cm}
-  % small ornamental short blue rule
-  {\noindent\color{accentblue}\rule{1.6cm}{3pt}\par}
+  \vspace*{3cm}
+  \begin{center}
+  % Title
+  {\Huge\bfseries Lectures on\\[0.5em] Computer Architecture\par}
+  \vspace{3cm}
+  % Author
+  {\Large By Isuru Nawinne\par}
+  \end{center}
   \vfill
-  % Author line
-  {\small\textbf{Isuru Nawinne}\par}
-  {\small Faculty of Engineering - University of Peradeniya\par}
-  \vspace{2.5cm}
-  % bottom bars are already drawn by shipout picture
 \end{titlepage}
+
+% ----------------- COPYRIGHT PAGE -----------------
+\clearpage
+\thispagestyle{empty}
+\vspace*{1cm}
+
+\begin{center}
+{\Large\bfseries Lectures on Computer Architecture}\par
+\vspace{0.5cm}
+{\large By Isuru Nawinne}\par
+\end{center}
+
+\vspace{1.5cm}
+
+\noindent\textcopyright\ 2025, by Creative Commons. This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International. To view a copy of this license, visit \url{https://creativecommons.org/licenses/by-nc/4.0/} or send a letter to Creative Commons, PO Box 1866, Mountain View, CA 94042, USA. This license allows reusers to distribute, remix, adapt, and build upon the material in any medium or format, so long as attribution is given to the creator. The license allows only for non-commercial use.\par
+
+\vspace{0.8cm}
+
+\noindent\textbf{ISBN} 978-624-92913-0-0\par
+
+\vspace{0.8cm}
+
+\noindent Downloadable ebook and supplementary material available at\par
+\noindent\url{https://cepdnaclk.github.io/Computer-Architecture-Web}\par
+
+\vspace{0.8cm}
+
+\noindent\textbf{Publisher:}\par
+\noindent Dr. Isuru Nawinne,\par
+\noindent Department of Computer Engineering, Faculty of Engineering,\par
+\noindent University of Peradeniya,\par
+\noindent Peradeniya 20400,\par
+\noindent Sri Lanka.\par
+\noindent\href{mailto:isurunawinne@eng.pdn.ac.lk}{isurunawinne@eng.pdn.ac.lk} \url{https://people.ce.pdn.ac.lk/staff/academic/isuru-nawinne/}\par
 
 \cleardoublepage
 \pagestyle{fancy}
 
+% Set page numbering for front matter
+\pagenumbering{arabic}
+
 % ----------------- FRONT MATTER -----------------
 \tableofcontents
 \clearpage
+
+% ----------------- PREFACE -----------------
+\section*{Preface}
+\addcontentsline{toc}{section}{Preface}
+
+Computer architecture sits at the heart of modern computing. It is the discipline that reveals how machines execute instructions, manage data, and achieve programmability—bridging the conceptual world of algorithms and the physical realities of hardware. Over many years of teaching this subject to undergraduate students, I have found that curiosity grows not only from understanding what computers do, but from discovering how they do it and why they're designed that way.\par
+
+\vspace{0.5cm}
+
+This book, \emph{Lectures on Computer Architecture}, is built upon the lecture series delivered to undergraduate cohorts. Each section distills core ideas, clarifies subtle concepts, and connects theory to the practical systems. The video lectures grew from classroom sessions, refined through questions, discussions, and repeated teaching experience. The accompanying notes are designed to complement the videos rather than duplicate it, offering multiple modalities through which students can explore the subject.\par
+
+\vspace{0.5cm}
+
+My goal is to provide a learning resource that is rigorous yet approachable, structured yet flexible, and suitable for both guided instruction and independent study. Whether used as a primary course text, or a guide for self-study, I hope this book supports students in creating a solid cognitive model of how computers are built.\par
+
+\vspace{0.5cm}
+
+I am grateful to all my students over the years whose questions and feedback helped refine these explanations, and to everyone who encouraged the development of a resource that unifies both lecture and text. It is my hope that this book helps you to see computer architecture not merely as a subject to be completed, but as a foundation for understanding the modern machines that shape our world.\par
+
+\vspace{0.5cm}
+
+I would like to convey my sincere appreciation to Dr. Kisaru Liyanage and Dr. Swarnalatha Radhakrishnan for their valuable contributions in delivering selected lectures. My profound thanks go to Kanishka Gunawardana and Sanka Peeris, for helping me edit this book and setting up the interactive web version. Their careful attention to detail, thoughtful feedback, and commitment to ensuring the clarity and accuracy have contributed greatly to the quality and reliability of this work.\par
+
+\vspace{1cm}
+
+\noindent Isuru Nawinne\par
+\noindent Senior Lecturer in Computer Engineering\par
+
+\clearpage
+
+% ----------------- LEARNING METHODS -----------------
+\section*{Learning Methods}
+\addcontentsline{toc}{section}{Learning Methods}
+
+This book is designed to support active, independent, and flexible learning, aligning closely with flipped learning and self-directed study practices.\par
+
+\vspace{0.5cm}
+
+The flipped-learning approach encourages students to engage with key concepts before coming to class or attempting exercises. Each section in this book includes a corresponding video lecture that introduces the fundamental ideas, explains core mechanisms, and walks through examples. Watching the video beforehand allows learners to arrive at discussions or problem-solving sessions better prepared, able to ask informed questions, and ready to dive deeper.\par
+
+\vspace{0.5cm}
+
+Flipped-learning transforms the role of classroom or study time: instead of passively receiving information, students actively seek and apply it. With multiple modalities of the videos as the initial exposure and the book as a reference and reinforcement tool, learners can use their interactive time: whether in discussions; tutorials; labs; or group study; to focus on reasoning, analysis, and synthesis.\par
+
+\vspace{0.5cm}
+
+Computer architecture is a subject that rewards curiosity and exploration. To support self-directed learning, each chapter is structured so students can progress at their own pace. The notes are carefully layered. They begin with foundational principles and incrementally build toward more advanced ideas.\par
+
+\vspace{0.5cm}
+
+Students are encouraged to:\par
+
+\vspace{0.3cm}
+
+\begin{itemize}
+\item Watch the video lectures as many times as needed to internalize concepts;
+\item Revisit diagrams and derivations to strengthen visual and mathematical intuition;
+\item Use end-of-section summaries and conceptual checkpoints to evaluate their understanding; and
+\item Make connections between topics—for example, how pipelining interacts with branching, or how memory hierarchy influences performance.
+\end{itemize}
+
+\vspace{0.5cm}
+
+This style of learning builds autonomy, critical thinking, and long-term retention—key skills for an engineer.\par
+
+\clearpage
+
+% ----------------- INTRODUCTION -----------------
+\section*{Introduction}
+\addcontentsline{toc}{section}{Introduction}
+
+This book follows a gradual progression from fundamental concepts to advanced architectural mechanisms, mirroring the structure of the lecture series. The material is organized into twenty sections, each corresponding to a major topic typically covered in an undergraduate computer architecture course.\par
+
+\vspace{0.5cm}
+
+\noindent\textbf{How the Book Is Organized}\par
+
+\vspace{0.3cm}
+
+The first set of chapters: Computer Abstractions, Technology Trends, and Performance establish the context and quantitative foundation needed to reason about architectural decisions. These are followed by chapters on Assembly Language Programming, Number Representation, Branching, Function Calls, and Memory Access which build the low-level understanding of how instructions operate.\par
+
+\vspace{0.5cm}
+
+Midway through the book, the focus shifts to the execution engine itself: Microarchitecture, Datapath, Control, and the progression from Single-Cycle Execution to Pipelined Processors. The chapters such as Pipeline Analysis help students understand real-world engineering challenges.\par
+
+\vspace{0.5cm}
+
+The later sections explore the memory subsystem in depth: Memory Hierarchy, Caching, Direct Mapped and Associative Cache Control, Multi-Level Caches, and Virtual Memory, before extending the architectural view to Multiprocessors, Storage, and Interfacing.\par
+
+\vspace{0.5cm}
+
+Each chapter includes:\par
+
+\vspace{0.3cm}
+
+\begin{itemize}
+\item A complete video lecture that introduces and explains concepts
+\item Written notes highlighting definitions, diagrams, examples, and reasoning steps
+\item Clarifications of common misconceptions
+\item Connections to earlier and later material
+\item Guidance on how the topic relates to real processors and modern systems
+\end{itemize}
+
+\vspace{0.5cm}
+
+\noindent\textbf{How to Use the Videos and Notes}\par
+
+\vspace{0.3cm}
+
+The recommended learning sequence is:\par
+
+\vspace{0.3cm}
+
+\begin{enumerate}
+\item Start with the video lecture to gain an intuitive, big-picture understanding.
+\item Read the notes from the corresponding chapter to clarify details, solidify concepts, and explore more formal explanations.
+\item Revisit the video or specific parts of the chapter if some ideas feel unclear—the two formats reinforce each other.
+\item Use diagrams and worked examples as anchors for your understanding; architecture is highly visual and spatial.
+\item Progress through sections sequentially, as many topics build directly on earlier ones.
+\end{enumerate}
+
+\vspace{0.5cm}
+
+For review, you may find it helpful to skim chapter summaries and rewatch short segments of the videos rather than re-reading entire chapters.\par
+
+\clearpage
+
+% Update section command to format lecture titles in blue
+\let\oldsection\section
+\renewcommand{\section}[1]{{\color{accentblue}\oldsection{#1}}}
 
 % ----------------- MAIN CONTENT -----------------
 \chapter{Fundamentals}
@@ -171,7 +328,7 @@
 \input{lecture-01}
 
 % % Lecture 2: Technology Trends
-% \input{lecture-02}
+\input{lecture-02}
 
 % % Lecture 3: Understanding Performance
 % \input{lecture-03}

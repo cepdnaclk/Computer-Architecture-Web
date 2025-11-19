@@ -13,6 +13,8 @@ INPUT E:\Software\MikTex\tex\latex\base\inputenc.sty
 INPUT E:\Software\MikTex\tex\latex\base\fontenc.sty
 INPUT E:\Software\MikTex\tex\latex\base\fontenc.sty
 INPUT E:\Software\MikTex\fonts\tfm\jknappen\ec\ecrm1095.tfm
+INPUT E:\Software\MikTex\tex\latex\lm\lmodern.sty
+INPUT E:\Software\MikTex\tex\latex\lm\lmodern.sty
 INPUT E:\Software\MikTex\tex\latex\geometry\geometry.sty
 INPUT E:\Software\MikTex\tex\latex\geometry\geometry.sty
 INPUT E:\Software\MikTex\tex\latex\graphics\keyval.sty
@@ -181,6 +183,8 @@ INPUT E:\Software\MikTex\tex\latex\titlesec\titlesec.sty
 INPUT E:\Software\MikTex\tex\latex\titlesec\titlesec.sty
 INPUT E:\Software\MikTex\tex\latex\tocloft\tocloft.sty
 INPUT E:\Software\MikTex\tex\latex\tocloft\tocloft.sty
+INPUT E:\Software\MikTex\tex\latex\url\url.sty
+INPUT E:\Software\MikTex\tex\latex\url\url.sty
 INPUT E:\Software\MikTex\tex\latex\hyperref\hyperref.sty
 INPUT E:\Software\MikTex\tex\latex\hyperref\hyperref.sty
 INPUT E:\Software\MikTex\tex\latex\kvsetkeys\kvsetkeys.sty
@@ -217,8 +221,6 @@ INPUT E:\Software\MikTex\tex\generic\intcalc\intcalc.sty
 INPUT E:\Software\MikTex\tex\latex\hyperref\puenc.def
 INPUT E:\Software\MikTex\tex\latex\hyperref\puenc.def
 INPUT E:\Software\MikTex\tex\latex\hyperref\puenc.def
-INPUT E:\Software\MikTex\tex\latex\url\url.sty
-INPUT E:\Software\MikTex\tex\latex\url\url.sty
 INPUT E:\Software\MikTex\tex\generic\bitset\bitset.sty
 INPUT E:\Software\MikTex\tex\generic\bitset\bitset.sty
 INPUT E:\Software\MikTex\tex\generic\bigintcalc\bigintcalc.sty
@@ -230,6 +232,10 @@ INPUT E:\Software\MikTex\tex\latex\rerunfilecheck\rerunfilecheck.sty
 INPUT E:\Software\MikTex\tex\latex\rerunfilecheck\rerunfilecheck.sty
 INPUT E:\Software\MikTex\tex\generic\uniquecounter\uniquecounter.sty
 INPUT E:\Software\MikTex\tex\generic\uniquecounter\uniquecounter.sty
+INPUT E:\Software\MikTex\tex\latex\lm\t1lmr.fd
+INPUT E:\Software\MikTex\tex\latex\lm\t1lmr.fd
+INPUT E:\Software\MikTex\tex\latex\lm\t1lmr.fd
+INPUT E:\Software\MikTex\fonts\tfm\public\lm\ec-lmr10.tfm
 INPUT E:\Software\MikTex\tex\latex\l3backend\l3backend-pdftex.def
 INPUT E:\Software\MikTex\tex\latex\l3backend\l3backend-pdftex.def
 INPUT .\main.aux
@@ -245,38 +251,45 @@ INPUT E:\Software\MikTex\tex\latex\00miktex\epstopdf-sys.cfg
 INPUT E:\Software\MikTex\tex\latex\00miktex\epstopdf-sys.cfg
 INPUT E:\Software\MikTex\tex\latex\00miktex\epstopdf-sys.cfg
 INPUT E:\Software\MikTex\tex\latex\graphics\color.sty
-INPUT .\main.out
-INPUT .\main.out
-INPUT main.out
-INPUT main.out
-OUTPUT main.pdf
-INPUT .\main.out
-INPUT .\main.out
 OUTPUT main.out
-INPUT E:\Software\MikTex\fonts\tfm\jknappen\ec\ecrm1440.tfm
-INPUT E:\Software\MikTex\fonts\tfm\jknappen\ec\ecbx1440.tfm
-INPUT E:\Software\MikTex\fonts\tfm\jknappen\ec\ecrm2488.tfm
-INPUT E:\Software\MikTex\fonts\tfm\jknappen\ec\ecbx2488.tfm
-INPUT E:\Software\MikTex\fonts\tfm\jknappen\ec\ecxc2488.tfm
-INPUT E:\Software\MikTex\fonts\tfm\jknappen\ec\ecrm1000.tfm
-INPUT E:\Software\MikTex\fonts\tfm\jknappen\ec\ecbx1000.tfm
+OUTPUT main.pdf
+INPUT E:\Software\MikTex\fonts\tfm\public\lm\ec-lmr17.tfm
+INPUT E:\Software\MikTex\fonts\tfm\public\lm\ec-lmbx12.tfm
+INPUT E:\Software\MikTex\fonts\tfm\public\lm\ec-lmr12.tfm
 INPUT C:\Users\kanis\AppData\Local\MiKTeX\fonts\map\pdftex\pdftex.map
-INPUT E:\Software\MikTex\fonts\tfm\jknappen\ec\ecrm0900.tfm
-INPUT .\main.toc
-INPUT .\main.toc
-INPUT main.toc
-INPUT E:\Software\MikTex\fonts\tfm\jknappen\ec\ecbx1095.tfm
-INPUT E:\Software\MikTex\fonts\tfm\public\cm\cmr8.tfm
-INPUT E:\Software\MikTex\fonts\tfm\public\cm\cmr6.tfm
-INPUT E:\Software\MikTex\fonts\tfm\public\cm\cmmi10.tfm
-INPUT E:\Software\MikTex\fonts\tfm\public\cm\cmmi8.tfm
-INPUT E:\Software\MikTex\fonts\tfm\public\cm\cmmi6.tfm
-INPUT E:\Software\MikTex\fonts\tfm\public\cm\cmsy10.tfm
-INPUT E:\Software\MikTex\fonts\tfm\public\cm\cmsy8.tfm
-INPUT E:\Software\MikTex\fonts\tfm\public\cm\cmsy6.tfm
-INPUT E:\Software\MikTex\fonts\tfm\public\cm\cmex10.tfm
-INPUT E:\Software\MikTex\fonts\tfm\public\amsfonts\cmextra\cmex8.tfm
-INPUT E:\Software\MikTex\fonts\tfm\public\amsfonts\cmextra\cmex7.tfm
+INPUT E:\Software\MikTex\fonts\enc\dvips\lm\lm-ec.enc
+INPUT E:\Software\MikTex\fonts\tfm\public\lm\ec-lmbx12.tfm
+INPUT E:\Software\MikTex\fonts\tfm\public\lm\ec-lmr12.tfm
+INPUT E:\Software\MikTex\tex\latex\lm\ts1lmr.fd
+INPUT E:\Software\MikTex\tex\latex\lm\ts1lmr.fd
+INPUT E:\Software\MikTex\tex\latex\lm\ts1lmr.fd
+INPUT E:\Software\MikTex\fonts\tfm\public\lm\ts1-lmr10.tfm
+INPUT E:\Software\MikTex\tex\latex\lm\t1lmtt.fd
+INPUT E:\Software\MikTex\tex\latex\lm\t1lmtt.fd
+INPUT E:\Software\MikTex\tex\latex\lm\t1lmtt.fd
+INPUT E:\Software\MikTex\fonts\tfm\public\lm\ec-lmtt10.tfm
+INPUT E:\Software\MikTex\tex\latex\lm\ot1lmr.fd
+INPUT E:\Software\MikTex\tex\latex\lm\ot1lmr.fd
+INPUT E:\Software\MikTex\tex\latex\lm\ot1lmr.fd
+INPUT E:\Software\MikTex\fonts\tfm\public\lm\rm-lmr10.tfm
+INPUT E:\Software\MikTex\fonts\tfm\public\lm\rm-lmr8.tfm
+INPUT E:\Software\MikTex\fonts\tfm\public\lm\rm-lmr6.tfm
+INPUT E:\Software\MikTex\tex\latex\lm\omllmm.fd
+INPUT E:\Software\MikTex\tex\latex\lm\omllmm.fd
+INPUT E:\Software\MikTex\tex\latex\lm\omllmm.fd
+INPUT E:\Software\MikTex\fonts\tfm\public\lm\lmmi10.tfm
+INPUT E:\Software\MikTex\fonts\tfm\public\lm\lmmi8.tfm
+INPUT E:\Software\MikTex\fonts\tfm\public\lm\lmmi6.tfm
+INPUT E:\Software\MikTex\tex\latex\lm\omslmsy.fd
+INPUT E:\Software\MikTex\tex\latex\lm\omslmsy.fd
+INPUT E:\Software\MikTex\tex\latex\lm\omslmsy.fd
+INPUT E:\Software\MikTex\fonts\tfm\public\lm\lmsy10.tfm
+INPUT E:\Software\MikTex\fonts\tfm\public\lm\lmsy8.tfm
+INPUT E:\Software\MikTex\fonts\tfm\public\lm\lmsy6.tfm
+INPUT E:\Software\MikTex\tex\latex\lm\omxlmex.fd
+INPUT E:\Software\MikTex\tex\latex\lm\omxlmex.fd
+INPUT E:\Software\MikTex\tex\latex\lm\omxlmex.fd
+INPUT E:\Software\MikTex\fonts\tfm\public\lm\lmex10.tfm
 INPUT E:\Software\MikTex\tex\latex\amsfonts\umsa.fd
 INPUT E:\Software\MikTex\tex\latex\amsfonts\umsa.fd
 INPUT E:\Software\MikTex\tex\latex\amsfonts\umsa.fd
@@ -289,58 +302,84 @@ INPUT E:\Software\MikTex\tex\latex\amsfonts\umsb.fd
 INPUT E:\Software\MikTex\fonts\tfm\public\amsfonts\symbols\msbm10.tfm
 INPUT E:\Software\MikTex\fonts\tfm\public\amsfonts\symbols\msbm10.tfm
 INPUT E:\Software\MikTex\fonts\tfm\public\amsfonts\symbols\msbm7.tfm
-INPUT E:\Software\MikTex\fonts\tfm\jknappen\ec\ecss1095.tfm
-INPUT E:\Software\MikTex\fonts\tfm\jknappen\ec\ecss1000.tfm
+INPUT E:\Software\MikTex\fonts\tfm\public\lm\ec-lmbx10.tfm
+INPUT E:\Software\MikTex\fonts\enc\dvips\lm\lm-ts1.enc
 OUTPUT main.toc
+INPUT E:\Software\MikTex\tex\latex\lm\t1lmss.fd
+INPUT E:\Software\MikTex\tex\latex\lm\t1lmss.fd
+INPUT E:\Software\MikTex\tex\latex\lm\t1lmss.fd
+INPUT E:\Software\MikTex\fonts\tfm\public\lm\ec-lmssbx10.tfm
+INPUT E:\Software\MikTex\fonts\tfm\public\lm\ec-lmri10.tfm
+INPUT E:\Software\MikTex\fonts\tfm\public\lm\ec-lmr9.tfm
+INPUT E:\Software\MikTex\fonts\tfm\public\lm\ec-lmssbx10.tfm
 INPUT .\lecture-01.tex
 INPUT .\lecture-01.tex
 INPUT .\lecture-01.tex
 INPUT .\lecture-01.tex
 INPUT lecture-01.tex
-INPUT E:\Software\MikTex\fonts\tfm\jknappen\ec\ecsx1440.tfm
-INPUT E:\Software\MikTex\fonts\tfm\jknappen\ec\ecti1095.tfm
-INPUT E:\Software\MikTex\fonts\tfm\jknappen\ec\ecrm1200.tfm
-INPUT E:\Software\MikTex\fonts\tfm\jknappen\ec\ecbx1200.tfm
-INPUT E:\Software\MikTex\fonts\tfm\jknappen\ec\ecsx1200.tfm
-INPUT E:\Software\MikTex\fonts\tfm\jknappen\ec\ecsx1095.tfm
-INPUT ..\img\Chapter 1 Computer Abstractions and Technology.jpg
-INPUT ..\img\Chapter 1 Computer Abstractions and Technology.jpg
-INPUT ..\img\Chapter 1 Computer Abstractions and Technology.jpg
-INPUT ..\img\Chapter 1 Computer Abstractions and Technology.jpg
-INPUT ..\img\Chapter 1 Computer Abstractions and Technology.jpg
-INPUT ..\img\Chapter 1 Computer Abstractions and Technology.jpg
-INPUT ..\img\Chapter 1 Computer Abstractions and Technology.jpg
-INPUT E:\Software\MikTex\fonts\tfm\jknappen\ec\tcrm1095.tfm
+INPUT E:\Software\MikTex\fonts\tfm\public\lm\ec-lmbx12.tfm
+INPUT E:\Software\MikTex\fonts\tfm\public\lm\ec-lmssbx10.tfm
+INPUT E:\Software\MikTex\fonts\tfm\public\lm\ec-lmssbx10.tfm
+INPUT .\img\Chapter 1 Computer Abstractions and Technology.jpg
+INPUT .\img\Chapter 1 Computer Abstractions and Technology.jpg
+INPUT .\img\Chapter 1 Computer Abstractions and Technology.jpg
+INPUT .\img\Chapter 1 Computer Abstractions and Technology.jpg
+INPUT .\img\Chapter 1 Computer Abstractions and Technology.jpg
+INPUT .\img\Chapter 1 Computer Abstractions and Technology.jpg
+INPUT .\img\Chapter 1 Computer Abstractions and Technology.jpg
+INPUT E:\Software\MikTex\fonts\enc\dvips\lm\lm-mathsy.enc
+INPUT .\lecture-02.tex
+INPUT .\lecture-02.tex
+INPUT .\lecture-02.tex
+INPUT .\lecture-02.tex
+INPUT lecture-02.tex
+INPUT .\img\Chapter 1 Moore's Law.jpg
+INPUT .\img\Chapter 1 Moore's Law.jpg
+INPUT .\img\Chapter 1 Moore's Law.jpg
+INPUT .\img\Chapter 1 Moore's Law.jpg
+INPUT .\img\Chapter 1 Moore's Law.jpg
+INPUT .\img\Chapter 1 Moore's Law.jpg
+INPUT .\img\Chapter 1 Moore's Law.jpg
+INPUT .\img\Chapter 1 Power Wall.jpg
+INPUT .\img\Chapter 1 Power Wall.jpg
+INPUT .\img\Chapter 1 Power Wall.jpg
+INPUT .\img\Chapter 1 Power Wall.jpg
+INPUT .\img\Chapter 1 Power Wall.jpg
+INPUT .\img\Chapter 1 Power Wall.jpg
+INPUT .\img\Chapter 1 Power Wall.jpg
+INPUT E:\Software\MikTex\fonts\tfm\public\lm\ec-lmr8.tfm
+INPUT E:\Software\MikTex\fonts\tfm\public\lm\ec-lmr6.tfm
+INPUT E:\Software\MikTex\fonts\enc\dvips\lm\lm-mathit.enc
+INPUT E:\Software\MikTex\fonts\enc\dvips\lm\lm-rm.enc
+INPUT .\img\Chapter 1 AMD Barcelona.jpg
+INPUT .\img\Chapter 1 AMD Barcelona.jpg
+INPUT .\img\Chapter 1 AMD Barcelona.jpg
+INPUT .\img\Chapter 1 AMD Barcelona.jpg
+INPUT .\img\Chapter 1 AMD Barcelona.jpg
+INPUT .\img\Chapter 1 AMD Barcelona.jpg
+INPUT .\img\Chapter 1 AMD Barcelona.jpg
 INPUT main.aux
 INPUT .\main.out
 INPUT .\main.out
-INPUT C:\Users\kanis\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\tcrm1095.pk
-INPUT C:\Users\kanis\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\tcrm1095.pk
-INPUT C:\Users\kanis\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\ecsx1095.pk
-INPUT C:\Users\kanis\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\ecsx1095.pk
-INPUT C:\Users\kanis\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\ecsx1200.pk
-INPUT C:\Users\kanis\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\ecsx1200.pk
-INPUT C:\Users\kanis\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\ecti1095.pk
-INPUT C:\Users\kanis\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\ecti1095.pk
-INPUT C:\Users\kanis\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\ecsx1440.pk
-INPUT C:\Users\kanis\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\ecsx1440.pk
-INPUT C:\Users\kanis\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\ecbx2488.pk
-INPUT C:\Users\kanis\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\ecbx2488.pk
-INPUT C:\Users\kanis\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\ecrm1095.pk
-INPUT C:\Users\kanis\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\ecrm1095.pk
-INPUT C:\Users\kanis\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\ecss1000.pk
-INPUT C:\Users\kanis\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\ecss1000.pk
-INPUT C:\Users\kanis\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\ecbx1095.pk
-INPUT C:\Users\kanis\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\ecbx1095.pk
-INPUT C:\Users\kanis\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\ecrm0900.pk
-INPUT C:\Users\kanis\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\ecrm0900.pk
-INPUT C:\Users\kanis\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\ecrm1000.pk
-INPUT C:\Users\kanis\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\ecrm1000.pk
-INPUT C:\Users\kanis\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\ecbx1000.pk
-INPUT C:\Users\kanis\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\ecbx1000.pk
-INPUT C:\Users\kanis\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\ecxc2488.pk
-INPUT C:\Users\kanis\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\ecxc2488.pk
-INPUT C:\Users\kanis\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\ecbx1440.pk
-INPUT C:\Users\kanis\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\ecbx1440.pk
-INPUT E:\Software\MikTex\fonts\type1\public\amsfonts\cm\cmsy10.pfb
-INPUT E:\Software\MikTex\fonts\type1\public\amsfonts\cm\cmsy10.pfb
+INPUT E:\Software\MikTex\fonts\type1\public\lm\lmbx10.pfb
+INPUT E:\Software\MikTex\fonts\type1\public\lm\lmbx10.pfb
+INPUT E:\Software\MikTex\fonts\type1\public\lm\lmbx12.pfb
+INPUT E:\Software\MikTex\fonts\type1\public\lm\lmbx12.pfb
+INPUT E:\Software\MikTex\fonts\type1\public\lm\lmmi10.pfb
+INPUT E:\Software\MikTex\fonts\type1\public\lm\lmmi10.pfb
+INPUT E:\Software\MikTex\fonts\type1\public\lm\lmr10.pfb
+INPUT E:\Software\MikTex\fonts\type1\public\lm\lmr10.pfb
+INPUT E:\Software\MikTex\fonts\type1\public\lm\lmr12.pfb
+INPUT E:\Software\MikTex\fonts\type1\public\lm\lmr12.pfb
+INPUT E:\Software\MikTex\fonts\type1\public\lm\lmr8.pfb
+INPUT E:\Software\MikTex\fonts\type1\public\lm\lmr8.pfb
+INPUT E:\Software\MikTex\fonts\type1\public\lm\lmr9.pfb
+INPUT E:\Software\MikTex\fonts\type1\public\lm\lmr9.pfb
+INPUT E:\Software\MikTex\fonts\type1\public\lm\lmri10.pfb
+INPUT E:\Software\MikTex\fonts\type1\public\lm\lmri10.pfb
+INPUT E:\Software\MikTex\fonts\type1\public\lm\lmssbx10.pfb
+INPUT E:\Software\MikTex\fonts\type1\public\lm\lmssbx10.pfb
+INPUT E:\Software\MikTex\fonts\type1\public\lm\lmsy10.pfb
+INPUT E:\Software\MikTex\fonts\type1\public\lm\lmsy10.pfb
+INPUT E:\Software\MikTex\fonts\type1\public\lm\lmtt10.pfb
+INPUT E:\Software\MikTex\fonts\type1\public\lm\lmtt10.pfb
