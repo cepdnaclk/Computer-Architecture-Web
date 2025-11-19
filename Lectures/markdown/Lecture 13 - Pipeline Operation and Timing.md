@@ -1,4 +1,4 @@
-# Lecture 13: Detailed MIPS Pipeline Operation and Pipeline Registers
+# Lecture 13: Pipeline Analysis
 
 *By Dr. Isuru Nawinne*
 
@@ -50,6 +50,11 @@ This lecture provides comprehensive, cycle-by-cycle analysis of MIPS five-stage 
 
 
 ## 13.3 Five-Stage MIPS Pipeline Review
+
+<div align="center">
+  <img src="../img/Pipeline Stages.jpeg" width=600>
+  <p><em>Figure 1: Five-Stage MIPS Pipeline Architecture</em></p>
+</div>
 
 ### 13.3.1 Stage 1: Instruction Fetch (IF)
 
@@ -171,7 +176,7 @@ This lecture provides comprehensive, cycle-by-cycle analysis of MIPS five-stage 
 
 - Multiple instructions in different stages
 - All sharing same hardware components
-- Data from different instructions 混淆
+- Data from different instructions
 
 **Example Issues:**
 
@@ -188,6 +193,11 @@ This lecture provides comprehensive, cycle-by-cycle analysis of MIPS five-stage 
 - Pipeline cannot function correctly
 
 ### 13.4.2 Pipeline Register Purpose
+
+<div align="center">
+  <img src="../img/Pipeline Registers.jpg" width=600>
+  <p><em>Figure 2: Pipeline Registers Between Pipeline Stages</em></p>
+</div>
 
 **Key Function:**
 
@@ -624,7 +634,7 @@ Offset: 16-bit immediate (bits 0-15)
 
 **Example:**
 
-
+```
 Cycle 1: LW $8, 0($10) fetched  (IF)
 Cycle 2: LW $9, 4($10) fetched  (IF), LW $8 in ID
 Cycle 3: LW $10, 8($10) fetched (IF), LW $8 in EX
@@ -636,7 +646,7 @@ At Cycle 5:
 - WB should write $8 (from LW)
 - If using IF/ID: Would write to $14 instead of $8!
 - WRONG REGISTER!
-
+```
 
 **Correct Implementation:**
 
@@ -725,14 +735,14 @@ At Cycle 5:
 
 **Format:**
 
-
+```
           Cycle: 1    2    3    4    5    6    7    8    9
 Instr 1:         IF   ID   EX   MEM  WB
 Instr 2:              IF   ID   EX   MEM  WB
 Instr 3:                   IF   ID   EX   MEM  WB
 Instr 4:                        IF   ID   EX   MEM  WB
 Instr 5:                             IF   ID   EX   MEM  WB
-
+```
 
 **Shows:**
 
@@ -751,18 +761,19 @@ Instr 5:                             IF   ID   EX   MEM  WB
 
 **Format:**
 
-
-Cycle 1:  Instr 1: [IM][RF][  ][  ][  ]
-Cycle 2:  Instr 1: [  ][IM][RF][  ][  ]   Instr 2: [IM][RF][  ][  ][  ]
-Cycle 3:  Instr 1: [  ][  ][IM][RF][  ]   Instr 2: [  ][IM][RF][  ][  ]   Instr 3: [IM][RF][  ][  ][  ]
-...
+Cycle | Instr 1                          | Instr 2                          | Instr 3
+-----:|:---------------------------------:|:---------------------------------:|:---------------------------------:
+1     | [IM][RF][  ][  ][  ]             | —                                 | —
+2     | [  ][IM][RF][  ][  ]             | [IM][RF][  ][  ][  ]             | —
+3     | [  ][  ][IM][RF][  ]             | [  ][IM][RF][  ][  ]             | [IM][RF][  ][  ][  ]
 
 Legend:
-IM: Instruction Memory
-RF: Register File
-ALU: ALU operation
-DM: Data Memory
-WB: Write Back
+
+- IM: Instruction Memory (IF)
+- RF: Register File (ID)
+- ALU: ALU operation (EX)
+- DM: Data Memory (MEM)
+- WB: Write Back (WB)
 
 
 **Shows:**

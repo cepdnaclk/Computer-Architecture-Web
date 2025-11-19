@@ -88,23 +88,29 @@
             <summary>
               <h3>Preface</h3>
               <p class="preview-text">
-                Computer architecture is the foundation upon which all computing systems are built. This comprehensive lecture series has been developed over years of teaching experience at the University of Peradeniya...
+                Computer architecture sits at the heart of modern computing. It is the discipline that reveals how machines execute instructions, manage data, and achieve programmability...
               </p>
             </summary>
             <div class="expandable-content">
               <p>
-                Computer architecture is the foundation upon which all computing systems are built. This comprehensive lecture series has been developed over years of teaching experience at the University of Peradeniya, refined through continuous interaction with students and industry feedback. The materials presented here represent a careful balance between theoretical foundations and practical applications.
+                Computer architecture sits at the heart of modern computing. It is the discipline that reveals how machines execute instructions, manage data, and achieve programmability- bridging the conceptual world of algorithms and the physical realities of hardware. Over many years of teaching this subject to undergraduate students, I have found that curiosity grows not only from understanding what computers do, but from discovering how they do it and why they're designed that way.
               </p>
               <p>
-                The journey through computer architecture begins with fundamental abstractions and progressively builds towards understanding complex systems including multicore processors, cache hierarchies, and virtual memory. Each lecture is designed to be both self-contained and part of a larger narrative that reveals how modern computers achieve their remarkable capabilities.
+                This book, <em>Lectures on Computer Architecture</em>, is built upon the lecture series delivered to undergraduate cohorts. Each section distills core ideas, clarifies subtle concepts, and connects theory to the practical systems. The video lectures grew from classroom sessions, refined through questions, discussions, and repeated teaching experience. The accompanying notes are designed to complement the videos rather than duplicate it, offering multiple modalities through which students can explore the subject.
               </p>
               <p>
-                These materials are intended for undergraduate students in computer engineering and computer science, as well as professionals seeking to deepen their understanding of computer systems. The accompanying video lectures provide additional context and explanations that complement the written notes.
+                My goal is to provide a learning resource that is rigorous yet approachable, structured yet flexible, and suitable for both guided instruction and independent study. Whether used as a primary course text, or a guide for self-study, I hope this book supports students in creating a solid cognitive model of how computers are built.
               </p>
               <p>
-                I hope this series serves you well in your journey to master computer architecture, whether you're building the next generation of processors or simply seeking to understand the remarkable machines that have transformed our world.
+                I am grateful to all my students over the years whose questions and feedback helped refine these explanations, and to everyone who encouraged the development of a resource that unifies both lecture and text. It is my hope that this book helps you to see computer architecture not merely as a subject to be completed, but as a foundation for understanding the modern machines that shape our world.
               </p>
-              <p style="margin-top: 1rem;"><em>— Dr. Isuru Nawinne</em></p>
+              <p>
+                I would like to convey my sincere appreciation to <strong>Dr. Kisaru Liyanage</strong> and <strong>Dr. Swarnalatha Radhakrishnan</strong> for their valuable contributions in delivering selected lectures. My profound thanks go to <strong>Kanishka Gunawardana</strong> and <strong>Sanka Peeris</strong>, for helping me edit this book and setting up the interactive web version. Their careful attention to detail, thoughtful feedback, and commitment to ensuring the clarity and accuracy have contributed greatly to the quality and reliability of this work.
+              </p>
+              <p style="margin-top: 1rem;">
+                <em>Isuru Nawinne<br>
+                Senior Lecturer in Computer Engineering</em>
+              </p>
             </div>
           </details>
         </div>
@@ -115,30 +121,32 @@
             <summary>
               <h3>Learning Methods</h3>
               <p class="preview-text">
-                This course employs a multi-modal learning approach designed to maximize understanding and retention through video lectures, written notes, and practical labs...
+                This book is designed to support active, independent, and flexible learning, aligning closely with flipped learning and self-directed study practices...
               </p>
             </summary>
             <div class="expandable-content">
-              <h4>How to Use These Materials</h4>
               <p>
-                This course employs a multi-modal learning approach designed to maximize understanding and retention:
+                This book is designed to support active, independent, and flexible learning, aligning closely with <strong>flipped learning</strong> and <strong>self-directed study</strong> practices.
               </p>
+              <p>
+                The flipped-learning approach encourages students to engage with key concepts before coming to class or attempting exercises. Each section in this book includes a corresponding video lecture that introduces the fundamental ideas, explains core mechanisms, and walks through examples. Watching the video beforehand allows learners to arrive at discussions or problem-solving sessions better prepared, able to ask informed questions, and ready to dive deeper.
+              </p>
+              <p>
+                Flipped-learning transforms the role of classroom or study time: instead of passively receiving information, students actively seek and apply it. With multiple modalities of the videos as the initial exposure and the book as a reference and reinforcement tool, learners can use their interactive time: whether in discussions; tutorials; labs; or group study; to focus on reasoning, analysis, and synthesis.
+              </p>
+              <p>
+                Computer architecture is a subject that rewards curiosity and exploration. To support self-directed learning, each chapter is structured so students can progress at their own pace. The notes are carefully layered. They begin with foundational principles and incrementally build toward more advanced ideas.
+              </p>
+              <p>Students are encouraged to:</p>
               <ul>
-                <li><strong>Video Lectures:</strong> Watch the corresponding YouTube video for each lecture to get a comprehensive explanation with visual aids and real-time problem-solving demonstrations.</li>
-                <li><strong>Written Notes:</strong> Use these detailed notes as reference material during and after watching videos. They include additional examples and clarifications.</li>
-                <li><strong>Practical Labs:</strong> Apply concepts through hands-on programming exercises in ARM assembly and Verilog HDL.</li>
-                <li><strong>Active Learning:</strong> Pause videos to work through examples independently before seeing solutions.</li>
-                <li><strong>Spaced Repetition:</strong> Review previous lectures periodically to reinforce foundational concepts.</li>
+                <li>Watch the video lectures as many times as needed to internalize concepts;</li>
+                <li>Revisit diagrams and derivations to strengthen visual and mathematical intuition;</li>
+                <li>Use end-of-section summaries and conceptual checkpoints to evaluate their understanding; and</li>
+                <li>Make connections between topics - for example, how pipelining interacts with branching, or how memory hierarchy influences performance.</li>
               </ul>
-              <h4>Recommended Study Approach</h4>
-              <ol>
-                <li>Read the lecture notes introduction to understand key topics</li>
-                <li>Watch the video lecture, taking brief notes on unclear concepts</li>
-                <li>Re-read the detailed notes, focusing on sections that need clarification</li>
-                <li>Complete any associated laboratory exercises</li>
-                <li>Review key takeaways and summary sections</li>
-                <li>Attempt practice problems and discuss with peers</li>
-              </ol>
+              <p>
+                This style of learning builds autonomy, critical thinking, and long-term retention—key skills for an engineer.
+              </p>
             </div>
           </details>
         </div>
@@ -149,40 +157,43 @@
             <summary>
               <h3>Introduction</h3>
               <p class="preview-text">
-                Computer architecture is the science and art of designing computer systems. It sits at the critical intersection of hardware and software, defining how processors execute instructions...
+                This book follows a gradual progression from fundamental concepts to advanced architectural mechanisms, mirroring the structure of the lecture series...
               </p>
             </summary>
             <div class="expandable-content">
               <p>
-                Computer architecture is the science and art of designing computer systems. It sits at the critical intersection of hardware and software, defining how processors execute instructions, how memory is organized, and how data flows through a system. Understanding computer architecture is essential for anyone who wants to write efficient code, design new computing systems, or optimize existing ones.
+                This book follows a gradual progression from fundamental concepts to advanced architectural mechanisms, mirroring the structure of the lecture series. The material is organized into twenty sections, each corresponding to a major topic typically covered in an undergraduate computer architecture course.
               </p>
-              <h4>What You Will Learn</h4>
+              <h4>How the Book Is Organized</h4>
               <p>
-                This lecture series covers the complete spectrum of computer architecture topics:
+                The first set of chapters: <strong>Computer Abstractions</strong>, <strong>Technology Trends</strong>, and <strong>Performance</strong> establish the context and quantitative foundation needed to reason about architectural decisions. These are followed by chapters on <strong>Assembly Language Programming</strong>, <strong>Number Representation</strong>, <strong>Branching</strong>, <strong>Function Calls</strong>, and <strong>Memory Access</strong> which build the low-level understanding of how instructions operate.
               </p>
+              <p>
+                Midway through the book, the focus shifts to the execution engine itself: <strong>Microarchitecture</strong>, <strong>Datapath</strong>, <strong>Control</strong>, and the progression from <strong>Single-Cycle Execution to Pipelined Processors</strong>. The chapters such as Pipeline Analysis help students understand real-world engineering challenges.
+              </p>
+              <p>
+                The later sections explore the memory subsystem in depth: <strong>Memory Hierarchy</strong>, <strong>Caching</strong>, <strong>Direct Mapped and Associative Cache Control</strong>, <strong>Multi-Level Caches</strong>, and <strong>Virtual Memory</strong>, before extending the architectural view to <strong>Multiprocessors</strong>, <strong>Storage</strong>, and <strong>Interfacing</strong>.
+              </p>
+              <p>Each chapter includes:</p>
               <ul>
-                <li><strong>Foundations:</strong> Computer abstractions, technology trends, and performance analysis</li>
-                <li><strong>Instruction Set Architecture:</strong> The ARM architecture and assembly programming</li>
-                <li><strong>Processor Design:</strong> Datapath, control units, and pipelining</li>
-                <li><strong>Memory Systems:</strong> Cache hierarchies, virtual memory, and optimization techniques</li>
-                <li><strong>Advanced Topics:</strong> Multiprocessors, parallel computing, and I/O systems</li>
+                <li>A complete video lecture that introduces and explains concepts</li>
+                <li>Written notes highlighting definitions, diagrams, examples, and reasoning steps</li>
+                <li>Clarifications of common misconceptions</li>
+                <li>Connections to earlier and later material</li>
+                <li>Guidance on how the topic relates to real processors and modern systems</li>
               </ul>
-              <h4>Prerequisites</h4>
+              <h4>How to Use the Videos and Notes</h4>
+              <p>The recommended learning sequence is:</p>
+              <ol>
+                <li><strong>Start with the video lecture</strong> to gain an intuitive, big-picture understanding.</li>
+                <li><strong>Read the notes</strong> from the corresponding chapter to clarify details, solidify concepts, and explore more formal explanations.</li>
+                <li><strong>Revisit the video or specific parts of the chapter</strong> if some ideas feel unclear—the two formats reinforce each other.</li>
+                <li><strong>Use diagrams and worked examples</strong> as anchors for your understanding; architecture is highly visual and spatial.</li>
+                <li><strong>Progress through sections sequentially</strong>, as many topics build directly on earlier ones.</li>
+              </ol>
               <p>
-                Students should have a basic understanding of digital logic design and programming in at least one high-level language (C, Python, Java, etc.). Familiarity with binary number systems and Boolean algebra is helpful but will be reviewed as needed.
+                For review, you may find it helpful to skim chapter summaries and rewatch short segments of the videos rather than re-reading entire chapters.
               </p>
-              <h4>Learning Outcomes</h4>
-              <p>
-                Upon completing this course, you will be able to:
-              </p>
-              <ul>
-                <li>Understand how high-level programs are translated into machine instructions</li>
-                <li>Write and debug programs in ARM assembly language</li>
-                <li>Design and implement a functional processor using hardware description languages</li>
-                <li>Analyze and optimize computer system performance</li>
-                <li>Understand modern processor features including pipelining, caching, and virtual memory</li>
-                <li>Make informed decisions about hardware-software trade-offs</li>
-              </ul>
             </div>
           </details>
         </div>
@@ -895,7 +906,7 @@
               <div class="lecture-content">
                 <h4>
                   <a href="Lectures/html/lecture-13.html"
-                    >Pipeline Operation and Timing</a
+                    >Pipeline Analysis</a
                   >
                 </h4>
                 <p class="lecture-instructor">By Dr. Isuru Nawinne</p>

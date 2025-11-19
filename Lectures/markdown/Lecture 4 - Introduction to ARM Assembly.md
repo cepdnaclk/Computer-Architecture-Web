@@ -52,8 +52,13 @@ This lecture introduces ARM assembly language programming, providing the foundat
 - **R15 (PC)**: Program Counter - address of next instruction
 
 **Register Usage Conventions**
-<img src="../img/Chapter%202%20ARM%20Conventions.jpg" alt="Computer System Abstraction Layers" width="600">
 
+<div align="center">
+  <img src="../img/Chapter%202%20ARM%20Conventions.jpg" alt="ARM Register Usage Conventions" width="600">
+  <p><em>Figure 1: ARM Register Usage Conventions</em></p>
+</div>
+
+<!-- ```
 R0-R3:   Argument/result registers
          - Pass parameters to functions
          - Return values from functions
@@ -78,7 +83,7 @@ R14 (LR): Link Register
 R15 (PC): Program Counter
          - Always points to next instruction
          - Modifying PC changes execution flow
-
+-->
 
 **Why So Many Registers?**
 

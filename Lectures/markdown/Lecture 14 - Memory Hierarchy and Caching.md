@@ -242,6 +242,11 @@ This lecture marks a crucial transition from CPU-centric topics to memory system
 
 ### 14.5.2 Memory Hierarchy Structure
 
+<div align="center">
+  <img src="../img/Memory Hierarchy.jpg" width=400>
+  <p><em>Figure 1: Memory Hierarchy with SRAM Cache, DRAM Main Memory, and Disk Storage</em></p>
+</div>
+
 
 Level 1 (Top): SRAM (Cache)
 - Smallest capacity
@@ -375,9 +380,9 @@ Level 3 (Bottom): Disk
 
 **Formula:**
 
-
+```
 Hit Rate = (Number of Hits) / (Total Accesses)
-
+```
 
 **Example:** 100 accesses, 90 hits → Hit Rate = 90% or 0.9
 
@@ -1124,29 +1129,44 @@ Both map to index 5, but different blocks!
 Tag = Block Address (excluding index bits)
 
 
+
 #### Example Address Breakdown
 
 **Full Address:**
 
-
+```
 [26-bit Tag][3-bit Index][3-bit Offset]
+```
 
+### Address A
 
-**Address A:**
+Binary representation:
 
+```
+00000000000000000000000000 101 000
+```
 
-[00000000000000000000000000][101][000]
- └── Tag = 0                └─ Index=5 └─ Offset
+Field     | Bits (binary)                       | Decimal
+:---------|:------------------------------------:|:-------:
+Tag       | 00000000000000000000000000 (26 bits) | 0
+Index     | 101                                  | 5
+Offset    | 000                                  | 0
 
+### Address B
 
-**Address B:**
+Binary representation:
 
+```
+00000000000000000000000001 101 000
+```
 
-[00000000000000000000000001][101][000]
- └── Tag = 1                └─ Index=5 └─ Offset
+Field     | Bits (binary)                       | Decimal
+:---------|:------------------------------------:|:-------:
+Tag       | 00000000000000000000000001 (26 bits) | 1
+Index     | 101                                  | 5
+Offset    | 000                                  | 0
 
-
-Both have index 5, but DIFFERENT tags!
+Both addresses map to cache index 5 but have different tag values (0 vs 1), so they refer to different memory blocks that conflict at the same cache index.
 
 ### 14.14.4 Cache Structure with Tags
 
@@ -1170,12 +1190,12 @@ Both have index 5, but DIFFERENT tags!
 
 **Storage Overhead:**
 
-
+```
 Overhead = (Tag + Valid) / Total
          = (26 + 1) / (26 + 1 + 64)
          = 27 / 91
          ≈ 30% overhead in this small example
-
+```
 
 #### Note on Overhead
 
@@ -1217,6 +1237,11 @@ Overhead = (Tag + Valid) / Total
 - Handling context switches
 
 ## 14.15 Cache Read Access Operation
+
+<div align="center">
+  <img src="../img/Direct Mapped Read.jpg" width=600>
+  <p><em>Figure 2: Direct-Mapped Cache Read Access Process</em></p>
+</div>
 
 ### 14.15.1 Read Access Process
 
@@ -1272,7 +1297,7 @@ Overhead = (Tag + Valid) / Total
 
 **Example (4-bit tags):**
 
-
+```
 Stored tag:   1 0 1 1
 Address tag:  1 0 1 1
 XNOR:         1 1 1 1  → AND = 1 (MATCH!)
@@ -1280,7 +1305,7 @@ XNOR:         1 1 1 1  → AND = 1 (MATCH!)
 Stored tag:   1 0 1 1
 Address tag:  1 0 0 1
 XNOR:         1 1 0 1  → AND = 0 (NO MATCH)
-
+```
 
 **For N-bit tag:**
 

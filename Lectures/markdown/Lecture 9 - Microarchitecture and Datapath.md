@@ -205,6 +205,13 @@ f = 1/(250 × 10^-12) = 4 GHz
 - Stores multi-bit value (e.g., 32 bits)
 - Updates on clock edge: D (input) → Q (output state)
 
+**Timing Example**
+
+<div align="center">
+  <img src="../img/Chapter 9 Register.jpeg" width=600>
+  <p><em>Figure 1: Register Timing Diagram</em></p>
+</div>
+
 **Register with Write Control**
 
 - Additional Write Enable signal
@@ -213,15 +220,19 @@ f = 1/(250 × 10^-12) = 4 GHz
 
 **Timing Example**
 
-```
+<div align="center">
+  <img src="../img/Chapter 9 Write EN Register.jpeg" width=600>
+  <p><em>Figure 2: Register with Write Enable Timing Diagram</em></p>
+</div>
+
+<!-- ```
 Clock: __|‾|__|‾|__|‾|__
 Write:  ‾‾‾‾|___|‾‾‾‾‾
 Data:   [A][B][C][D][E]
 State:  [A][A][A][D][D]
-```
+``` -->
 
-
-### 9.3.6 Critical Path and Clock Period
+### 2.6 Critical Path and Clock Period
 
 **Combinational Logic Delay**
 
@@ -255,7 +266,12 @@ Must allow time for:
 - Clock period must accommodate slowest instruction
 - All instructions take same time (inefficient!)
 
-## 9.4 CPU Execution Stages
+## 3. CPU Execution Stages
+
+<div align="center">
+  <img src="../img/Chapter 9 CPU Overview.jpeg" width=600>
+  <p><em>Figure 3: CPU Execution Stages Overview</em></p>
+</div>
 
 ### 9.4.1 Instruction Fetch (IF)
 
@@ -664,7 +680,12 @@ BNE: PCSrc = Branch AND NOT(Zero)
 - Append two zero wires at bits 0-1
 - NO actual shifter hardware!
 
-## 9.9 Complete Single-Cycle Datapath
+## 8. Complete Single-Cycle Datapath
+
+<div align="center">
+  <img src="../img/Chapter 9 CPU Control and Datapath.jpeg" width=600>
+  <p><em>Figure 4: Complete Single-Cycle CPU Control and Datapath</em></p>
+</div>
 
 ### 9.9.1 Integrated Components
 
