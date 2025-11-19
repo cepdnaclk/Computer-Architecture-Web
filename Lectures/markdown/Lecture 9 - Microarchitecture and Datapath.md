@@ -200,6 +200,13 @@ f = 1/(250 × 10^-12) = 4 GHz
 - Stores multi-bit value (e.g., 32 bits)
 - Updates on clock edge: D (input) → Q (output state)
 
+**Timing Example**
+
+<div align="center">
+  <img src="../img/Chapter 9 Register.jpeg" width=600>
+  <p><em>Figure 1: Register Timing Diagram</em></p>
+</div>
+
 **Register with Write Control**
 
 - Additional Write Enable signal
@@ -208,12 +215,17 @@ f = 1/(250 × 10^-12) = 4 GHz
 
 **Timing Example**
 
-```
+<div align="center">
+  <img src="../img/Chapter 9 Write EN Register.jpeg" width=600>
+  <p><em>Figure 2: Register with Write Enable Timing Diagram</em></p>
+</div>
+
+<!-- ```
 Clock: __|‾|__|‾|__|‾|__
 Write:  ‾‾‾‾|___|‾‾‾‾‾
 Data:   [A][B][C][D][E]
 State:  [A][A][A][D][D]
-```
+``` -->
 
 ### 2.6 Critical Path and Clock Period
 
@@ -249,6 +261,11 @@ Must allow time for:
 - All instructions take same time (inefficient!)
 
 ## 3. CPU Execution Stages
+
+<div align="center">
+  <img src="../img/Chapter 9 CPU Overview.jpeg" width=600>
+  <p><em>Figure 3: CPU Execution Stages Overview</em></p>
+</div>
 
 ### 3.1 Instruction Fetch (IF)
 
@@ -653,6 +670,11 @@ BNE: PCSrc = Branch AND NOT(Zero)
 - NO actual shifter hardware!
 
 ## 8. Complete Single-Cycle Datapath
+
+<div align="center">
+  <img src="../img/Chapter 9 CPU Control and Datapath.jpeg" width=600>
+  <p><em>Figure 4: Complete Single-Cycle CPU Control and Datapath</em></p>
+</div>
 
 ### 8.1 Integrated Components
 
