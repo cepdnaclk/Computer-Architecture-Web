@@ -38,13 +38,13 @@ This lecture provides a comprehensive, step‑by‑step examination of how a dir
 
 #### Address Breakdown (Recap)
 
-
+```
 [Tag][Index][Offset]
   ^      ^       ^
   |      |       └── Identifies word/byte within block
   |      └── Identifies cache entry (direct mapping)
   └── Remaining bits for block identification
-
+```
 
 ### 15.2.2 Today's Focus
 
