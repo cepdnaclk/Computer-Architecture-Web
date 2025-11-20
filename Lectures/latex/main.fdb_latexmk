@@ -1,5 +1,5 @@
 # Fdb version 4
-["pdflatex"] 1763618621.03708 "d:/Academics/Projects/isuru sir/CO224-Web/Lectures/latex/main.tex" "main.pdf" "main" 1763618627.74919 2
+["pdflatex"] 1763619720.8981 "d:/Academics/Projects/isuru sir/CO224-Web/Lectures/latex/main.tex" "main.pdf" "main" 1763619727.21766 2
   "C:/Users/kanis/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map" 1763566443 84158 d77284a6843bde1e4b9764f09fb2e89e ""
   "C:/Users/kanis/AppData/Local/MiKTeX/miktex/data/le/pdftex/pdflatex.fmt" 1760939740 13309158 fb3df6520ac9c7d27a3e4955a64c5ebf ""
   "E:/Software/MikTex/fonts/enc/dvips/lm/lm-ec.enc" 1256929440 2375 baa924870cfb487815765f9094cf3728 ""
@@ -189,7 +189,7 @@
   "E:/Software/MikTex/tex/latex/tocloft/tocloft.sty" 1578908763 37263 3e78d14f0f4b1a30560fea5e04de805d ""
   "E:/Software/MikTex/tex/latex/url/url.sty" 1388490452 12796 8edb7d69a20b857904dd0ea757c14ec9 ""
   "E:/Software/MikTex/tex/latex/xcolor/xcolor.sty" 1729265222 55384 b454dec21c2d9f45ec0b793f0995b992 ""
-  "d:/Academics/Projects/isuru sir/CO224-Web/Lectures/latex/main.tex" 1763618562 14965 b3cc02a9f4aba412535515ea67dd94e7 ""
+  "d:/Academics/Projects/isuru sir/CO224-Web/Lectures/latex/main.tex" 1763619293 14965 b3cc02a9f4aba412535515ea67dd94e7 ""
   "img/Chapter 1 AMD Barcelona.jpg" 1763365340 214060 071e959c7abf729c6cba7ec8a1c5f2dc ""
   "img/Chapter 1 Computer Abstractions and Technology.jpg" 1763131116 134941 350571663f1bca7913e31c2c78432491 ""
   "img/Chapter 1 Moore's Law.jpg" 1763365340 96822 a0571984aa9573dbcecdc6c64eeeb9e4 ""
@@ -209,11 +209,11 @@
   "lecture-08.tex" 1763616275 21233 121accb54d2ed5d87cbc0222b3970a99 ""
   "lecture-09.tex" 1763616275 24972 c2e166c4df84694b39c6e4c07213d7f3 ""
   "lecture-10.tex" 1763616275 25269 4a968e14c772238c0e0f972ecd31d30c ""
-  "lecture-11.tex" 1763618616 47091 3c5cd5645aa6ee37ba0a40706fd8a4e7 ""
-  "main.aux" 1763618626 68710 bdd05bd008517c8d6eb9f5d7a8653699 "pdflatex"
-  "main.out" 1763618626 32133 a8dca330f2c61e15f533b7b14d5e473f "pdflatex"
-  "main.tex" 1763618562 14965 b3cc02a9f4aba412535515ea67dd94e7 ""
-  "main.toc" 1763618626 40434 692125660ecb216887f20ac29197810d "pdflatex"
+  "lecture-11.tex" 1763619705 56563 d158ffbab21dfff302618bd00ba057d7 ""
+  "main.aux" 1763619726 75586 67e6dcc5320110d604e2523b586d5f5b "pdflatex"
+  "main.out" 1763619726 32484 8359d1ff39799782e7cc2a332174094b "pdflatex"
+  "main.tex" 1763619293 14965 b3cc02a9f4aba412535515ea67dd94e7 ""
+  "main.toc" 1763619726 40816 84a099b23c3670c90c2fb8a34384554b "pdflatex"
   (generated)
   "main.aux"
   "main.log"
@@ -221,3 +221,4 @@
   "main.pdf"
   "main.toc"
   (rewritten before read)
+

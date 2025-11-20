@@ -1,7 +1,6 @@
-\section{Lecture 11: Complete Single-Cycle MIPS Processor and Performance Analysis}
-
-% Formatting helper for Pandoc-generated tight lists (if present)
-\providecommand{\tightlist}{\setlength{\itemsep}{4pt}\setlength{\parskip}{0pt}}
+\section{Lecture 11: Complete Single-Cycle MIPS Processor and
+Performance
+Analysis}\label{lecture-11-complete-single-cycle-mips-processor-and-performance-analysis}
 
 \emph{By Dr.~Isuru Nawinne}
 
@@ -267,14 +266,20 @@ Figure 1: R-Type Instruction Datapath
   Shift Left 2: Not used
 \end{itemize}
 
-\subsubsection{11.4.3 Control Signal Values for R-Type}\label{control-signal-values-for-r-type}
+\subsubsection{11.4.3 Control Signal Values for
+R-Type}\label{control-signal-values-for-r-type}
 
-	extbf{Exercise Example: ADD \$1, \$2, \$3}
+\textbf{Exercise Example: ADD \$1, \$2, \$3}
 
-\begin{center}
-\begin{tabular}{lll}
-	extbf{Signal} & \textbf{Value} & \textbf{Reason} \\
-RegDst & 1 & Write to RD (bits 11--15), not RT \\
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}lll@{}}
+\toprule\noalign{}
+Signal & Value & Reason \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+RegDst & 1 & Write to RD (bits 11-15), not RT \\
 Branch & 0 & Not a branch instruction \\
 MemRead & 0 & Not reading from memory \\
 MemtoReg & 0 & Write ALU result (not memory data) \\
@@ -282,8 +287,8 @@ ALUOp & 10 & R-type: Consult funct field \\
 MemWrite & 0 & Not writing to memory \\
 ALUSrc & 0 & Second operand from register RT (not immediate) \\
 RegWrite & 1 & Write result to destination register \\
-\end{tabular}
-\end{center}
+\end{longtable}
+}
 
 \textbf{Detailed Explanations:}
 

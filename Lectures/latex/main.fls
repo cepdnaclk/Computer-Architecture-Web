@@ -238,6 +238,9 @@ INPUT E:\Software\MikTex\tex\latex\lm\t1lmr.fd
 INPUT E:\Software\MikTex\fonts\tfm\public\lm\ec-lmr10.tfm
 INPUT E:\Software\MikTex\tex\latex\l3backend\l3backend-pdftex.def
 INPUT E:\Software\MikTex\tex\latex\l3backend\l3backend-pdftex.def
+INPUT .\main.aux
+INPUT .\main.aux
+INPUT main.aux
 OUTPUT main.aux
 INPUT E:\Software\MikTex\tex\context\base\mkii\supp-pdf.mkii
 INPUT E:\Software\MikTex\tex\context\base\mkii\supp-pdf.mkii
@@ -248,6 +251,12 @@ INPUT E:\Software\MikTex\tex\latex\00miktex\epstopdf-sys.cfg
 INPUT E:\Software\MikTex\tex\latex\00miktex\epstopdf-sys.cfg
 INPUT E:\Software\MikTex\tex\latex\00miktex\epstopdf-sys.cfg
 INPUT E:\Software\MikTex\tex\latex\graphics\color.sty
+INPUT .\main.out
+INPUT .\main.out
+INPUT main.out
+INPUT main.out
+INPUT .\main.out
+INPUT .\main.out
 OUTPUT main.out
 OUTPUT main.pdf
 INPUT E:\Software\MikTex\fonts\tfm\public\lm\ec-lmr17.tfm
@@ -301,6 +310,9 @@ INPUT E:\Software\MikTex\fonts\tfm\public\amsfonts\symbols\msbm10.tfm
 INPUT E:\Software\MikTex\fonts\tfm\public\amsfonts\symbols\msbm7.tfm
 INPUT E:\Software\MikTex\fonts\tfm\public\lm\ec-lmbx10.tfm
 INPUT E:\Software\MikTex\fonts\enc\dvips\lm\lm-ts1.enc
+INPUT .\main.toc
+INPUT .\main.toc
+INPUT main.toc
 OUTPUT main.toc
 INPUT E:\Software\MikTex\tex\latex\lm\t1lmss.fd
 INPUT E:\Software\MikTex\tex\latex\lm\t1lmss.fd

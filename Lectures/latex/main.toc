@@ -419,63 +419,63 @@
 \contentsline {subsection}{\numberline {3.2.11}Key Takeaways}{178}{subsection.3.2.11}%
 \contentsline {subsection}{\numberline {3.2.12}Summary}{179}{subsection.3.2.12}%
 \contentsline {section}{\numberline {3.3}Lecture 11: Complete Single-Cycle MIPS Processor and Performance Analysis}{179}{section.3.3}%
-\contentsline {subsection}{\numberline {3.3.1}Introduction}{179}{subsection.3.3.1}%
-\contentsline {subsection}{\numberline {3.3.2}Lecture Overview and Context}{180}{subsection.3.3.2}%
-\contentsline {subsubsection}{Recap from Previous Lectures}{180}{subsubsection*.296}%
-\contentsline {subsubsection}{Instruction Subset Review}{180}{subsubsection*.297}%
-\contentsline {subsection}{\numberline {3.3.3}Control Unit Inputs and Outputs}{181}{subsection.3.3.3}%
-\contentsline {subsubsection}{Control Unit Inputs}{181}{subsubsection*.298}%
+\contentsline {subsection}{\numberline {3.3.1}11.1 Introduction}{179}{subsection.3.3.1}%
+\contentsline {subsection}{\numberline {3.3.2}11.2 Lecture Overview and Context}{180}{subsection.3.3.2}%
+\contentsline {subsubsection}{11.2.1 Recap from Previous Lectures}{180}{subsubsection*.296}%
+\contentsline {subsubsection}{11.2.2 Instruction Subset Review}{180}{subsubsection*.297}%
+\contentsline {subsection}{\numberline {3.3.3}11.3 Control Unit Inputs and Outputs}{181}{subsection.3.3.3}%
+\contentsline {subsubsection}{11.3.1 Control Unit Inputs}{181}{subsubsection*.298}%
 \contentsline {paragraph}{Primary Input - Opcode (6 bits):}{181}{paragraph*.299}%
 \contentsline {paragraph}{Secondary Input - Funct Field (6 bits):}{181}{paragraph*.300}%
-\contentsline {subsubsection}{Control Unit Outputs}{181}{subsubsection*.301}%
-\contentsline {subsection}{\numberline {3.3.4}R-Type Instruction Detailed Analysis}{182}{subsection.3.3.4}%
-\contentsline {subsubsection}{Instruction Format}{182}{subsubsection*.302}%
-\contentsline {subsubsection}{Datapath Elements Used}{182}{subsubsection*.303}%
-\contentsline {subsubsection}{Control Signal Values for R-Type}{183}{subsubsection*.304}%
-\contentsline {subsubsection}{Execution Steps for R-Type}{184}{subsubsection*.305}%
-\contentsline {subsection}{\numberline {3.3.5}Branch If Equal Instruction Detailed Analysis}{185}{subsection.3.3.5}%
-\contentsline {subsubsection}{Instruction Format}{185}{subsubsection*.306}%
-\contentsline {subsubsection}{Datapath Elements Used}{185}{subsubsection*.307}%
-\contentsline {subsubsection}{Control Signal Values for BEQ}{185}{subsubsection*.308}%
-\contentsline {subsubsection}{Branch Target Calculation}{187}{subsubsection*.309}%
-\contentsline {subsection}{\numberline {3.3.6}Load Word Instruction Detailed Analysis}{187}{subsection.3.3.6}%
-\contentsline {subsubsection}{Instruction Format}{187}{subsubsection*.310}%
-\contentsline {subsubsection}{Datapath Elements Used}{188}{subsubsection*.311}%
-\contentsline {subsubsection}{Control Signal Values for LW}{188}{subsubsection*.312}%
-\contentsline {subsubsection}{Critical Path for Load Word}{189}{subsubsection*.313}%
-\contentsline {subsection}{\numberline {3.3.7}Store Word Instruction Detailed Analysis}{190}{subsection.3.3.7}%
-\contentsline {subsubsection}{Instruction Format}{190}{subsubsection*.314}%
-\contentsline {subsubsection}{Datapath Elements Used}{190}{subsubsection*.315}%
-\contentsline {subsubsection}{Control Signal Values for SW}{191}{subsubsection*.316}%
-\contentsline {subsubsection}{Important Lesson: Don't Care vs Zero}{192}{subsubsection*.317}%
-\contentsline {subsection}{\numberline {3.3.8}Jump Instruction Integration}{192}{subsection.3.3.8}%
-\contentsline {subsubsection}{Instruction Format}{192}{subsubsection*.318}%
-\contentsline {subsubsection}{Jump Target Address Calculation}{193}{subsubsection*.319}%
-\contentsline {subsubsection}{Additional Datapath Hardware}{193}{subsubsection*.320}%
-\contentsline {subsubsection}{Jump Control Signal}{194}{subsubsection*.321}%
-\contentsline {subsubsection}{Complete Datapath with Jump}{194}{subsubsection*.322}%
-\contentsline {subsection}{\numberline {3.3.9}Timing Analysis with Concrete Delays}{195}{subsection.3.3.9}%
-\contentsline {subsubsection}{Assumed Component Delays}{195}{subsubsection*.323}%
-\contentsline {subsubsection}{Critical Path Analysis}{195}{subsubsection*.324}%
-\contentsline {subsubsection}{Load Word Instruction Timing}{196}{subsubsection*.325}%
-\contentsline {subsubsection}{Store Word Instruction Timing}{197}{subsubsection*.326}%
-\contentsline {subsubsection}{Arithmetic Instruction Timing (ADD, SUB, AND, OR)}{198}{subsubsection*.327}%
-\contentsline {subsubsection}{Branch Instruction Timing}{198}{subsubsection*.328}%
-\contentsline {subsubsection}{Jump Instruction Timing}{199}{subsubsection*.329}%
-\contentsline {subsubsection}{Timing Summary Table}{200}{subsubsection*.330}%
-\contentsline {subsection}{\numberline {3.3.10}Performance Analysis}{200}{subsection.3.3.10}%
-\contentsline {subsubsection}{Program Composition Example}{200}{subsubsection*.331}%
-\contentsline {subsubsection}{Average Time Calculation}{200}{subsubsection*.332}%
-\contentsline {subsubsection}{Critical Path Problem}{200}{subsubsection*.333}%
-\contentsline {subsubsection}{Clock Period Inflexibility}{201}{subsubsection*.334}%
-\contentsline {subsection}{\numberline {3.3.11}Path to Better Performance: Multi-Cycle Design}{201}{subsection.3.3.11}%
-\contentsline {subsubsection}{Multi-Cycle Concept}{201}{subsubsection*.335}%
-\contentsline {subsubsection}{Stage Division}{202}{subsubsection*.336}%
-\contentsline {subsubsection}{Clock Period in Multi-Cycle}{203}{subsubsection*.337}%
-\contentsline {subsubsection}{Performance Comparison}{203}{subsubsection*.338}%
-\contentsline {subsubsection}{Design Challenge}{204}{subsubsection*.339}%
-\contentsline {subsection}{\numberline {3.3.12}Preview: Pipelining}{204}{subsection.3.3.12}%
-\contentsline {subsubsection}{Next Step Beyond Multi-Cycle}{204}{subsubsection*.340}%
-\contentsline {subsubsection}{Coming Next}{205}{subsubsection*.341}%
-\contentsline {subsection}{\numberline {3.3.13}Key Takeaways}{205}{subsection.3.3.13}%
-\contentsline {subsection}{\numberline {3.3.14}Summary}{206}{subsection.3.3.14}%
+\contentsline {subsubsection}{11.3.2 Control Unit Outputs}{181}{subsubsection*.301}%
+\contentsline {subsection}{\numberline {3.3.4}11.4 R-Type Instruction Detailed Analysis}{182}{subsection.3.3.4}%
+\contentsline {subsubsection}{11.4.1 Instruction Format}{182}{subsubsection*.302}%
+\contentsline {subsubsection}{11.4.2 Datapath Elements Used}{182}{subsubsection*.303}%
+\contentsline {subsubsection}{11.4.3 Control Signal Values for R-Type}{183}{subsubsection*.304}%
+\contentsline {subsubsection}{11.4.4 Execution Steps for R-Type}{184}{subsubsection*.305}%
+\contentsline {subsection}{\numberline {3.3.5}11.5 Branch If Equal Instruction Detailed Analysis}{185}{subsection.3.3.5}%
+\contentsline {subsubsection}{11.5.1 Instruction Format}{185}{subsubsection*.306}%
+\contentsline {subsubsection}{11.5.2 Datapath Elements Used}{185}{subsubsection*.307}%
+\contentsline {subsubsection}{11.5.3 Control Signal Values for BEQ}{186}{subsubsection*.308}%
+\contentsline {subsubsection}{11.5.4 Branch Target Calculation}{187}{subsubsection*.309}%
+\contentsline {subsection}{\numberline {3.3.6}11.6 Load Word Instruction Detailed Analysis}{188}{subsection.3.3.6}%
+\contentsline {subsubsection}{11.6.1 Instruction Format}{188}{subsubsection*.310}%
+\contentsline {subsubsection}{11.6.2 Datapath Elements Used}{188}{subsubsection*.311}%
+\contentsline {subsubsection}{11.6.3 Control Signal Values for LW}{188}{subsubsection*.312}%
+\contentsline {subsubsection}{11.6.4 Critical Path for Load Word}{190}{subsubsection*.313}%
+\contentsline {subsection}{\numberline {3.3.7}11.7 Store Word Instruction Detailed Analysis}{190}{subsection.3.3.7}%
+\contentsline {subsubsection}{11.7.1 Instruction Format}{190}{subsubsection*.314}%
+\contentsline {subsubsection}{11.7.2 Datapath Elements Used}{191}{subsubsection*.315}%
+\contentsline {subsubsection}{11.7.3 Control Signal Values for SW}{191}{subsubsection*.316}%
+\contentsline {subsubsection}{11.7.4 Important Lesson: Don't Care vs Zero}{193}{subsubsection*.317}%
+\contentsline {subsection}{\numberline {3.3.8}11.8 Jump Instruction Integration}{193}{subsection.3.3.8}%
+\contentsline {subsubsection}{11.8.1 Instruction Format}{193}{subsubsection*.318}%
+\contentsline {subsubsection}{11.8.2 Jump Target Address Calculation}{193}{subsubsection*.319}%
+\contentsline {subsubsection}{11.8.3 Additional Datapath Hardware}{194}{subsubsection*.320}%
+\contentsline {subsubsection}{11.8.4 Jump Control Signal}{195}{subsubsection*.321}%
+\contentsline {subsubsection}{11.8.5 Complete Datapath with Jump}{196}{subsubsection*.322}%
+\contentsline {subsection}{\numberline {3.3.9}11.9 Timing Analysis with Concrete Delays}{196}{subsection.3.3.9}%
+\contentsline {subsubsection}{11.9.1 Assumed Component Delays}{196}{subsubsection*.323}%
+\contentsline {subsubsection}{11.9.2 Critical Path Analysis}{197}{subsubsection*.324}%
+\contentsline {subsubsection}{11.9.3 Load Word Instruction Timing}{197}{subsubsection*.325}%
+\contentsline {subsubsection}{11.9.4 Store Word Instruction Timing}{199}{subsubsection*.326}%
+\contentsline {subsubsection}{11.9.5 Arithmetic Instruction Timing (ADD, SUB, AND, OR)}{199}{subsubsection*.327}%
+\contentsline {subsubsection}{11.9.6 Branch Instruction Timing}{200}{subsubsection*.328}%
+\contentsline {subsubsection}{11.9.7 Jump Instruction Timing}{201}{subsubsection*.329}%
+\contentsline {subsubsection}{11.9.8 Timing Summary Table}{201}{subsubsection*.330}%
+\contentsline {subsection}{\numberline {3.3.10}11.10 Performance Analysis}{201}{subsection.3.3.10}%
+\contentsline {subsubsection}{11.10.1 Program Composition Example}{202}{subsubsection*.331}%
+\contentsline {subsubsection}{11.10.2 Average Time Calculation}{202}{subsubsection*.332}%
+\contentsline {subsubsection}{11.10.3 Critical Path Problem}{202}{subsubsection*.333}%
+\contentsline {subsubsection}{11.10.4 Clock Period Inflexibility}{202}{subsubsection*.334}%
+\contentsline {subsection}{\numberline {3.3.11}11.11 Path to Better Performance: Multi-Cycle Design}{203}{subsection.3.3.11}%
+\contentsline {subsubsection}{11.11.1 Multi-Cycle Concept}{203}{subsubsection*.335}%
+\contentsline {subsubsection}{11.11.2 Stage Division}{203}{subsubsection*.336}%
+\contentsline {subsubsection}{11.11.3 Clock Period in Multi-Cycle}{204}{subsubsection*.337}%
+\contentsline {subsubsection}{11.11.4 Performance Comparison}{205}{subsubsection*.338}%
+\contentsline {subsubsection}{11.11.5 Design Challenge}{206}{subsubsection*.339}%
+\contentsline {subsection}{\numberline {3.3.12}11.12 Preview: Pipelining}{206}{subsection.3.3.12}%
+\contentsline {subsubsection}{11.12.1 Next Step Beyond Multi-Cycle}{206}{subsubsection*.340}%
+\contentsline {subsubsection}{11.12.2 Coming Next}{207}{subsubsection*.341}%
+\contentsline {subsection}{\numberline {3.3.13}Key Takeaways}{207}{subsection.3.3.13}%
+\contentsline {subsection}{\numberline {3.3.14}Summary}{208}{subsection.3.3.14}%
