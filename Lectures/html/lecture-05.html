@@ -6,6 +6,15 @@
     <title>Lecture 5: Number Representation and Data Processing - Lectures on Computer Architecture</title>
     <link rel="stylesheet" href="../../assets/css/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+    <!-- Prism.js for code syntax highlighting -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-c.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-asm6502.min.js"></script>
 </head>
 <body>
     <header class="lecture-header">
@@ -63,7 +72,7 @@
 
 <h3>5.2.1 Unsigned Binary Integers</h3>
 
-<strong>Binary System Basics</strong>
+<p><strong>Binary System Basics</strong></p>
 
 <ul>
 <li>Base-2 number system using digits 0 and 1</li>
@@ -72,17 +81,21 @@
 <li>Leftmost bit is most significant (MSB)</li>
 </ul>
 
-<strong>Place Value Calculation</strong>
+<p><strong>Place Value Calculation</strong></p>
 
-``<code>
-<p>Binary: 1011</p>
-<p>Value = (1 × 2³) + (0 × 2²) + (1 × 2¹) + (1 × 2⁰)</p>
-<p>= 8 + 0 + 2 + 1</p>
-<p>= 11 (decimal)</p>
-</code>`<code>
+<div class="math-block">
+$$
+\begin{align*}
+\text{Binary: } &1011 \\
+\text{Value} &= (1 \times 2^3) + (0 \times 2^2) + (1 \times 2^1) + (1 \times 2^0) \\
+&= 8 + 0 + 2 + 1 \\
+&= 11 \text{ (decimal)}
+\end{align*}
+$$
+</div>
 
 
-<strong>N-Bit Unsigned Range</strong>
+<p><strong>N-Bit Unsigned Range</strong></p>
 
 <ul>
 <li>N bits can represent 2^N different values</li>
@@ -91,19 +104,23 @@
 <li>32 bits: 0 to 4,294,967,295</li>
 </ul>
 
-<strong>Binary to Decimal Conversion</strong>
+<p><strong>Binary to Decimal Conversion</strong></p>
 
-</code>`<code>
-<p>Example: 10110101</p>
-<p>= 1×128 + 0×64 + 1×32 + 1×16 + 0×8 + 1×4 + 0×2 + 1×1</p>
-<p>= 128 + 32 + 16 + 4 + 1</p>
-<p>= 181</p>
-</code>`<code>
+<div class="math-block">
+$$
+\begin{align*}
+\text{Example: } &10110101 \\
+&= 1 \times 128 + 0 \times 64 + 1 \times 32 + 1 \times 16 + 0 \times 8 + 1 \times 4 + 0 \times 2 + 1 \times 1 \\
+&= 128 + 32 + 16 + 4 + 1 \\
+&= 181
+\end{align*}
+$$
+</div>
 
 
 <h3>5.2.2 Two's Complement Representation</h3>
 
-<strong>Purpose of Two's Complement</strong>
+<p><strong>Purpose of Two's Complement</strong></p>
 
 <ul>
 <li>Represents both positive and negative integers</li>
@@ -112,7 +129,7 @@
 <li>Natural overflow behavior</li>
 </ul>
 
-<strong>Sign Bit</strong>
+<p><strong>Sign Bit</strong></p>
 
 <ul>
 <li>MSB indicates sign</li>
@@ -120,7 +137,7 @@
 <li>MSB = 1: Negative number</li>
 </ul>
 
-<strong>Positive Numbers</strong>
+<p><strong>Positive Numbers</strong></p>
 
 <ul>
 <li>Same as unsigned binary</li>
@@ -128,18 +145,21 @@
 <li>Example: +5 in 8 bits = 00000101</li>
 </ul>
 
-<strong>Negative Numbers</strong>
+<p><strong>Negative Numbers</strong></p>
 
 <ul>
 <li>Represented as 2^N - |value|</li>
 <li>Example: -5 in 8 bits:</li>
 </ul>
-</code>`<code>
-<p>2^8 - 5 = 256 - 5 = 251 = 11111011</p>
-</code>`<code>
+
+<div class="math-block">
+$$
+2^8 - 5 = 256 - 5 = 251 = 11111011
+$$
+</div>
 
 
-<strong>Two's Complement Conversion</strong>
+<p><strong>Two's Complement Conversion</strong></p>
 <p>Method 1 (Invert and Add):</p>
 
 <p>1. Write positive value in binary</p>
@@ -148,21 +168,21 @@
 
 <p>Example: -5 in 8 bits</p>
 
-</code>`<code>
-<p>+5:        00000101</p>
-<p>Invert:    11111010</p>
-<p>Add 1:     11111011  (this is -5)</p>
-</code>`<code>
-
+<pre><code>+5:        00000101
+Invert:    11111010
+Add 1:     11111011  (this is -5)
+</code></pre>
 
 <p>Method 2 (Subtraction):</p>
 
-</code>`<code>
-<p>-5 = 2^8 - 5 = 256 - 5 = 251 = 11111011</p>
-</code>`<code>
+<div class="math-block">
+$$
+-5 = 2^8 - 5 = 256 - 5 = 251 = 11111011
+$$
+</div>
 
 
-<strong>N-Bit Signed Range</strong>
+<p><strong>N-Bit Signed Range</strong></p>
 
 <ul>
 <li>Range: -(2^(N-1)) to +(2^(N-1) - 1)</li>
@@ -170,7 +190,7 @@
 <li>32 bits: -2,147,483,648 to +2,147,483,647</li>
 </ul>
 
-<strong>Special Cases</strong>
+<p><strong>Special Cases</strong></p>
 
 <ul>
 <li>Zero: 00000000 (unique representation)</li>
@@ -181,7 +201,7 @@
 
 <h3>5.2.3 Sign Extension</h3>
 
-<strong>Purpose</strong>
+<p><strong>Purpose</strong></p>
 
 <ul>
 <li>Extend smaller signed value to larger width</li>
@@ -189,23 +209,21 @@
 <li>Required when loading bytes/halfwords into 32-bit registers</li>
 </ul>
 
-<strong>Process</strong>
+<p><strong>Process</strong></p>
 
 <ul>
 <li>Replicate the sign bit (MSB) to fill new bits</li>
 <li>Preserves positive/negative value</li>
 </ul>
 
-<strong>Examples</strong>
+<p><strong>Examples</strong></p>
 
-</code>`<code>
-<p>8-bit to 32-bit:</p>
-<p>00000101 (+5) → 00000000 00000000 00000000 00000101 (+5)</p>
-<p>11111011 (-5) → 11111111 11111111 11111111 11111011 (-5)</p>
-</code>`<code>
+<pre><code>8-bit to 32-bit:
+00000101 (+5) → 00000000 00000000 00000000 00000101 (+5)
+11111011 (-5) → 11111111 11111111 11111111 11111011 (-5)
+</code></pre>
 
-
-<strong>ARM Instructions for Sign Extension</strong>
+<p><strong>ARM Instructions for Sign Extension</strong></p>
 
 <ul>
 <li><strong>LDRH</strong>: Load halfword (16 bits), zero-extend to 32 bits</li>
@@ -214,20 +232,18 @@
 <li><strong>LDRSB</strong>: Load signed byte, sign-extend to 32 bits</li>
 </ul>
 
-<strong>Example Usage</strong>
+<p><strong>Example Usage</strong></p>
 
-</code>`<code>assembly
-<p>LDRH R0, [R1]     ; R0 = 0x0000ABCD (zero-extended)</p>
-<p>LDRSH R0, [R1]    ; R0 = 0xFFFFABCD (sign-extended if bit 15 = 1)</p>
-
-<p>LDRB R0, [R1]     ; R0 = 0x000000AB (zero-extended)</p>
-<p>LDRSB R0, [R1]    ; R0 = 0xFFFFFFAB (sign-extended if bit 7 = 1)</p>
-</code>`<code>
+<pre><code class="language-asm6502">LDRH R0, [R1]     ; R0 = 0x0000ABCD (zero-extended)
+LDRSH R0, [R1]    ; R0 = 0xFFFFABCD (sign-extended if bit 15 = 1)
+LDRB R0, [R1]     ; R0 = 0x000000AB (zero-extended)
+LDRSB R0, [R1]    ; R0 = 0xFFFFFFAB (sign-extended if bit 7 = 1)
+</code></pre>
 
 
 <h3>5.2.4 Hexadecimal Notation</h3>
 
-<strong>Why Hexadecimal?</strong>
+<p><strong>Why Hexadecimal?</strong></p>
 
 <ul>
 <li>Compact representation of binary</li>
@@ -236,57 +252,61 @@
 <li>Common in programming and debugging</li>
 </ul>
 
-<strong>Hex Digits</strong>
+<p><strong>Hex Digits</strong></p>
 
-</code>`<code>
-<p>Binary  | Hex | Decimal</p>
-<p>--------|-----|--------</p>
-<p>0000    |  0  |   0</p>
-<p>0001    |  1  |   1</p>
-<p>0010    |  2  |   2</p>
-<p>0011    |  3  |   3</p>
-<p>0100    |  4  |   4</p>
-<p>0101    |  5  |   5</p>
-<p>0110    |  6  |   6</p>
-<p>0111    |  7  |   7</p>
-<p>1000    |  8  |   8</p>
-<p>1001    |  9  |   9</p>
-<p>1010    |  A  |  10</p>
-<p>1011    |  B  |  11</p>
-<p>1100    |  C  |  12</p>
-<p>1101    |  D  |  13</p>
-<p>1110    |  E  |  14</p>
-<p>1111    |  F  |  15</p>
-</code>`<code>
-
-
-<strong>Conversion Examples</strong>
-
-</code>`<code>
-<p>Binary: 1011 0110 1101 0010</p>
-<p>Hex:      B    6    D    2</p>
-<p>Result: 0xB6D2</p>
-
-<p>Hex: 0x3F</p>
-<p>Binary: 0011 1111</p>
-<p>Decimal: 63</p>
-</code>`<code>
+<table>
+<thead>
+<tr>
+<th>Binary</th>
+<th>Hex</th>
+<th>Decimal</th>
+</tr>
+</thead>
+<tbody>
+<tr><td>0000</td><td>0</td><td>0</td></tr>
+<tr><td>0001</td><td>1</td><td>1</td></tr>
+<tr><td>0010</td><td>2</td><td>2</td></tr>
+<tr><td>0011</td><td>3</td><td>3</td></tr>
+<tr><td>0100</td><td>4</td><td>4</td></tr>
+<tr><td>0101</td><td>5</td><td>5</td></tr>
+<tr><td>0110</td><td>6</td><td>6</td></tr>
+<tr><td>0111</td><td>7</td><td>7</td></tr>
+<tr><td>1000</td><td>8</td><td>8</td></tr>
+<tr><td>1001</td><td>9</td><td>9</td></tr>
+<tr><td>1010</td><td>A</td><td>10</td></tr>
+<tr><td>1011</td><td>B</td><td>11</td></tr>
+<tr><td>1100</td><td>C</td><td>12</td></tr>
+<tr><td>1101</td><td>D</td><td>13</td></tr>
+<tr><td>1110</td><td>E</td><td>14</td></tr>
+<tr><td>1111</td><td>F</td><td>15</td></tr>
+</tbody>
+</table>
 
 
-<strong>ARM Hexadecimal Usage</strong>
+<p><strong>Conversion Examples</strong></p>
 
-</code>`<code>assembly
-<p>MOV R0, #0xFF        ; R0 = 255</p>
-<p>MOV R1, #0x100       ; R1 = 256</p>
-<p>LDR R2, =0xDEADBEEF  ; R2 = 3735928559</p>
-</code>`<code>
+<pre><code>Binary: 1011 0110 1101 0010
+Hex:      B    6    D    2
+Result: 0xB6D2
+
+Hex: 0x3F
+Binary: 0011 1111
+Decimal: 63
+</code></pre>
+
+<p><strong>ARM Hexadecimal Usage</strong></p>
+
+<pre><code class="language-asm6502">MOV R0, #0xFF        ; R0 = 255
+MOV R1, #0x100       ; R1 = 256
+LDR R2, =0xDEADBEEF  ; R2 = 3735928559
+</code></pre>
 
 
 <h2>5.3 ARM Instruction Encoding</h2>
 
 <h3>5.3.1 Fixed-Length Instructions</h3>
 
-<strong>32-Bit Instruction Format</strong>
+<p><strong>32-Bit Instruction Format</strong></p>
 
 <ul>
 <li>Every ARM instruction is exactly 32 bits</li>
@@ -294,7 +314,7 @@
 <li>Enables efficient pipelining</li>
 </ul>
 
-<strong>Advantages</strong>
+<p><strong>Advantages</strong></p>
 
 <ul>
 <li>Predictable instruction boundaries</li>
@@ -302,7 +322,7 @@
 <li>Fast decode logic</li>
 </ul>
 
-<strong>Trade-offs</strong>
+<p><strong>Trade-offs</strong></p>
 
 <ul>
 <li>Some instructions may "waste" bits</li>
@@ -312,17 +332,16 @@
 
 <h3>5.3.2 Data Processing Instruction Format</h3>
 
-<strong>Format Structure</strong>
+<p><strong>Format Structure</strong></p>
 
-</code>`<code>
-<p>[Cond][00][I][Opcode][S][Rn][Rd][Operand2]</p>
-<p>4-bit 2  1   4-bit   1  4   4   12-bit</p>
-</code>`<code>
+<pre><code>[Cond][00][I][Opcode][S][Rn][Rd][Operand2]
+4-bit 2  1   4-bit   1  4   4   12-bit
+</code></pre>
 
 
-<strong>Field Descriptions</strong>
+<p><strong>Field Descriptions</strong></p>
 
-<strong>Condition (4 bits, bits 28-31)</strong>
+<p><strong>Condition (4 bits, bits 28-31)</strong></p>
 
 <ul>
 <li>Conditional execution feature</li>
@@ -332,14 +351,14 @@
 <li>1110 = AL (always execute, default)</li>
 </ul>
 
-<strong>I bit (bit 25)</strong>
+<p><strong>I bit (bit 25)</strong></p>
 
 <ul>
 <li>0 = Operand2 is register</li>
 <li>1 = Operand2 is immediate value</li>
 </ul>
 
-<strong>Opcode (4 bits, bits 21-24)</strong>
+<p><strong>Opcode (4 bits, bits 21-24)</strong></p>
 
 <ul>
 <li>Specifies operation (AND, EOR, SUB, ADD, etc.)</li>
@@ -349,147 +368,140 @@
 <li>1100 = ORR</li>
 </ul>
 
-<strong>S bit (bit 20)</strong>
+<p><strong>S bit (bit 20)</strong></p>
 
 <ul>
 <li>0 = Don't update condition flags</li>
 <li>1 = Update flags (CPSR)</li>
 </ul>
 
-<strong>Rn (4 bits, bits 16-19)</strong>
+<p><strong>Rn (4 bits, bits 16-19)</strong></p>
 
 <ul>
 <li>First operand register number</li>
 <li>0000 = R0, 0001 = R1, etc.</li>
 </ul>
 
-<strong>Rd (4 bits, bits 12-15)</strong>
+<p><strong>Rd (4 bits, bits 12-15)</strong></p>
 
 <ul>
 <li>Destination register number</li>
 </ul>
 
-<strong>Operand2 (12 bits, bits 0-11)</strong>
+<p><strong>Operand2 (12 bits, bits 0-11)</strong></p>
 
 <ul>
 <li>If I=0: Shift amount and second register</li>
 <li>If I=1: 8-bit immediate + 4-bit rotation</li>
 </ul>
 
-<strong>Example: ADD R0, R1, R2</strong>
+<p><strong>Example: ADD R0, R1, R2</strong></p>
 
-</code>`<code>
-<p>Encoding fields:</p>
-<ul>
-<li>Cond: 1110 (always)</li>
-<li>I: 0 (register operand)</li>
-<li>Opcode: 0100 (ADD)</li>
-<li>S: 0 (don't update flags)</li>
-<li>Rn: 0001 (R1)</li>
-<li>Rd: 0000 (R0)</li>
-<li>Operand2: 0002 (R2, no shift)</li>
-</ul>
+<pre><code>Encoding fields:
+  Cond: 1110 (always)
+  I: 0 (register operand)
+  Opcode: 0100 (ADD)
+  S: 0 (don't update flags)
+  Rn: 0001 (R1)
+  Rd: 0000 (R0)
+  Operand2: 0002 (R2, no shift)
 
-<p>Result: 0xE0810002</p>
-</code>`<code>
+Result: 0xE0810002
+</code></pre>
 
 
 <h3>5.3.3 Data Transfer Instruction Format</h3>
 
-<strong>Format Structure</strong>
+<p><strong>Format Structure</strong></p>
 
-</code>`<code>
-<p>[Cond][01][I][P][U][B][W][L][Rn][Rd][Offset]</p>
-<p>4-bit 2  1  1  1  1  1  1  4   4   12-bit</p>
-</code>`<code>
+<pre><code>[Cond][01][I][P][U][B][W][L][Rn][Rd][Offset]
+4-bit 2  1  1  1  1  1  1  4   4   12-bit
+</code></pre>
 
 
-<strong>Key Fields</strong>
+<p><strong>Key Fields</strong></p>
 
-<strong>L bit (bit 20)</strong>
+<p><strong>L bit (bit 20)</strong></p>
 
 <ul>
 <li>0 = Store (STR)</li>
 <li>1 = Load (LDR)</li>
 </ul>
 
-<strong>B bit (bit 22)</strong>
+<p><strong>B bit (bit 22)</strong></p>
 
 <ul>
 <li>0 = Word transfer (32 bits)</li>
 <li>1 = Byte transfer (8 bits)</li>
 </ul>
 
-<strong>P bit (bit 24)</strong>
+<p><strong>P bit (bit 24)</strong></p>
 
 <ul>
 <li>0 = Post-indexed addressing</li>
 <li>1 = Pre-indexed or offset addressing</li>
 </ul>
 
-<strong>U bit (bit 23)</strong>
+<p><strong>U bit (bit 23)</strong></p>
 
 <ul>
 <li>0 = Subtract offset from base</li>
 <li>1 = Add offset to base</li>
 </ul>
 
-<strong>W bit (bit 21)</strong>
+<p><strong>W bit (bit 21)</strong></p>
 
 <ul>
 <li>0 = No write-back</li>
 <li>1 = Write-back (update base register)</li>
 </ul>
 
-<strong>Rn (base register)</strong>
+<p><strong>Rn (base register)</strong></p>
 
 <ul>
 <li>Contains memory address or base address</li>
 </ul>
 
-<strong>Rd (data register)</strong>
+<p><strong>Rd (data register)</strong></p>
 
 <ul>
 <li>For Load: Destination register</li>
 <li>For Store: Source register</li>
 </ul>
 
-<strong>Offset (12 bits)</strong>
+<p><strong>Offset (12 bits)</strong></p>
 
 <ul>
 <li>Memory address offset</li>
 <li>Can be immediate or register</li>
 </ul>
 
-<strong>Example: LDR R0, [R1, #4]</strong>
+<p><strong>Example: LDR R0, [R1, #4]</strong></p>
 
-</code>`<code>
-<p>Encoding fields:</p>
-<ul>
-<li>Cond: 1110 (always)</li>
-<li>L: 1 (load)</li>
-<li>B: 0 (word)</li>
-<li>P: 1 (offset addressing)</li>
-<li>U: 1 (add offset)</li>
-<li>Rn: 0001 (R1)</li>
-<li>Rd: 0000 (R0)</li>
-<li>Offset: 004 (immediate 4)</li>
-</ul>
+<pre><code>Encoding fields:
+  Cond: 1110 (always)
+  L: 1 (load)
+  B: 0 (word)
+  P: 1 (offset addressing)
+  U: 1 (add offset)
+  Rn: 0001 (R1)
+  Rd: 0000 (R0)
+  Offset: 004 (immediate 4)
 
-<p>Result: 0xE5910004</p>
-</code>`<code>
+Result: 0xE5910004
+</code></pre>
 
 
 <h3>5.3.4 Immediate Value Encoding</h3>
 
-<strong>Challenge</strong>
+<p><strong>Challenge</strong></p>
 
 <ul>
 <li>32-bit instruction must fit: opcode, registers, immediate</li>
 <li>Cannot fit full 32-bit immediate</li>
 </ul>
 
-<strong>ARM Solution: 8-bit + 4-bit Rotation</strong>
+<p><strong>ARM Solution: 8-bit + 4-bit Rotation</strong></p>
 
 <ul>
 <li>Immediate field: 12 bits total</li>
@@ -498,28 +510,28 @@
 <li>Rotation: Right by (2 × rotation field) bits</li>
 </ul>
 
-<strong>Calculation</strong>
+<p><strong>Calculation</strong></p>
 
-</code>`<code>
-<p>Actual Value = Immediate × ROR (2 × Rotation)</p>
-</code>`<code>
+<div class="math-block">
+$$
+\text{Actual Value} = \text{Immediate} \times \text{ROR}(2 \times \text{Rotation})
+$$
+</div>
+
+<p><strong>Examples</strong></p>
+
+<pre><code>Immediate=0xFF, Rotation=0:
+Value = 0xFF ROR 0 = 0x000000FF
+
+Immediate=0xFF, Rotation=8:
+Value = 0xFF ROR 16 = 0x00FF0000
+
+Immediate=0xFF, Rotation=12:
+Value = 0xFF ROR 24 = 0xFF000000
+</code></pre>
 
 
-<strong>Examples</strong>
-
-</code>`<code>
-<p>Immediate=0xFF, Rotation=0:</p>
-<p>Value = 0xFF ROR 0 = 0x000000FF</p>
-
-<p>Immediate=0xFF, Rotation=8:</p>
-<p>Value = 0xFF ROR 16 = 0x00FF0000</p>
-
-<p>Immediate=0xFF, Rotation=12:</p>
-<p>Value = 0xFF ROR 24 = 0xFF000000</p>
-</code>`<code>
-
-
-<strong>Allowed Immediates</strong>
+<p><strong>Allowed Immediates</strong></p>
 
 <ul>
 <li>Not all 32-bit values can be encoded</li>
@@ -528,247 +540,240 @@
 <li>Invalid: 0x123 (cannot be formed by rotation)</li>
 </ul>
 
-<strong>Assembler Handling</strong>
+<p><strong>Assembler Handling</strong></p>
 
 <ul>
 <li>Assembler checks if immediate is valid</li>
 <li>Gives error if immediate cannot be encoded</li>
 <li>Use LDR pseudo-instruction for arbitrary values:</li>
 </ul>
-</code>`<code>assembly
-<p>LDR R0, =0x12345678  ; Loads from literal pool</p>
-</code>`<code>
+
+<pre><code class="language-asm6502">LDR R0, =0x12345678  ; Loads from literal pool
+</code></pre>
 
 
 <h2>5.4 Logical Operations</h2>
 
 <h3>5.4.1 Bitwise AND</h3>
 
-<strong>Operation</strong>
+<p><strong>Operation</strong></p>
 
 <ul>
 <li>Performs logical AND on each bit pair</li>
 <li>Result bit = 1 only if both input bits are 1</li>
 </ul>
 
-<strong>Truth Table</strong>
+<p><strong>Truth Table</strong></p>
 
-</code>`<code>
-<p>A | B | A AND B</p>
-<p>--|---|--------</p>
-<p>0 | 0 |   0</p>
-<p>0 | 1 |   0</p>
-<p>1 | 0 |   0</p>
-<p>1 | 1 |   1</p>
-</code>`<code>
+<table>
+<thead>
+<tr>
+<th>A</th>
+<th>B</th>
+<th>A AND B</th>
+</tr>
+</thead>
+<tbody>
+<tr><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>0</td><td>1</td><td>0</td></tr>
+<tr><td>1</td><td>0</td><td>0</td></tr>
+<tr><td>1</td><td>1</td><td>1</td></tr>
+</tbody>
+</table>
 
+<p><strong>ARM Instruction</strong></p>
 
-<strong>ARM Instruction</strong>
-
-</code>`<code>assembly
-<p>AND Rd, Rn, Rm       ; Rd = Rn AND Rm</p>
-<p>AND Rd, Rn, #imm     ; Rd = Rn AND immediate</p>
-</code>`<code>
-
-
-<strong>Common Uses</strong>
-
-<strong>Bit Masking (Extract Specific Bits)</strong>
-
-</code>`<code>assembly
-<p>; Extract lower 8 bits of R1</p>
-<p>MOV R0, R1</p>
-<p>AND R0, R0, #0xFF    ; R0 = R1 & 0xFF (keep bits 0-7)</p>
-
-<p>; Extract bits 8-15</p>
-<p>MOV R0, R1</p>
-<p>AND R0, R0, #0xFF00  ; R0 = R1 & 0xFF00 (keep bits 8-15)</p>
-</code>`<code>
+<pre><code class="language-asm6502">AND Rd, Rn, Rm       ; Rd = Rn AND Rm
+AND Rd, Rn, #imm     ; Rd = Rn AND immediate
+</code></pre>
 
 
-<strong>Clearing Specific Bits</strong>
+<p><strong>Common Uses</strong></p>
 
-</code>`<code>assembly
-<p>; Clear bit 5 of R1</p>
-<p>AND R1, R1, #0xFFFFFFDF  ; Bit 5 mask: ~(1 << 5)</p>
-</code>`<code>
+<p><strong>Bit Masking (Extract Specific Bits)</strong></p>
 
+<pre><code class="language-asm6502">; Extract lower 8 bits of R1
+MOV R0, R1
+AND R0, R0, #0xFF    ; R0 = R1 & 0xFF (keep bits 0-7)
 
-<strong>Checking if Bit Set</strong>
+; Extract bits 8-15
+MOV R0, R1
+AND R0, R0, #0xFF00  ; R0 = R1 & 0xFF00 (keep bits 8-15)
+</code></pre>
 
-</code>`<code>assembly
-<p>AND R2, R1, #0x80    ; Check if bit 7 is set</p>
-<p>CMP R2, #0           ; Compare with zero</p>
-<p>BEQ bit_clear        ; Branch if bit was clear</p>
-</code>`<code>
+<p><strong>Clearing Specific Bits</strong></p>
+
+<pre><code class="language-asm6502">; Clear bit 5 of R1
+AND R1, R1, #0xFFFFFFDF  ; Bit 5 mask: ~(1 << 5)
+</code></pre>
+
+<p><strong>Checking if Bit Set</strong></p>
+
+<pre><code class="language-asm6502">AND R2, R1, #0x80    ; Check if bit 7 is set
+CMP R2, #0           ; Compare with zero
+BEQ bit_clear        ; Branch if bit was clear
+</code></pre>
 
 
 <h3>5.4.2 Bitwise OR</h3>
 
-<strong>Operation</strong>
+<p><strong>Operation</strong></p>
 
 <ul>
 <li>Performs logical OR on each bit pair</li>
 <li>Result bit = 1 if either input bit is 1</li>
 </ul>
 
-<strong>Truth Table</strong>
+<p><strong>Truth Table</strong></p>
 
-</code>`<code>
-<p>A | B | A OR B</p>
-<p>--|---|-------</p>
-<p>0 | 0 |   0</p>
-<p>0 | 1 |   1</p>
-<p>1 | 0 |   1</p>
-<p>1 | 1 |   1</p>
-</code>`<code>
+<table>
+<thead>
+<tr>
+<th>A</th>
+<th>B</th>
+<th>A OR B</th>
+</tr>
+</thead>
+<tbody>
+<tr><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>0</td><td>1</td><td>1</td></tr>
+<tr><td>1</td><td>0</td><td>1</td></tr>
+<tr><td>1</td><td>1</td><td>1</td></tr>
+</tbody>
+</table>
 
+<p><strong>ARM Instruction</strong></p>
 
-<strong>ARM Instruction</strong>
+<pre><code class="language-asm6502">ORR Rd, Rn, Rm       ; Rd = Rn OR Rm (ORR in ARM)
+ORR Rd, Rn, #imm     ; Rd = Rn OR immediate
+</code></pre>
 
-</code>`<code>assembly
-<p>ORR Rd, Rn, Rm       ; Rd = Rn OR Rm (ORR in ARM)</p>
-<p>ORR Rd, Rn, #imm     ; Rd = Rn OR immediate</p>
-</code>`<code>
+<p><strong>Common Uses</strong></p>
 
+<p><strong>Setting Specific Bits</strong></p>
 
-<strong>Common Uses</strong>
+<pre><code class="language-asm6502">; Set bit 3 of R1
+ORR R1, R1, #0x08    ; Bit 3 mask: (1 << 3) = 0x08
 
-<strong>Setting Specific Bits</strong>
+; Set bits 4 and 5
+ORR R1, R1, #0x30    ; Mask: 0x30 = 0b00110000
+</code></pre>
 
-</code>`<code>assembly
-<p>; Set bit 3 of R1</p>
-<p>ORR R1, R1, #0x08    ; Bit 3 mask: (1 << 3) = 0x08</p>
+<p><strong>Combining Values</strong></p>
 
-<p>; Set bits 4 and 5</p>
-<p>ORR R1, R1, #0x30    ; Mask: 0x30 = 0b00110000</p>
-</code>`<code>
-
-
-<strong>Combining Values</strong>
-
-</code>`<code>assembly
-<p>; Combine lower byte of R1 with upper bytes of R2</p>
-<p>AND R1, R1, #0xFF        ; Keep only lower byte</p>
-<p>AND R2, R2, #0xFFFFFF00  ; Keep only upper bytes</p>
-<p>ORR R0, R1, R2           ; Combine</p>
-</code>`<code>
+<pre><code class="language-asm6502">; Combine lower byte of R1 with upper bytes of R2
+AND R1, R1, #0xFF        ; Keep only lower byte
+AND R2, R2, #0xFFFFFF00  ; Keep only upper bytes
+ORR R0, R1, R2           ; Combine
+</code></pre>
 
 
 <h3>5.4.3 Bitwise XOR (Exclusive OR)</h3>
 
-<strong>Operation</strong>
+<p><strong>Operation</strong></p>
 
 <ul>
 <li>Performs logical XOR on each bit pair</li>
 <li>Result bit = 1 if input bits differ</li>
 </ul>
 
-<strong>Truth Table</strong>
+<p><strong>Truth Table</strong></p>
 
-</code>`<code>
-<p>A | B | A XOR B</p>
-<p>--|---|--------</p>
-<p>0 | 0 |   0</p>
-<p>0 | 1 |   1</p>
-<p>1 | 0 |   1</p>
-<p>1 | 1 |   0</p>
-</code>`<code>
+<table>
+<thead>
+<tr>
+<th>A</th>
+<th>B</th>
+<th>A XOR B</th>
+</tr>
+</thead>
+<tbody>
+<tr><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>0</td><td>1</td><td>1</td></tr>
+<tr><td>1</td><td>0</td><td>1</td></tr>
+<tr><td>1</td><td>1</td><td>0</td></tr>
+</tbody>
+</table>
 
+<p><strong>ARM Instruction</strong></p>
 
-<strong>ARM Instruction</strong>
-
-</code>`<code>assembly
-<p>EOR Rd, Rn, Rm       ; Rd = Rn EOR Rm (EOR in ARM)</p>
-<p>EOR Rd, Rn, #imm     ; Rd = Rn EOR immediate</p>
-</code>`<code>
-
-
-<strong>Common Uses</strong>
-
-<strong>Toggling Specific Bits</strong>
-
-</code>`<code>assembly
-<p>; Toggle bit 2 of R1</p>
-<p>EOR R1, R1, #0x04    ; Bit 2 mask: (1 << 2)</p>
-<p>; If bit was 0, becomes 1; if was 1, becomes 0</p>
-</code>`<code>
+<pre><code class="language-asm6502">EOR Rd, Rn, Rm       ; Rd = Rn EOR Rm (EOR in ARM)
+EOR Rd, Rn, #imm     ; Rd = Rn EOR immediate
+</code></pre>
 
 
-<strong>Fast Zero</strong>
+<p><strong>Common Uses</strong></p>
 
-</code>`<code>assembly
-<p>EOR R0, R0, R0       ; R0 = 0 (XOR with itself)</p>
-</code>`<code>
+<p><strong>Toggling Specific Bits</strong></p>
 
+<pre><code class="language-asm6502">; Toggle bit 2 of R1
+EOR R1, R1, #0x04    ; Bit 2 mask: (1 << 2)
+; If bit was 0, becomes 1; if was 1, becomes 0
+</code></pre>
 
-<strong>Comparison</strong>
+<p><strong>Fast Zero</strong></p>
 
-</code>`<code>assembly
-<p>; Check if R1 and R2 are equal</p>
-<p>EOR R3, R1, R2       ; R3 = R1 XOR R2</p>
-<p>CMP R3, #0           ; If R3 = 0, R1 == R2</p>
-<p>BEQ values_equal</p>
-</code>`<code>
+<pre><code class="language-asm6502">EOR R0, R0, R0       ; R0 = 0 (XOR with itself)
+</code></pre>
 
+<p><strong>Comparison</strong></p>
 
-<strong>Swapping Without Temporary</strong>
+<pre><code class="language-asm6502">; Check if R1 and R2 are equal
+EOR R3, R1, R2       ; R3 = R1 XOR R2
+CMP R3, #0           ; If R3 = 0, R1 == R2
+BEQ values_equal
+</code></pre>
 
-</code>`<code>assembly
-<p>; Swap R0 and R1 without using another register</p>
-<p>EOR R0, R0, R1</p>
-<p>EOR R1, R0, R1</p>
-<p>EOR R0, R0, R1</p>
-<p>; Now R0 and R1 are swapped</p>
-</code>`<code>
+<p><strong>Swapping Without Temporary</strong></p>
+
+<pre><code class="language-asm6502">; Swap R0 and R1 without using another register
+EOR R0, R0, R1
+EOR R1, R0, R1
+EOR R0, R0, R1
+; Now R0 and R1 are swapped
+</code></pre>
 
 
 <h3>5.4.4 Bitwise NOT</h3>
 
-<strong>Operation</strong>
+<p><strong>Operation</strong></p>
 
 <ul>
 <li>Inverts all bits (0→1, 1→0)</li>
 <li>Also called complement</li>
 </ul>
 
-<strong>ARM Instruction</strong>
+<p><strong>ARM Instruction</strong></p>
 
-</code>`<code>assembly
-<p>MVN Rd, Rm           ; Rd = NOT Rm (Move Not)</p>
-<p>MVN Rd, #imm         ; Rd = NOT immediate</p>
-</code>`<code>
+<pre><code class="language-asm6502">MVN Rd, Rm           ; Rd = NOT Rm (Move Not)
+MVN Rd, #imm         ; Rd = NOT immediate
+</code></pre>
 
+<p><strong>Common Uses</strong></p>
 
-<strong>Common Uses</strong>
+<p><strong>Creating Bit Masks</strong></p>
 
-<strong>Creating Bit Masks</strong>
+<pre><code class="language-asm6502">; Create mask with all bits set except bit 3
+MOV R0, #0x08        ; 0x08 = 0b00001000
+MVN R1, R0           ; R1 = 0xFFFFFFF7 (all except bit 3)
+</code></pre>
 
-</code>`<code>assembly
-<p>; Create mask with all bits set except bit 3</p>
-<p>MOV R0, #0x08        ; 0x08 = 0b00001000</p>
-<p>MVN R1, R0           ; R1 = 0xFFFFFFF7 (all except bit 3)</p>
-</code>`<code>
+<p><strong>Negation (with ADD)</strong></p>
 
-
-<strong>Negation (with ADD)</strong>
-
-</code>`<code>assembly
-<p>; Negate R1 (two's complement)</p>
-<p>MVN R1, R1           ; Invert all bits</p>
-<p>ADD R1, R1, #1       ; Add 1</p>
-<p>; Now R1 = -R1 (original)</p>
-</code>`<code>
+<pre><code class="language-asm6502">; Negate R1 (two's complement)
+MVN R1, R1           ; Invert all bits
+ADD R1, R1, #1       ; Add 1
+; Now R1 = -R1 (original)
+</code></pre>
 
 
 <h3>5.4.5 Shift Operations</h3>
 
-<strong>Logical Shift Left (LSL)</strong>
+<p><strong>Logical Shift Left (LSL)</strong></p>
 
-</code>`<code>assembly
-<p>LSL Rd, Rn, #shift   ; Rd = Rn << shift</p>
-<p>MOV Rd, Rn, LSL #shift</p>
-</code>`<code>
+<pre><code class="language-asm6502">LSL Rd, Rn, #shift   ; Rd = Rn << shift
+MOV Rd, Rn, LSL #shift
+</code></pre>
 
 
 <ul>
@@ -777,13 +782,11 @@
 <li>Example: 0b00001010 LSL 2 = 0b00101000</li>
 </ul>
 
-<strong>Logical Shift Right (LSR)</strong>
+<p><strong>Logical Shift Right (LSR)</strong></p>
 
-</code>`<code>assembly
-<p>LSR Rd, Rn, #shift   ; Rd = Rn >> shift (unsigned)</p>
-<p>MOV Rd, Rn, LSR #shift</p>
-</code>`<code>
-
+<pre><code class="language-asm6502">LSR Rd, Rn, #shift   ; Rd = Rn >> shift (unsigned)
+MOV Rd, Rn, LSR #shift
+</code></pre>
 
 <ul>
 <li>Shifts bits right, fills left with zeros</li>
@@ -791,12 +794,10 @@
 <li>Example: 0b10100000 LSR 2 = 0b00101000</li>
 </ul>
 
-<strong>Arithmetic Shift Right (ASR)</strong>
+<p><strong>Arithmetic Shift Right (ASR)</strong></p>
 
-</code>`<code>assembly
-<p>ASR Rd, Rn, #shift   ; Rd = Rn >> shift (signed)</p>
-</code>`<code>
-
+<pre><code class="language-asm6502">ASR Rd, Rn, #shift   ; Rd = Rn >> shift (signed)
+</code></pre>
 
 <ul>
 <li>Shifts bits right, fills left with sign bit</li>
@@ -804,11 +805,10 @@
 <li>Example: 0b11110000 ASR 2 = 0b11111100 (sign preserved)</li>
 </ul>
 
-<strong>Rotate Right (ROR)</strong>
+<p><strong>Rotate Right (ROR)</strong></p>
 
-</code>`<code>assembly
-<p>ROR Rd, Rn, #shift   ; Rotate Rn right by shift</p>
-</code>`<code>
+<pre><code class="language-asm6502">ROR Rd, Rn, #shift   ; Rotate Rn right by shift
+</code></pre>
 
 
 <ul>
@@ -817,152 +817,140 @@
 <li>Example: 0b10000001 ROR 1 = 0b11000000</li>
 </ul>
 
-<strong>Common Shift Applications</strong>
+<p><strong>Common Shift Applications</strong></p>
 
-<strong>Fast Multiplication/Division by Powers of 2</strong>
+<p><strong>Fast Multiplication/Division by Powers of 2</strong></p>
 
-</code>`<code>assembly
-<p>LSL R0, R1, #3       ; R0 = R1 × 8 (2^3)</p>
-<p>LSR R0, R1, #2       ; R0 = R1 / 4 (unsigned)</p>
-<p>ASR R0, R1, #2       ; R0 = R1 / 4 (signed)</p>
-</code>`<code>
+<pre><code class="language-asm6502">LSL R0, R1, #3       ; R0 = R1 × 8 (2^3)
+LSR R0, R1, #2       ; R0 = R1 / 4 (unsigned)
+ASR R0, R1, #2       ; R0 = R1 / 4 (signed)
+</code></pre>
 
+<p><strong>Bit Extraction</strong></p>
 
-<strong>Bit Extraction</strong>
+<pre><code class="language-asm6502">; Extract bits 8-11 from R1
+LSR R0, R1, #8       ; Shift bits 8-11 to bits 0-3
+AND R0, R0, #0xF     ; Mask to keep only 4 bits
+</code></pre>
 
-</code>`<code>assembly
-<p>; Extract bits 8-11 from R1</p>
-<p>LSR R0, R1, #8       ; Shift bits 8-11 to bits 0-3</p>
-<p>AND R0, R0, #0xF     ; Mask to keep only 4 bits</p>
-</code>`<code>
+<p><strong>Bit Positioning</strong></p>
 
-
-<strong>Bit Positioning</strong>
-
-</code>`<code>assembly
-<p>; Move bit 0 to bit 7</p>
-<p>LSL R0, R1, #7       ; Shift left 7 positions</p>
-<p>AND R0, R0, #0x80    ; Keep only bit 7</p>
-</code>`<code>
+<pre><code class="language-asm6502">; Move bit 0 to bit 7
+LSL R0, R1, #7       ; Shift left 7 positions
+AND R0, R0, #0x80    ; Keep only bit 7
+</code></pre>
 
 
 <h2>5.5 Practical Bit Manipulation Examples</h2>
 
 <h3>5.5.1 Extracting Bit Fields</h3>
 
-<strong>Extract bits 16-23</strong>
+<p><strong>Extract bits 16-23</strong></p>
 
-</code>`<code>assembly
-<p>LSR R0, R1, #16      ; Shift right to position</p>
-<p>AND R0, R0, #0xFF    ; Mask to 8 bits</p>
-</code>`<code>
+<pre><code class="language-asm6502">LSR R0, R1, #16      ; Shift right to position
+AND R0, R0, #0xFF    ; Mask to 8 bits
+</code></pre>
 
-<strong>Extract bits 4-9 (6 bits)</strong>
+<p><strong>Extract bits 4-9 (6 bits)</strong></p>
 
-</code>`<code>assembly
-<p>LSR R0, R1, #4       ; Shift to position 0</p>
-<p>AND R0, R0, #0x3F    ; Mask to 6 bits (0b111111)</p>
-</code>`<code>
+<pre><code class="language-asm6502">LSR R0, R1, #4       ; Shift to position 0
+AND R0, R0, #0x3F    ; Mask to 6 bits (0b111111)
+</code></pre>
 
 
 <h3>5.5.2 Setting and Clearing Bits</h3>
 
-<strong>Set bits 8-15</strong>
+<p><strong>Set bits 8-15</strong></p>
 
-</code>`<code>assembly
-<p>ORR R1, R1, #0xFF00  ; Set bits 8-15</p>
-</code>`<code>
+<pre><code class="language-asm6502">ORR R1, R1, #0xFF00  ; Set bits 8-15
+</code></pre>
 
-<strong>Clear bits 16-23</strong>
+<p><strong>Clear bits 16-23</strong></p>
 
-</code>`<code>assembly
-<p>LDR R0, =0xFF00FFFF  ; Mask with bits 16-23 clear</p>
-<p>AND R1, R1, R0       ; Clear bits 16-23 of R1</p>
-</code>`<code>
+<pre><code class="language-asm6502">LDR R0, =0xFF00FFFF  ; Mask with bits 16-23 clear
+AND R1, R1, R0       ; Clear bits 16-23 of R1
+</code></pre>
 
-<strong>Toggle bits 0-7</strong>
+<p><strong>Toggle bits 0-7</strong></p>
 
-</code>`<code>assembly
-<p>EOR R1, R1, #0xFF    ; Toggle lower byte</p>
-</code>`<code>
+<pre><code class="language-asm6502">EOR R1, R1, #0xFF    ; Toggle lower byte
+</code></pre>
 
 
 <h3>5.5.3 Checking Flags</h3>
 
-<strong>Check if any of bits 4-7 are set</strong>
+<p><strong>Check if any of bits 4-7 are set</strong></p>
 
-</code>`<code>assembly
-<p>AND R2, R1, #0xF0    ; Mask bits 4-7</p>
-<p>CMP R2, #0           ; Check if zero</p>
-<p>BNE bits_set         ; Branch if any bit was set</p>
-</code>`<code>
+<pre><code class="language-asm6502">AND R2, R1, #0xF0    ; Mask bits 4-7
+CMP R2, #0           ; Check if zero
+BNE bits_set         ; Branch if any bit was set
+</code></pre>
 
-<strong>Check if specific pattern matches</strong>
+<p><strong>Check if specific pattern matches</strong></p>
 
-</code>`<code>assembly
-<p>; Check if bits 8-11 are 0b1010</p>
-<p>LSR R0, R1, #8       ; Position bits</p>
-<p>AND R0, R0, #0xF     ; Mask 4 bits</p>
-<p>CMP R0, #0xA         ; Compare with 0b1010</p>
-<p>BEQ pattern_match</p>
-</code>`<code>
+<pre><code class="language-asm6502">; Check if bits 8-11 are 0b1010
+LSR R0, R1, #8       ; Position bits
+AND R0, R0, #0xF     ; Mask 4 bits
+CMP R0, #0xA         ; Compare with 0b1010
+BEQ pattern_match
+</code></pre>
 
 
 <h3>5.5.4 Color Packing/Unpacking</h3>
 
-<strong>Pack RGB values (8 bits each)</strong>
+<p><strong>Pack RGB values (8 bits each)</strong></p>
 
-</code>`<code>assembly
-<p>; R0 = Red, R1 = Green, R2 = Blue</p>
-<p>LSL R1, R1, #8       ; Green << 8</p>
-<p>LSL R2, R2, #16      ; Blue << 16</p>
-<p>ORR R3, R0, R1       ; Combine Red and Green</p>
-<p>ORR R3, R3, R2       ; Combine with Blue</p>
-<p>; R3 now contains 0x00BBGGRR</p>
-</code>`<code>
+<pre><code class="language-asm6502">; R0 = Red, R1 = Green, R2 = Blue
+LSL R1, R1, #8       ; Green << 8
+LSL R2, R2, #16      ; Blue << 16
+ORR R3, R0, R1       ; Combine Red and Green
+ORR R3, R3, R2       ; Combine with Blue
+; R3 now contains 0x00BBGGRR
+</code></pre>
 
 
-<strong>Unpack RGB values</strong>
+<p><strong>Unpack RGB values</strong></p>
 
-</code>`<code>assembly
-<p>; R0 contains 0x00BBGGRR</p>
-<p>AND R1, R0, #0xFF      ; Extract Red</p>
-<p>LSR R2, R0, #8</p>
-<p>AND R2, R2, #0xFF      ; Extract Green</p>
-<p>LSR R3, R0, #16</p>
-<p>AND R3, R3, #0xFF      ; Extract Blue</p>
-</code>``
+<pre><code class="language-asm6502">; R0 contains 0x00BBGGRR
+AND R1, R0, #0xFF      ; Extract Red
+LSR R2, R0, #8
+AND R2, R2, #0xFF      ; Extract Green
+LSR R3, R0, #16
+AND R3, R3, #0xFF      ; Extract Blue
+</code></pre>
 
 
 <h2>Key Takeaways</h2>
 
-<p>1. <strong>Unsigned binary integers</strong> represent values from 0 to 2^N - 1 using N bits.</p>
+<ol>
+<li><strong>Unsigned binary integers</strong> represent values from 0 to 2^N - 1 using N bits.</li>
 
-<p>2. <strong>Two's complement</strong> represents signed integers, with MSB as sign bit and range -(2^(N-1)) to +(2^(N-1) - 1).</p>
+<li><strong>Two's complement</strong> represents signed integers, with MSB as sign bit and range -(2^(N-1)) to +(2^(N-1) - 1).</li>
 
-<p>3. <strong>Sign extension</strong> preserves value when expanding narrower signed values to wider registers.</p>
+<li><strong>Sign extension</strong> preserves value when expanding narrower signed values to wider registers.</li>
 
-<p>4. <strong>Hexadecimal notation</strong> provides compact representation with one hex digit per 4 binary bits.</p>
+<li><strong>Hexadecimal notation</strong> provides compact representation with one hex digit per 4 binary bits.</li>
 
-<p>5. <strong>ARM instructions are fixed 32-bit length</strong>, simplifying fetch/decode but limiting immediate values.</p>
+<li><strong>ARM instructions are fixed 32-bit length</strong>, simplifying fetch/decode but limiting immediate values.</li>
 
-<p>6. <strong>Data processing format</strong> includes condition, opcode, source/destination registers, and operand.</p>
+<li><strong>Data processing format</strong> includes condition, opcode, source/destination registers, and operand.</li>
 
-<p>7. <strong>Data transfer format</strong> specifies load/store, byte/word, addressing mode, and offset.</p>
+<li><strong>Data transfer format</strong> specifies load/store, byte/word, addressing mode, and offset.</li>
 
-<p>8. <strong>Immediate encoding</strong> uses 8-bit value + 4-bit rotation, limiting which constants can be encoded directly.</p>
+<li><strong>Immediate encoding</strong> uses 8-bit value + 4-bit rotation, limiting which constants can be encoded directly.</li>
 
-<p>9. <strong>Bitwise AND</strong> used for masking (extracting specific bits) and clearing bits.</p>
+<li><strong>Bitwise AND</strong> used for masking (extracting specific bits) and clearing bits.</li>
 
-<p>10. <strong>Bitwise OR</strong> used for setting specific bits and combining values.</p>
+<li><strong>Bitwise OR</strong> used for setting specific bits and combining values.</li>
 
-<p>11. <strong>Bitwise XOR</strong> used for toggling bits, fast zero, and comparisons.</p>
+<li><strong>Bitwise XOR</strong> used for toggling bits, fast zero, and comparisons.</li>
 
-<p>12. <strong>Shift operations</strong> enable fast multiplication/division by powers of 2 and bit positioning.</p>
+<li><strong>Shift operations</strong> enable fast multiplication/division by powers of 2 and bit positioning.</li>
 
-<p>13. <strong>Bit manipulation</strong> is fundamental for low-level programming, hardware control, and optimization.</p>
+<li><strong>Bit manipulation</strong> is fundamental for low-level programming, hardware control, and optimization.</li>
 
-<p>14. <strong>Understanding encoding</strong> helps write efficient assembly and debug machine code issues.</p>
+<li><strong>Understanding encoding</strong> helps write efficient assembly and debug machine code issues.</li>
+</ol>
 
 <h2>Summary</h2>
 

@@ -6,6 +6,15 @@
     <title>Lecture 2: Technology Trends - Lectures on Computer Architecture</title>
     <link rel="stylesheet" href="../../assets/css/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+    <!-- Prism.js for code syntax highlighting -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-c.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-asm6502.min.js"></script>
 </head>
 <body>
     <header class="lecture-header">
@@ -64,7 +73,7 @@
 
 <h3>2.2.1 Who Was Gordon Moore?</h3>
 
-<strong>Background and Influence:</strong>
+<p><strong>Background and Influence:</strong></p>
 
 <ul>
 <li>Co-founder of Intel Corporation, historically the biggest manufacturer of computer chips/processors</li>
@@ -72,7 +81,7 @@
 <li>Made a prediction that shaped the entire semiconductor industry</li>
 </ul>
 
-<strong>Intel's Dominance:</strong>
+<p><strong>Intel's Dominance:</strong></p>
 
 <ul>
 <li>Established industry standards for processor design</li>
@@ -83,13 +92,13 @@
 
 <h3>2.2.2 Moore's Law Definition</h3>
 
-<strong>The Prediction:</strong>
+<p><strong>The Prediction:</strong></p>
 
 <p>Moore's Law is NOT a physical law like the law of gravity. It is an observation and prediction about technology trends:</p>
 
-<strong>"The number of transistors that can be placed on a standard computer chip will double every two years."</strong>
+<p><strong>"The number of transistors that can be placed on a standard computer chip will double every two years."</strong></p>
 
-<strong>Practical Interpretation:</strong>
+<p><strong>Practical Interpretation:</strong></p>
 
 <ul>
 <li>Roughly translates to: Computational power doubles every two years</li>
@@ -98,7 +107,7 @@
 <li>Self-fulfilling prophecy driven by industry investment</li>
 </ul>
 
-<strong>Historical Context:</strong>
+<p><strong>Historical Context:</strong></p>
 
 <ul>
 <li>Initial observation made in mid-1960s</li>
@@ -109,7 +118,7 @@
 
 <h3>2.2.3 Impact of Moore's Law</h3>
 
-<strong>Computer Evolution Enabled:</strong>
+<p><strong>Computer Evolution Enabled:</strong></p>
 
 <p>Computers transformed from room-sized scientific calculators to:</p>
 
@@ -120,34 +129,42 @@
 <li><strong>Wearables:</strong> Smartwatches and fitness trackers</li>
 </ul>
 
-<strong>Revolutionary Applications:</strong>
+<p><strong>Revolutionary Applications:</strong></p>
 
 <p>Moore's Law made computationally intensive applications possible:</p>
 
-1. <strong>Human Genome Decoding:</strong>
+<ol>
+<li><strong>Human Genome Decoding:</strong>
+    <ul>
+        <li>Massive computational requirements</li>
+        <li>Processing billions of genetic sequences</li>
+        <li>Pattern recognition across enormous datasets</li>
+    </ul>
+</li>
+<li><strong>World Wide Web and Internet Search:</strong>
+    <ul>
+        <li>Millisecond response times for complex queries</li>
+        <li>Indexing billions of web pages</li>
+        <li>Real-time information retrieval</li>
+    </ul>
+</li>
+<li><strong>Artificial Intelligence and Machine Learning:</strong>
+    <ul>
+        <li>Neural networks with billions of parameters</li>
+        <li>Real-time image and speech recognition</li>
+        <li>Autonomous systems and decision-making</li>
+    </ul>
+</li>
+<li><strong>Complex Simulations and Scientific Computing:</strong>
+    <ul>
+        <li>Weather prediction and climate modeling</li>
+        <li>Molecular dynamics simulations</li>
+        <li>Astrophysical calculations</li>
+    </ul>
+</li>
+</ol>
 
-<p>- Massive computational requirements</p>
-<p>- Processing billions of genetic sequences</p>
-<p>- Pattern recognition across enormous datasets</p>
-
-2. <strong>World Wide Web and Internet Search:</strong>
-
-<p>- Millisecond response times for complex queries</p>
-<p>- Indexing billions of web pages</p>
-<p>- Real-time information retrieval</p>
-
-3. <strong>Artificial Intelligence and Machine Learning:</strong>
-
-<p>- Neural networks with billions of parameters</p>
-<p>- Real-time image and speech recognition</p>
-<p>- Autonomous systems and decision-making</p>
-
-4. <strong>Complex Simulations and Scientific Computing:</strong>
-<p>- Weather prediction and climate modeling</p>
-<p>- Molecular dynamics simulations</p>
-<p>- Astrophysical calculations</p>
-
-<strong>Societal Impact:</strong>
+<p><strong>Societal Impact:</strong></p>
 
 <ul>
 <li>Computer software became ubiquitous and unavoidable</li>
@@ -160,7 +177,7 @@
 
 <h3>2.3.1 Transistor Count Growth (1970-2010)</h3>
 
-<strong>Chart Analysis:</strong>
+<p><strong>Chart Analysis:</strong></p>
 
 <img src="../img/Chapter%201%20Moore's%20Law.jpg" alt="Computer System Abstraction Layers" width="600">
 
@@ -173,7 +190,7 @@
 <li><strong>Red-Brown Line:</strong> Doubling every 24 months (Moore's actual prediction)</li>
 </ul>
 
-<strong>Real Intel Processor Models:</strong>
+<p><strong>Real Intel Processor Models:</strong></p>
 
 <p>Tracking actual transistor counts across processor generations:</p>
 
@@ -185,7 +202,7 @@
 <li><strong>Trend Validation:</strong> Actual counts closely followed the "doubling per 2 years" curve</li>
 </ul>
 
-<strong>Significance:</strong>
+<p><strong>Significance:</strong></p>
 
 <ul>
 <li>Prediction held remarkably accurate for 40+ years</li>
@@ -196,7 +213,7 @@
 
 <h3>2.3.2 The x86 Architecture</h3>
 
-<strong>Origin and Naming:</strong>
+<p><strong>Origin and Naming:</strong></p>
 
 <ul>
 <li><strong>8086 Processor:</strong> First x86 architecture processor (notice "86" in the name)</li>
@@ -204,7 +221,7 @@
 <li>Created foundation for backward compatibility</li>
 </ul>
 
-<strong>x86 Architecture Family:</strong>
+<p><strong>x86 Architecture Family:</strong></p>
 
 <p>The architecture evolved through multiple generations while maintaining compatibility:</p>
 
@@ -216,7 +233,7 @@
 <li><strong>Modern Processors:</strong> Core i3, i5, i7, i9 series</li>
 </ul>
 
-<strong>AMD's Adoption:</strong>
+<p><strong>AMD's Adoption:</strong></p>
 
 <ul>
 <li>AMD also uses x86 architecture</li>
@@ -225,7 +242,7 @@
 <li>Drives innovation through competition</li>
 </ul>
 
-<strong>Evolution Strategy:</strong>
+<p><strong>Evolution Strategy:</strong></p>
 
 <ul>
 <li>Architecture evolved significantly over decades</li>
@@ -236,7 +253,7 @@
 
 <h3>2.3.3 Historical Context</h3>
 
-<strong>Early Computing Era (1985-1990):</strong>
+<p><strong>Early Computing Era (1985-1990):</strong></p>
 
 <ul>
 <li>1985: 80386 computers first arrived on market</li>
@@ -246,7 +263,7 @@
 <li>Command-line interaction only</li>
 </ul>
 
-<strong>Transformation Period (Mid-Late 1990s):</strong>
+<p><strong>Transformation Period (Mid-Late 1990s):</strong></p>
 
 <ul>
 <li>GUIs emerged (Windows 95 and similar systems)</li>
@@ -255,7 +272,7 @@
 <li>Internet connectivity became widespread</li>
 </ul>
 
-<strong>User Experience Revolution:</strong>
+<p><strong>User Experience Revolution:</strong></p>
 
 <ul>
 <li>Significant transformation in how people interacted with computers</li>
@@ -268,11 +285,11 @@
 
 <h3>2.4.1 What Made Transistor Count Increase Possible?</h3>
 
-<strong>The Answer: Smaller Transistors</strong>
+<p><strong>The Answer: Smaller Transistors</strong></p>
 
 <p>The exponential growth in transistor count was enabled primarily by reducing transistor size through improved manufacturing processes.</p>
 
-<strong>Lithography Process:</strong>
+<p><strong>Lithography Process:</strong></p>
 
 <ul>
 <li>Etching transistors onto silicon wafer using photolithographic techniques</li>
@@ -281,7 +298,7 @@
 <li>Smaller features = more transistors per unit area</li>
 </ul>
 
-<strong>Feature Size Timeline:</strong>
+<p><strong>Feature Size Timeline:</strong></p>
 
 <p>The relentless march toward smaller dimensions:</p>
 
@@ -300,7 +317,7 @@
 
 <h3>2.4.2 What is "Feature Size"?</h3>
 
-<strong>Original Definition:</strong>
+<p><strong>Original Definition:</strong></p>
 
 <ul>
 <li>Originally represented physical measurement: minimum distance between source and drain of transistor</li>
@@ -308,7 +325,7 @@
 <li>Directly related to transistor dimensions</li>
 </ul>
 
-<strong>Modern Reality:</strong>
+<p><strong>Modern Reality:</strong></p>
 
 <ul>
 <li><strong>NOT a precisely defined physical measurement anymore</strong></li>
@@ -317,7 +334,7 @@
 <li>Smaller number suggests more advanced technology</li>
 </ul>
 
-<strong>Alternative Names:</strong>
+<p><strong>Alternative Names:</strong></p>
 
 <p>Different terms referring to approximately the same concept:</p>
 
@@ -329,7 +346,7 @@
 <li>Technology node</li>
 </ul>
 
-<strong>Why Ambiguity Developed:</strong>
+<p><strong>Why Ambiguity Developed:</strong></p>
 
 <ul>
 <li>Manufacturing processes became more complex</li>
@@ -340,7 +357,7 @@
 
 <h3>2.4.3 How Tiny Are Transistors?</h3>
 
-<strong>Mind-Boggling Scale:</strong>
+<p><strong>Mind-Boggling Scale:</strong></p>
 
 <p>Putting modern transistor sizes in perspective:</p>
 
@@ -350,7 +367,7 @@
 <li><strong>Comparison to past:</strong> Incredibly small compared to transistors 40-50 years ago</li>
 </ul>
 
-<strong>Manufacturing Precision:</strong>
+<p><strong>Manufacturing Precision:</strong></p>
 
 <ul>
 <li>Requires cleanroom environments cleaner than surgical suites</li>
@@ -361,7 +378,7 @@
 
 <h3>2.4.4 Transistor Structure</h3>
 
-<strong>Basic Components:</strong>
+<p><strong>Basic Components:</strong></p>
 
 <ul>
 <li><strong>Silicon Substrate:</strong> Base semiconductor material</li>
@@ -370,7 +387,7 @@
 <li><strong>Insulator:</strong> Separates gate from channel</li>
 </ul>
 
-<strong>Feature Size Definition:</strong>
+<p><strong>Feature Size Definition:</strong></p>
 
 <ul>
 <li>Distance between drain and source (channel width)</li>
@@ -378,7 +395,7 @@
 <li>Determines electrical characteristics</li>
 </ul>
 
-<strong>Electrical Properties:</strong>
+<p><strong>Electrical Properties:</strong></p>
 
 <ul>
 <li><strong>Capacitance Load:</strong> Inherent property based on semiconductor material and structure</li>
@@ -391,7 +408,7 @@
 
 <h3>2.5.1 ITRS Organization</h3>
 
-<strong>International Technology Roadmap for Semiconductors:</strong>
+<p><strong>International Technology Roadmap for Semiconductors:</strong></p>
 
 <ul>
 <li><strong>Established:</strong> Around 2001</li>
@@ -400,7 +417,7 @@
 <li><strong>Methodology:</strong> Based on technology capabilities and market demand</li>
 </ul>
 
-<strong>Prediction Basis:</strong>
+<p><strong>Prediction Basis:</strong></p>
 
 <p>The roadmaps considered multiple factors:</p>
 
@@ -412,7 +429,7 @@
 <li>Physical limitations</li>
 </ul>
 
-<strong>Regular Updates:</strong>
+<p><strong>Regular Updates:</strong></p>
 
 <ul>
 <li>Produced updated roadmaps regularly</li>
@@ -423,7 +440,7 @@
 
 <h3>2.5.2 Original Roadmap (2001)</h3>
 
-<strong>Optimistic Projections:</strong>
+<p><strong>Optimistic Projections:</strong></p>
 
 <p>The initial roadmap predicted steady exponential decrease in feature size:</p>
 
@@ -434,7 +451,7 @@
 <li><strong>2012 Projection:</strong> Continuing decrease following Moore's Law</li>
 </ul>
 
-<strong>Assumptions:</strong>
+<p><strong>Assumptions:</strong></p>
 
 <ul>
 <li>Linear continuation of historical trends</li>
@@ -445,7 +462,7 @@
 
 <h3>2.5.3 Revised Roadmap (2013)</h3>
 
-<strong>Adjusted Expectations:</strong>
+<p><strong>Adjusted Expectations:</strong></p>
 
 <p>By 2013, reality required revised predictions:</p>
 
@@ -457,7 +474,7 @@
 <li><strong>2028 Target:</strong> 5 nm</li>
 </ul>
 
-<strong>Key Observations:</strong>
+<p><strong>Key Observations:</strong></p>
 
 <ul>
 <li><strong>Rate of reduction slowed down</strong> compared to original predictions</li>
@@ -468,7 +485,7 @@
 
 <h3>2.5.4 Final Roadmap (2015)</h3>
 
-<strong>Dramatic Shift in Direction:</strong>
+<p><strong>Dramatic Shift in Direction:</strong></p>
 
 <p>The 2015 roadmap marked a fundamental change:</p>
 
@@ -480,7 +497,7 @@
 <li><strong>Plateau:</strong> Would stick with 10 nm for foreseeable future</li>
 </ul>
 
-<strong>Significance:</strong>
+<p><strong>Significance:</strong></p>
 
 <ul>
 <li>Sudden departure from decades of continuous scaling</li>
@@ -491,11 +508,11 @@
 
 <h3>2.5.5 Why the Change? - 3D Technology</h3>
 
-<strong>Major Paradigm Shift (2013-2015):</strong>
+<p><strong>Major Paradigm Shift (2013-2015):</strong></p>
 
 <p>The industry pivoted to a fundamentally different approach:</p>
 
-<strong>Traditional Approach (Before):</strong>
+<p><strong>Traditional Approach (Before):</strong></p>
 
 <ul>
 <li>Single layer of transistors on silicon surface</li>
@@ -503,7 +520,7 @@
 <li>Two-dimensional planar structures</li>
 </ul>
 
-<strong>New Approach (After):</strong>
+<p><strong>New Approach (After):</strong></p>
 
 <ul>
 <li><strong>3D Chips:</strong> Multiple layers of transistors stacked vertically</li>
@@ -511,7 +528,7 @@
 <li><strong>Vertical Integration:</strong> Third dimension for density increase</li>
 </ul>
 
-<strong>Impact on Moore's Law:</strong>
+<p><strong>Impact on Moore's Law:</strong></p>
 
 <ul>
 <li>Transistor count <strong>still increasing</strong> (Moore's Law continues)</li>
@@ -520,7 +537,7 @@
 <li>Adds thickness dimension to chip design</li>
 </ul>
 
-<strong>Technical Innovations:</strong>
+<p><strong>Technical Innovations:</strong></p>
 
 <ul>
 <li>Gate-all-around (GAA) transistors</li>
@@ -531,7 +548,7 @@
 
 <h3>2.5.6 Dissolution of ITRS (2015)</h3>
 
-<strong>Reasons for Dissolution:</strong>
+<p><strong>Reasons for Dissolution:</strong></p>
 
 <ul>
 <li><strong>Technology Divergence:</strong> Multiple paths to increase transistor density</li>
@@ -540,7 +557,7 @@
 <li><strong>Heterogeneous Integration:</strong> Combining different technologies on same chip</li>
 </ul>
 
-<strong>Multiple Methods for Transistor Density:</strong>
+<p><strong>Multiple Methods for Transistor Density:</strong></p>
 
 <p>Modern approaches include:</p>
 
@@ -552,7 +569,7 @@
 <li>Heterogeneous integration</li>
 </ul>
 
-<strong>Moore's Law Status:</strong>
+<p><strong>Moore's Law Status:</strong></p>
 
 <ul>
 <li>Transistor count <strong>still doubling every 2 years</strong> (as of 2021)</li>
@@ -565,13 +582,13 @@
 
 <h3>2.6.1 Reason 1: More Complex Circuits</h3>
 
-<strong>Increased Transistor Budget:</strong>
+<p><strong>Increased Transistor Budget:</strong></p>
 
 <p>More transistors available on chip enables more sophisticated functionality.</p>
 
-<strong>Comparison Example:</strong>
+<p><strong>Comparison Example:</strong></p>
 
-<strong>Limited Transistor Count (100 transistors):</strong>
+<p><strong>Limited Transistor Count (100 transistors):</strong></p>
 
 <ul>
 <li>Can only build simple functional units</li>
@@ -581,7 +598,7 @@
 <li><strong>Result: SLOWER overall execution</strong></li>
 </ul>
 
-<strong>Abundant Transistors (1 billion):</strong>
+<p><strong>Abundant Transistors (1 billion):</strong></p>
 
 <ul>
 <li>Can build extremely complex circuits</li>
@@ -591,7 +608,7 @@
 <li><strong>Result: FASTER overall execution</strong></li>
 </ul>
 
-<strong>Architectural Implications:</strong>
+<p><strong>Architectural Implications:</strong></p>
 
 <ul>
 <li>Larger caches for better hit rates</li>
@@ -603,11 +620,11 @@
 
 <h3>2.6.2 Reason 2: Faster Switching</h3>
 
-<strong>Electrical Advantages of Smaller Size:</strong>
+<p><strong>Electrical Advantages of Smaller Size:</strong></p>
 
 <p>Smaller transistors possess superior electrical characteristics:</p>
 
-<strong>Lower Operating Voltage:</strong>
+<p><strong>Lower Operating Voltage:</strong></p>
 
 <ul>
 <li>Smaller channel width requires less voltage to switch transistor</li>
@@ -616,7 +633,7 @@
 <li>Enables higher switching frequencies</li>
 </ul>
 
-<strong>Reduced Impedance:</strong>
+<p><strong>Reduced Impedance:</strong></p>
 
 <ul>
 <li>Lower resistance in transistor channel</li>
@@ -624,7 +641,7 @@
 <li>Quicker charging/discharging of capacitances</li>
 </ul>
 
-<strong>Faster State Changes:</strong>
+<p><strong>Faster State Changes:</strong></p>
 
 <ul>
 <li>Can switch transistor on/off faster</li>
@@ -632,7 +649,7 @@
 <li>Shorter gate delays</li>
 </ul>
 
-<strong>Overall Impact:</strong>
+<p><strong>Overall Impact:</strong></p>
 
 <ul>
 <li>Faster transistor switching → Higher possible clock rate</li>
@@ -640,7 +657,7 @@
 <li>Faster overall computation</li>
 </ul>
 
-<strong>Physical Explanation:</strong>
+<p><strong>Physical Explanation:</strong></p>
 
 <p>The relationship between size and speed involves:</p>
 
@@ -655,11 +672,11 @@
 
 <h3>2.7.1 Clock Rate Increases (1982-2004)</h3>
 
-<strong>Exponential Growth Era:</strong>
+<p><strong>Exponential Growth Era:</strong></p>
 
 <p>Processor clock frequencies increased dramatically for over two decades:</p>
 
-<strong>Historical Progression:</strong>
+<p><strong>Historical Progression:</strong></p>
 <img src="../img/Chapter%201%20Power%20Wall.jpg" alt="Computer System Abstraction Layers" width="600">
 
 <ul>
@@ -671,7 +688,7 @@
 <li><strong>Pentium 4 Prescott (2004):</strong> 3.6 GHz (3600 MHz) - <strong>Peak of single-core era</strong></li>
 </ul>
 
-<strong>Growth Rate:</strong>
+<p><strong>Growth Rate:</strong></p>
 
 <ul>
 <li>Nearly 300× increase in 20 years</li>
@@ -682,7 +699,7 @@
 
 <h3>2.7.2 The Turning Point (2004-2007)</h3>
 
-<strong>Sudden Deceleration:</strong>
+<p><strong>Sudden Deceleration:</strong></p>
 
 <p>Around 2004, the decades-long trend dramatically changed:</p>
 
@@ -693,7 +710,7 @@
 <li><strong>Despite transistors continuing to get smaller</strong></li>
 </ul>
 
-<strong>The Paradox:</strong>
+<p><strong>The Paradox:</strong></p>
 
 <ul>
 <li>Manufacturing processes still improving</li>
@@ -702,7 +719,7 @@
 <li><strong>But clock frequencies stopped increasing</strong></li>
 </ul>
 
-<strong>Industry Recognition:</strong>
+<p><strong>Industry Recognition:</strong></p>
 
 <ul>
 <li>Fundamental limitation encountered</li>
@@ -717,7 +734,7 @@
 
 <p>As clock rates increased, power consumption grew unsustainably:</p>
 
-<strong>Pentium 4 Prescott Example:</strong>
+<p><strong>Pentium 4 Prescott Example:</strong></p>
 
 <ul>
 <li>Required more than <strong>100 watts</strong> of power</li>
@@ -725,7 +742,7 @@
 <li><strong>But HEAT became the critical limiting issue</strong></li>
 </ul>
 
-<strong>The Thermal Crisis:</strong>
+<p><strong>The Thermal Crisis:</strong></p>
 
 <p>Physical reality of heat generation:</p>
 
@@ -742,7 +759,7 @@
 <p>- Thermal damage to silicon</p>
 <p>- Reliability concerns and failure modes</p>
 
-<strong>The 100-Watt Rule of Thumb:</strong>
+<p><strong>The 100-Watt Rule of Thumb:</strong></p>
 
 <p>Industry consensus emerged:</p>
 
@@ -753,7 +770,7 @@
 <li>Required alternative approaches to improve performance</li>
 </ul>
 
-<strong>Attempted Solutions (All Insufficient):</strong>
+<p><strong>Attempted Solutions (All Insufficient):</strong></p>
 
 <p>Various cooling methods were tried:</p>
 
@@ -780,7 +797,7 @@
 <p>- Thermoelectric coolers</p>
 <p>- Ultimately impractical for consumer systems</p>
 
-<strong>None Sufficient:</strong>
+<p><strong>None Sufficient:</strong></p>
 
 <ul>
 <li>Couldn't overcome fundamental heat generation problem</li>
@@ -795,11 +812,15 @@
 
 <p>Dynamic power consumption follows this relationship:</p>
 
-<p>Power = Capacitance Load × Voltage² × Frequency</p>
+<div class="math-block">
+$$
+\text{Power} = \text{Capacitance Load} \times \text{Voltage}^2 \times \text{Frequency}
+$$
+</div>
 
-<strong>Factor Analysis (1982-2004):</strong>
+<p><strong>Factor Analysis (1982-2004):</strong></p>
 
-<strong>Capacitance Load:</strong>
+<p><strong>Capacitance Load:</strong></p>
 
 <ul>
 <li><strong>Relatively Constant</strong> per transistor</li>
@@ -808,7 +829,7 @@
 <li>Cannot be arbitrarily reduced</li>
 </ul>
 
-<strong>Voltage Reduction:</strong>
+<p><strong>Voltage Reduction:</strong></p>
 
 <ul>
 <li>Decreased from <strong>~5V to ~1V</strong></li>
@@ -817,7 +838,7 @@
 <li>Significant mitigation strategy</li>
 </ul>
 
-<strong>Frequency Increase:</strong>
+<p><strong>Frequency Increase:</strong></p>
 
 <ul>
 <li>Increased <strong>~300× (12 MHz to 3600 MHz)</strong></li>
@@ -826,19 +847,20 @@
 <li>Overwhelmed voltage reduction benefits</li>
 </ul>
 
-<strong>Net Effect Calculation:</strong>
+<p><strong>Net Effect Calculation:</strong></p>
 
+<div class="math-block">
+$$
+\begin{align*}
+\text{Power Scaling} &= (\text{Capacitance}) \times (\text{Voltage}^2) \times (\text{Frequency}) \\
+&= (1\times) \times (\frac{1}{5})^2 \times (300\times) \\
+&= (1\times) \times (\frac{1}{25}) \times (300\times) \\
+&= 12\times \text{ power increase}
+\end{align*}
+$$
+</div>
 
-<p>$$</p>
-<p>\begin{align*}</p>
-<p>ext{Power Scaling} &= (\text{Capacitance}) \times (\text{Voltage}^2) \times (\text{Frequency}) \\</p>
-<p>&= (1\times) \times (\frac{1}{5})^2 \times (300\times) \\</p>
-<p>&= (1\times) \times (\frac{1}{25}) \times (300\times) \\</p>
-<p>&= 12\times \text{ power increase}</p>
-<p>\end{align*}</p>
-<p>$$</p>
-
-<strong>Key Insight:</strong>
+<p><strong>Key Insight:</strong></p>
 
 <ul>
 <li>Despite aggressive voltage scaling (25× reduction in V² term)</li>
@@ -848,7 +870,7 @@
 <li>Fundamental limitation reached</li>
 </ul>
 
-<strong>Why Voltage Couldn't Scale Further:</strong>
+<p><strong>Why Voltage Couldn't Scale Further:</strong></p>
 
 <ul>
 <li>Transistor threshold voltages have physical limits</li>
@@ -863,7 +885,7 @@
 
 <p>Emerged prominently around early 2000s during the MHz wars:</p>
 
-<strong>Manufacturer Approach:</strong>
+<p><strong>Manufacturer Approach:</strong></p>
 
 <ul>
 <li><strong>"Official" Specifications:</strong> Conservative clock speed (e.g., 3.6 GHz)</li>
@@ -872,11 +894,11 @@
 <li><strong>Risk Disclaimer:</strong> No warranty at higher speeds</li>
 </ul>
 
-<strong>User Overclocking:</strong>
+<p><strong>User Overclocking:</strong></p>
 
 <p>Users could manually increase clock speed beyond rated specification:</p>
 
-<strong>Process:</strong>
+<p><strong>Process:</strong></p>
 
 <ul>
 <li>Change BIOS/UEFI settings</li>
@@ -885,7 +907,7 @@
 <li>Improve cooling solutions</li>
 </ul>
 
-<strong>Risks:</strong>
+<p><strong>Risks:</strong></p>
 
 <ul>
 <li><strong>Generate More Heat:</strong> Exceed thermal design power (TDP)</li>
@@ -895,7 +917,7 @@
 <li><strong>Voided Warranty:</strong> No manufacturer support</li>
 </ul>
 
-<strong>Target Audience:</strong>
+<p><strong>Target Audience:</strong></p>
 
 <ul>
 <li><strong>Gamers:</strong> Seeking maximum frame rates</li>
@@ -904,7 +926,7 @@
 <li><strong>Benchmarkers:</strong> Competitive performance testing</li>
 </ul>
 
-<strong>Industry Impact:</strong>
+<p><strong>Industry Impact:</strong></p>
 
 <ul>
 <li>Created enthusiast market segment</li>
@@ -917,11 +939,11 @@
 
 <h3>2.8.1 The Challenge</h3>
 
-<strong>The Industry Dilemma:</strong>
+<p><strong>The Industry Dilemma:</strong></p>
 
 <p>By mid-2000s, the semiconductor industry faced a paradox:</p>
 
-<strong>Available Resources:</strong>
+<p><strong>Available Resources:</strong></p>
 
 <ul>
 <li>Moore's Law still valid: More transistors available every generation</li>
@@ -929,7 +951,7 @@
 <li>Silicon area increasing or transistor density growing</li>
 </ul>
 
-<strong>Constraints:</strong>
+<p><strong>Constraints:</strong></p>
 
 <ul>
 <li><strong>Cannot use all transistors simultaneously</strong> (power wall/heat problem)</li>
@@ -937,7 +959,7 @@
 <li>Traditional performance scaling broken</li>
 </ul>
 
-<strong>Critical Questions:</strong>
+<p><strong>Critical Questions:</strong></p>
 
 <ul>
 <li>How to utilize available transistors?</li>
@@ -951,7 +973,7 @@
 
 <p>Industry pivoted from single-core to multi-core architectures:</p>
 
-<strong>Core Concept:</strong>
+<p><strong>Core Concept:</strong></p>
 
 <p>Instead of one powerful processor, put <strong>multiple complete processors on same chip</strong>:</p>
 
@@ -962,9 +984,9 @@
 <li>Parallel execution at thread/process level</li>
 </ul>
 
-<strong>Early Multi-Core Processors:</strong>
+<p><strong>Early Multi-Core Processors:</strong></p>
 
-<strong>AMD Barcelona (2007):</strong>
+<p><strong>AMD Barcelona (2007):</strong></p>
 
 <img src="../img/Chapter%201%20AMD%20Barcelona.jpg" alt="Computer System Abstraction Layers" width="600">
 
@@ -974,7 +996,7 @@
 <li>Integrated memory controller</li>
 </ul>
 
-<strong>Intel Core Series:</strong>
+<p><strong>Intel Core Series:</strong></p>
 
 <ul>
 <li>Multiple models with <strong>4 cores</strong></li>
@@ -982,7 +1004,7 @@
 <li>Competitive performance</li>
 </ul>
 
-<strong>IBM Processors:</strong>
+<p><strong>IBM Processors:</strong></p>
 
 <ul>
 <li>Server-oriented multi-core designs</li>
@@ -990,7 +1012,7 @@
 <li>Power-efficient designs</li>
 </ul>
 
-<strong>Extreme Designs:</strong>
+<p><strong>Extreme Designs:</strong></p>
 
 <ul>
 <li>Some manufacturers: <strong>8 cores</strong> per chip</li>
@@ -998,7 +1020,7 @@
 <li>Graphics processors (GPUs) with hundreds of simple cores</li>
 </ul>
 
-<strong>Power Management:</strong>
+<p><strong>Power Management:</strong></p>
 
 <ul>
 <li><strong>Dynamic Power Allocation:</strong> Cores powered on/off as needed</li>
@@ -1010,11 +1032,11 @@
 
 <h3>2.8.3 The Plan</h3>
 
-<strong>Initial Industry Vision:</strong>
+<p><strong>Initial Industry Vision:</strong></p>
 
 <p>Following Moore's Law principle for core counts:</p>
 
-<strong>Projected Growth:</strong>
+<p><strong>Projected Growth:</strong></p>
 
 <ul>
 <li><strong>Every 2 years:</strong> Double the number of cores per chip</li>
@@ -1022,7 +1044,7 @@
 <li>Each generation: 2× cores, same power envelope</li>
 </ul>
 
-<strong>Timeline Projection:</strong>
+<p><strong>Timeline Projection:</strong></p>
 
 <ul>
 <li><strong>2006:</strong> 4 cores</li>
@@ -1033,7 +1055,7 @@
 <li><strong>By 2021:</strong> Should have <strong>hundreds of cores</strong> in consumer processors</li>
 </ul>
 
-<strong>Theoretical Benefits:</strong>
+<p><strong>Theoretical Benefits:</strong></p>
 
 <ul>
 <li>Continuous performance improvement</li>
@@ -1042,7 +1064,7 @@
 <li>Parallel computing becoming mainstream</li>
 </ul>
 
-<strong>Reality Check:</strong>
+<p><strong>Reality Check:</strong></p>
 
 <ul>
 <li><strong>This did NOT happen</strong></li>
@@ -1054,13 +1076,13 @@
 
 <h3>2.8.4 Why Multi-Core Growth Slowed</h3>
 
-<strong>The Fundamental Problem: Parallel Programming Difficulty</strong>
+<p><strong>The Fundamental Problem: Parallel Programming Difficulty</strong></p>
 
-<strong>Software Challenge:</strong>
+<p><strong>Software Challenge:</strong></p>
 
 <p>Multi-core processors require fundamentally different programming approach:</p>
 
-<strong>Sequential Programming (Traditional):</strong>
+<p><strong>Sequential Programming (Traditional):</strong></p>
 
 <ul>
 <li>Single thread of execution</li>
@@ -1070,7 +1092,7 @@
 <li>Predictable behavior</li>
 </ul>
 
-<strong>Parallel Programming (Required for Multi-Core):</strong>
+<p><strong>Parallel Programming (Required for Multi-Core):</strong></p>
 
 <ul>
 <li>Multiple simultaneous threads of execution</li>
@@ -1080,9 +1102,9 @@
 <li>Manage shared resources and data</li>
 </ul>
 
-<strong>Available Parallel Programming Techniques:</strong>
+<p><strong>Available Parallel Programming Techniques:</strong></p>
 
-<strong>Multi-Threading:</strong>
+<p><strong>Multi-Threading:</strong></p>
 
 <ul>
 <li><strong>POSIX Threads (pthreads)</strong> in C/C++</li>
@@ -1091,7 +1113,7 @@
 <li>Operating system thread scheduling</li>
 </ul>
 
-<strong>Multiple Processes:</strong>
+<p><strong>Multiple Processes:</strong></p>
 
 <ul>
 <li>Fork/join models</li>
@@ -1099,7 +1121,7 @@
 <li>Process pools</li>
 </ul>
 
-<strong>Communication Mechanisms:</strong>
+<p><strong>Communication Mechanisms:</strong></p>
 
 <ul>
 <li>Shared memory</li>
@@ -1108,7 +1130,7 @@
 <li>Synchronization primitives (mutexes, semaphores, barriers)</li>
 </ul>
 
-<strong>Language Support:</strong>
+<p><strong>Language Support:</strong></p>
 
 <ul>
 <li>Available in most major programming languages</li>
@@ -1116,9 +1138,9 @@
 <li>Language-level primitives vs library-based approaches</li>
 </ul>
 
-<strong>Inherent Difficulties:</strong>
+<p><strong>Inherent Difficulties:</strong></p>
 
-<strong>1. Parallel Programming is HARD:</strong>
+<p><strong>1. Parallel Programming is HARD:</strong></p>
 
 <ul>
 <li>Much more difficult than sequential programming</li>
@@ -1128,7 +1150,7 @@
 <li>Race conditions and deadlocks</li>
 </ul>
 
-<strong>2. Requires Deep Understanding:</strong>
+<p><strong>2. Requires Deep Understanding:</strong></p>
 
 <ul>
 <li><strong>Hardware Architecture:</strong> How cores communicate, cache coherency</li>
@@ -1137,9 +1159,9 @@
 <li><strong>Synchronization Overhead:</strong> Cost of coordinating execution</li>
 </ul>
 
-<strong>Key Technical Challenges:</strong>
+<p><strong>Key Technical Challenges:</strong></p>
 
-<strong>Load Balancing:</strong>
+<p><strong>Load Balancing:</strong></p>
 
 <ul>
 <li><strong>Problem:</strong> Distribute work evenly across all cores</li>
@@ -1149,7 +1171,7 @@
 <li><strong>Solution Difficulty:</strong> NP-hard problem in general case</li>
 </ul>
 
-<strong>Communication Optimization:</strong>
+<p><strong>Communication Optimization:</strong></p>
 
 <ul>
 <li><strong>Problem:</strong> Minimize data transfer between cores</li>
@@ -1159,7 +1181,7 @@
 <li><strong>Solution:</strong> Locality-aware algorithms, minimize sharing</li>
 </ul>
 
-<strong>Synchronization:</strong>
+<p><strong>Synchronization:</strong></p>
 
 <ul>
 <li><strong>Problem:</strong> Coordinate execution between cores</li>
@@ -1169,7 +1191,7 @@
 <li><strong>Solution:</strong> Careful design, lock-free algorithms</li>
 </ul>
 
-<strong>Performance Consequences:</strong>
+<p><strong>Performance Consequences:</strong></p>
 
 <p>If parallel programming not done well:</p>
 
@@ -1182,9 +1204,9 @@
 
 <h3>2.8.5 Instruction-Level Parallelism vs Multi-Core Parallelism</h3>
 
-<strong>Instruction-Level Parallelism (ILP):</strong>
+<p><strong>Instruction-Level Parallelism (ILP):</strong></p>
 
-<strong>Characteristics:</strong>
+<p><strong>Characteristics:</strong></p>
 
 <ul>
 <li><strong>Hardware-Based Solution:</strong> Processor automatically finds parallelism</li>
@@ -1195,7 +1217,7 @@
 <li><strong>Automatic and Hidden:</strong> Works without programmer awareness</li>
 </ul>
 
-<strong>Techniques:</strong>
+<p><strong>Techniques:</strong></p>
 
 <ul>
 <li>Superscalar execution</li>
@@ -1205,7 +1227,7 @@
 <li>Branch prediction</li>
 </ul>
 
-<strong>Benefits:</strong>
+<p><strong>Benefits:</strong></p>
 
 <ul>
 <li>Free performance improvement</li>
@@ -1214,9 +1236,9 @@
 <li>Automatic optimization</li>
 </ul>
 
-<strong>Multi-Core Parallelism:</strong>
+<p><strong>Multi-Core Parallelism:</strong></p>
 
-<strong>Characteristics:</strong>
+<p><strong>Characteristics:</strong></p>
 
 <ul>
 <li><strong>Explicit Programming Required:</strong> Programmer must manually parallelize</li>
@@ -1225,7 +1247,7 @@
 <li><strong>Programmer Responsibility:</strong> Must handle all coordination</li>
 </ul>
 
-<strong>Programmer Must:</strong>
+<p><strong>Programmer Must:</strong></p>
 
 <ul>
 <li>Break program into parallel threads</li>
@@ -1238,19 +1260,48 @@
 <li>Minimize communication overhead</li>
 </ul>
 
-<strong>Contrast:</strong>
+<p><strong>Contrast:</strong></p>
 
-<p>| Aspect        | ILP       | Multi-Core       |</p>
-<p>| ------------- | --------- | ---------------- |</p>
-<p>| Who does work | Hardware  | Programmer       |</p>
-<p>| Transparency  | Invisible | Explicit         |</p>
-<p>| Difficulty    | Automatic | Hard             |</p>
-<p>| Applicability | All code  | Limited patterns |</p>
-<p>| Overhead      | Hidden    | Must manage      |</p>
+<table>
+<thead>
+<tr>
+<th>Aspect</th>
+<th>ILP</th>
+<th>Multi-Core</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Who does work</td>
+<td>Hardware</td>
+<td>Programmer</td>
+</tr>
+<tr>
+<td>Transparency</td>
+<td>Invisible</td>
+<td>Explicit</td>
+</tr>
+<tr>
+<td>Difficulty</td>
+<td>Automatic</td>
+<td>Hard</td>
+</tr>
+<tr>
+<td>Applicability</td>
+<td>All code</td>
+<td>Limited patterns</td>
+</tr>
+<tr>
+<td>Overhead</td>
+<td>Hidden</td>
+<td>Must manage</td>
+</tr>
+</tbody>
+</table>
 
 <h3>2.8.6 Impact on Software Development</h3>
 
-<strong>For Regular Programmers:</strong>
+<p><strong>For Regular Programmers:</strong></p>
 
 <ul>
 <li><strong>Too Difficult:</strong> Most cannot effectively parallelize</li>
@@ -1259,7 +1310,7 @@
 <li><strong>Training Gap:</strong> Most programmers not trained in parallel programming</li>
 </ul>
 
-<strong>For Computer Engineers:</strong>
+<p><strong>For Computer Engineers:</strong></p>
 
 <ul>
 <li><strong>Essential Skill:</strong> Must learn parallel programming</li>
@@ -1269,9 +1320,9 @@
 <li><strong>Architecture Knowledge:</strong> Must understand cache coherency, memory models</li>
 </ul>
 
-<strong>Application Domains:</strong>
+<p><strong>Application Domains:</strong></p>
 
-<strong>High-Performance Applications Requiring Parallelism:</strong>
+<p><strong>High-Performance Applications Requiring Parallelism:</strong></p>
 
 <ul>
 <li>Scientific computing and simulations</li>
@@ -1282,7 +1333,7 @@
 <li>Financial modeling</li>
 </ul>
 
-<strong>Applications That Remain Sequential:</strong>
+<p><strong>Applications That Remain Sequential:</strong></p>
 
 <ul>
 <li>Many business applications</li>
@@ -1292,7 +1343,7 @@
 <li>Legacy software</li>
 </ul>
 
-<strong>Education Impact:</strong>
+<p><strong>Education Impact:</strong></p>
 
 <ul>
 <li>Computer science curricula adding parallel programming courses</li>
@@ -1305,9 +1356,9 @@
 
 <h3>2.9.1 Hardware Layer (Bottom)</h3>
 
-<strong>Physical Components:</strong>
+<p><strong>Physical Components:</strong></p>
 
-<strong>Processor (CPU):</strong>
+<p><strong>Processor (CPU):</strong></p>
 
 <ul>
 <li>Central Processing Unit</li>
@@ -1316,7 +1367,7 @@
 <li>Includes registers and functional units</li>
 </ul>
 
-<strong>Microarchitecture:</strong>
+<p><strong>Microarchitecture:</strong></p>
 
 <ul>
 <li>Internal organization of processor</li>
@@ -1326,7 +1377,7 @@
 <li>Bus interfaces</li>
 </ul>
 
-<strong>Memory Hierarchy:</strong>
+<p><strong>Memory Hierarchy:</strong></p>
 
 <ul>
 <li><strong>Level 1 Cache (L1):</strong></li>
@@ -1361,7 +1412,7 @@
 <p>- Much slower than cache</p>
 <p>- Volatile storage</p>
 
-<strong>Input/Output Controllers:</strong>
+<p><strong>Input/Output Controllers:</strong></p>
 
 <ul>
 <li>USB controllers</li>
@@ -1370,7 +1421,7 @@
 <li>Storage controllers</li>
 </ul>
 
-<strong>Secondary Storage Interfaces:</strong>
+<p><strong>Secondary Storage Interfaces:</strong></p>
 
 <ul>
 <li>SATA for hard drives/SSDs</li>
@@ -1378,7 +1429,7 @@
 <li>External storage connections</li>
 </ul>
 
-<strong>Purpose:</strong>
+<p><strong>Purpose:</strong></p>
 
 <ul>
 <li>Actual physical components that execute computation</li>
@@ -1391,7 +1442,7 @@
 
 <em></em>Tool Chain Components:
 
-<strong>Compiler:</strong>
+<p><strong>Compiler:</strong></p>
 
 <ul>
 <li><strong>Function:</strong> Translates high-level language to assembly</li>
@@ -1401,7 +1452,7 @@
 <li><strong>Examples:</strong> GCC, Clang, MSVC, Javac</li>
 </ul>
 
-<strong>Assembler:</strong>
+<p><strong>Assembler:</strong></p>
 
 <ul>
 <li><strong>Function:</strong> Translates assembly to machine code</li>
@@ -1411,7 +1462,7 @@
 <li><strong>Examples:</strong> GNU Assembler (as), NASM</li>
 </ul>
 
-<strong>Linker:</strong>
+<p><strong>Linker:</strong></p>
 
 <ul>
 <li><strong>Function:</strong> Combines object files and libraries</li>
@@ -1421,7 +1472,7 @@
 <li><strong>Examples:</strong> GNU ld, MSVC linker</li>
 </ul>
 
-<strong>Purpose of Tool Chain:</strong>
+<p><strong>Purpose of Tool Chain:</strong></p>
 
 <ul>
 <li>Support application development</li>
@@ -1430,11 +1481,11 @@
 <li>Provide optimization opportunities</li>
 </ul>
 
-<strong>Operating System:</strong>
+<p><strong>Operating System:</strong></p>
 
-<strong>Core Responsibilities:</strong>
+<p><strong>Core Responsibilities:</strong></p>
 
-<strong>Resource Management:</strong>
+<p><strong>Resource Management:</strong></p>
 
 <ul>
 <li>CPU time allocation</li>
@@ -1443,7 +1494,7 @@
 <li>Storage space management</li>
 </ul>
 
-<strong>Memory Management:</strong>
+<p><strong>Memory Management:</strong></p>
 
 <ul>
 <li>Virtual memory implementation</li>
@@ -1452,7 +1503,7 @@
 <li>Swap space management</li>
 </ul>
 
-<strong>Storage Management:</strong>
+<p><strong>Storage Management:</strong></p>
 
 <ul>
 <li>File system implementation</li>
@@ -1461,7 +1512,7 @@
 <li>Disk block allocation</li>
 </ul>
 
-<strong>Input/Output Handling:</strong>
+<p><strong>Input/Output Handling:</strong></p>
 
 <ul>
 <li>Device drivers</li>
@@ -1470,7 +1521,7 @@
 <li>Asynchronous I/O</li>
 </ul>
 
-<strong>Task Scheduling:</strong>
+<p><strong>Task Scheduling:</strong></p>
 
 <ul>
 <li>Process scheduling algorithms</li>
@@ -1479,7 +1530,7 @@
 <li>Time-slicing and preemption</li>
 </ul>
 
-<strong>Resource Sharing:</strong>
+<p><strong>Resource Sharing:</strong></p>
 
 <ul>
 <li>Prevents conflicts between programs</li>
@@ -1487,9 +1538,9 @@
 <li>Provides controlled sharing mechanisms</li>
 </ul>
 
-<strong>Why Operating System Needed:</strong>
+<p><strong>Why Operating System Needed:</strong></p>
 
-<strong>Trust and Security:</strong>
+<p><strong>Trust and Security:</strong></p>
 
 <ul>
 <li><strong>Cannot trust application software</strong></li>
@@ -1498,7 +1549,7 @@
 <li>Need supervision and enforcement</li>
 </ul>
 
-<strong>Coordination and Protection:</strong>
+<p><strong>Coordination and Protection:</strong></p>
 
 <ul>
 <li>Prevents programs from breaking hardware</li>
@@ -1507,9 +1558,9 @@
 <li>Mediates access to shared resources</li>
 </ul>
 
-<strong>Programmer Benefits:</strong>
+<p><strong>Programmer Benefits:</strong></p>
 
-<strong>Abstractions Provided:</strong>
+<p><strong>Abstractions Provided:</strong></p>
 
 <p>Programmers don't need to worry about:</p>
 
@@ -1521,7 +1572,7 @@
 <li>Physical device characteristics</li>
 </ul>
 
-<strong>OS Guarantees:</strong>
+<p><strong>OS Guarantees:</strong></p>
 
 <ul>
 <li>Safe hardware usage</li>
@@ -1531,7 +1582,7 @@
 <li>Network communication</li>
 </ul>
 
-<strong>Example Services:</strong>
+<p><strong>Example Services:</strong></p>
 
 <ul>
 <li>File I/O without knowing disk geometry</li>
@@ -1542,7 +1593,7 @@
 
 <h3>2.9.3 Application Software Layer (Top)</h3>
 
-<strong>User-Level Programs:</strong>
+<p><strong>User-Level Programs:</strong></p>
 
 <ul>
 <li>Programs written by application programmers</li>
@@ -1551,9 +1602,9 @@
 <li>Implement business logic</li>
 </ul>
 
-<strong>High-Level Programming Languages:</strong>
+<p><strong>High-Level Programming Languages:</strong></p>
 
-<strong>Popular Languages:</strong>
+<p><strong>Popular Languages:</strong></p>
 
 <ul>
 <li><strong>C:</strong> Systems programming, performance-critical</li>
@@ -1566,9 +1617,9 @@
 <li><strong>Rust:</strong> Systems programming, memory safety</li>
 </ul>
 
-<strong>Language Characteristics:</strong>
+<p><strong>Language Characteristics:</strong></p>
 
-<strong>Hundreds/Thousands Available:</strong>
+<p><strong>Hundreds/Thousands Available:</strong></p>
 
 <ul>
 <li>Each optimized for specific application domains</li>
@@ -1577,7 +1628,7 @@
 <li>Community and ecosystem considerations</li>
 </ul>
 
-<strong>Domain Optimization:</strong>
+<p><strong>Domain Optimization:</strong></p>
 
 <ul>
 <li><strong>Machine Learning:</strong> Python (NumPy, TensorFlow, PyTorch), R</li>
@@ -1589,7 +1640,7 @@
 <li><strong>Game Development:</strong> C++, C#</li>
 </ul>
 
-<strong>Level of Abstraction:</strong>
+<p><strong>Level of Abstraction:</strong></p>
 
 <ul>
 <li>Represents algorithms and solutions to problems</li>
@@ -1603,51 +1654,54 @@
 
 <h3>2.10.1 Example: Swap Function in C</h3>
 
-<strong>Source Code:</strong>
+<p><strong>Source Code:</strong></p>
 
-<p>void swap(int v[], int k) {</p>
-<p>int temp;</p>
-<p>temp = v[k];</p>
-<p>v[k] = v[k+1];</p>
-<p>v[k+1] = temp;</p>
-<p>}</p>
+<pre><code class="language-c">void swap(int v[], int k) {
+    int temp;
+    temp = v[k];
+    v[k] = v[k+1];
+    v[k+1] = temp;
+}
+</code></pre>
 
-<strong>Function Purpose:</strong>
+<p><strong>Function Purpose:</strong></p>
 
 <ul>
 <li><strong>Operation:</strong> Swap two values in array</li>
-<li><strong>Parameters:</strong></li>
-</ul>
-<p>- v[]: Array pointer (base address)</p>
-<p>- k: Index of first element to swap</p>
-<ul>
+<li><strong>Parameters:</strong>
+    <ul>
+        <li><code>v[]</code>: Array pointer (base address)</li>
+        <li><code>k</code>: Index of first element to swap</li>
+    </ul>
+</li>
 <li><strong>Elements Swapped:</strong> Positions k and k+1</li>
 <li><strong>Method:</strong> Uses temporary variable</li>
 <li><strong>Simplicity:</strong> Basic operation used frequently in sorting algorithms</li>
 </ul>
 
-<strong>Algorithm:</strong>
+<p><strong>Algorithm:</strong></p>
 
-<p>1. Store v[k] in temporary variable</p>
-<p>2. Copy v[k+1] to v[k]</p>
-<p>3. Copy temporary to v[k+1]</p>
+<ol>
+<li>Store <code>v[k]</code> in temporary variable</li>
+<li>Copy <code>v[k+1]</code> to <code>v[k]</code></li>
+<li>Copy temporary to <code>v[k+1]</code></li>
+</ol>
 
 <h3>2.10.2 After Compilation - MIPS Assembly Code</h3>
 
-<strong>Assembly Translation:</strong>
+<p><strong>Assembly Translation:</strong></p>
 
 <p>The compiler generates 7 MIPS instructions to implement the swap function:</p>
 
-``<code>
-<p>MUL  $2, $5, 4      # Multiply k by 4 (array index to byte offset)</p>
-<p>ADD  $2, $4, $2     # Add base address to offset (address of v[k])</p>
-<p>LW   $15, 0($2)     # Load v[k] into register $15 (temp = v[k])</p>
-<p>LW   $16, 4($2)     # Load v[k+1] into register $16</p>
-<p>SW   $16, 0($2)     # Store v[k+1] to v[k]</p>
-<p>SW   $15, 4($2)     # Store temp to v[k+1]</p>
-</code>`<code>
+<pre><code class="language-asm">MUL  $2, $5, 4      # Multiply k by 4 (array index to byte offset)
+ADD  $2, $4, $2     # Add base address to offset (address of v[k])
+LW   $15, 0($2)     # Load v[k] into register $15 (temp = v[k])
+LW   $16, 4($2)     # Load v[k+1] into register $16
+SW   $16, 0($2)     # Store v[k+1] to v[k]
+SW   $15, 4($2)     # Store temp to v[k+1]
+</code></pre>
 
-<strong>Translation Analysis:</strong>
+<p><strong>Translation Analysis:</strong></p>
 
 <ul>
 <li><strong>5 C statements</strong> → <strong>7 assembly instructions</strong></li>
@@ -1655,9 +1709,9 @@
 <li>Each assembly instruction is simple operation</li>
 </ul>
 
-<strong>Key Operations Explained:</strong>
+<p><strong>Key Operations Explained:</strong></p>
 
-<strong>1. Address Calculation:</strong>
+<p><strong>1. Address Calculation:</strong></p>
 
 <ul>
 <li><strong>Multiply by 4:</strong> Each integer occupies 4 bytes in memory</li>
@@ -1665,7 +1719,7 @@
 <li>Calculate memory address of v[k]</li>
 </ul>
 
-<strong>2. Memory Addressing:</strong>
+<p><strong>2. Memory Addressing:</strong></p>
 
 <ul>
 <li>Base address of array in register $4</li>
@@ -1673,7 +1727,7 @@
 <li>Results in absolute memory address</li>
 </ul>
 
-<strong>3. Register Usage:</strong>
+<p><strong>3. Register Usage:</strong></p>
 
 <ul>
 <li><strong>$4:</strong> Base address of array v (parameter)</li>
@@ -1683,7 +1737,7 @@
 <li><strong>$16:</strong> Temporary storage for v[k+1] value</li>
 </ul>
 
-<strong>Instruction Set Details:</strong>
+<p><strong>Instruction Set Details:</strong></p>
 
 <ul>
 <li><strong>MIPS ISA</strong> used in example (not ARM, but similar concepts)</li>
@@ -1694,20 +1748,19 @@
 
 <h3>2.10.3 After Assembly - Machine Code</h3>
 
-<strong>Binary Representation:</strong>
+<p><strong>Binary Representation:</strong></p>
 
 <p>Each assembly instruction translates to 32-bit binary instruction:</p>
 
-</code>`<code>
-<p>00000000101000100001000000011000  # MUL $2, $5, 4</p>
-<p>00000000100000100001000000100001  # ADD $2, $4, $2</p>
-<p>10001100010011110000000000000000  # LW  $15, 0($2)</p>
-<p>10001100010100000000000000000100  # LW  $16, 4($2)</p>
-<p>10101100010100000000000000000000  # SW  $16, 0($2)</p>
-<p>10101100010011110000000000000100  # SW  $15, 4($2)</p>
-</code>``
+<pre><code class="language-binary">00000000101000100001000000011000  # MUL $2, $5, 4
+00000000100000100001000000100001  # ADD $2, $4, $2
+10001100010011110000000000000000  # LW  $15, 0($2)
+10001100010100000000000000000100  # LW  $16, 4($2)
+10101100010100000000000000000000  # SW  $16, 0($2)
+10101100010011110000000000000100  # SW  $15, 4($2)
+</code></pre>
 
-<strong>One-to-One Mapping:</strong>
+<p><strong>One-to-One Mapping:</strong></p>
 
 <ul>
 <li>Each assembly instruction → Exactly one 32-bit machine instruction</li>
@@ -1716,20 +1769,20 @@
 <li>Assembly is human-readable form of machine code</li>
 </ul>
 
-<strong>Instruction Format:</strong>
+<p><strong>Instruction Format:</strong></p>
 
 <p>Different instruction types have different bit field layouts:</p>
 
-<strong>R-Type (Register) Format:</strong>
+<p><strong>R-Type (Register) Format:</strong></p>
 
 <p>[Opcode 6 bits][Rs 5 bits][Rt 5 bits][Rd 5 bits][Shamt 5 bits][Funct 6 bits]</p>
 
-<strong>I-Type (Immediate) Format:</strong>
+<p><strong>I-Type (Immediate) Format:</strong></p>
 
 <p>[Opcode 6 bits][Rs 5 bits][Rt 5 bits][Immediate 16 bits]</p>
 
 
-<strong>Instruction Components Specify:</strong>
+<p><strong>Instruction Components Specify:</strong></p>
 
 <ul>
 <li><strong>Opcode:</strong> Operation category</li>
@@ -1739,7 +1792,7 @@
 <li><strong>Function Code:</strong> Specific operation for R-type</li>
 </ul>
 
-<strong>Example Analysis:</strong>
+<p><strong>Example Analysis:</strong></p>
 
 <p>In the immediate value 4:</p>
 
@@ -1749,7 +1802,7 @@
 <li>Part of instruction encoding</li>
 </ul>
 
-<strong>Binary Image:</strong>
+<p><strong>Binary Image:</strong></p>
 
 <ul>
 <li>Complete program represented as sequence of 32-bit words</li>
@@ -1763,9 +1816,9 @@
 
 <h3>2.11.1 Block Diagram of Computer</h3>
 
-<strong>System Components:</strong>
+<p><strong>System Components:</strong></p>
 
-<strong>Compiler/Tool Chain:</strong>
+<p><strong>Compiler/Tool Chain:</strong></p>
 
 <ul>
 <li>Translates human-written program to machine code</li>
@@ -1773,7 +1826,7 @@
 <li>Produces executable binary</li>
 </ul>
 
-<strong>Memory:</strong>
+<p><strong>Memory:</strong></p>
 
 <ul>
 <li>Stores program instructions</li>
@@ -1781,7 +1834,7 @@
 <li>Hierarchical (cache, RAM, disk)</li>
 </ul>
 
-<strong>CPU (Central Processing Unit):</strong>
+<p><strong>CPU (Central Processing Unit):</strong></p>
 
 <ul>
 <li>Executes machine instructions</li>
@@ -1789,7 +1842,7 @@
 <li>Controls program flow</li>
 </ul>
 
-<strong>Input/Output:</strong>
+<p><strong>Input/Output:</strong></p>
 
 <ul>
 <li>Peripherals (keyboard, display, network)</li>
@@ -1797,9 +1850,9 @@
 <li>Communication interfaces</li>
 </ul>
 
-<strong>Program Execution Flow:</strong>
+<p><strong>Program Execution Flow:</strong></p>
 
-<strong>1. Compile Stage:</strong>
+<p><strong>1. Compile Stage:</strong></p>
 
 <ul>
 <li>Source code → Assembly → Machine code</li>
@@ -1807,7 +1860,7 @@
 <li>Output: Executable binary file</li>
 </ul>
 
-<strong>2. Store Stage:</strong>
+<p><strong>2. Store Stage:</strong></p>
 
 <ul>
 <li>Machine code saved to secondary storage</li>
@@ -1815,7 +1868,7 @@
 <li>Typically on hard disk or SSD</li>
 </ul>
 
-<strong>3. Load Stage:</strong>
+<p><strong>3. Load Stage:</strong></p>
 
 <ul>
 <li>Machine code loaded into main memory (RAM) when program runs</li>
@@ -1823,7 +1876,7 @@
 <li>Program becomes "process"</li>
 </ul>
 
-<strong>4. Execute Stage:</strong>
+<p><strong>4. Execute Stage:</strong></p>
 
 <ul>
 <li>CPU fetches instructions from memory one by one</li>
@@ -1831,7 +1884,7 @@
 <li>Updates registers and memory</li>
 </ul>
 
-<strong>5. Results Stage:</strong>
+<p><strong>5. Results Stage:</strong></p>
 
 <ul>
 <li>Computed values stored back in memory</li>
@@ -1841,9 +1894,9 @@
 
 <h3>2.11.2 Inside the CPU - Two Main Components</h3>
 
-<strong>Datapath:</strong>
+<p><strong>Datapath:</strong></p>
 
-<strong>Structure:</strong>
+<p><strong>Structure:</strong></p>
 
 <ul>
 <li>Collection of logic circuits interconnected</li>
@@ -1852,7 +1905,7 @@
 <li>Sequential stages of processing</li>
 </ul>
 
-<strong>Components:</strong>
+<p><strong>Components:</strong></p>
 
 <ul>
 <li>Functional units (adders, multipliers, shifters, logic units)</li>
@@ -1861,7 +1914,7 @@
 <li>Buses for data transfer</li>
 </ul>
 
-<strong>Function:</strong>
+<p><strong>Function:</strong></p>
 
 <ul>
 <li>Instruction travels from one logic circuit to another</li>
@@ -1870,7 +1923,7 @@
 <li>Executes the computational work</li>
 </ul>
 
-<strong>Examples of Functional Units:</strong>
+<p><strong>Examples of Functional Units:</strong></p>
 
 <ul>
 <li>Arithmetic Logic Unit (ALU)</li>
@@ -1879,9 +1932,9 @@
 <li>Branch Unit</li>
 </ul>
 
-<strong>Control:</strong>
+<p><strong>Control:</strong></p>
 
-<strong>Structure:</strong>
+<p><strong>Structure:</strong></p>
 
 <ul>
 <li>Another logic circuit (or set of circuits)</li>
@@ -1889,7 +1942,7 @@
 <li>Coordinates datapath operation</li>
 </ul>
 
-<strong>Function:</strong>
+<p><strong>Function:</strong></p>
 
 <ul>
 <li>Governs instruction/data flow through datapath</li>
@@ -1898,7 +1951,7 @@
 <li>Controls multiplexers and enables</li>
 </ul>
 
-<strong>Responsibilities:</strong>
+<p><strong>Responsibilities:</strong></p>
 
 <ul>
 <li>Decode instructions</li>
@@ -1907,7 +1960,7 @@
 <li>Handle exceptions and interrupts</li>
 </ul>
 
-<strong>Interaction:</strong>
+<p><strong>Interaction:</strong></p>
 
 <ul>
 <li><strong>Control</strong> tells <strong>Datapath</strong> what to do</li>
@@ -1918,9 +1971,9 @@
 
 <h3>2.11.3 Execution Process (Conveyor Belt Analogy)</h3>
 
-<strong>Instruction Execution Cycle:</strong>
+<p><strong>Instruction Execution Cycle:</strong></p>
 
-<strong>1. Fetch:</strong>
+<p><strong>1. Fetch:</strong></p>
 
 <ul>
 <li>Instructions stored in memory</li>
@@ -1929,7 +1982,7 @@
 <li>Increments program counter</li>
 </ul>
 
-<strong>2. Decode:</strong>
+<p><strong>2. Decode:</strong></p>
 
 <ul>
 <li>Instruction enters datapath</li>
@@ -1938,7 +1991,7 @@
 <li>Identifies operands</li>
 </ul>
 
-<strong>3. Execute:</strong>
+<p><strong>3. Execute:</strong></p>
 
 <ul>
 <li>Instruction travels through logic circuits in datapath</li>
@@ -1947,7 +2000,7 @@
 <li>Intermediate results produced</li>
 </ul>
 
-<strong>4. Memory:</strong>
+<p><strong>4. Memory:</strong></p>
 
 <ul>
 <li>Memory accesses performed if needed (load/store)</li>
@@ -1955,7 +2008,7 @@
 <li>Address calculation completed</li>
 </ul>
 
-<strong>5. Writeback:</strong>
+<p><strong>5. Writeback:</strong></p>
 
 <ul>
 <li>Results generated</li>
@@ -1963,7 +2016,7 @@
 <li>Results may be sent to memory or I/O</li>
 </ul>
 
-<strong>6. Repeat:</strong>
+<p><strong>6. Repeat:</strong></p>
 
 <ul>
 <li>Cycle repeats for next instruction</li>
@@ -1971,7 +2024,7 @@
 <li>One instruction after another (in simple model)</li>
 </ul>
 
-<strong>Conveyor Belt Metaphor:</strong>
+<p><strong>Conveyor Belt Metaphor:</strong></p>
 
 <ul>
 <li>Instructions like items on conveyor belt</li>
@@ -1982,9 +2035,9 @@
 
 <h3>2.11.4 Cache Memory</h3>
 
-<strong>Purpose and Motivation:</strong>
+<p><strong>Purpose and Motivation:</strong></p>
 
-<strong>The Performance Gap:</strong>
+<p><strong>The Performance Gap:</strong></p>
 
 <ul>
 <li>CPU can process data very fast</li>
@@ -1993,7 +2046,7 @@
 <li>CPU would waste time waiting for memory</li>
 </ul>
 
-<strong>Cache Solution:</strong>
+<p><strong>Cache Solution:</strong></p>
 
 <ul>
 <li>Fast memory located on CPU chip</li>
@@ -2002,9 +2055,9 @@
 <li>Exploits locality of reference</li>
 </ul>
 
-<strong>Cache Hierarchy:</strong>
+<p><strong>Cache Hierarchy:</strong></p>
 
-<strong>Level 1 Cache (L1):</strong>
+<p><strong>Level 1 Cache (L1):</strong></p>
 
 <ul>
 <li>Smallest capacity (32-64 KB)</li>
@@ -2013,7 +2066,7 @@
 <li>Often split: L1-I (instruction), L1-D (data)</li>
 </ul>
 
-<strong>Level 2 Cache (L2):</strong>
+<p><strong>Level 2 Cache (L2):</strong></p>
 
 <ul>
 <li>Medium capacity (256 KB - 1 MB)</li>
@@ -2022,7 +2075,7 @@
 <li>Unified (instructions and data)</li>
 </ul>
 
-<strong>Level 3 Cache (L3):</strong>
+<p><strong>Level 3 Cache (L3):</strong></p>
 
 <ul>
 <li>Largest capacity (several MB)</li>
@@ -2031,7 +2084,7 @@
 <li>Last level cache (LLC)</li>
 </ul>
 
-<strong>Performance Impact:</strong>
+<p><strong>Performance Impact:</strong></p>
 
 <ul>
 <li>Cache hit: Data found in cache (fast)</li>
@@ -2040,7 +2093,7 @@
 <li>Well-designed cache can achieve >95% hit rate</li>
 </ul>
 
-<strong>Will Learn in Lecture:</strong>
+<p><strong>Will Learn in Lecture:</strong></p>
 
 <ul>
 <li>Cache organization</li>
@@ -2054,7 +2107,7 @@
 
 <h3>2.12.1 Overview</h3>
 
-<strong>AMD Barcelona Processor:</strong>
+<p><strong>AMD Barcelona Processor:</strong></p>
 
 <ul>
 <li>Released around 2007</li>
@@ -2064,7 +2117,7 @@
 <li>Can visually identify individual components</li>
 </ul>
 
-<strong>Die Photo Analysis:</strong>
+<p><strong>Die Photo Analysis:</strong></p>
 
 <ul>
 <li>Optical or electron microscope image</li>
@@ -2076,7 +2129,7 @@
 
 <h3>2.12.2 Four Processor Cores</h3>
 
-<strong>Core Distribution:</strong>
+<p><strong>Core Distribution:</strong></p>
 
 <p>Physical layout shows clear quadrant organization:</p>
 
@@ -2087,7 +2140,7 @@
 <li><strong>Core 4:</strong> Lower right area of die</li>
 </ul>
 
-<strong>Layout Strategy:</strong>
+<p><strong>Layout Strategy:</strong></p>
 
 <ul>
 <li><strong>Mirror Image Layouts:</strong> Cores identical but mirrored</li>
@@ -2098,9 +2151,9 @@
 
 <h3>2.12.3 Inside Each Core</h3>
 
-<strong>Floating-Point Unit (FPU):</strong>
+<p><strong>Floating-Point Unit (FPU):</strong></p>
 
-<strong>Characteristics:</strong>
+<p><strong>Characteristics:</strong></p>
 
 <ul>
 <li><strong>Large Component:</strong> Significant silicon area in each core</li>
@@ -2108,7 +2161,7 @@
 <li><strong>High Transistor Count:</strong> Precision requires many gates</li>
 </ul>
 
-<strong>Operations:</strong>
+<p><strong>Operations:</strong></p>
 
 <ul>
 <li>Addition, subtraction of floating-point numbers</li>
@@ -2117,7 +2170,7 @@
 <li>Square root and other mathematical functions</li>
 </ul>
 
-<strong>Why So Large:</strong>
+<p><strong>Why So Large:</strong></p>
 
 <ul>
 <li>Floating-point math more complex than integer</li>
@@ -2126,9 +2179,9 @@
 <li>High precision demands</li>
 </ul>
 
-<strong>Load-Store Unit:</strong>
+<p><strong>Load-Store Unit:</strong></p>
 
-<strong>Function:</strong>
+<p><strong>Function:</strong></p>
 
 <ul>
 <li>Handles all memory operations</li>
@@ -2137,7 +2190,7 @@
 <li>Critical for data transfer</li>
 </ul>
 
-<strong>Operations:</strong>
+<p><strong>Operations:</strong></p>
 
 <ul>
 <li>Address calculation</li>
@@ -2146,16 +2199,16 @@
 <li>Memory ordering and consistency</li>
 </ul>
 
-<strong>Integer Execution Unit:</strong>
+<p><strong>Integer Execution Unit:</strong></p>
 
-<strong>Characteristics:</strong>
+<p><strong>Characteristics:</strong></p>
 
 <ul>
 <li><strong>Smaller than FPU:</strong> Integer operations generally simpler</li>
 <li><strong>High Frequency:</strong> Often faster than floating-point</li>
 </ul>
 
-<strong>Operations:</strong>
+<p><strong>Operations:</strong></p>
 
 <ul>
 <li>Integer arithmetic (add, subtract, multiply, divide)</li>
@@ -2164,7 +2217,7 @@
 <li>Comparisons</li>
 </ul>
 
-<strong>Why Smaller:</strong>
+<p><strong>Why Smaller:</strong></p>
 
 <ul>
 <li>Simpler algorithms</li>
@@ -2173,11 +2226,11 @@
 <li>Fewer pipeline stages</li>
 </ul>
 
-<strong>Fetch and Decode Unit:</strong>
+<p><strong>Fetch and Decode Unit:</strong></p>
 
-<strong>Responsibilities:</strong>
+<p><strong>Responsibilities:</strong></p>
 
-<strong>Instruction Fetch:</strong>
+<p><strong>Instruction Fetch:</strong></p>
 
 <ul>
 <li>Fetches instructions from memory (via I-cache)</li>
@@ -2185,7 +2238,7 @@
 <li>Manages instruction buffer</li>
 </ul>
 
-<strong>Instruction Decode:</strong>
+<p><strong>Instruction Decode:</strong></p>
 
 <ul>
 <li>Makes sense of binary instruction encoding</li>
@@ -2194,7 +2247,7 @@
 <li>Generates micro-ops (for CISC architectures)</li>
 </ul>
 
-<strong>Pipeline Frontend:</strong>
+<p><strong>Pipeline Frontend:</strong></p>
 
 <ul>
 <li>Prepares instructions for execution</li>
@@ -2202,9 +2255,9 @@
 <li>Feeds execution units</li>
 </ul>
 
-<strong>Level 1 Data Cache (L1 D-Cache):</strong>
+<p><strong>Level 1 Data Cache (L1 D-Cache):</strong></p>
 
-<strong>Characteristics:</strong>
+<p><strong>Characteristics:</strong></p>
 
 <ul>
 <li>Stores frequently used <strong>data</strong> (not instructions)</li>
@@ -2213,7 +2266,7 @@
 <li>Separate from instruction cache (Harvard architecture)</li>
 </ul>
 
-<strong>Typical Specifications:</strong>
+<p><strong>Typical Specifications:</strong></p>
 
 <ul>
 <li>32-64 KB capacity</li>
@@ -2221,9 +2274,9 @@
 <li>Write-through or write-back policy</li>
 </ul>
 
-<strong>Level 1 Instruction Cache (L1 I-Cache):</strong>
+<p><strong>Level 1 Instruction Cache (L1 I-Cache):</strong></p>
 
-<strong>Characteristics:</strong>
+<p><strong>Characteristics:</strong></p>
 
 <ul>
 <li>Stores frequently used <strong>instructions</strong> (program code only)</li>
@@ -2232,7 +2285,7 @@
 <li>Separate from data cache</li>
 </ul>
 
-<strong>Benefits of Separation:</strong>
+<p><strong>Benefits of Separation:</strong></p>
 
 <ul>
 <li>No structural hazards (simultaneous instruction fetch and data access)</li>
@@ -2240,9 +2293,9 @@
 <li>Simpler control logic</li>
 </ul>
 
-<strong>Level 2 Unified Cache (L2 Cache):</strong>
+<p><strong>Level 2 Unified Cache (L2 Cache):</strong></p>
 
-<strong>Characteristics:</strong>
+<p><strong>Characteristics:</strong></p>
 
 <ul>
 <li><strong>Larger than L1:</strong> Typically 512 KB per core in Barcelona</li>
@@ -2251,7 +2304,7 @@
 <li>Victim cache for L1 misses</li>
 </ul>
 
-<strong>Architecture:</strong>
+<p><strong>Architecture:</strong></p>
 
 <ul>
 <li>Dedicated control logic for coherency</li>
@@ -2261,16 +2314,16 @@
 
 <h3>2.12.4 Shared Components</h3>
 
-<strong>North Bridge (Central Hub):</strong>
+<p><strong>North Bridge (Central Hub):</strong></p>
 
-<strong>Location:</strong>
+<p><strong>Location:</strong></p>
 
 <ul>
 <li>Central/middle area of chip</li>
 <li>Strategic position for communication</li>
 </ul>
 
-<strong>Functions:</strong>
+<p><strong>Functions:</strong></p>
 
 <ul>
 <li><strong>L2-to-Memory Connection:</strong> Connects all L2 caches to main memory</li>
@@ -2279,7 +2332,7 @@
 <li><strong>Cache Coherency:</strong> Maintains coherency protocol between cores</li>
 </ul>
 
-<strong>Critical Role:</strong>
+<p><strong>Critical Role:</strong></p>
 
 <ul>
 <li>Central communication circuit</li>
@@ -2287,9 +2340,9 @@
 <li>Affects multi-core scaling</li>
 </ul>
 
-<strong>DDR PHY (Physical Controller):</strong>
+<p><strong>DDR PHY (Physical Controller):</strong></p>
 
-<strong>DDR Memory:</strong>
+<p><strong>DDR Memory:</strong></p>
 
 <ul>
 <li><strong>DDR:</strong> Dual Data Rate SDRAM</li>
@@ -2297,7 +2350,7 @@
 <li>Industry-standard memory interface</li>
 </ul>
 
-<strong>PHY (Physical Layer):</strong>
+<p><strong>PHY (Physical Layer):</strong></p>
 
 <ul>
 <li><strong>PHY:</strong> Physical layer controller</li>
@@ -2305,7 +2358,7 @@
 <li>Handles physical signaling</li>
 </ul>
 
-<strong>Responsibilities:</strong>
+<p><strong>Responsibilities:</strong></p>
 
 <ul>
 <li>Electrical interface to memory chips</li>
@@ -2314,9 +2367,9 @@
 <li>Error detection/correction</li>
 </ul>
 
-<strong>HyperTransport Controllers:</strong>
+<p><strong>HyperTransport Controllers:</strong></p>
 
-<strong>HyperTransport Technology:</strong>
+<p><strong>HyperTransport Technology:</strong></p>
 
 <ul>
 <li>High-speed interconnect technology (AMD proprietary)</li>
@@ -2325,7 +2378,7 @@
 <li>High bandwidth, low latency</li>
 </ul>
 
-<strong>Connections:</strong>
+<p><strong>Connections:</strong></p>
 
 <ul>
 <li><strong>External Devices:</strong> Graphics cards, other processors</li>
@@ -2333,7 +2386,7 @@
 <li><strong>I/O Device Connectivity:</strong> Network, storage, peripherals</li>
 </ul>
 
-<strong>Benefits:</strong>
+<p><strong>Benefits:</strong></p>
 
 <ul>
 <li>Scalable bandwidth</li>
@@ -2345,9 +2398,9 @@
 
 <strong>WikiChip Database:</strong> https://en.wikichip.org
 
-<strong>Comprehensive Processor Information:</strong>
+<p><strong>Comprehensive Processor Information:</strong></p>
 
-<strong>Major Manufacturers Covered:</strong>
+<p><strong>Major Manufacturers Covered:</strong></p>
 
 <ul>
 <li><strong>Intel Processors:</strong> x86 architecture, Core series, Xeon servers</li>
@@ -2360,9 +2413,9 @@
 <li><strong>NVIDIA, Broadcom, Texas Instruments, and many more</strong></li>
 </ul>
 
-<strong>Available Information:</strong>
+<p><strong>Available Information:</strong></p>
 
-<strong>Visual Content:</strong>
+<p><strong>Visual Content:</strong></p>
 
 <ul>
 <li>Processor die photographs and diagrams</li>
@@ -2371,7 +2424,7 @@
 <li>Microarchitecture pipeline diagrams</li>
 </ul>
 
-<strong>Technical Specifications:</strong>
+<p><strong>Technical Specifications:</strong></p>
 
 <ul>
 <li>Manufacturing process (nm technology)</li>
@@ -2384,7 +2437,7 @@
 <li>Cache sizes and organization</li>
 </ul>
 
-<strong>Advanced Topics:</strong>
+<p><strong>Advanced Topics:</strong></p>
 
 <ul>
 <li>3D stacking technology details</li>
@@ -2394,23 +2447,23 @@
 <li>I/O capabilities</li>
 </ul>
 
-<strong>Current Technology Landscape (2021):</strong>
+<p><strong>Current Technology Landscape (2021):</strong></p>
 
-<strong>Mainstream Manufacturing:</strong>
+<p><strong>Mainstream Manufacturing:</strong></p>
 
 <ul>
 <li><strong>10 nm and 7 nm</strong> processes in volume production</li>
 <li>Multiple manufacturers at this node</li>
 </ul>
 
-<strong>Future Direction:</strong>
+<p><strong>Future Direction:</strong></p>
 
 <ul>
 <li><strong>Next Few Years:</strong> Shift to 5 nm and 3 nm</li>
 <li>2 nm and 1 nm in research</li>
 </ul>
 
-<strong>Important Clarification:</strong>
+<p><strong>Important Clarification:</strong></p>
 
 <ul>
 <li><strong>Numbers don't represent actual gate size anymore</strong></li>
@@ -2435,7 +2488,7 @@
 
 <p>5. <strong>Clock rate increased exponentially until ~2004</strong> - grew from 12.5 MHz (1982) to 3.6 GHz (2004), then hit fundamental thermal limitations</p>
 
-<p>6. <strong>Power wall halted frequency scaling</strong> - heat generation (P = CV²f) exceeded cooling capability, establishing ~100W practical limit for consumer processors</p>
+<p>6. <strong>Power wall halted frequency scaling</strong> - heat generation (<code>P = CV²f</code>) exceeded cooling capability, establishing ~100W practical limit for consumer processors</p>
 
 <p>7. <strong>Dynamic power equation explains the crisis</strong> - despite 25× power reduction from voltage scaling, 300× frequency increase overwhelmed the benefit</p>
 
@@ -2471,7 +2524,7 @@
 
 <p>The progression of manufacturing technology steadily reduced feature sizes from 90 nanometers to current 7nm and 5nm processes. Smaller transistors provided two key advantages: more transistors per chip enabling complex functionality, and faster switching speeds enabling higher clock frequencies. Clock rates grew exponentially from 12.5 MHz in 1982 to 3.6 GHz in 2004.</p>
 
-<p>However, around 2004, the industry encountered the power wall - a fundamental thermal limitation. The dynamic power equation (P = CV²f) revealed that despite aggressive voltage scaling, the massive frequency increases caused power consumption and heat generation to exceed cooling capabilities. The ~100-watt limit for consumer processors could not be overcome by improved cooling solutions.</p>
+<p>However, around 2004, the industry encountered the power wall - a fundamental thermal limitation. The dynamic power equation (<code>P = CV²f</code>) revealed that despite aggressive voltage scaling, the massive frequency increases caused power consumption and heat generation to exceed cooling capabilities. The ~100-watt limit for consumer processors could not be overcome by improved cooling solutions.</p>
 
 <p>The solution was multi-core processors: placing multiple complete CPU cores on a single chip. This allowed continued performance improvement within power constraints by exploiting thread-level parallelism. However, the initial vision of exponentially growing core counts didn't materialize due to the difficulty of parallel programming. Unlike automatic instruction-level parallelism, multi-core requires programmers to explicitly manage threads, balance loads, minimize communication, and handle synchronization - a significantly more challenging paradigm.</p>
 

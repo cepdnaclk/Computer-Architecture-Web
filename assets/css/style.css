@@ -687,18 +687,23 @@ footer p {
 }
 
 .content-body pre {
-  background: #1e293b;
-  color: #e2e8f0;
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  color: #1e293b;
   padding: 1.5rem;
-  border-radius: 6px;
+  border-radius: 8px;
   overflow-x: auto;
   margin: 1.5rem 0;
+  border: 2px solid #e2e8f0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
 .content-body pre code {
   background: none;
   color: inherit;
   padding: 0;
+  border: none;
+  font-size: 0.95em;
+  line-height: 1.6;
 }
 
 .content-body blockquote {
@@ -1142,5 +1147,232 @@ footer p {
   margin-bottom: 0.5rem;
   line-height: 1.8;
   color: var(--text-light);
+}
+
+/* ===========================
+   Flow Diagrams and Process Chains
+   =========================== */
+.flow-diagram {
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  border: 2px solid var(--border-color);
+  border-radius: 12px;
+  padding: 2rem;
+  margin: 2rem 0;
+  text-align: center;
+  box-shadow: var(--shadow-sm);
+}
+
+.flow-step {
+  background: var(--bg-white);
+  border: 2px solid var(--primary-color);
+  border-radius: 8px;
+  padding: 1rem 1.5rem;
+  margin: 0.5rem auto;
+  max-width: 600px;
+  font-weight: 500;
+  color: var(--text-dark);
+  box-shadow: 0 2px 4px rgba(37, 99, 235, 0.1);
+  transition: all 0.3s ease;
+}
+
+.flow-step:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(37, 99, 235, 0.15);
+}
+
+.flow-arrow {
+  color: var(--primary-color);
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin: 0.25rem 0;
+  line-height: 1;
+}
+
+/* Enhanced nested lists */
+.content-body ul ul {
+  margin-left: 1.5rem;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.content-body ul ul li {
+  list-style-type: circle;
+  font-size: 0.95em;
+}
+
+/* Enhanced code blocks */
+.content-body code {
+  background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-family: "Consolas", "Monaco", "Courier New", monospace;
+  font-size: 0.9em;
+  color: #dc2626;
+  border: 1px solid #fecaca;
+  font-weight: 500;
+}
+
+/* Enhanced ordered lists */
+.content-body ol {
+  counter-reset: item;
+  list-style: none;
+  margin-left: 0;
+}
+
+.content-body ol > li {
+  counter-increment: item;
+  margin-bottom: 0.75rem;
+  padding-left: 2rem;
+  position: relative;
+}
+
+.content-body ol > li::before {
+  content: counter(item);
+  position: absolute;
+  left: 0;
+  top: 0;
+  background: var(--primary-color);
+  color: white;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+/* Enhanced images */
+.content-body img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  margin: 2rem auto;
+  display: block;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--border-color);
+}
+
+/* Enhanced emphasis */
+.content-body em {
+  font-style: italic;
+  color: var(--text-light);
+  display: block;
+  margin: 0.5rem 0 1.5rem 0;
+  padding-left: 1rem;
+  border-left: 3px solid var(--accent-color);
+}
+
+/* Enhanced strong in lists */
+.content-body li strong {
+  color: var(--text-dark);
+  font-weight: 600;
+}
+
+/* Section spacing */
+.content-body h4 {
+  color: var(--primary-dark);
+  margin-top: 1.5rem;
+  margin-bottom: 0.75rem;
+  font-size: 1.1rem;
+}
+
+/* ===========================
+   Math Equations (KaTeX)
+   =========================== */
+.math-block {
+  background: linear-gradient(135deg, #fefce8 0%, #fef9c3 100%);
+  border: 2px solid #fde047;
+  border-radius: 12px;
+  padding: 1.5rem 2rem;
+  margin: 1.5rem 0;
+  overflow-x: auto;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(253, 224, 71, 0.2);
+}
+
+.math-block .katex-display {
+  margin: 0;
+}
+
+.math-block .katex {
+  font-size: 1.1em;
+}
+
+/* Inline math */
+.content-body .katex {
+  font-size: 1em;
+}
+
+/* ===========================
+   Code Block Enhancements
+   =========================== */
+.content-body pre[class*="language-"] {
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  border: 2px solid #cbd5e1;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.content-body code[class*="language-"] {
+  color: #334155;
+  text-shadow: none;
+}
+
+/* Syntax highlighting color overrides for light theme */
+.token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+  color: #64748b;
+  font-style: italic;
+}
+
+.token.punctuation {
+  color: #475569;
+}
+
+.token.property,
+.token.tag,
+.token.boolean,
+.token.number,
+.token.constant,
+.token.symbol,
+.token.deleted {
+  color: #dc2626;
+}
+
+.token.selector,
+.token.attr-name,
+.token.string,
+.token.char,
+.token.builtin,
+.token.inserted {
+  color: #16a34a;
+}
+
+.token.operator,
+.token.entity,
+.token.url,
+.language-css .token.string,
+.style .token.string {
+  color: #ea580c;
+}
+
+.token.atrule,
+.token.attr-value,
+.token.keyword {
+  color: #2563eb;
+}
+
+.token.function,
+.token.class-name {
+  color: #7c3aed;
+}
+
+.token.regex,
+.token.important,
+.token.variable {
+  color: #c026d3;
 }
 

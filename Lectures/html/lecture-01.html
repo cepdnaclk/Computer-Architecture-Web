@@ -64,6 +64,8 @@
 
 <img src="../img/Chapter%201%20Computer%20Abstractions%20and%20Technology.jpg" alt="Computer System Abstraction Layers" width="600">
 
+</br>
+
 <em>The diagram above illustrates the complete hierarchy from problems and algorithms at the human level, through the compilation toolchain (Compiler/Assembler/Linker), down to the ISA, microarchitecture (RTL), functional units, logic gates, transistors, and finally the silicon substrate. Each colored layer represents a different abstraction level.</em>
 
 <h3>1.2.2 Human-Related Level (Gray)</h3>
@@ -125,7 +127,7 @@
 
 <h3>1.3.1 What is an ISA?</h3>
 
-<strong>Definition</strong>:
+<p><strong>Definition:</strong></p>
 
 <ul>
 <li>A specification defining what the computer will understand</li>
@@ -158,19 +160,19 @@
 
 <h3>1.4.1 High-Level Process</h3>
 
-
-<p>Problem → Algorithm → Programming Language (C, Python, etc.)</p>
-<p>↓</p>
-<p>Compiler (translates to assembly code)</p>
-<p>↓</p>
-<p>Assembler (translates to machine code)</p>
-<p>↓</p>
-<p>Linker (combines with libraries)</p>
-<p>↓</p>
-<p>Machine Code / Binary Image</p>
-<p>↓</p>
-<p>Runs on Microarchitecture (CPU)</p>
-
+<div class="flow-diagram">
+    <div class="flow-step">Problem → Algorithm → Programming Language (C, Python, etc.)</div>
+    <div class="flow-arrow">↓</div>
+    <div class="flow-step">Compiler (translates to assembly code)</div>
+    <div class="flow-arrow">↓</div>
+    <div class="flow-step">Assembler (translates to machine code)</div>
+    <div class="flow-arrow">↓</div>
+    <div class="flow-step">Linker (combines with libraries)</div>
+    <div class="flow-arrow">↓</div>
+    <div class="flow-step">Machine Code / Binary Image</div>
+    <div class="flow-arrow">↓</div>
+    <div class="flow-step">Runs on Microarchitecture (CPU)</div>
+</div>
 
 <h3>1.4.2 Tool Chain Components</h3>
 
@@ -212,7 +214,7 @@
 
 <h3>1.5.1 Machine Code (Binary)</h3>
 
-<strong>Characteristics</strong>:
+<p><strong>Characteristics:</strong></p>
 
 <ul>
 <li>Ones and zeros</li>
@@ -223,11 +225,11 @@
 
 <h3>1.5.2 Assembly Language</h3>
 
-<strong>Characteristics</strong>:
+<p><strong>Characteristics:</strong></p>
 
 <ul>
 <li>Textual representation of machine instructions</li>
-<li>Example: "ADD R1, R2, R3" instead of binary</li>
+<li>Example: <code>ADD R1, R2, R3</code> instead of binary</li>
 <li>One-to-one mapping with machine code</li>
 <li>Easier than machine code but still difficult for large programs</li>
 <li>Used in CO224 labs for ARM assembly programming</li>
@@ -235,7 +237,7 @@
 
 <h3>1.5.3 High-Level Languages (C, Python, etc.)</h3>
 
-<strong>Characteristics</strong>:
+<p><strong>Characteristics:</strong></p>
 
 <ul>
 <li>Easier to write and understand</li>
@@ -248,7 +250,7 @@
 
 <h3>1.6.1 What is Microarchitecture?</h3>
 
-<strong>Definition</strong>:
+<p><strong>Definition:</strong></p>
 
 <ul>
 <li>A digital logic circuit built to support a given ISA</li>
@@ -270,13 +272,14 @@
 
 <ul>
 <li><strong>Purpose</strong>: Manipulates numbers</li>
-<li><strong>Examples</strong>:</li>
-</ul>
-<p>- Adders (ripple carry, half adders, full adders)</p>
-<p>- Multiplexers</p>
-<p>- Encoders</p>
-<p>- Decoders</p>
-<ul>
+<li><strong>Examples</strong>:
+    <ul>
+        <li>Adders (ripple carry, half adders, full adders)</li>
+        <li>Multiplexers</li>
+        <li>Encoders</li>
+        <li>Decoders</li>
+    </ul>
+</li>
 <li>Built using logic gates</li>
 </ul>
 
@@ -308,7 +311,7 @@
 
 <h3>1.7.1 What is an Abstraction?</h3>
 
-<strong>Key Principles</strong>:
+<p><strong>Key Principles:</strong></p>
 
 <ul>
 <li>A conceptual entity hiding internal details</li>
@@ -449,18 +452,20 @@
 
 <h2>Key Takeaways</h2>
 
-<p>1. Computer systems are built as hierarchies of abstractions</p>
-<p>2. Each abstraction level hides complexity and provides services to levels above</p>
-<p>3. Instruction Set Architecture (ISA) is the critical interface between hardware and software</p>
-<p>4. Hardware hierarchy: Substrate → Transistors → Gates → Functional Units → Microarchitecture</p>
-<p>5. Software hierarchy: Machine Code → Assembly → Programs → Algorithms</p>
-<p>6. Tight coupling exists between hardware and software abstractions</p>
-<p>7. Voltages → Logic Levels → Numbers → Instructions (relationships between levels)</p>
-<p>8. Covers ISA, microarchitecture, memory hierarchy, and system organization</p>
-<p>9. Labs involve ARM assembly programming and building processor using Verilog</p>
-<p>10. Understanding the complete system picture is essential for computer engineers</p>
-<p>11. All computer systems, regardless of complexity, are built on these fundamental abstractions</p>
-<p>12. Performance optimization is a central theme throughout the lecture series</p>
+<ol>
+<li>Computer systems are built as hierarchies of abstractions</li>
+<li>Each abstraction level hides complexity and provides services to levels above</li>
+<li>Instruction Set Architecture (ISA) is the critical interface between hardware and software</li>
+<li>Hardware hierarchy: Substrate → Transistors → Gates → Functional Units → Microarchitecture</li>
+<li>Software hierarchy: Machine Code → Assembly → Programs → Algorithms</li>
+<li>Tight coupling exists between hardware and software abstractions</li>
+<li>Voltages → Logic Levels → Numbers → Instructions (relationships between levels)</li>
+<li>Covers ISA, microarchitecture, memory hierarchy, and system organization</li>
+<li>Labs involve ARM assembly programming and building processor using Verilog</li>
+<li>Understanding the complete system picture is essential for computer engineers</li>
+<li>All computer systems, regardless of complexity, are built on these fundamental abstractions</li>
+<li>Performance optimization is a central theme throughout the lecture series</li>
+</ol>
 
 <h2>Summary</h2>
 

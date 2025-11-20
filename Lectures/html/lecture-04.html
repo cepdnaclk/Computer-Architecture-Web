@@ -6,6 +6,15 @@
     <title>Lecture 4: Introduction to ARM Assembly - Lectures on Computer Architecture</title>
     <link rel="stylesheet" href="../../assets/css/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+    <!-- Prism.js for code syntax highlighting -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-c.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-asm6502.min.js"></script>
 </head>
 <body>
     <header class="lecture-header">
@@ -63,7 +72,7 @@
 
 <h3>4.2.1 RISC Philosophy</h3>
 
-<strong>Reduced Instruction Set Computer (RISC)</strong>
+<p><strong>Reduced Instruction Set Computer (RISC)</strong></p>
 
 <ul>
 <li>Simple, uniform instruction format</li>
@@ -74,19 +83,52 @@
 <li>Hardware simplicity for higher clock rates</li>
 </ul>
 
-<strong>Contrasted with CISC (Complex Instruction Set Computer)</strong>
+<p><strong>Contrasted with CISC (Complex Instruction Set Computer)</strong></p>
 
-<p>| Feature | RISC | CISC |</p>
-<p>|---------|------|------|</p>
-<p>| <strong>Instruction Format</strong> | Simple, uniform format | Variable-length instructions |</p>
-<p>| <strong>Instruction Complexity</strong> | Simple instructions, more instructions per program | Complex operations |</p>
-<p>| <strong>Memory Access</strong> | Load/store architecture (only LOAD/STORE access memory) | Memory operands in arithmetic operations |</p>
-<p>| <strong>Registers</strong> | Large number of general-purpose registers | Fewer registers |</p>
-<p>| <strong>Hardware Design</strong> | Hardware simplicity for higher clock rates | More complex hardware |</p>
-<p>| <strong>Pipelining</strong> | Regular structure enables efficient pipelining | More difficult to pipeline |</p>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>RISC</th>
+<th>CISC</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Instruction Format</strong></td>
+<td>Simple, uniform format</td>
+<td>Variable-length instructions</td>
+</tr>
+<tr>
+<td><strong>Instruction Complexity</strong></td>
+<td>Simple instructions, more instructions per program</td>
+<td>Complex operations</td>
+</tr>
+<tr>
+<td><strong>Memory Access</strong></td>
+<td>Load/store architecture (only LOAD/STORE access memory)</td>
+<td>Memory operands in arithmetic operations</td>
+</tr>
+<tr>
+<td><strong>Registers</strong></td>
+<td>Large number of general-purpose registers</td>
+<td>Fewer registers</td>
+</tr>
+<tr>
+<td><strong>Hardware Design</strong></td>
+<td>Hardware simplicity for higher clock rates</td>
+<td>More complex hardware</td>
+</tr>
+<tr>
+<td><strong>Pipelining</strong></td>
+<td>Regular structure enables efficient pipelining</td>
+<td>More difficult to pipeline</td>
+</tr>
+</tbody>
+</table>
 
 
-<strong>ARM Design Principles</strong>
+<p><strong>ARM Design Principles</strong></p>
 
 <ul>
 <li>Simplicity enables high performance</li>
@@ -98,7 +140,7 @@
 
 <h3>4.2.2 ARM Registers</h3>
 
-<strong>General-Purpose Registers</strong>
+<p><strong>General-Purpose Registers</strong></p>
 
 <ul>
 <li><strong>R0 to R15</strong>: 16 registers total</li>
@@ -109,41 +151,40 @@
 <li><strong>R15 (PC)</strong>: Program Counter - address of next instruction</li>
 </ul>
 
-<strong>Register Usage Conventions</strong>
+<p><strong>Register Usage Conventions</strong></p>
 
 <div align="center">
 <img src="../img/Chapter%202%20ARM%20Conventions.jpg" alt="ARM Register Usage Conventions" width="600">
 <p><em>Figure 1: ARM Register Usage Conventions</em></p>
 </div>
 
-<!-- ``<code>
-<p>R0-R3:   Argument/result registers</p>
-<p>- Pass parameters to functions</p>
-<p>- Return values from functions</p>
-<p>- Scratch registers (not preserved)</p>
+<pre><code class="language-asm6502">R0-R3:   Argument/result registers
+- Pass parameters to functions
+- Return values from functions
+- Scratch registers (not preserved)
 
-<p>R4-R11:  Local variable registers</p>
-<p>- Must be preserved across function calls</p>
-<p>- Callee saves/restores if used</p>
+R4-R11:  Local variable registers
+- Must be preserved across function calls
+- Callee saves/restores if used
 
-<p>R12:     Intra-procedure-call scratch register</p>
-<p>- Can be corrupted by function calls</p>
-<p>- Not preserved</p>
+R12:     Intra-procedure-call scratch register
+- Can be corrupted by function calls
+- Not preserved
 
-<p>R13 (SP): Stack Pointer</p>
-<p>- Points to top of stack</p>
-<p>- Must always be valid</p>
+R13 (SP): Stack Pointer
+- Points to top of stack
+- Must always be valid
 
-<p>R14 (LR): Link Register</p>
-<p>- Stores return address on function call</p>
-<p>- Contains address to return to</p>
+R14 (LR): Link Register
+- Stores return address on function call
+- Contains address to return to
 
-<p>R15 (PC): Program Counter</p>
-<p>- Always points to next instruction</p>
-<p>- Modifying PC changes execution flow</p>
--->
+R15 (PC): Program Counter
+- Always points to next instruction
+- Modifying PC changes execution flow
+</code></pre>
 
-<strong>Why So Many Registers?</strong>
+<p><strong>Why So Many Registers?</strong></p>
 
 <ul>
 <li>Reduces memory accesses (faster than cache/RAM)</li>
@@ -154,20 +195,19 @@
 
 <h3>4.2.3 Memory Organization</h3>
 
-<strong>Little-Endian Byte Ordering</strong>
+<p><strong>Little-Endian Byte Ordering</strong></p>
 
 <ul>
 <li>Least significant byte at lowest address</li>
 <li>Example: 0x12345678 stored as:</li>
 </ul>
 
-</code>`<code>
-<p>Address:  [base+0] [base+1] [base+2] [base+3]</p>
-<p>Content:     78       56       34       12</p>
-</code>`<code>
+<pre><code>Address:  [base+0] [base+1] [base+2] [base+3]
+Content:     78       56       34       12
+</code></pre>
 
 
-<strong>Word Alignment</strong>
+<p><strong>Word Alignment</strong></p>
 
 <ul>
 <li>Words are 32 bits (4 bytes)</li>
@@ -175,7 +215,7 @@
 <li>Accessing unaligned words may cause errors or slowdown</li>
 </ul>
 
-<strong>Address Space</strong>
+<p><strong>Address Space</strong></p>
 
 <ul>
 <li>32-bit addresses can access 2³² bytes = 4 GB</li>
@@ -187,7 +227,7 @@
 
 <h3>4.3.1 Instruction Structure</h3>
 
-<strong>Fixed 32-Bit Length</strong>
+<p><strong>Fixed 32-Bit Length</strong></p>
 
 <ul>
 <li>Every instruction exactly 32 bits</li>
@@ -195,18 +235,16 @@
 <li>Enables predictable pipeline operation</li>
 </ul>
 
-<strong>Typical Instruction Fields</strong>
+<p><strong>Typical Instruction Fields</strong></p>
 
-</code>`<code>
-<p>[Condition][Opcode][Operands]</p>
-<p>4 bits    varies   varies</p>
-</code>`<code>
+<pre><code>[Condition][Opcode][Operands]
+4 bits    varies   varies
+</code></pre>
 
-<strong>Example: ADD Instruction</strong>
+<p><strong>Example: ADD Instruction</strong></p>
 
-</code>`<code>assembly
-<p>ADD R1, R2, R3    ; R1 = R2 + R3</p>
-</code>`<code>
+<pre><code class="language-asm6502">ADD R1, R2, R3    ; R1 = R2 + R3
+</code></pre>
 
 <p>Encoding includes:</p>
 <ul>
@@ -220,7 +258,7 @@
 
 <h3>4.3.2 Instruction Types</h3>
 
-<strong>Data Processing Instructions</strong>
+<p><strong>Data Processing Instructions</strong></p>
 
 <ul>
 <li>Arithmetic: ADD, SUB, RSB (reverse subtract)</li>
@@ -230,7 +268,7 @@
 <li>Shift/Rotate: LSL, LSR, ASR, ROR</li>
 </ul>
 
-<strong>Data Transfer Instructions</strong>
+<p><strong>Data Transfer Instructions</strong></p>
 
 <ul>
 <li>Load: LDR (word), LDRB (byte), LDRH (halfword)</li>
@@ -238,7 +276,7 @@
 <li>Multiple: LDM, STM (load/store multiple registers)</li>
 </ul>
 
-<strong>Control Flow Instructions</strong>
+<p><strong>Control Flow Instructions</strong></p>
 
 <ul>
 <li>Branch: B (unconditional), BEQ, BNE, BGE, BLT, etc.</li>
@@ -248,21 +286,19 @@
 
 <h3>4.3.3 Operand Types</h3>
 
-<strong>Register Operands</strong>
+<p><strong>Register Operands</strong></p>
 
-</code>`<code>assembly
-<p>ADD R0, R1, R2    ; R0 = R1 + R2 (all registers)</p>
-</code>`<code>
+<pre><code class="language-asm6502">ADD R0, R1, R2    ; R0 = R1 + R2 (all registers)
+</code></pre>
 
-<strong>Immediate Operands</strong>
+<p><strong>Immediate Operands</strong></p>
 
-</code>`<code>assembly
-<p>ADD R0, R1, #5    ; R0 = R1 + 5 (# indicates immediate)</p>
-<p>MOV R2, #100      ; R2 = 100</p>
-</code>`<code>
+<pre><code class="language-asm6502">ADD R0, R1, #5    ; R0 = R1 + 5 (# indicates immediate)
+MOV R2, #100      ; R2 = 100
+</code></pre>
 
 
-<strong>Immediate Value Constraints</strong>
+<p><strong>Immediate Value Constraints</strong></p>
 
 <ul>
 <li>Limited to certain patterns due to 32-bit instruction encoding</li>
@@ -270,328 +306,298 @@
 <li>Assembler warns if immediate cannot be encoded</li>
 </ul>
 
-<strong>Shifted Register Operands</strong>
+<p><strong>Shifted Register Operands</strong></p>
 
-</code>`<code>assembly
-<p>ADD R0, R1, R2, LSL #2    ; R0 = R1 + (R2 << 2)</p>
-<p>SUB R3, R4, R5, LSR #1    ; R3 = R4 - (R5 >> 1)</p>
-</code>`<code>
+<pre><code class="language-asm6502">ADD R0, R1, R2, LSL #2    ; R0 = R1 + (R2 << 2)
+SUB R3, R4, R5, LSR #1    ; R3 = R4 - (R5 >> 1)
+</code></pre>
 
 
 <h2>4.4 Basic ARM Instructions</h2>
 
 <h3>4.4.1 Arithmetic Instructions</h3>
 
-<strong>Addition</strong>
+<p><strong>Addition</strong></p>
 
-</code>`<code>assembly
-<p>ADD Rd, Rn, Rm       ; Rd = Rn + Rm</p>
-<p>ADD Rd, Rn, #imm     ; Rd = Rn + immediate</p>
-</code>`<code>
-
-<p>Examples:</p>
-</code>`<code>assembly
-<p>ADD R0, R1, R2       ; R0 = R1 + R2</p>
-<p>ADD R3, R3, #1       ; R3 = R3 + 1 (increment)</p>
-</code>`<code>
-
-
-<strong>Subtraction</strong>
-
-</code>`<code>assembly
-<p>SUB Rd, Rn, Rm       ; Rd = Rn - Rm</p>
-<p>SUB Rd, Rn, #imm     ; Rd = Rn - immediate</p>
-<p>RSB Rd, Rn, #imm     ; Rd = immediate - Rn (reverse subtract)</p>
-</code>`<code>
+<pre><code class="language-asm6502">ADD Rd, Rn, Rm       ; Rd = Rn + Rm
+ADD Rd, Rn, #imm     ; Rd = Rn + immediate
+</code></pre>
 
 <p>Examples:</p>
-</code>`<code>assembly
-<p>SUB R0, R1, R2       ; R0 = R1 - R2</p>
-<p>SUB R4, R4, #10      ; R4 = R4 - 10 (decrement)</p>
-<p>RSB R5, R6, #0       ; R5 = 0 - R6 (negate)</p>
-</code>`<code>
+
+<pre><code class="language-asm6502">ADD R0, R1, R2       ; R0 = R1 + R2
+ADD R3, R3, #1       ; R3 = R3 + 1 (increment)
+</code></pre>
 
 
-<strong>Multiplication</strong> (covered in later tutorials)
+<p><strong>Subtraction</strong></p>
 
-</code>`<code>assembly
-<p>MUL Rd, Rn, Rm       ; Rd = Rn × Rm (lower 32 bits)</p>
-</code>`<code>
+<pre><code class="language-asm6502">SUB Rd, Rn, Rm       ; Rd = Rn - Rm
+SUB Rd, Rn, #imm     ; Rd = Rn - immediate
+RSB Rd, Rn, #imm     ; Rd = immediate - Rn (reverse subtract)
+</code></pre>
+
+<p>Examples:</p>
+
+<pre><code class="language-asm6502">SUB R0, R1, R2       ; R0 = R1 - R2
+SUB R4, R4, #10      ; R4 = R4 - 10 (decrement)
+RSB R5, R6, #0       ; R5 = 0 - R6 (negate)
+</code></pre>
+
+<p><strong>Multiplication</strong> (covered in later tutorials)</p>
+
+<pre><code class="language-asm6502">MUL Rd, Rn, Rm       ; Rd = Rn × Rm (lower 32 bits)
+</code></pre>
 
 
 <h3>4.4.2 Logical Instructions</h3>
 
-<strong>AND Operation</strong>
+<p><strong>AND Operation</strong></p>
 
-</code>`<code>assembly
-<p>AND Rd, Rn, Rm       ; Rd = Rn AND Rm</p>
-<p>AND Rd, Rn, #imm     ; Rd = Rn AND immediate</p>
-</code>`<code>
+<pre><code class="language-asm6502">AND Rd, Rn, Rm       ; Rd = Rn AND Rm
+AND Rd, Rn, #imm     ; Rd = Rn AND immediate
+</code></pre>
 
 <p>Usage: Bit masking, clearing specific bits</p>
 
 <p>Example:</p>
-</code>`<code>assembly
-<p>AND R0, R0, #0xFF    ; Keep only lower 8 bits</p>
-</code>`<code>
 
+<pre><code class="language-asm6502">AND R0, R0, #0xFF    ; Keep only lower 8 bits
+</code></pre>
 
-<strong>OR Operation</strong>
+<p><strong>OR Operation</strong></p>
 
-</code>`<code>assembly
-<p>ORR Rd, Rn, Rm       ; Rd = Rn OR Rm (ORR in ARM)</p>
-<p>ORR Rd, Rn, #imm     ; Rd = Rn OR immediate</p>
-</code>`<code>
+<pre><code class="language-asm6502">ORR Rd, Rn, Rm       ; Rd = Rn OR Rm (ORR in ARM)
+ORR Rd, Rn, #imm     ; Rd = Rn OR immediate
+</code></pre>
 
 <p>Usage: Setting specific bits</p>
 
 <p>Example:</p>
-</code>`<code>assembly
-<p>ORR R1, R1, #0x80    ; Set bit 7</p>
-</code>`<code>
 
+<pre><code class="language-asm6502">ORR R1, R1, #0x80    ; Set bit 7
+</code></pre>
 
-<strong>Exclusive OR</strong>
+<p><strong>Exclusive OR</strong></p>
 
-</code>`<code>assembly
-<p>EOR Rd, Rn, Rm       ; Rd = Rn XOR Rm</p>
-<p>EOR Rd, Rn, #imm     ; Rd = Rn XOR immediate</p>
-</code>`<code>
+<pre><code class="language-asm6502">EOR Rd, Rn, Rm       ; Rd = Rn XOR Rm
+EOR Rd, Rn, #imm     ; Rd = Rn XOR immediate
+</code></pre>
 
 <p>Usage: Toggling bits, fast comparison</p>
 
 <p>Example:</p>
-</code>`<code>assembly
-<p>EOR R2, R2, R2       ; R2 = 0 (XOR with itself)</p>
-</code>`<code>
 
+<pre><code class="language-asm6502">EOR R2, R2, R2       ; R2 = 0 (XOR with itself)
+</code></pre>
 
-<strong>Move and Move Not</strong>
+<p><strong>Move and Move Not</strong></p>
 
-</code>`<code>assembly
-<p>MOV Rd, Rm           ; Rd = Rm</p>
-<p>MOV Rd, #imm         ; Rd = immediate</p>
-<p>MVN Rd, Rm           ; Rd = NOT Rm (bitwise complement)</p>
-</code>`<code>
+<pre><code class="language-asm6502">MOV Rd, Rm           ; Rd = Rm
+MOV Rd, #imm         ; Rd = immediate
+MVN Rd, Rm           ; Rd = NOT Rm (bitwise complement)
+</code></pre>
 
 <p>Examples:</p>
-</code>`<code>assembly
-<p>MOV R0, R1           ; Copy R1 to R0</p>
-<p>MOV R2, #0           ; Clear R2</p>
-<p>MVN R3, R4           ; R3 = ~R4 (invert all bits)</p>
-</code>`<code>
+
+<pre><code class="language-asm6502">MOV R0, R1           ; Copy R1 to R0
+MOV R2, #0           ; Clear R2
+MVN R3, R4           ; R3 = ~R4 (invert all bits)
+</code></pre>
 
 
 <h3>4.4.3 Shift Operations</h3>
 
-<strong>Logical Shift Left (LSL)</strong>
+<p><strong>Logical Shift Left (LSL)</strong></p>
 
-</code>`<code>assembly
-<p>LSL Rd, Rn, #shift   ; Rd = Rn << shift</p>
-<p>MOV Rd, Rn, LSL #shift</p>
-</code>`<code>
+<pre><code class="language-asm6502">LSL Rd, Rn, #shift   ; Rd = Rn << shift
+MOV Rd, Rn, LSL #shift
+</code></pre>
 
 <p>Effect: Multiplies by 2^shift</p>
 
 <p>Example:</p>
-</code>`<code>assembly
-<p>LSL R0, R1, #2       ; R0 = R1 × 4</p>
-</code>`<code>
 
-<strong>Logical Shift Right (LSR)</strong>
+<pre><code class="language-asm6502">LSL R0, R1, #2       ; R0 = R1 × 4
+</code></pre>
 
-</code>`<code>assembly
-<p>LSR Rd, Rn, #shift   ; Rd = Rn >> shift (unsigned)</p>
-<p>MOV Rd, Rn, LSR #shift</p>
-</code>`<code>
+<p><strong>Logical Shift Right (LSR)</strong></p>
+
+<pre><code class="language-asm6502">LSR Rd, Rn, #shift   ; Rd = Rn >> shift (unsigned)
+MOV Rd, Rn, LSR #shift
+</code></pre>
 
 <p>Effect: Divides by 2^shift (unsigned)</p>
 
 <p>Example:</p>
-</code>`<code>assembly
-<p>LSR R0, R1, #3       ; R0 = R1 / 8</p>
-</code>`<code>
 
-<strong>Arithmetic Shift Right (ASR)</strong>
+<pre><code class="language-asm6502">LSR R0, R1, #3       ; R0 = R1 / 8
+</code></pre>
 
-</code>`<code>assembly
-<p>ASR Rd, Rn, #shift   ; Rd = Rn >> shift (signed)</p>
-</code>`<code>
+<p><strong>Arithmetic Shift Right (ASR)</strong></p>
+
+<pre><code class="language-asm6502">ASR Rd, Rn, #shift   ; Rd = Rn >> shift (signed)
+</code></pre>
 
 <p>Effect: Divides by 2^shift, preserves sign</p>
 
 <p>Example:</p>
-</code>`<code>assembly
-<p>ASR R0, R1, #2       ; R0 = R1 / 4 (signed)</p>
-</code>`<code>
 
-<strong>Rotate Right (ROR)</strong>
+<pre><code class="language-asm6502">ASR R0, R1, #2       ; R0 = R1 / 4 (signed)
+</code></pre>
 
-</code>`<code>assembly
-<p>ROR Rd, Rn, #shift   ; Rotate Rn right by shift</p>
-</code>`<code>
+<p><strong>Rotate Right (ROR)</strong></p>
+
+<pre><code class="language-asm6502">ROR Rd, Rn, #shift   ; Rotate Rn right by shift
+</code></pre>
 
 <p>Effect: Bits rotated off right end reappear at left</p>
 
 <p>Example:</p>
-</code>`<code>assembly
-<p>ROR R0, R1, #8       ; Rotate R1 right by 8 bits</p>
-</code>`<code>
+
+<pre><code class="language-asm6502">ROR R0, R1, #8       ; Rotate R1 right by 8 bits
+</code></pre>
 
 
 <h2>4.5 Memory Access Instructions</h2>
 
 <h3>4.5.1 Load Instructions</h3>
 
-<strong>Load Word (LDR)</strong>
+<p><strong>Load Word (LDR)</strong></p>
 
-</code>`<code>assembly
-<p>LDR Rd, [Rn]         ; Rd = Memory[Rn]</p>
-<p>LDR Rd, [Rn, #offset]; Rd = Memory[Rn + offset]</p>
-</code>`<code>
-
-<p>Examples:</p>
-</code>`<code>assembly
-<p>LDR R0, [R1]         ; Load word from address in R1</p>
-<p>LDR R2, [R3, #4]     ; Load from address R3+4</p>
-<p>LDR R4, [R5, #-8]    ; Load from address R5-8</p>
-</code>`<code>
-
-<strong>Load Byte (LDRB)</strong>
-
-</code>`<code>assembly
-<p>LDRB Rd, [Rn, #offset]; Load one byte, zero-extend to 32 bits</p>
-</code>`<code>
-
-<p>Example:</p>
-</code>`<code>assembly
-<p>LDRB R0, [R1]        ; R0 = (byte at R1), upper 24 bits = 0</p>
-</code>`<code>
-
-<strong>Load Halfword (LDRH)</strong>
-
-</code>`<code>assembly
-<p>LDRH Rd, [Rn, #offset]; Load 16 bits, zero-extend to 32 bits</p>
-</code>`<code>
-
-<p>Example:</p>
-</code>`<code>assembly
-<p>LDRH R0, [R1, #2]    ; R0 = (halfword at R1+2), upper 16 bits = 0</p>
-</code>`<code>
-
-<strong>Pseudo-Instruction for Loading Addresses</strong>
-
-</code>`<code>assembly
-<p>LDR Rd, =label       ; Load address of label into Rd</p>
-<p>LDR Rd, =value       ; Load 32-bit constant into Rd</p>
-</code>`<code>
+<pre><code class="language-asm6502">LDR Rd, [Rn]         ; Rd = Memory[Rn]
+LDR Rd, [Rn, #offset]; Rd = Memory[Rn + offset]
+</code></pre>
 
 <p>Examples:</p>
-</code>`<code>assembly
-<p>LDR R0, =array       ; R0 = address of array</p>
-<p>LDR R1, =0x12345678  ; R1 = 0x12345678 (large immediate)</p>
-</code>`<code>
+
+<pre><code class="language-asm6502">LDR R0, [R1]         ; Load word from address in R1
+LDR R2, [R3, #4]     ; Load from address R3+4
+LDR R4, [R5, #-8]    ; Load from address R5-8
+</code></pre>
+
+<p><strong>Load Byte (LDRB)</strong></p>
+
+<pre><code class="language-asm6502">LDRB Rd, [Rn, #offset]; Load one byte, zero-extend to 32 bits
+</code></pre>
+
+<p>Example:</p>
+
+<pre><code class="language-asm6502">LDRB R0, [R1]        ; R0 = (byte at R1), upper 24 bits = 0
+</code></pre>
+
+<p><strong>Load Halfword (LDRH)</strong></p>
+
+<pre><code class="language-asm6502">LDRH Rd, [Rn, #offset]; Load 16 bits, zero-extend to 32 bits
+</code></pre>
+
+<p>Example:</p>
+
+<pre><code class="language-asm6502">LDRH R0, [R1, #2]    ; R0 = (halfword at R1+2), upper 16 bits = 0
+</code></pre>
+
+<p><strong>Pseudo-Instruction for Loading Addresses</strong></p>
+
+<pre><code class="language-asm6502">LDR Rd, =label       ; Load address of label into Rd
+LDR Rd, =value       ; Load 32-bit constant into Rd
+</code></pre>
+
+<p>Examples:</p>
+
+<pre><code class="language-asm6502">LDR R0, =array       ; R0 = address of array
+LDR R1, =0x12345678  ; R1 = 0x12345678 (large immediate)
+</code></pre>
 
 
 <h3>4.5.2 Store Instructions</h3>
 
-<strong>Store Word (STR)</strong>
+<p><strong>Store Word (STR)</strong></p>
 
-</code>`<code>assembly
-<p>STR Rd, [Rn]         ; Memory[Rn] = Rd</p>
-<p>STR Rd, [Rn, #offset]; Memory[Rn + offset] = Rd</p>
-</code>`<code>
+<pre><code class="language-asm6502">STR Rd, [Rn]         ; Memory[Rn] = Rd
+STR Rd, [Rn, #offset]; Memory[Rn + offset] = Rd
+</code></pre>
 
 <p>Examples:</p>
-</code>`<code>assembly
-<p>STR R0, [R1]         ; Store R0 to address in R1</p>
-<p>STR R2, [R3, #8]     ; Store R2 to address R3+8</p>
-</code>`<code>
 
-<strong>Store Byte (STRB)</strong>
+<pre><code class="language-asm6502">STR R0, [R1]         ; Store R0 to address in R1
+STR R2, [R3, #8]     ; Store R2 to address R3+8
+</code></pre>
 
-</code>`<code>assembly
-<p>STRB Rd, [Rn, #offset]; Store lower 8 bits of Rd</p>
-</code>`<code>
+<p><strong>Store Byte (STRB)</strong></p>
 
-<p>Example:</p>
-</code>`<code>assembly
-<p>STRB R0, [R1]        ; Store lower byte of R0 to address R1</p>
-</code>`<code>
-
-<strong>Store Halfword (STRH)</strong>
-
-</code>`<code>assembly
-<p>STRH Rd, [Rn, #offset]; Store lower 16 bits of Rd</p>
-</code>`<code>
+<pre><code class="language-asm6502">STRB Rd, [Rn, #offset]; Store lower 8 bits of Rd
+</code></pre>
 
 <p>Example:</p>
-</code>`<code>assembly
-<p>STRH R0, [R1, #4]    ; Store lower halfword of R0 to R1+4</p>
-</code>`<code>
+
+<pre><code class="language-asm6502">STRB R0, [R1]        ; Store lower byte of R0 to address R1
+</code></pre>
+
+<p><strong>Store Halfword (STRH)</strong></p>
+
+<pre><code class="language-asm6502">STRH Rd, [Rn, #offset]; Store lower 16 bits of Rd
+</code></pre>
+
+<p>Example:</p>
+
+<pre><code class="language-asm6502">STRH R0, [R1, #4]    ; Store lower halfword of R0 to R1+4
+</code></pre>
 
 
 <h3>4.5.3 Addressing Modes</h3>
 
-<strong>Offset Addressing</strong>
+<p><strong>Offset Addressing</strong></p>
 
-</code>`<code>assembly
-<p>LDR R0, [R1, #4]     ; R0 = Memory[R1 + 4], R1 unchanged</p>
-</code>`<code>
+<pre><code class="language-asm6502">LDR R0, [R1, #4]     ; R0 = Memory[R1 + 4], R1 unchanged
+</code></pre>
 
-<strong>Pre-indexed Addressing</strong>
+<p><strong>Pre-indexed Addressing</strong></p>
 
-</code>`<code>assembly
-<p>LDR R0, [R1, #4]!    ; R1 = R1 + 4, then R0 = Memory[R1]</p>
-<p>; ! indicates update base register</p>
-</code>`<code>
+<pre><code class="language-asm6502">LDR R0, [R1, #4]!    ; R1 = R1 + 4, then R0 = Memory[R1]
+; ! indicates update base register
+</code></pre>
 
-<strong>Post-indexed Addressing</strong>
+<p><strong>Post-indexed Addressing</strong></p>
 
-</code>`<code>assembly
-<p>LDR R0, [R1], #4     ; R0 = Memory[R1], then R1 = R1 + 4</p>
-</code>`<code>
+<pre><code class="language-asm6502">LDR R0, [R1], #4     ; R0 = Memory[R1], then R1 = R1 + 4
+</code></pre>
 
-<strong>Register Offset</strong>
+<p><strong>Register Offset</strong></p>
 
-</code>`<code>assembly
-<p>LDR R0, [R1, R2]     ; R0 = Memory[R1 + R2]</p>
-<p>LDR R0, [R1, R2, LSL #2] ; R0 = Memory[R1 + (R2 << 2)]</p>
-</code>`<code>
+<pre><code class="language-asm6502">LDR R0, [R1, R2]     ; R0 = Memory[R1 + R2]
+LDR R0, [R1, R2, LSL #2] ; R0 = Memory[R1 + (R2 << 2)]
+</code></pre>
 
 
 <h2>4.6 Assembly Program Structure</h2>
 
 <h3>4.6.1 Directives</h3>
 
-<strong>Section Directives</strong>
+<p><strong>Section Directives</strong></p>
 
-</code>`<code>assembly
-<p>.text                ; Code section (instructions)</p>
-<p>.data                ; Data section (initialized variables)</p>
-<p>.bss                 ; Uninitialized data section</p>
-</code>`<code>
+<pre><code class="language-asm6502">.text                ; Code section (instructions)
+.data                ; Data section (initialized variables)
+.bss                 ; Uninitialized data section
+</code></pre>
 
-<strong>Global and External</strong>
+<p><strong>Global and External</strong></p>
 
-</code>`<code>assembly
-<p>.global main         ; Make symbol visible to linker</p>
-<p>.extern printf       ; Declare external symbol</p>
-</code>`<code>
+<pre><code class="language-asm6502">.global main         ; Make symbol visible to linker
+.extern printf       ; Declare external symbol
+</code></pre>
 
-<strong>Data Definition</strong>
+<p><strong>Data Definition</strong></p>
 
-</code>`<code>assembly
-<p>.word value          ; Define 32-bit word</p>
-<p>.byte value          ; Define byte</p>
-<p>.asciz "string"      ; Define null-terminated string</p>
-<p>.space n             ; Reserve n bytes of space</p>
-</code>`<code>
+<pre><code class="language-asm6502">.word value          ; Define 32-bit word
+.byte value          ; Define byte
+.asciz "string"      ; Define null-terminated string
+.space n             ; Reserve n bytes of space
+</code></pre>
 
 
 <h3>4.6.2 Labels</h3>
 
-<strong>Purpose</strong>
+<p><strong>Purpose</strong></p>
 
 <ul>
 <li>Mark locations in code or data</li>
@@ -599,241 +605,226 @@
 <li>Enable jumps and references</li>
 </ul>
 
-<strong>Syntax</strong>
+<p><strong>Syntax</strong></p>
 
-</code>`<code>assembly
-<p>label:               ; Label for instruction</p>
-<p>MOV R0, #1</p>
-<p>ADD R1, R0, R2</p>
+<pre><code class="language-asm6502">label:               ; Label for instruction
+    MOV R0, #1
+    ADD R1, R0, R2
 
-<p>array:               ; Label for data</p>
-<p>.word 1, 2, 3, 4</p>
-</code>`<code>
+array:               ; Label for data
+    .word 1, 2, 3, 4
+</code></pre>
 
 
 <h3>4.6.3 Simple Program Example</h3>
 
-</code>`<code>assembly
-<p>.text</p>
-<p>.global main</p>
+<pre><code class="language-asm6502">.text
+.global main
 
-<p>main:</p>
-<p>MOV R0, #5       ; R0 = 5</p>
-<p>MOV R1, #10      ; R1 = 10</p>
-<p>ADD R2, R0, R1   ; R2 = R0 + R1 = 15</p>
-<p>MOV R0, R2       ; R0 = R2 (return value)</p>
-<p>MOV PC, LR       ; Return from main</p>
+main:
+    MOV R0, #5       ; R0 = 5
+    MOV R1, #10      ; R1 = 10
+    ADD R2, R0, R1   ; R2 = R0 + R1 = 15
+    MOV R0, R2       ; R0 = R2 (return value)
+    MOV PC, LR       ; Return from main
 
-<p>.data</p>
-<p>message:</p>
-<p>.asciz "Hello, ARM!"</p>
-</code>`<code>
+.data
+message:
+    .asciz "Hello, ARM!"
+</code></pre>
 
 
 <h2>4.7 ARM Development Tools</h2>
 
 <h3>4.7.1 Toolchain Components</h3>
 
-<strong>Cross-Compiler</strong>
+<p><strong>Cross-Compiler</strong></p>
 
 <ul>
-<li></code>arm-linux-gnueabi-gcc<code>: Compiles C to ARM code</li>
+<li><code>arm-linux-gnueabi-gcc</code>: Compiles C to ARM code</li>
 <li>Runs on x86 PC, produces ARM binaries</li>
 <li>Necessary because development machine ≠ target machine</li>
 </ul>
 
-<strong>Assembler</strong>
+<p><strong>Assembler</strong></p>
 
 <ul>
-<li></code>arm-linux-gnueabi-as<code>: Assembles ARM assembly to object code</li>
+<li><code>arm-linux-gnueabi-as</code>: Assembles ARM assembly to object code</li>
 <li>Part of binutils package</li>
 </ul>
 
-<strong>Linker</strong>
+<p><strong>Linker</strong></p>
 
 <ul>
-<li></code>arm-linux-gnueabi-ld<code>: Links object files to executable</li>
+<li><code>arm-linux-gnueabi-ld</code>: Links object files to executable</li>
 <li>Resolves symbols, combines code sections</li>
 </ul>
 
-<strong>Emulator</strong>
+<p><strong>Emulator</strong></p>
 
 <ul>
-<li></code>qemu-arm<code>: Emulates ARM processor on x86</li>
+<li><code>qemu-arm</code>: Emulates ARM processor on x86</li>
 <li>Allows running ARM binaries on PC</li>
 <li>Useful for testing without ARM hardware</li>
 </ul>
 
 <h3>4.7.2 Compilation Process</h3>
 
-<strong>From C to Executable</strong>
+<p><strong>From C to Executable</strong></p>
 
-</code>`<code>
-<p>C Source (.c)</p>
-<p>↓ [gcc -S]</p>
-<p>Assembly (.s)</p>
-<p>↓ [as]</p>
-<p>Object Code (.o)</p>
-<p>↓ [ld]</p>
-<p>Executable (a.out)</p>
-<p>↓ [qemu-arm]</p>
-<p>Execution</p>
-</code>`<code>
+<pre><code>C Source (.c)
+    ↓ [gcc -S]
+Assembly (.s)
+    ↓ [as]
+Object Code (.o)
+    ↓ [ld]
+Executable (a.out)
+    ↓ [qemu-arm]
+Execution
+</code></pre>
 
-<strong>Command Examples</strong>
+<p><strong>Command Examples</strong></p>
 
-</code>`<code>bash
-<h1>Compile C to assembly</h1>
-<p>arm-linux-gnueabi-gcc -S program.c -o program.s</p>
+<pre><code class="language-bash"># Compile C to assembly
+arm-linux-gnueabi-gcc -S program.c -o program.s
 
-<h1>Assemble to object code</h1>
-<p>arm-linux-gnueabi-as program.s -o program.o</p>
+# Assemble to object code
+arm-linux-gnueabi-as program.s -o program.o
 
-<h1>Link to executable</h1>
-<p>arm-linux-gnueabi-gcc program.o -o program</p>
+# Link to executable
+arm-linux-gnueabi-gcc program.o -o program
 
-<h1>Run with emulator</h1>
-<p>qemu-arm program</p>
-</code>`<code>
+# Run with emulator
+qemu-arm program
+</code></pre>
 
-<strong>One-Step Compilation</strong>
+<p><strong>One-Step Compilation</strong></p>
 
-</code>`<code>bash
-<h1>Compile, assemble, and link in one command</h1>
-<p>arm-linux-gnueabi-gcc program.c -o program</p>
-</code>`<code>
+<pre><code class="language-bash"># Compile, assemble, and link in one command
+arm-linux-gnueabi-gcc program.c -o program
+</code></pre>
 
 
 <h3>4.7.3 Debugging and Inspection</h3>
 
-<strong>GDB (GNU Debugger)</strong>
+<p><strong>GDB (GNU Debugger)</strong></p>
 
-</code>`<code>bash
-<h1>Debug with QEMU and GDB</h1>
-<p>qemu-arm -g 1234 program &     # Start QEMU, wait for debugger</p>
-<p>arm-linux-gnueabi-gdb program  # Start GDB</p>
-<p>(gdb) target remote :1234      # Connect to QEMU</p>
-<p>(gdb) break main               # Set breakpoint</p>
-<p>(gdb) continue                 # Run to breakpoint</p>
-<p>(gdb) step                     # Execute one instruction</p>
-<p>(gdb) info registers           # Show register values</p>
-</code>`<code>
+<pre><code class="language-bash"># Debug with QEMU and GDB
+qemu-arm -g 1234 program &     # Start QEMU, wait for debugger
+arm-linux-gnueabi-gdb program  # Start GDB
+(gdb) target remote :1234      # Connect to QEMU
+(gdb) break main               # Set breakpoint
+(gdb) continue                 # Run to breakpoint
+(gdb) step                     # Execute one instruction
+(gdb) info registers           # Show register values
+</code></pre>
 
-<strong>Objdump</strong>
+<p><strong>Objdump</strong></p>
 
-</code>`<code>bash
-<h1>Disassemble binary to assembly</h1>
-<p>arm-linux-gnueabi-objdump -d program</p>
-</code>`<code>
+<pre><code class="language-bash"># Disassemble binary to assembly
+arm-linux-gnueabi-objdump -d program
+</code></pre>
 
-<strong>nm</strong>
+<p><strong>nm</strong></p>
 
-</code>`<code>bash
-<h1>List symbols in object file</h1>
-<p>arm-linux-gnueabi-nm program.o</p>
-</code>`<code>
+<pre><code class="language-bash"># List symbols in object file
+arm-linux-gnueabi-nm program.o
+</code></pre>
 
 
 <h2>4.8 Programming in ARM Assembly</h2>
 
 <h3>4.8.1 Translating C to ARM</h3>
 
-<strong>C Code:</strong>
+<p><strong>C Code:</strong></p>
 
-</code>`<code>c
-<p>int a = 5;</p>
-<p>int b = 10;</p>
-<p>int c = a + b;</p>
-</code>`<code>
+<pre><code class="language-c">int a = 5;
+int b = 10;
+int c = a + b;
+</code></pre>
 
-<strong>ARM Assembly:</strong>
+<p><strong>ARM Assembly:</strong></p>
 
-</code>`<code>assembly
-<p>MOV R0, #5       ; a = 5</p>
-<p>MOV R1, #10      ; b = 10</p>
-<p>ADD R2, R0, R1   ; c = a + b</p>
-</code>`<code>
+<pre><code class="language-asm6502">MOV R0, #5       ; a = 5
+MOV R1, #10      ; b = 10
+ADD R2, R0, R1   ; c = a + b
+</code></pre>
 
-<strong>C Code with Array:</strong>
+<p><strong>C Code with Array:</strong></p>
 
-</code>`<code>c
-<p>int arr[3] = {1, 2, 3};</p>
-<p>int x = arr[1];</p>
-</code>`<code>
+<pre><code class="language-c">int arr[3] = {1, 2, 3};
+int x = arr[1];
+</code></pre>
 
-<strong>ARM Assembly:</strong>
+<p><strong>ARM Assembly:</strong></p>
 
-</code>`<code>assembly
-<p>.data</p>
-<p>arr:</p>
-<p>.word 1, 2, 3</p>
+<pre><code class="language-asm6502">.data
+arr:
+    .word 1, 2, 3
 
-<p>.text</p>
-<p>LDR R0, =arr     ; R0 = address of arr</p>
-<p>LDR R1, [R0, #4] ; R1 = arr[1] (offset 4 bytes)</p>
-</code>`<code>
+.text
+    LDR R0, =arr     ; R0 = address of arr
+    LDR R1, [R0, #4] ; R1 = arr[1] (offset 4 bytes)
+</code></pre>
 
 
 <h3>4.8.2 Common Patterns</h3>
 
-<strong>Clearing a Register</strong>
+<p><strong>Clearing a Register</strong></p>
 
-</code>`<code>assembly
-<p>MOV R0, #0           ; Method 1</p>
-<p>EOR R0, R0, R0       ; Method 2 (XOR with itself)</p>
-</code>`<code>
+<pre><code class="language-asm6502">MOV R0, #0           ; Method 1
+EOR R0, R0, R0       ; Method 2 (XOR with itself)
+</code></pre>
 
-<strong>Negating a Value</strong>
+<p><strong>Negating a Value</strong></p>
 
-</code>`<code>assembly
-<p>RSB R0, R0, #0       ; R0 = 0 - R0</p>
-<p>MVN R0, R0           ; R0 = ~R0 (bitwise, not arithmetic)</p>
-<p>ADD R0, R0, #1       ; Then add 1 (two's complement)</p>
-</code>`<code>
+<pre><code class="language-asm6502">RSB R0, R0, #0       ; R0 = 0 - R0
+MVN R0, R0           ; R0 = ~R0 (bitwise, not arithmetic)
+ADD R0, R0, #1       ; Then add 1 (two's complement)
+</code></pre>
 
-<strong>Multiplying by Powers of 2</strong>
+<p><strong>Multiplying by Powers of 2</strong></p>
 
-</code>`<code>assembly
-<p>LSL R0, R1, #3       ; R0 = R1 × 8 (faster than MUL)</p>
-</code>`<code>
+<pre><code class="language-asm6502">LSL R0, R1, #3       ; R0 = R1 × 8 (faster than MUL)
+</code></pre>
 
-<strong>Dividing by Powers of 2</strong>
+<p><strong>Dividing by Powers of 2</strong></p>
 
-</code>`<code>assembly
-<p>LSR R0, R1, #2       ; R0 = R1 / 4 (unsigned)</p>
-<p>ASR R0, R1, #2       ; R0 = R1 / 4 (signed)</p>
-</code>`<code>
+<pre><code class="language-asm6502">LSR R0, R1, #2       ; R0 = R1 / 4 (unsigned)
+ASR R0, R1, #2       ; R0 = R1 / 4 (signed)
+</code></pre>
 
-<strong>Swapping Two Registers</strong>
+<p><strong>Swapping Two Registers</strong></p>
 
-</code>`<code>assembly
-<p>EOR R0, R0, R1       ; XOR-based swap (no temporary)</p>
-<p>EOR R1, R0, R1</p>
-<p>EOR R0, R0, R1</p>
-</code>``
+<pre><code class="language-asm6502">EOR R0, R0, R1       ; XOR-based swap (no temporary)
+EOR R1, R0, R1
+EOR R0, R0, R1
+</code></pre>
 
 
 <h2>Key Takeaways</h2>
 
-<p>1. <strong>ARM follows RISC principles</strong> - simple instructions, load/store architecture, large register file, fixed instruction length.</p>
+<ol>
+<li><strong>ARM follows RISC principles</strong> - simple instructions, load/store architecture, large register file, fixed instruction length.</li>
 
-<p>2. <strong>16 registers (R0-R15)</strong> with special purposes: R13 (SP), R14 (LR), R15 (PC), and calling conventions for R0-R11.</p>
+<li><strong>16 registers (R0-R15)</strong> with special purposes: R13 (SP), R14 (LR), R15 (PC), and calling conventions for R0-R11.</li>
 
-<p>3. <strong>Three main instruction categories</strong> - data processing (arithmetic/logic), data transfer (load/store), control flow (branches).</p>
+<li><strong>Three main instruction categories</strong> - data processing (arithmetic/logic), data transfer (load/store), control flow (branches).</li>
 
-<p>4. <strong>Fixed 32-bit instruction format</strong> simplifies hardware and enables efficient pipelining.</p>
+<li><strong>Fixed 32-bit instruction format</strong> simplifies hardware and enables efficient pipelining.</li>
 
-<p>5. <strong>Little-endian byte ordering</strong> - least significant byte stored at lowest address.</p>
+<li><strong>Little-endian byte ordering</strong> - least significant byte stored at lowest address.</li>
 
-<p>6. <strong>Immediate values</strong> indicated by # symbol, with encoding constraints due to fixed instruction size.</p>
+<li><strong>Immediate values</strong> indicated by # symbol, with encoding constraints due to fixed instruction size.</li>
 
-<p>7. <strong>Memory access only through LOAD/STORE</strong> - arithmetic operations work on registers only (load/store architecture).</p>
+<li><strong>Memory access only through LOAD/STORE</strong> - arithmetic operations work on registers only (load/store architecture).</li>
 
-<p>8. <strong>Rich addressing modes</strong> - offset, pre-indexed, post-indexed, register offset with optional shifts.</p>
+<li><strong>Rich addressing modes</strong> - offset, pre-indexed, post-indexed, register offset with optional shifts.</li>
 
-<p>9. <strong>Cross-compilation toolchain</strong> - arm-linux-gnueabi-gcc, as, ld, and qemu-arm for development on x86.</p>
+<li><strong>Cross-compilation toolchain</strong> - arm-linux-gnueabi-gcc, as, ld, and qemu-arm for development on x86.</li>
 
-<p>10. <strong>Assembly programming requires understanding</strong> of register allocation, instruction selection, and calling conventions.</p>
+<li><strong>Assembly programming requires understanding</strong> of register allocation, instruction selection, and calling conventions.</li>
+</ol>
 
 <h2>Summary</h2>
 

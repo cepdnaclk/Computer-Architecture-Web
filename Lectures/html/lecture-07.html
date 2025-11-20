@@ -6,6 +6,27 @@
     <title>Lecture 7: Function Call and Return - Lectures on Computer Architecture</title>
     <link rel="stylesheet" href="../../assets/css/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- KaTeX CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <!-- KaTeX JS -->
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+            onload="renderMathInElement(document.body, {
+                delimiters: [
+                    {left: '$$', right: '$$', display: true},
+                    {left: '$', right: '$', display: false}
+                ]
+            });"></script>
+    
+    <!-- Prism.js CSS (Light theme) -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <!-- Prism.js Core -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <!-- Prism.js ARM Assembly Language Support -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-asm6502.min.js"></script>
+    <!-- Prism.js C Language Support -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-c.min.js"></script>
 </head>
 <body>
     <header class="lecture-header">
@@ -63,7 +84,7 @@
 
 <h3>7.2.1 Function Calling Steps</h3>
 
-<strong>Complete Call Sequence</strong>
+<p><strong>Complete Call Sequence</strong></p>
 
 <p>1. <strong>Place parameters</strong> in argument registers (R0-R3)</p>
 <p>2. <strong>Transfer control</strong> to callee function using BL</p>
@@ -74,7 +95,7 @@
 <p>7. <strong>Restore backed-up registers</strong> from stack</p>
 <p>8. <strong>Return to caller</strong> using MOV PC, LR</p>
 
-<strong>Why This Complexity?</strong>
+<p><strong>Why This Complexity?</strong></p>
 
 <ul>
 <li>Enables nested and recursive function calls</li>
@@ -85,7 +106,7 @@
 
 <h3>7.2.2 Why Use Functions?</h3>
 
-<strong>Benefits</strong>
+<p><strong>Benefits</strong></p>
 
 <ul>
 <li><strong>Code reuse</strong>: Write once, call many times</li>
@@ -94,58 +115,56 @@
 <li><strong>Maintainability</strong>: Easier to debug and modify</li>
 </ul>
 
-<strong>Example</strong>
+<p><strong>Example</strong></p>
 
-<p>``<code>c</p>
-<p>int add(int a, int b) {</p>
-<p>return a + b;</p>
-<p>}</p>
+<pre><code class="language-c">int add(int a, int b) {
+    return a + b;
+}
 
-<p>int main() {</p>
-<p>int result = add(5, 3);  // Function call</p>
-<p>}</p>
-</code>`<code>
+int main() {
+    int result = add(5, 3);  // Function call
+}
+</code></pre>
 
 <h2>7.3 ARM Register Conventions</h2>
 
 <h3>7.3.1 Register Usage Rules</h3>
 
-<strong>Register Classification</strong>
+<p><strong>Register Classification</strong></p>
 
-</code>`<code>
-<p>R0-R1:   Arguments and return results</p>
-<p>- Caller does NOT expect these preserved</p>
-<p>- Scratch registers</p>
+<pre><code class="language-asm6502">R0-R1:   Arguments and return results
+         - Caller does NOT expect these preserved
+         - Scratch registers
 
-<p>R2-R3:   Additional arguments</p>
-<p>- Also scratch registers</p>
-<p>- Caller does NOT expect preservation</p>
+R2-R3:   Additional arguments
+         - Also scratch registers
+         - Caller does NOT expect preservation
 
-<p>R4-R11:  Local variables</p>
-<p>- MUST be preserved across function calls</p>
-<p>- Callee saves if it uses these registers</p>
+R4-R11:  Local variables
+         - MUST be preserved across function calls
+         - Callee saves if it uses these registers
 
-<p>R12:     Intra-procedure-call scratch register</p>
-<p>- Can be corrupted by function calls</p>
-<p>- Not preserved</p>
+R12:     Intra-procedure-call scratch register
+         - Can be corrupted by function calls
+         - Not preserved
 
-<p>R13 (SP): Stack Pointer</p>
-<p>- Points to top of stack</p>
-<p>- MUST always be valid</p>
+R13 (SP): Stack Pointer
+          - Points to top of stack
+          - MUST always be valid
 
-<p>R14 (LR): Link Register</p>
-<p>- Stores return address</p>
-<p>- Set by BL instruction</p>
+R14 (LR): Link Register
+          - Stores return address
+          - Set by BL instruction
 
-<p>R15 (PC): Program Counter</p>
-<p>- Next instruction address</p>
-<p>- Modified to return from function</p>
-</code>`<code>
+R15 (PC): Program Counter
+          - Next instruction address
+          - Modified to return from function
+</code></pre>
 
 
 <h3>7.3.2 Shared Register File</h3>
 
-<strong>Key Concept</strong>
+<p><strong>Key Concept</strong></p>
 
 <ul>
 <li>ALL functions share the SAME 16 registers</li>
@@ -153,7 +172,7 @@
 <li>Registers are a shared resource requiring careful management</li>
 </ul>
 
-<strong>Implications</strong>
+<p><strong>Implications</strong></p>
 
 <ul>
 <li>Functions must coordinate register usage</li>
@@ -162,54 +181,51 @@
 <li>Caller can assume R4-R11 unchanged after call</li>
 </ul>
 
-<strong>Example Scenario</strong>
+<p><strong>Example Scenario</strong></p>
 
-</code>`<code>assembly
-<p>main:</p>
-<p>MOV R4, #10      ; main uses R4</p>
-<p>MOV R0, #5       ; Pass argument</p>
-<p>BL function      ; Call function</p>
-<p>; R4 still contains 10 (guaranteed)</p>
-<p>ADD R5, R4, R0   ; Use preserved R4 and return value</p>
+<pre><code class="language-asm6502">main:
+MOV R4, #10      ; main uses R4
+MOV R0, #5       ; Pass argument
+BL function      ; Call function
+; R4 still contains 10 (guaranteed)
+ADD R5, R4, R0   ; Use preserved R4 and return value
 
-<p>function:</p>
-<p>; Must preserve R4 if we use it</p>
-<p>; Can freely modify R0-R3, R12</p>
-<p>MOV R0, #20      ; Return value</p>
-<p>MOV PC, LR       ; Return</p>
-</code>`<code>
+function:
+; Must preserve R4 if we use it
+; Can freely modify R0-R3, R12
+MOV R0, #20      ; Return value
+MOV PC, LR       ; Return
+</code></pre>
 
 <h2>7.4 Function Call Instructions</h2>
 
 <h3>7.4.1 Branch and Link (BL)</h3>
 
-<strong>Syntax</strong>
+<p><strong>Syntax</strong></p>
 
-</code>`<code>assembly
-<p>BL function_label    ; Branch and Link</p>
-</code>`<code>
+<pre><code class="language-asm6502">BL function_label    ; Branch and Link
+</code></pre>
 
 
-<strong>Operation</strong>
+<p><strong>Operation</strong></p>
 
 <p>1. <strong>Save return address</strong>: LR = address of next instruction</p>
 <p>2. <strong>Jump to function</strong>: PC = function_label address</p>
 
-<strong>Example</strong>
+<p><strong>Example</strong></p>
 
-</code>`<code>assembly
-<p>MOV R0, #10      ; Address: 0x1000</p>
-<p>BL fun           ; Address: 0x1004</p>
-<p>ADD R1, R0, #5   ; Address: 0x1008 (return point)</p>
+<pre><code class="language-asm6502">MOV R0, #10      ; Address: 0x1000
+BL fun           ; Address: 0x1004
+ADD R1, R0, #5   ; Address: 0x1008 (return point)
 
 
-<p>fun:</p>
-<p>; LR contains 0x1008 (address after BL)</p>
-<p>; Function code here</p>
-<p>MOV PC, LR       ; Return to 0x1008</p>
-</code>`<code>
+fun:
+; LR contains 0x1008 (address after BL)
+; Function code here
+MOV PC, LR       ; Return to 0x1008
+</code></pre>
 
-<strong>Why "Link"?</strong>
+<p><strong>Why "Link"?</strong></p>
 
 <ul>
 <li>Creates a "link" back to caller</li>
@@ -219,13 +235,12 @@
 
 <h3>7.4.2 Return from Function</h3>
 
-<strong>Basic Return</strong>
+<p><strong>Basic Return</strong></p>
 
-</code>`<code>assembly
-<p>MOV PC, LR           ; Copy LR to PC</p>
-</code>`<code>
+<pre><code class="language-asm6502">MOV PC, LR           ; Copy LR to PC
+</code></pre>
 
-<strong>Operation</strong>
+<p><strong>Operation</strong></p>
 
 <ul>
 <li>PC = LR (jump to return address)</li>
@@ -233,17 +248,16 @@
 <li>Simple and fast</li>
 </ul>
 
-<strong>Alternative (older ARM)</strong>
+<p><strong>Alternative (older ARM)</strong></p>
 
-</code>`<code>assembly
-<p>BX LR                ; Branch and Exchange</p>
-</code>`<code>
+<pre><code class="language-asm6502">BX LR                ; Branch and Exchange
+</code></pre>
 
 <h2>7.5 Parameter Passing</h2>
 
 <h3>7.5.1 Using R0-R3</h3>
 
-<strong>Convention</strong>
+<p><strong>Convention</strong></p>
 
 <ul>
 <li>First 4 arguments in R0-R3</li>
@@ -251,33 +265,31 @@
 <li>Callee reads R0-R3 to get parameters</li>
 </ul>
 
-<strong>Example: Two Parameters</strong>
+<p><strong>Example: Two Parameters</strong></p>
 
-</code>`<code>c
-<p>int multiply(int a, int b) {</p>
-<p>return a * b;</p>
-<p>}</p>
+<pre><code class="language-c">int multiply(int a, int b) {
+    return a * b;
+}
 
-<p>int result = multiply(6, 7);</p>
-</code>`<code>
+int result = multiply(6, 7);
+</code></pre>
 
-<strong>ARM Assembly</strong>
+<p><strong>ARM Assembly</strong></p>
 
-</code>`<code>assembly
-<p>MOV R0, #6       ; First argument (a)</p>
-<p>MOV R1, #7       ; Second argument (b)</p>
-<p>BL multiply      ; Call function</p>
-<p>; R0 now contains result (42)</p>
+<pre><code class="language-asm6502">MOV R0, #6       ; First argument (a)
+MOV R1, #7       ; Second argument (b)
+BL multiply      ; Call function
+; R0 now contains result (42)
 
 
-<p>multiply:</p>
-<p>MUL R0, R0, R1   ; R0 = R0 × R1</p>
-<p>MOV PC, LR       ; Return</p>
-</code>`<code>
+multiply:
+MUL R0, R0, R1   ; R0 = R0 × R1
+MOV PC, LR       ; Return
+</code></pre>
 
 <h3>7.5.2 More Than 4 Arguments</h3>
 
-<strong>Solution: Use Stack</strong>
+<p><strong>Solution: Use Stack</strong></p>
 
 <ul>
 <li>Arguments 1-4 in R0-R3</li>
@@ -285,48 +297,46 @@
 <li>Callee reads from stack</li>
 </ul>
 
-<strong>Example: 6 Arguments</strong>
+<p><strong>Example: 6 Arguments</strong></p>
 
-</code>`<code>c
-<p>int sum6(int a, int b, int c, int d, int e, int f) {</p>
-<p>return a + b + c + d + e + f;</p>
-<p>}</p>
-</code>`<code>
+<pre><code class="language-c">int sum6(int a, int b, int c, int d, int e, int f) {
+    return a + b + c + d + e + f;
+}
+</code></pre>
 
-<strong>ARM Assembly</strong>
+<p><strong>ARM Assembly</strong></p>
 
-</code>`<code>assembly
-<p>MOV R0, #1       ; arg1</p>
-<p>MOV R1, #2       ; arg2</p>
-<p>MOV R2, #3       ; arg3</p>
-<p>MOV R3, #4       ; arg4</p>
-<p>MOV R4, #5</p>
-<p>MOV R5, #6</p>
-<p>SUB SP, SP, #8   ; Space for 2 more args</p>
-<p>STR R4, [SP, #0] ; arg5 on stack</p>
-<p>STR R5, [SP, #4] ; arg6 on stack</p>
-<p>BL sum6</p>
-<p>ADD SP, SP, #8   ; Clean up stack</p>
+<pre><code class="language-asm6502">MOV R0, #1       ; arg1
+MOV R1, #2       ; arg2
+MOV R2, #3       ; arg3
+MOV R3, #4       ; arg4
+MOV R4, #5
+MOV R5, #6
+SUB SP, SP, #8   ; Space for 2 more args
+STR R4, [SP, #0] ; arg5 on stack
+STR R5, [SP, #4] ; arg6 on stack
+BL sum6
+ADD SP, SP, #8   ; Clean up stack
 
 
-<p>sum6:</p>
-<p>; R0-R3 have first 4 args</p>
-<p>; Load arg5 and arg6 from stack</p>
-<p>LDR R4, [SP, #0] ; arg5</p>
-<p>LDR R5, [SP, #4] ; arg6</p>
-<p>ADD R0, R0, R1</p>
-<p>ADD R0, R0, R2</p>
-<p>ADD R0, R0, R3</p>
-<p>ADD R0, R0, R4</p>
-<p>ADD R0, R0, R5</p>
-<p>MOV PC, LR</p>
-</code>`<code>
+sum6:
+; R0-R3 have first 4 args
+; Load arg5 and arg6 from stack
+LDR R4, [SP, #0] ; arg5
+LDR R5, [SP, #4] ; arg6
+ADD R0, R0, R1
+ADD R0, R0, R2
+ADD R0, R0, R3
+ADD R0, R0, R4
+ADD R0, R0, R5
+MOV PC, LR
+</code></pre>
 
 <h2>7.6 Return Values</h2>
 
 <h3>7.6.1 Primary Return Register (R0)</h3>
 
-<strong>Convention</strong>
+<p><strong>Convention</strong></p>
 
 <ul>
 <li>Result placed in R0</li>
@@ -334,23 +344,22 @@
 <li>Works for 32-bit values</li>
 </ul>
 
-<strong>Example</strong>
+<p><strong>Example</strong></p>
 
-</code>`<code>assembly
-<p>add:</p>
-<p>ADD R0, R0, R1   ; R0 = R0 + R1</p>
-<p>MOV PC, LR       ; Return with result in R0</p>
+<pre><code class="language-asm6502">add:
+ADD R0, R0, R1   ; R0 = R0 + R1
+MOV PC, LR       ; Return with result in R0
 
-<p>main:</p>
-<p>MOV R0, #10</p>
-<p>MOV R1, #20</p>
-<p>BL add           ; Call function</p>
-<p>; R0 now contains 30</p>
-</code>`<code>
+main:
+MOV R0, #10
+MOV R1, #20
+BL add           ; Call function
+; R0 now contains 30
+</code></pre>
 
 <h3>7.6.2 64-Bit Return Values</h3>
 
-<strong>Convention</strong>
+<p><strong>Convention</strong></p>
 
 <ul>
 <li>Lower 32 bits in R0</li>
@@ -358,30 +367,28 @@
 <li>Example: 64-bit integer or two 32-bit values</li>
 </ul>
 
-<strong>Example</strong>
+<p><strong>Example</strong></p>
 
-</code>`<code>c
-<p>long long multiply64(int a, int b) {</p>
-<p>return (long long)a * b;</p>
-<p>}</p>
-</code>`<code>
+<pre><code class="language-c">long long multiply64(int a, int b) {
+    return (long long)a * b;
+}
+</code></pre>
 
-<strong>ARM Assembly</strong>
+<p><strong>ARM Assembly</strong></p>
 
-</code>`<code>assembly
-<p>multiply64:</p>
-<p>SMULL R0, R1, R0, R1  ; Signed multiply long</p>
-<p>; R0 = lower 32 bits</p>
-<p>; R1 = upper 32 bits</p>
-<p>MOV PC, LR</p>
-</code>`<code>
+<pre><code class="language-asm6502">multiply64:
+SMULL R0, R1, R0, R1  ; Signed multiply long
+; R0 = lower 32 bits
+; R1 = upper 32 bits
+MOV PC, LR
+</code></pre>
 
 
 <h2>7.7 The Stack</h2>
 
 <h3>7.7.1 Stack Structure</h3>
 
-<strong>Definition</strong>
+<p><strong>Definition</strong></p>
 
 <ul>
 <li>Last In, First Out (LIFO) data structure</li>
@@ -389,7 +396,7 @@
 <li>Used for temporary storage</li>
 </ul>
 
-<strong>Characteristics</strong>
+<p><strong>Characteristics</strong></p>
 
 <ul>
 <li><strong>Starts at high address</strong>: Top of memory</li>
@@ -398,29 +405,28 @@
 <li><strong>Dynamic size</strong>: Grows and shrinks as needed</li>
 </ul>
 
-<strong>Memory Layout</strong>
+<p><strong>Memory Layout</strong></p>
 
-</code>`<code>
-<p>High Address</p>
-<p>┌─────────┐</p>
-<p>│  Stack  │ ← SP points here</p>
-<p>│   ↓     │   (grows downward)</p>
-<p>│         │</p>
-<p>├─────────┤</p>
-<p>│  Heap   │</p>
-<p>│   ↑     │   (grows upward)</p>
-<p>├─────────┤</p>
-<p>│  Data   │   (static variables)</p>
-<p>├─────────┤</p>
-<p>│  Text   │   (instructions)</p>
-<p>└─────────┘</p>
-<p>Low Address</p>
-</code>`<code>
+<pre><code>High Address
+┌─────────┐
+│  Stack  │ ← SP points here
+│   ↓     │   (grows downward)
+│         │
+├─────────┤
+│  Heap   │
+│   ↑     │   (grows upward)
+├─────────┤
+│  Data   │   (static variables)
+├─────────┤
+│  Text   │   (instructions)
+└─────────┘
+Low Address
+</code></pre>
 
 
 <h3>7.7.2 Stack Uses</h3>
 
-<strong>Primary Purposes</strong>
+<p><strong>Primary Purposes</strong></p>
 
 <p>1. <strong>Saving register values</strong> (preserve R4-R11)</p>
 <p>2. <strong>Storing local variables</strong> (arrays, structures)</p>
@@ -432,15 +438,14 @@
 
 <h3>7.8.1 Allocating Stack Space (Pushing)</h3>
 
-<strong>Decrement Stack Pointer</strong>
+<p><strong>Decrement Stack Pointer</strong></p>
 
-</code>`<code>assembly
-<p>SUB SP, SP, #4       ; Allocate 4 bytes (1 register)</p>
-<p>SUB SP, SP, #12      ; Allocate 12 bytes (3 registers)</p>
-</code>`<code>
+<pre><code class="language-asm6502">SUB SP, SP, #4       ; Allocate 4 bytes (1 register)
+SUB SP, SP, #12      ; Allocate 12 bytes (3 registers)
+</code></pre>
 
 
-<strong>Why Subtract?</strong>
+<p><strong>Why Subtract?</strong></p>
 
 <ul>
 <li>Stack grows toward lower addresses</li>
@@ -450,65 +455,59 @@
 
 <h3>7.8.2 Storing Values to Stack</h3>
 
-<strong>Single Register</strong>
+<p><strong>Single Register</strong></p>
 
-</code>`<code>assembly
-<p>SUB SP, SP, #4       ; Allocate space</p>
-<p>STR R4, [SP, #0]     ; Store R4 at top of stack</p>
-</code>`<code>
+<pre><code class="language-asm6502">SUB SP, SP, #4       ; Allocate space
+STR R4, [SP, #0]     ; Store R4 at top of stack
+</code></pre>
 
 
-<strong>Multiple Registers</strong>
+<p><strong>Multiple Registers</strong></p>
 
-</code>`<code>assembly
-<p>SUB SP, SP, #12      ; Space for 3 registers</p>
-<p>STR R4, [SP, #0]     ; Store R4</p>
-<p>STR R5, [SP, #4]     ; Store R5</p>
-<p>STR R6, [SP, #8]     ; Store R6</p>
-</code>`<code>
+<pre><code class="language-asm6502">SUB SP, SP, #12      ; Space for 3 registers
+STR R4, [SP, #0]     ; Store R4
+STR R5, [SP, #4]     ; Store R5
+STR R6, [SP, #8]     ; Store R6
+</code></pre>
 
-<strong>Push Multiple (Convenient)</strong>
+<p><strong>Push Multiple (Convenient)</strong></p>
 
-</code>`<code>assembly
-<p>PUSH {R4-R6}         ; Allocate and store in one instruction</p>
-</code>`<code>
+<pre><code class="language-asm6502">PUSH {R4-R6}         ; Allocate and store in one instruction
+</code></pre>
 
 
 <h3>7.8.3 Loading Values from Stack</h3>
 
-<strong>Single Register</strong>
+<p><strong>Single Register</strong></p>
 
-</code>`<code>assembly
-<p>LDR R4, [SP, #0]     ; Load R4 from stack</p>
-<p>ADD SP, SP, #4       ; Release space</p>
-</code>`<code>
+<pre><code class="language-asm6502">LDR R4, [SP, #0]     ; Load R4 from stack
+ADD SP, SP, #4       ; Release space
+</code></pre>
 
 
-<strong>Multiple Registers</strong>
+<p><strong>Multiple Registers</strong></p>
 
-</code>`<code>assembly
-<p>LDR R4, [SP, #0]     ; Restore R4</p>
-<p>LDR R5, [SP, #4]     ; Restore R5</p>
-<p>LDR R6, [SP, #8]     ; Restore R6</p>
-<p>ADD SP, SP, #12      ; Release space</p>
-</code>`<code>
+<pre><code class="language-asm6502">LDR R4, [SP, #0]     ; Restore R4
+LDR R5, [SP, #4]     ; Restore R5
+LDR R6, [SP, #8]     ; Restore R6
+ADD SP, SP, #12      ; Release space
+</code></pre>
 
-<strong>Pop Multiple</strong>
+<p><strong>Pop Multiple</strong></p>
 
-</code>`<code>assembly
-<p>POP {R4-R6}          ; Restore and release in one instruction</p>
-</code>`<code>
+<pre><code class="language-asm6502">POP {R4-R6}          ; Restore and release in one instruction
+</code></pre>
 
 
 <h3>7.8.4 Stack Space Lifecycle</h3>
 
-<strong>Pattern</strong>
+<p><strong>Pattern</strong></p>
 
 <p>1. <strong>Allocate</strong>: SUB SP, SP, #n</p>
 <p>2. <strong>Use</strong>: STR/LDR with [SP, offset]</p>
 <p>3. <strong>Release</strong>: ADD SP, SP, #n</p>
 
-<strong>Important: Balance</strong>
+<p><strong>Important: Balance</strong></p>
 
 <ul>
 <li>Every SUB must have corresponding ADD</li>
@@ -520,7 +519,7 @@
 
 <h3>7.9.1 Why Preserve R4-R11?</h3>
 
-<strong>Problem</strong>
+<p><strong>Problem</strong></p>
 
 <ul>
 <li>All functions share same registers</li>
@@ -529,7 +528,7 @@
 <li>Must not corrupt caller's data</li>
 </ul>
 
-<strong>Solution</strong>
+<p><strong>Solution</strong></p>
 
 <ul>
 <li>Callee saves R4-R11 to stack at function start</li>
@@ -540,29 +539,28 @@
 
 <h3>7.9.2 Preservation Pattern</h3>
 
-<strong>Function Template</strong>
+<p><strong>Function Template</strong></p>
 
-</code>`<code>assembly
-<p>function:</p>
-<p>; Prologue: Save registers</p>
-<p>SUB SP, SP, #12      ; Allocate space</p>
-<p>STR R4, [SP, #0]     ; Save R4</p>
-<p>STR R5, [SP, #4]     ; Save R5</p>
-<p>STR R6, [SP, #8]     ; Save R6</p>
+<pre><code class="language-asm6502">function:
+; Prologue: Save registers
+SUB SP, SP, #12      ; Allocate space
+STR R4, [SP, #0]     ; Save R4
+STR R5, [SP, #4]     ; Save R5
+STR R6, [SP, #8]     ; Save R6
 
-<p>; Function body: Use R4-R6 freely</p>
-<p>; ...</p>
+; Function body: Use R4-R6 freely
+; ...
 
-<p>; Epilogue: Restore registers</p>
-<p>LDR R4, [SP, #0]     ; Restore R4</p>
-<p>LDR R5, [SP, #4]     ; Restore R5</p>
-<p>LDR R6, [SP, #8]     ; Restore R6</p>
-<p>ADD SP, SP, #12      ; Release space</p>
-<p>MOV PC, LR           ; Return</p>
-</code>`<code>
+; Epilogue: Restore registers
+LDR R4, [SP, #0]     ; Restore R4
+LDR R5, [SP, #4]     ; Restore R5
+LDR R6, [SP, #8]     ; Restore R6
+ADD SP, SP, #12      ; Release space
+MOV PC, LR           ; Return
+</code></pre>
 
 
-<strong>Optimization</strong>
+<p><strong>Optimization</strong></p>
 
 <ul>
 <li>Only preserve registers actually used</li>
@@ -574,7 +572,7 @@
 
 <h3>7.10.1 The Problem</h3>
 
-<strong>Leaf Function</strong>
+<p><strong>Leaf Function</strong></p>
 
 <ul>
 <li>Doesn't call other functions</li>
@@ -582,7 +580,7 @@
 <li>Simple return: MOV PC, LR</li>
 </ul>
 
-<strong>Non-Leaf Function</strong>
+<p><strong>Non-Leaf Function</strong></p>
 
 <ul>
 <li>Calls other functions</li>
@@ -591,86 +589,81 @@
 <li>Cannot return to original caller</li>
 </ul>
 
-<strong>Example Problem</strong>
+<p><strong>Example Problem</strong></p>
 
-</code>`<code>assembly
-<p>main:</p>
-<p>BL funcA         ; LR = address after this BL</p>
+<pre><code class="language-asm6502">main:
+BL funcA         ; LR = address after this BL
 
-<p>funcA:</p>
-<p>; LR contains return address to main</p>
-<p>BL funcB         ; LR OVERWRITTEN with return to funcA!</p>
-<p>MOV PC, LR       ; Returns to funcA, not main (WRONG!)</p>
+funcA:
+; LR contains return address to main
+BL funcB         ; LR OVERWRITTEN with return to funcA!
+MOV PC, LR       ; Returns to funcA, not main (WRONG!)
 
-<p>funcB:</p>
-<p>MOV PC, LR       ; Correctly returns to funcA</p>
-</code>`<code>
+funcB:
+MOV PC, LR       ; Correctly returns to funcA
+</code></pre>
 
 
 <h3>7.10.2 Solution: Save LR to Stack</h3>
 
-<strong>Pattern</strong>
+<p><strong>Pattern</strong></p>
 
-</code>`<code>assembly
-<p>function:</p>
-<p>; Save LR first!</p>
-<p>SUB SP, SP, #4</p>
-<p>STR LR, [SP, #0]</p>
+<pre><code class="language-asm6502">function:
+; Save LR first!
+SUB SP, SP, #4
+STR LR, [SP, #0]
 
-<p>; Now safe to call other functions</p>
-<p>BL other_function</p>
+; Now safe to call other functions
+BL other_function
 
-<p>; Restore LR before return</p>
-<p>LDR LR, [SP, #0]</p>
-<p>ADD SP, SP, #4</p>
-<p>MOV PC, LR</p>
-</code>`<code>
+; Restore LR before return
+LDR LR, [SP, #0]
+ADD SP, SP, #4
+MOV PC, LR
+</code></pre>
 
 
-<strong>Complete Example</strong>
+<p><strong>Complete Example</strong></p>
 
-</code>`<code>assembly
-<p>main:</p>
-<p>MOV R0, #5</p>
-<p>BL outer         ; LR = return<em>to</em>main</p>
-<p>; Execution returns here</p>
+<pre><code class="language-asm6502">main:
+MOV R0, #5
+BL outer         ; LR = return_to_main
+; Execution returns here
 
-<p>outer:</p>
-<p>SUB SP, SP, #4</p>
-<p>STR LR, [SP, #0] ; Save LR (return<em>to</em>main)</p>
+outer:
+SUB SP, SP, #4
+STR LR, [SP, #0] ; Save LR (return_to_main)
 
-<p>MOV R1, R0</p>
-<p>ADD R0, R0, #10</p>
-<p>BL inner         ; LR = return<em>to</em>outer (overwrites!)</p>
+MOV R1, R0
+ADD R0, R0, #10
+BL inner         ; LR = return_to_outer (overwrites!)
 
-<p>ADD R0, R0, R1</p>
-<p>LDR LR, [SP, #0] ; Restore LR (return<em>to</em>main)</p>
-<p>ADD SP, SP, #4</p>
-<p>MOV PC, LR       ; Returns to main</p>
+ADD R0, R0, R1
+LDR LR, [SP, #0] ; Restore LR (return_to_main)
+ADD SP, SP, #4
+MOV PC, LR       ; Returns to main
 
-<p>inner:</p>
-<p>MUL R0, R0, R0</p>
-<p>MOV PC, LR       ; Returns to outer</p>
-</code>`<code>
+inner:
+MUL R0, R0, R0
+MOV PC, LR       ; Returns to outer
+</code></pre>
 
 
 <h2>7.11 Recursion Example: Factorial</h2>
 
 <h3>7.11.1 Factorial Function</h3>
 
-<strong>C Code</strong>
+<p><strong>C Code</strong></p>
 
-</code>`<code>c
-<p>int fact(int n) {</p>
-<p>if (n <= 1)</p>
-<p>return 1;</p>
-<p>else</p>
-<p>return n * fact(n-1);</p>
-<p>}</p>
-</code>`<code>
+<pre><code class="language-c">int fact(int n) {
+    if (n <= 1)
+        return 1;
+    else
+        return n * fact(n-1);
+}
+</code></pre>
 
-
-<strong>Key Points</strong>
+<p><strong>Key Points</strong></p>
 
 <ul>
 <li>Base case: n ≤ 1, return 1</li>
@@ -681,59 +674,57 @@
 
 <h3>7.11.2 ARM Assembly Implementation</h3>
 
-</code>`<code>assembly
-<p>fact:</p>
-<p>; Save LR and n</p>
-<p>SUB SP, SP, #8</p>
-<p>STR LR, [SP, #4]     ; Save return address</p>
-<p>STR R0, [SP, #0]     ; Save n</p>
+<pre><code class="language-asm6502">fact:
+; Save LR and n
+SUB SP, SP, #8
+STR LR, [SP, #4]     ; Save return address
+STR R0, [SP, #0]     ; Save n
 
-<p>; Base case: if (n <= 1) return 1</p>
-<p>CMP R0, #1</p>
-<p>BGT recursive</p>
-<p>MOV R0, #1           ; Return 1</p>
-<p>B fact_end</p>
+; Base case: if (n <= 1) return 1
+CMP R0, #1
+BGT recursive
+MOV R0, #1           ; Return 1
+B fact_end
 
-<p>recursive:</p>
-<p>; Recursive case: n * fact(n-1)</p>
-<p>SUB R0, R0, #1       ; n-1</p>
-<p>BL fact              ; fact(n-1)</p>
-<p>LDR R1, [SP, #0]     ; Restore original n</p>
-<p>MUL R0, R0, R1       ; n * fact(n-1)</p>
+recursive:
+; Recursive case: n * fact(n-1)
+SUB R0, R0, #1       ; n-1
+BL fact              ; fact(n-1)
+LDR R1, [SP, #0]     ; Restore original n
+MUL R0, R0, R1       ; n * fact(n-1)
 
-<p>fact_end:</p>
-<p>; Restore and return</p>
-<p>LDR LR, [SP, #4]</p>
-<p>ADD SP, SP, #8</p>
-<p>MOV PC, LR</p>
-</code>`<code>
+fact_end:
+; Restore and return
+LDR LR, [SP, #4]
+ADD SP, SP, #8
+MOV PC, LR
+</code></pre>
 
 <h3>7.11.3 Stack Growth During Recursion</h3>
 
-<strong>Call: fact(3)</strong>
+<p><strong>Call: fact(3)</strong></p>
 
-</code>`<code>
-<p>Initial: SP = 0x1000</p>
+<pre><code>Initial: SP = 0x1000
 
-<p>fact(3) call:</p>
-<p>SP = 0x0FF8: [LR_main, 3]</p>
+fact(3) call:
+SP = 0x0FF8: [LR_main, 3]
 
-<p>fact(2) call:</p>
-<p>SP = 0x0FF0: [LR_fact3, 2]</p>
+fact(2) call:
+SP = 0x0FF0: [LR_fact3, 2]
 
-<p>fact(1) call:</p>
-<p>SP = 0x0FE8: [LR_fact2, 1]</p>
+fact(1) call:
+SP = 0x0FE8: [LR_fact2, 1]
 
-<p>Base case returns 1</p>
-<p>Unwinds to fact(2): returns 1*2 = 2</p>
-<p>Unwinds to fact(3): returns 2*3 = 6</p>
-<p>Returns to main with result 6</p>
+Base case returns 1
+Unwinds to fact(2): returns 1*2 = 2
+Unwinds to fact(3): returns 2*3 = 6
+Returns to main with result 6
 
-<p>Final: SP = 0x1000 (restored)</p>
-</code>`<code>
+Final: SP = 0x1000 (restored)
+</code></pre>
 
 
-<strong>Stack Space Per Call</strong>
+<p><strong>Stack Space Per Call</strong></p>
 
 <ul>
 <li>8 bytes (LR + n)</li>
@@ -746,35 +737,33 @@
 
 <h3>7.12.1 Complete Memory Layout</h3>
 
-</code>`<code>
-<p>High Address (0xFFFFFFFF)</p>
-<p>┌──────────────┐</p>
-<p>│   Reserved   │ OS and system</p>
-<p>├──────────────┤</p>
-<p>│    Stack     │ ← SP (grows down)</p>
-<p>│      ↓       │   Automatic storage</p>
-<p>│              │   Function call data</p>
-<p>│              │   Local variables</p>
-<p>│              │</p>
-<p>│   (unused)   │</p>
-<p>│              │</p>
-<p>│      ↑       │</p>
-<p>│    Heap      │   Dynamic allocation</p>
-<p>│              │   malloc/free, new/delete</p>
-<p>├──────────────┤</p>
-<p>│ Static Data  │   Global variables</p>
-<p>│              │   String constants</p>
-<p>├──────────────┤</p>
-<p>│    Text      │   Program instructions</p>
-<p>│ (Code)       │   Read-only</p>
-<p>└──────────────┘</p>
-<p>Low Address (0x00000000)</p>
-</code>``
-
+<pre><code>High Address (0xFFFFFFFF)
+┌──────────────┐
+│   Reserved   │ OS and system
+├──────────────┤
+│    Stack     │ ← SP (grows down)
+│      ↓       │   Automatic storage
+│              │   Function call data
+│              │   Local variables
+│              │
+│   (unused)   │
+│              │
+│      ↑       │
+│    Heap      │   Dynamic allocation
+│              │   malloc/free, new/delete
+├──────────────┤
+│ Static Data  │   Global variables
+│              │   String constants
+├──────────────┤
+│    Text      │   Program instructions
+│ (Code)       │   Read-only
+└──────────────┘
+Low Address (0x00000000)
+</code></pre>
 
 <h3>7.12.2 Stack Characteristics</h3>
 
-<strong>Automatic Storage</strong>
+<p><strong>Automatic Storage</strong></p>
 
 <ul>
 <li>Allocated when function called</li>
@@ -782,7 +771,7 @@
 <li>Managed automatically by compiler/runtime</li>
 </ul>
 
-<strong>Fast Access</strong>
+<p><strong>Fast Access</strong></p>
 
 <ul>
 <li>Fixed addressing pattern</li>
@@ -790,7 +779,7 @@
 <li>Simple offset calculations</li>
 </ul>
 
-<strong>Limited Size</strong>
+<p><strong>Limited Size</strong></p>
 
 <ul>
 <li>Typically 1-8 MB</li>
@@ -798,7 +787,7 @@
 <li>Recursion depth limited</li>
 </ul>
 
-<strong>Scope</strong>
+<p><strong>Scope</strong></p>
 
 <ul>
 <li>Local to function</li>
@@ -808,7 +797,7 @@
 
 <h3>7.12.3 Heap Characteristics</h3>
 
-<strong>Dynamic Allocation</strong>
+<p><strong>Dynamic Allocation</strong></p>
 
 <ul>
 <li>malloc/free in C</li>
@@ -816,14 +805,14 @@
 <li>Programmer controls lifetime</li>
 </ul>
 
-<strong>Flexible Size</strong>
+<p><strong>Flexible Size</strong></p>
 
 <ul>
 <li>Can grow large (limited by available memory)</li>
 <li>Variable-sized allocations</li>
 </ul>
 
-<strong>Manual Management</strong>
+<p><strong>Manual Management</strong></p>
 
 <ul>
 <li>Must explicitly free memory</li>
@@ -831,7 +820,7 @@
 <li>Fragmentation possible</li>
 </ul>
 
-<strong>Global Scope</strong>
+<p><strong>Global Scope</strong></p>
 
 <ul>
 <li>Persists until explicitly freed</li>
@@ -841,29 +830,31 @@
 
 <h2>Key Takeaways</h2>
 
-<p>1. <strong>Function calling requires</strong> parameter passing, return value handling, and register preservation.</p>
+<ol>
+<li><strong>Function calling requires</strong> parameter passing, return value handling, and register preservation.</li>
 
-<p>2. <strong>R0-R3 for arguments and returns</strong> - caller doesn't expect preservation.</p>
+<li><strong>R0-R3 for arguments and returns</strong> - caller doesn't expect preservation.</li>
 
-<p>3. <strong>R4-R11 must be preserved</strong> by callee if used, protecting caller's data.</p>
+<li><strong>R4-R11 must be preserved</strong> by callee if used, protecting caller's data.</li>
 
-<p>4. <strong>BL instruction</strong> saves return address in LR and jumps to function.</p>
+<li><strong>BL instruction</strong> saves return address in LR and jumps to function.</li>
 
-<p>5. <strong>Return via MOV PC, LR</strong> copies link register to program counter.</p>
+<li><strong>Return via MOV PC, LR</strong> copies link register to program counter.</li>
 
-<p>6. <strong>Stack is LIFO structure</strong> growing downward from high addresses, pointed to by SP.</p>
+<li><strong>Stack is LIFO structure</strong> growing downward from high addresses, pointed to by SP.</li>
 
-<p>7. <strong>Stack usage</strong> includes saving registers, local variables, return addresses, and extra arguments.</p>
+<li><strong>Stack usage</strong> includes saving registers, local variables, return addresses, and extra arguments.</li>
 
-<p>8. <strong>Allocate with SUB SP, release with ADD SP</strong> - must balance allocations and releases.</p>
+<li><strong>Allocate with SUB SP, release with ADD SP</strong> - must balance allocations and releases.</li>
 
-<p>9. <strong>Non-leaf functions</strong> must save LR to stack before making nested calls.</p>
+<li><strong>Non-leaf functions</strong> must save LR to stack before making nested calls.</li>
 
-<p>10. <strong>Recursion</strong> creates multiple stack frames, one per call, unwinding as calls return.</p>
+<li><strong>Recursion</strong> creates multiple stack frames, one per call, unwinding as calls return.</li>
 
-<p>11. <strong>Stack vs. Heap</strong> - stack is automatic/local/fast/limited, heap is manual/global/flexible/larger.</p>
+<li><strong>Stack vs. Heap</strong> - stack is automatic/local/fast/limited, heap is manual/global/flexible/larger.</li>
 
-<p>12. <strong>Register conventions</strong> enable modularity and prevent conflicts in shared register file.</p>
+<li><strong>Register conventions</strong> enable modularity and prevent conflicts in shared register file.</li>
+</ol>
 
 <h2>Summary</h2>
 
