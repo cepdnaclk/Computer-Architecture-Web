@@ -402,10 +402,12 @@ State:  [A][A][A][D][D]
 
 <p><strong>Steps</strong>:</p>
 
-<p>1. Use Program Counter (PC) for instruction address</p>
-<p>2. Access Instruction Memory with PC</p>
-<p>3. Retrieve 32-bit instruction word</p>
-<p>4. Instruction now in CPU for processing</p>
+<ol>
+<li>Use Program Counter (PC) for instruction address</li>
+<li>Access Instruction Memory with PC</li>
+<li>Retrieve 32-bit instruction word</li>
+<li>Instruction now in CPU for processing</li>
+</ol>
 
 <p><strong>Hardware</strong>:</p>
 
@@ -422,28 +424,25 @@ State:  [A][A][A][D][D]
 
 <p><strong>Decode Operations</strong>:</p>
 
-<p>1. <strong>Examine Opcode</strong> (bits 26-31):</p>
-
-<pre><code>
-If opcode = 0: R-type
+<ol>
+<li><strong>Examine Opcode</strong> (bits 26-31):
+<pre><code>If opcode = 0: R-type
 If opcode = 2 or 3: J-type
 Otherwise: I-type
 </code></pre>
-
-<p>2. <strong>Extract Register Numbers</strong>:</p>
-
-<pre><code>
-R-type: RS, RT, RD (three 5-bit fields)
+</li>
+<li><strong>Extract Register Numbers</strong>:
+<pre><code>R-type: RS, RT, RD (three 5-bit fields)
 I-type: RS, RT (two 5-bit fields)
 J-type: No registers
 </code></pre>
-
-<p>3. <strong>Extract Immediate/Address</strong>:</p>
-
-<pre><code>
-I-type: 16-bit immediate
+</li>
+<li><strong>Extract Immediate/Address</strong>:
+<pre><code>I-type: 16-bit immediate
 J-type: 26-bit address
 </code></pre>
+</li>
+</ol>
 
 <pre><code>
 4. <strong>Extract Function/Shift</strong> (R-type only):
@@ -503,15 +502,19 @@ SHAMT: bits 6-10 (shift amount)
 
 <p><strong>Load Operation</strong>:</p>
 
-<p>1. Use address from ALU</p>
-<p>2. Read data from memory</p>
-<p>3. Data will be written to register</p>
+<ol>
+<li>Use address from ALU</li>
+<li>Read data from memory</li>
+<li>Data will be written to register</li>
+</ol>
 
 <p><strong>Store Operation</strong>:</p>
 
-<p>1. Use address from ALU</p>
-<p>2. Get data from RT register</p>
-<p>3. Write data to memory</p>
+<ol>
+<li>Use address from ALU</li>
+<li>Get data from RT register</li>
+<li>Write data to memory</li>
+</ol>
 
 <h3>9.4.5 Register Write-Back (WB)</h3>
 
@@ -655,10 +658,12 @@ Funct     | Operation | ALU Control
 
 <p><strong>Process</strong>:</p>
 
-<p>1. Take 16-bit immediate</p>
-<p>2. Examine bit 15 (sign bit)</p>
-<p>3. Replicate sign bit to bits 16-31</p>
-<p>4. Result: 32-bit signed value</p>
+<ol>
+<li>Take 16-bit immediate</li>
+<li>Examine bit 15 (sign bit)</li>
+<li>Replicate sign bit to bits 16-31</li>
+<li>Result: 32-bit signed value</li>
+</ol>
 
 <p><strong>Examples</strong>:</p>
 
@@ -714,13 +719,13 @@ ALUSrc = 1: Use immediate (I-type)
 
 <p><strong>Execution</strong>:</p>
 
-<p>1. Read RS (base address)</p>
-<p>2. Sign-extend immediate (offset)</p>
-<pre><code>
-3. ALU adds: Address = RS + offset
-4. Read data from memory at address
-5. Write data to RT register
-</code></pre>
+<ol>
+<li>Read RS (base address)</li>
+<li>Sign-extend immediate (offset)</li>
+<li>ALU adds: Address = RS + offset</li>
+<li>Read data from memory at address</li>
+<li>Write data to RT register</li>
+</ol>
 
 <p><strong>Critical Path</strong>: Longest in single-cycle design</p>
 
@@ -740,10 +745,12 @@ ALUSrc = 1: Use immediate (I-type)
 
 <p><strong>Execution</strong>:</p>
 
-<p>1. Read RS (base) and RT (data)</p>
-<p>2. ALU calculates address</p>
-<p>3. Write RT data to memory at address</p>
-<p>4. NO register write-back</p>
+<ol>
+<li>Read RS (base) and RT (data)</li>
+<li>ALU calculates address</li>
+<li>Write RT data to memory at address</li>
+<li>NO register write-back</li>
+</ol>
 
 <p><strong>Key Difference</strong>:</p>
 

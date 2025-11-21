@@ -164,9 +164,11 @@ $$
 <p><strong>Two's Complement Conversion</strong></p>
 <p>Method 1 (Invert and Add):</p>
 
-<p>1. Write positive value in binary</p>
-<p>2. Invert all bits (0→1, 1→0)</p>
-<p>3. Add 1 to result</p>
+<ol>
+<li>Write positive value in binary</li>
+<li>Invert all bits (0→1, 1→0)</li>
+<li>Add 1 to result</li>
+</ol>
 
 <p>Example: -5 in 8 bits</p>
 
@@ -196,10 +198,13 @@ $$
 
 <ul>
 <li>Zero: 00000000 (unique representation)</li>
-<li>Most negative: 10000000 (-128 in 8 bits)</li>
+<li>Most negative: 10000000 (-128 in 8 bits)
+<ul>
+<li>Has no positive counterpart!</li>
+<li>Negating gives overflow</li>
 </ul>
-<p>- Has no positive counterpart!</p>
-<p>- Negating gives overflow</p>
+</li>
+</ul>
 
 <h3>5.2.3 Sign Extension</h3>
 

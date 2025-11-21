@@ -85,14 +85,16 @@
 
 <p><strong>Complete Call Sequence</strong></p>
 
-<p>1. <strong>Place parameters</strong> in argument registers (R0-R3)</p>
-<p>2. <strong>Transfer control</strong> to callee function using BL</p>
-<p>3. <strong>Acquire stack storage</strong> for temporary values</p>
-<p>4. <strong>Back up registers</strong> that need preservation (R4-R11)</p>
-<p>5. <strong>Perform function operations</strong> (the actual work)</p>
-<p>6. <strong>Place result</strong> in return register (R0)</p>
-<p>7. <strong>Restore backed-up registers</strong> from stack</p>
-<p>8. <strong>Return to caller</strong> using MOV PC, LR</p>
+<ol>
+<li><strong>Place parameters</strong> in argument registers (R0-R3)</li>
+<li><strong>Transfer control</strong> to callee function using BL</li>
+<li><strong>Acquire stack storage</strong> for temporary values</li>
+<li><strong>Back up registers</strong> that need preservation (R4-R11)</li>
+<li><strong>Perform function operations</strong> (the actual work)</li>
+<li><strong>Place result</strong> in return register (R0)</li>
+<li><strong>Restore backed-up registers</strong> from stack</li>
+<li><strong>Return to caller</strong> using MOV PC, LR</li>
+</ol>
 
 <p><strong>Why This Complexity?</strong></p>
 
@@ -205,11 +207,12 @@ MOV PC, LR       ; Return
 <pre><code class="language-asm6502">BL function_label    ; Branch and Link
 </code></pre>
 
-
 <p><strong>Operation</strong></p>
 
-<p>1. <strong>Save return address</strong>: LR = address of next instruction</p>
-<p>2. <strong>Jump to function</strong>: PC = function_label address</p>
+<ol>
+<li><strong>Save return address</strong>: LR = address of next instruction</li>
+<li><strong>Jump to function</strong>: PC = function_label address</li>
+</ol>
 
 <p><strong>Example</strong></p>
 
@@ -427,11 +430,13 @@ Low Address
 
 <p><strong>Primary Purposes</strong></p>
 
-<p>1. <strong>Saving register values</strong> (preserve R4-R11)</p>
-<p>2. <strong>Storing local variables</strong> (arrays, structures)</p>
-<p>3. <strong>Preserving return addresses</strong> (nested calls)</p>
-<p>4. <strong>Extra function arguments</strong> (beyond R0-R3)</p>
-<p>5. <strong>Storing local arrays</strong> that don't fit in registers</p>
+<ol>
+<li><strong>Saving register values</strong> (preserve R4-R11)</li>
+<li><strong>Storing local variables</strong> (arrays, structures)</li>
+<li><strong>Preserving return addresses</strong> (nested calls)</li>
+<li><strong>Extra function arguments</strong> (beyond R0-R3)</li>
+<li><strong>Storing local arrays</strong> that don't fit in registers</li>
+</ol>
 
 <h2>7.8 Stack Operations</h2>
 
@@ -502,9 +507,11 @@ ADD SP, SP, #12      ; Release space
 
 <p><strong>Pattern</strong></p>
 
-<p>1. <strong>Allocate</strong>: SUB SP, SP, #n</p>
-<p>2. <strong>Use</strong>: STR/LDR with [SP, offset]</p>
-<p>3. <strong>Release</strong>: ADD SP, SP, #n</p>
+<ol>
+<li><strong>Allocate</strong>: SUB SP, SP, #n</li>
+<li><strong>Use</strong>: STR/LDR with [SP, offset]</li>
+<li><strong>Release</strong>: ADD SP, SP, #n</li>
+</ol>
 
 <p><strong>Important: Balance</strong></p>
 

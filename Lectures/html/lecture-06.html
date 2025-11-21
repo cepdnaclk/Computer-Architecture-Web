@@ -419,9 +419,11 @@ B start          ; Branch to start label
 
 <p><strong>Assembly Process</strong></p>
 
-<p>1. First pass: Record label addresses</p>
-<p>2. Second pass: Replace labels with addresses</p>
-<p>3. Calculate offsets for PC-relative branches</p>
+<ol>
+<li>First pass: Record label addresses</li>
+<li>Second pass: Replace labels with addresses</li>
+<li>Calculate offsets for PC-relative branches</li>
+</ol>
 
 <p><strong>Virtual Addresses</strong></p>
 
@@ -815,11 +817,12 @@ MOVNE R0, R2     ; max = b (if not equal)
 <p><strong>Basic Block Characteristics</strong></p>
 
 <ul>
-<li>Sequence of instructions with:</li>
-</ul>
-<p>- No embedded branches (except possibly at end)</p>
-<p>- No branch targets (except possibly at beginning)</p>
+<li>Sequence of instructions with:
 <ul>
+<li>No embedded branches (except possibly at end)</li>
+<li>No branch targets (except possibly at beginning)</li>
+</ul>
+</li>
 <li>Executed atomically: all or nothing</li>
 <li>Single entry point, single exit point</li>
 </ul>

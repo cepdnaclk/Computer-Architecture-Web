@@ -748,18 +748,23 @@
 
 <p>Physical reality of heat generation:</p>
 
-1. <strong>Heat Generation Mechanism:</strong>
+</h4>1. Heat Generation Mechanism:</h4>
 
-<p>- Billions of transistors switching billions of times per second</p>
-<p>- Each switching event involves current flow</p>
-<p>- Current through resistance generates heat (I²R losses)</p>
-<p>- Accumulated heat from all transistors</p>
+<ul>
+<li>Billions of transistors switching billions of times per second</li>
+<li>Each switching event involves current flow</li>
+<li>Current through resistance generates heat (I²R losses)</li>
+<li>Accumulated heat from all transistors</li>
+</ul>
 
-2. <strong>Heat Dissipation Challenge:</strong>
-<p>- Heat generation outpaced heat removal capability</p>
-<p>- Chips would overheat and potentially burn</p>
-<p>- Thermal damage to silicon</p>
-<p>- Reliability concerns and failure modes</p>
+<h4>2. Heat Dissipation Challenge:</h4>
+
+<ul>
+<li>Heat generation outpaced heat removal capability</li>
+<li>Chips would overheat and potentially burn</li>
+<li>Thermal damage to silicon</li>
+<li>Reliability concerns and failure modes</li>
+</ul>
 
 <p><strong>The 100-Watt Rule of Thumb:</strong></p>
 
@@ -777,27 +782,31 @@
 <p>Various cooling methods were tried:</p>
 
 <ul>
-<li><strong>Improved Air Cooling:</strong></li>
+<li><strong>Improved Air Cooling:</strong>
+<ul>
+<li>Larger heatsinks</li>
+<li>More powerful fans</li>
+<li>Better thermal interface materials</li>
 </ul>
-
-<p>- Larger heatsinks</p>
-<p>- More powerful fans</p>
-<p>- Better thermal interface materials</p>
+</li>
+<li><strong>Liquid Cooling:</strong>
+<ul>
+<li>Water cooling systems (like car radiators)</li>
+<li>More efficient heat transfer</li>
+<li>Complex and expensive</li>
+</ul>
+</li>
+</ul>
 
 <ul>
-<li><strong>Liquid Cooling:</strong></li>
-</ul>
-
-<p>- Water cooling systems (like car radiators)</p>
-<p>- More efficient heat transfer</p>
-<p>- Complex and expensive</p>
-
+<li><strong>Exotic Solutions:</strong>
 <ul>
-<li><strong>Exotic Solutions:</strong></li>
+<li>Phase-change cooling</li>
+<li>Thermoelectric coolers</li>
+<li>Ultimately impractical for consumer systems</li>
 </ul>
-<p>- Phase-change cooling</p>
-<p>- Thermoelectric coolers</p>
-<p>- Ultimately impractical for consumer systems</p>
+</li>
+</ul>
 
 <p><strong>None Sufficient:</strong></p>
 
@@ -1382,37 +1391,37 @@ $$
 <p><strong>Memory Hierarchy:</strong></p>
 
 <ul>
-<li><strong>Level 1 Cache (L1):</strong></li>
-</ul>
-
-<p>- Smallest, fastest</p>
-<p>- Separate instruction and data caches</p>
-<p>- On-core, immediate access</p>
-<p>- Typically 32-64 KB per core</p>
-
+<li><strong>Level 1 Cache (L1):</strong>
 <ul>
-<li><strong>Level 2 Cache (L2):</strong></li>
+<li>Smallest, fastest</li>
+<li>Separate instruction and data caches</li>
+<li>On-core, immediate access</li>
+<li>Typically 32-64 KB per core</li>
 </ul>
-
-<p>- Larger, slightly slower</p>
-<p>- May be shared or per-core</p>
-<p>- Typically 256 KB - 1 MB per core</p>
-
+</li>
+<li><strong>Level 2 Cache (L2):</strong>
 <ul>
-<li><strong>Level 3 Cache (L3):</strong></li>
+<li>Larger, slightly slower</li>
+<li>May be shared or per-core</li>
+<li>Typically 256 KB - 1 MB per core</li>
 </ul>
-
-<p>- Largest, slower than L2</p>
-<p>- Shared across all cores</p>
-<p>- Typically several MB</p>
-
+</li>
+<li><strong>Level 3 Cache (L3):</strong>
 <ul>
-<li><strong>Main Memory (RAM):</strong></li>
+<li>Largest, slower than L2</li>
+<li>Shared across all cores</li>
+<li>Typically several MB</li>
 </ul>
-<p>- Dynamic RAM (DRAM)</p>
-<p>- Several GB capacity</p>
-<p>- Much slower than cache</p>
-<p>- Volatile storage</p>
+</li>
+<li><strong>Main Memory (RAM):</strong>
+<ul>
+<li>Dynamic RAM (DRAM)</li>
+<li>Several GB capacity</li>
+<li>Much slower than cache</li>
+<li>Volatile storage</li>
+</ul>
+</li>
+</ul>
 
 <p><strong>Input/Output Controllers:</strong></p>
 
@@ -2471,12 +2480,15 @@ SW   $15, 4($2)     # Store temp to v[k+1]
 <li><strong>Numbers don't represent actual gate size anymore</strong></li>
 <li><strong>Marketing terms</strong> more than physical measurements</li>
 <li><strong>Example:</strong> 5 nm transistors may have wider channels than 10 nm</li>
-<li><strong>Density Increase Through:</strong></li>
+<li><strong>Density Increase Through:</strong>
+<ul>
+<li>3D stacking (vertical integration)</li>
+<li>FinFET and GAA structures</li>
+<li>Improved layouts and design rules</li>
+<li>Multi-patterning lithography</li>
 </ul>
-<p>- 3D stacking (vertical integration)</p>
-<p>- FinFET and GAA structures</p>
-<p>- Improved layouts and design rules</p>
-<p>- Multi-patterning lithography</p>
+</li>
+</ul>
 
 <h2>Key Takeaways</h2>
 
