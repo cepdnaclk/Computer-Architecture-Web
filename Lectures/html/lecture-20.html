@@ -6,6 +6,14 @@
     <title>Lecture 20: Storage and Interfacing - Lectures on Computer Architecture</title>
     <link rel="stylesheet" href="../../assets/css/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-c.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-asm6502.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
 </head>
 <body>
     <header class="lecture-header">
@@ -243,9 +251,8 @@
 
 <strong>Formula</strong>:
 
-
-<p>MTBF = MTTF + MTTR</p>
-
+<pre><code>MTBF = MTTF + MTTR
+</code></pre>
 
 <strong>Definition</strong>:
 
@@ -259,9 +266,8 @@
 
 <strong>Formula</strong>:
 
-
-<p>Availability = MTTF / (MTTF + MTTR)</p>
-
+<pre><code>Availability = MTTF / (MTTF + MTTR)
+</code></pre>
 
 <strong>Definition</strong>:
 
@@ -373,11 +379,12 @@
 <ul>
 <li><strong>Sector ID</strong> (identification)</li>
 <li><strong>Data</strong> (512 bytes to 4096 bytes typical)</li>
-<li><strong>Error Correcting Code (ECC)</strong></li>
-</ul>
-<p>- Hides defects</p>
-<p>- Corrects recording errors</p>
+<li><strong>Error Correcting Code (ECC)</strong>
 <ul>
+<li>Hides defects</li>
+<li>Corrects recording errors</li>
+</ul>
+</li>
 <li><strong>Gaps</strong> between sectors (unused spaces)</li>
 </ul>
 
@@ -495,12 +502,13 @@
 
 <ul>
 <li>Actual average seek time might be 1 ms (not 4 ms)</li>
-<li>Depends on:</li>
-</ul>
-<p>- Which sector being accessed</p>
-<p>- Current head position</p>
-<p>- Distance head must travel</p>
+<li>Depends on:
 <ul>
+<li>Which sector being accessed</li>
+<li>Current head position</li>
+<li>Distance head must travel</li>
+</ul>
+</li>
 <li>With 1 ms seek: Total = <strong>3.2 ms</strong></li>
 <li>Significant variation based on access patterns</li>
 </ul>
@@ -653,11 +661,14 @@
 <ul>
 <li>Separate instructions specifically for I/O operations</li>
 <li>Distinct from load/store (memory) instructions</li>
-<li>Can duplicate addresses:</li>
+<li>Can duplicate addresses:
+<ul>
+<li>Same address can refer to memory location</li>
+<li>Same address can refer to I/O device</li>
+<li>Instruction type determines which is accessed</li>
 </ul>
-<p>- Same address can refer to memory location</p>
-<p>- Same address can refer to I/O device</p>
-<p>- Instruction type determines which is accessed</p>
+</li>
+</ul>
 
 <h3>20.17.2 Access Control</h3>
 
@@ -769,12 +780,13 @@
 <h3>20.18.3 Programming Model</h3>
 
 <ul>
-<li>Can write program to:</li>
-</ul>
-<p>- Read status bit from device</p>
-<p>- Check if device free</p>
-<p>- Make decisions based on status</p>
+<li>Can write program to:
 <ul>
+<li>Read status bit from device</li>
+<li>Check if device free</li>
+<li>Make decisions based on status</li>
+</ul>
+</li>
 <li>Simple control flow</li>
 </ul>
 
@@ -880,12 +892,15 @@
 <li>Main program running</li>
 <li>Instruction completes</li>
 <li>Interrupt checked</li>
-<li>If interrupt pending:</li>
+<li>If interrupt pending:
+<ul>
+<li>Current state saved</li>
+<li>Interrupt handler runs</li>
+<li>State restored</li>
+<li>Resume main program at next instruction</li>
 </ul>
-<p>- Current state saved</p>
-<p>- Interrupt handler runs</p>
-<p>- State restored</p>
-<p>- Resume main program at next instruction</p>
+</li>
+</ul>
 
 <h2>20.20 I/O Data Transfer Methods</h2>
 
@@ -1023,16 +1038,18 @@
 
 <h2>Key Takeaways</h2>
 
-<p>1. I/O systems connect computers to external devices and storage</p>
-<p>2. Dependability is critical for storage systems</p>
-<p>3. MTTF, MTTR, and availability are key metrics</p>
-<p>4. Magnetic disks use mechanical components with millisecond access times</p>
-<p>5. Flash storage is faster but more expensive than magnetic storage</p>
-<p>6. Memory-mapped I/O and separate I/O instructions are two access methods</p>
-<p>7. Polling is simple but inefficient</p>
-<p>8. Interrupts improve CPU efficiency</p>
-<p>9. DMA is essential for high-speed bulk data transfers</p>
-<p>10. RAID improves both performance and reliability</p>
+<ol>
+<li>I/O systems connect computers to external devices and storage</li>
+<li>Dependability is critical for storage systems</li>
+<li>MTTF, MTTR, and availability are key metrics</li>
+<li>Magnetic disks use mechanical components with millisecond access times</li>
+<li>Flash storage is faster but more expensive than magnetic storage</li>
+<li>Memory-mapped I/O and separate I/O instructions are two access methods</li>
+<li>Polling is simple but inefficient</li>
+<li>Interrupts improve CPU efficiency</li>
+<li>DMA is essential for high-speed bulk data transfers</li>
+<li>RAID improves both performance and reliability</li>
+</ol>
 
 <h2>Summary</h2>
 

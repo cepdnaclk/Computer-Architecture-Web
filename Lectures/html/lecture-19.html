@@ -6,6 +6,14 @@
     <title>Lecture 19: Multiprocessors - Lectures on Computer Architecture</title>
     <link rel="stylesheet" href="../../assets/css/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-c.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-asm6502.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
 </head>
 <body>
     <header class="lecture-header">
@@ -293,12 +301,14 @@
 
 <h3>19.9.2 Example Sequence</h3>
 
-<p>1. <strong>PE1 reads X (value = 1)</strong> → Cached in PE1</p>
-<p>2. <strong>PE2 reads X (value = 1)</strong> → Cached in PE2</p>
-<p>3. <strong>PE1 writes X = 0</strong> → PE1 cache updated</p>
-<p>4. Memory may or may not be updated (depends on write policy)</p>
-<p>5. PE2 still sees X = 1 (stale data)</p>
-<p>6. <strong>Inconsistency</strong>: Same address, different values</p>
+<ol>
+<li><strong>PE1 reads X (value = 1)</strong> → Cached in PE1</li>
+<li><strong>PE2 reads X (value = 1)</strong> → Cached in PE2</li>
+<li><strong>PE1 writes X = 0</strong> → PE1 cache updated</li>
+<li>Memory may or may not be updated (depends on write policy)</li>
+<li>PE2 still sees X = 1 (stale data)</li>
+<li><strong>Inconsistency</strong>: Same address, different values</li>
+</ol>
 
 <h3>19.9.3 With Write-Through Policy</h3>
 
@@ -347,11 +357,13 @@
 
 <h3>19.10.2 How It Works</h3>
 
-<p>1. Cache controller performs write to address</p>
-<p>2. Broadcasts address information on snoop bus</p>
-<p>3. All cache controllers listen to snoop bus</p>
-<p>4. Controllers check if they have same address cached</p>
-<p>5. If yes, take action based on protocol</p>
+<ol>
+<li>Cache controller performs write to address</li>
+<li>Broadcasts address information on snoop bus</li>
+<li>All cache controllers listen to snoop bus</li>
+<li>Controllers check if they have same address cached</li>
+<li>If yes, take action based on protocol</li>
+</ol>
 
 <h3>19.10.3 Key Feature</h3>
 
@@ -376,14 +388,18 @@
 
 <h4>On Write by Processor</h4>
 
-<p>1. Update own cache</p>
-<p>2. Broadcast write address on snoop bus</p>
+<ol>
+<li>Update own cache</li>
+<li>Broadcast write address on snoop bus</li>
+</ol>
 
 <h4>On Receiving Write Broadcast</h4>
 
-<p>1. Check if same address in own cache</p>
-<p>2. If yes: Mark block as INVALID (clear valid bit)</p>
-<p>3. Next access will be miss</p>
+<ol>
+<li>Check if same address in own cache</li>
+<li>If yes: Mark block as INVALID (clear valid bit)</li>
+<li>Next access will be miss</li>
+</ol>
 
 <h3>19.11.3 With Write-Through Policy</h3>
 
@@ -443,14 +459,18 @@
 
 <h4>On Write by Processor</h4>
 
-<p>1. Update own cache</p>
-<p>2. Broadcast BOTH address AND data on snoop bus</p>
+<ol>
+<li>Update own cache</li>
+<li>Broadcast BOTH address AND data on snoop bus</li>
+</ol>
 
 <h4>On Receiving Write Broadcast</h4>
 
-<p>1. Check if same address in own cache</p>
-<p>2. If yes: Update own copy with new data</p>
-<p>3. Keep block VALID</p>
+<ol>
+<li>Check if same address in own cache</li>
+<li>If yes: Update own copy with new data</li>
+<li>Keep block VALID</li>
+</ol>
 
 <h3>19.12.3 Benefits</h3>
 
@@ -461,7 +481,7 @@
 <li>Simpler cache controller (no snoop read needed)</li>
 </ul>
 
-<h3>Costs</h3>
+<h3>19.12.4 Costs</h3>
 
 <ul>
 <li>Snoop bus must carry data (wider bus)</li>
@@ -644,11 +664,12 @@ Named after four states: <strong>Modified, Exclusive, Shared, Invalid</strong>
 
 <ul>
 <li>PE3: X = 0 (Modified)</li>
-<li>PE1 receives invalidate:</li>
-</ul>
-<p>- State transition: Shared → Invalid</p>
-<p>- PE1: X = ? (Invalid)</p>
+<li>PE1 receives invalidate:
 <ul>
+<li>State transition: Shared → Invalid</li>
+<li>PE1: X = ? (Invalid)</li>
+</ul>
+</li>
 <li>Memory still has X = 1 (stale)</li>
 </ul>
 
@@ -660,15 +681,19 @@ Named after four states: <strong>Modified, Exclusive, Shared, Invalid</strong>
 <li>Block in PE1 is Invalid (tag matches but invalid)</li>
 <li>Place snoop read request on bus</li>
 <li>PE3 has Modified copy (most up-to-date)</li>
-<li>PE3 responds to snoop read:</li>
-</ul>
-<p>- Supplies data to PE1 through snoop bus</p>
-<p>- Writes back to memory</p>
-<p>- State transition: Modified → Shared</p>
+<li>PE3 responds to snoop read:
 <ul>
-<li>PE1 receives data:</li>
+<li>Supplies data to PE1 through snoop bus</li>
+<li>Writes back to memory</li>
+<li>State transition: Modified → Shared</li>
 </ul>
-<p>- State transition: Invalid → Shared</p>
+</li>
+<li>PE1 receives data:
+<ul>
+<li>State transition: Invalid → Shared</li>
+</ul>
+</li>
+</ul>
 
 <strong>Result</strong>:
 
@@ -882,16 +907,18 @@ Named after four states: <strong>Modified, Exclusive, Shared, Invalid</strong>
 
 <h2>Key Takeaways</h2>
 
-<p>1. Multiprocessors overcome single-processor performance limitations</p>
-<p>2. Shared memory provides communication mechanism between processors</p>
-<p>3. Cache coherence is essential for correct parallel program execution</p>
-<p>4. Bus snooping works well for small-scale systems (up to ~32 processors)</p>
-<p>5. MESI protocol is widely adopted for cache coherence</p>
-<p>6. UMA systems provide uniform access but limited scalability</p>
-<p>7. NUMA systems enable thousands of processors with non-uniform access</p>
-<p>8. Directory-based coherence enables scalable cache coherence</p>
-<p>9. Operating system plays crucial role in workload balancing and optimization</p>
-<p>10. Trade-offs exist between simplicity, performance, and scalability</p>
+<ol>
+<li>Multiprocessors overcome single-processor performance limitations</li>
+<li>Shared memory provides communication mechanism between processors</li>
+<li>Cache coherence is essential for correct parallel program execution</li>
+<li>Bus snooping works well for small-scale systems (up to ~32 processors)</li>
+<li>MESI protocol is widely adopted for cache coherence</li>
+<li>UMA systems provide uniform access but limited scalability</li>
+<li>NUMA systems enable thousands of processors with non-uniform access</li>
+<li>Directory-based coherence enables scalable cache coherence</li>
+<li>Operating system plays crucial role in workload balancing and optimization</li>
+<li>Trade-offs exist between simplicity, performance, and scalability</li>
+</ol>
 
 
 <h2>Summary</h2>

@@ -6,6 +6,14 @@
     <title>Lecture 16: Associative Cache Control - Lectures on Computer Architecture</title>
     <link rel="stylesheet" href="../../assets/css/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-c.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-asm6502.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
 </head>
 <body>
     <header class="lecture-header">
@@ -120,7 +128,7 @@
 
 <h3>16.3.3 Write-Back Operations</h3>
 
-<strong>On Write Hit:</strong>
+<p><strong>On Write Hit:</strong></p>
 
 <ul>
 <li>Simply update the cache entry</li>
@@ -128,26 +136,31 @@
 <li>Do not write to memory</li>
 </ul>
 
-<strong>On Read Miss:</strong>
+<p><strong>On Read Miss:</strong></p>
 
 <ul>
 <li>Fetch missing block from memory</li>
-<li>If old block at that entry is dirty (dirty bit = 1):</li>
-</ul>
-<p>- Write old block back to memory first</p>
-<p>- Then fetch new block and overwrite</p>
+<li>If old block at that entry is dirty (dirty bit = 1):
 <ul>
-<li>If old block is not dirty:</li>
+<li>Write old block back to memory first</li>
+<li>Then fetch new block and overwrite</li>
 </ul>
-<p>- Directly fetch new block and overwrite</p>
+</li>
+<li>If old block is not dirty:
+<ul>
+<li>Directly fetch new block and overwrite</li>
+</ul>
+</li>
+</ul>
 
-<strong>On Write Miss:</strong>
+<p><strong>On Write Miss:</strong></p>
 
 <ul>
-<li>If old block is dirty:</li>
-</ul>
-<p>- Write old block back to memory</p>
+<li>If old block is dirty:
 <ul>
+<li>Write old block back to memory</li>
+</ul>
+</li>
 <li>Fetch new block from memory</li>
 <li>Update cache entry only (not memory)</li>
 </ul>
@@ -183,11 +196,10 @@
 
 <h3>16.4.1 Average Access Time Formula</h3>
 
+<pre><code>T_avg = Hit Latency + Miss Rate × Miss Penalty
+</code></pre>
 
-<p>T_avg = Hit Latency + Miss Rate × Miss Penalty</p>
-
-
-<strong>Where:</strong>
+<p><strong>Where:</strong></p>
 
 <ul>
 <li>Hit Latency: Time to determine a hit (always present)</li>
@@ -198,7 +210,7 @@
 
 <h3>16.4.2 Example Calculation</h3>
 
-<strong>Given:</strong>
+<p><strong>Given:</strong></p>
 
 <ul>
 <li>Miss Penalty = 20 CPU cycles</li>
@@ -207,21 +219,24 @@
 <li>Clock Period = 1 nanosecond (1 GHz)</li>
 </ul>
 
+<pre><code>T_avg = 1 + (1 - 0.95) × 20 
+      = 1 + 0.05 × 20 
+      = 2 cycles 
+      = 2 nanoseconds
+</code></pre>
 
-<p>T_avg = 1 + (1 - 0.95) × 20 = 1 + 0.05 × 20 = 2 cycles = 2 nanoseconds</p>
+<p><strong>If hit rate improves to 99.9%:</strong></p>
 
-
-<strong>If hit rate improves to 99.9%:</strong>
-
-
-<p>T_avg = 1 + (1 - 0.999) × 20 = 1 + 0.001 × 20 = 1.02 cycles</p>
-
+<pre><code>T_avg = 1 + (1 - 0.999) × 20 
+      = 1 + 0.001 × 20 
+      = 1.02 cycles
+</code></pre>
 
 <p>This shows significant improvement from better hit rate.</p>
 
 <h3>16.4.3 Performance Example Problem</h3>
 
-<strong>Given:</strong>
+<p><strong>Given:</strong></p>
 
 <ul>
 <li>Program with 36% load/store instructions</li>
@@ -231,7 +246,7 @@
 <li>Miss penalty = 100 cycles</li>
 </ul>
 
-<strong>Calculating Actual CPI:</strong>
+<p><strong>Calculating Actual CPI:</strong></p>
 
 <ul>
 <li>Stalls from instruction cache misses: I × 0.02 × 100 = 2I cycles</li>
@@ -242,7 +257,7 @@
 
 <strong>Speedup with ideal caches:</strong> 5.44 / 2 = 2.72×
 
-<strong>CPI with no caches:</strong>
+<p><strong>CPI with no caches:</strong></p>
 
 <ul>
 <li>Every instruction fetch: 100 cycles</li>
@@ -256,13 +271,15 @@
 
 <h3>16.5.1 Three Factors to Improve</h3>
 
-<p>1. Hit Rate - increase the percentage of hits</p>
-<p>2. Hit Latency - reduce time to determine hits</p>
-<p>3. Miss Penalty - reduce time to fetch missing blocks</p>
+<ol>
+<li>Hit Rate - increase the percentage of hits</li>
+<li>Hit Latency - reduce time to determine hits</li>
+<li>Miss Penalty - reduce time to fetch missing blocks</li>
+</ol>
 
 <h3>16.5.2 Improving Hit Rate</h3>
 
-<strong>Method 1: Larger Cache Size</strong>
+<p><strong>Method 1: Larger Cache Size</strong></p>
 
 <ul>
 <li>More cache blocks means more index bits</li>
@@ -325,27 +342,38 @@
 
 <h3>16.6.6 Replacement Policies</h3>
 
-<p>1. LRU (Least Recently Used) - IDEAL:</p>
+<p>When all entries are valid, need replacement policy to choose which block to evict.</p>
 
-<p>- Evict the block that was used longest ago</p>
-<p>- Best exploits temporal locality</p>
-<p>- Very complex to implement</p>
-<p>- Need to timestamp every access</p>
-<p>- Expensive in hardware</p>
+<ol>
+<li><strong>LRU (Least Recently Used) - IDEAL:</strong>
+<ul>
+<li>Evict the block that was used longest ago</li>
+<li>Best exploits temporal locality</li>
+<li>Very complex to implement</li>
+<li>Need to timestamp every access</li>
+<li>Expensive in hardware</li>
+</ul>
+</li>
 
-<p>2. Pseudo-LRU (PLRU):</p>
+<li><strong>Pseudo-LRU (PLRU):</strong>
+<ul>
+<li>Approximation of LRU</li>
+<li>Simpler mechanism than true LRU</li>
+<li>90-99% of time picks least recently used</li>
+<li>Better balance of performance and complexity</li>
+</ul>
+</li>
 
-<p>- Approximation of LRU</p>
-<p>- Simpler mechanism than true LRU</p>
-<p>- 90-99% of time picks least recently used</p>
-<p>- Better balance of performance and complexity</p>
-
-<p>3. FIFO (First In First Out):</p>
-<p>- Evict block that entered cache first</p>
-<p>- Very simple implementation</p>
-<p>- Only update when new block fetched (not on every access)</p>
-<p>- Lower likelihood of picking LRU block</p>
-<p>- Used in embedded systems for simplicity and low power</p>
+<li><strong>FIFO (First In First Out):</strong>
+<ul>
+<li>Evict block that entered cache first</li>
+<li>Very simple implementation</li>
+<li>Only update when new block fetched (not on every access)</li>
+<li>Lower likelihood of picking LRU block</li>
+<li>Used in embedded systems for simplicity and low power</li>
+</ul>
+</li>
+</ol>
 
 <h3>16.6.7 Fully Associative - Advantages</h3>
 
@@ -388,13 +416,15 @@
 
 <h3>16.7.3 Read Access Process</h3>
 
-<p>1. Use index to select correct set (via demultiplexer)</p>
-<p>2. Extract both stored tags from the set</p>
-<p>3. Parallel comparison of both tags with incoming tag</p>
-<p>4. Each way has hit status (hit0, hit1)</p>
-<p>5. Use encoder to generate select signal for multiplexer</p>
-<p>6. Select correct data block based on which way hit</p>
-<p>7. Use offset to select correct word within block</p>
+<ol>
+<li>Use index to select correct set (via demultiplexer)</li>
+<li>Extract both stored tags from the set</li>
+<li>Parallel comparison of both tags with incoming tag</li>
+<li>Each way has hit status (hit0, hit1)</li>
+<li>Use encoder to generate select signal for multiplexer</li>
+<li>Select correct data block based on which way hit</li>
+<li>Use offset to select correct word within block</li>
+</ol>
 
 <h3>16.7.4 Important Notes</h3>
 
@@ -410,39 +440,41 @@
 
 <h3>16.8.1 For an 8-Block Cache, Different Organizations</h3>
 
-<p>1-way set associative (Direct Mapped):</p>
-
+<ol>
+<li><strong>1-way set associative (Direct Mapped):</strong>
 <ul>
 <li>8 entries, 1 way each</li>
 <li>3-bit index</li>
 <li>Each block has fixed location</li>
 </ul>
-
-<p>2-way set associative:</p>
-
+</li>
+<li><strong>2-way set associative:</strong>
 <ul>
 <li>4 entries, 2 ways each</li>
 <li>2-bit index</li>
 <li>Each set can hold 2 different blocks</li>
 </ul>
+</li>
+</ol>
 
 <img src="../img/Memory%20Systems.jpg" alt="Memory System" width="500">
 
-<p>4-way set associative:</p>
-
+<ol start="3">
+<li><strong>4-way set associative:</strong>
 <ul>
 <li>2 entries, 4 ways each</li>
 <li>1-bit index</li>
 <li>Each set can hold 4 different blocks</li>
 </ul>
-
-<p>8-way set associative (Fully Associative):</p>
-
+</li>
+<li><strong>8-way set associative (Fully Associative):</strong>
 <ul>
 <li>1 entry, 8 ways</li>
 <li>No index field (0 bits)</li>
 <li>Any block can go anywhere</li>
 </ul>
+</li>
+</ol>
 
 <h3>16.8.2 Design Considerations</h3>
 
@@ -483,7 +515,7 @@
 
 <h3>16.9.3 Memory Access Sequence</h3>
 
-<strong>Access 1: Block Address 0</strong>
+<p><strong>Access 1: Block Address 0</strong></p>
 
 <ul>
 <li>All three caches: MISS (cold miss - first time accessed)</li>
@@ -493,7 +525,7 @@
 
 <strong>Score:</strong> Direct Mapped: 0 hits, 1 miss | 2-way: 0 hits, 1 miss | Fully: 0 hits, 1 miss
 
-<strong>Access 2: Block Address 8</strong>
+<p><strong>Access 2: Block Address 8</strong></p>
 
 <ul>
 <li>All three caches: MISS (cold miss - first time accessed)</li>
@@ -503,7 +535,7 @@
 
 <strong>Score:</strong> Direct Mapped: 0 hits, 2 misses | 2-way: 0 hits, 2 misses | Fully: 0 hits, 2 misses
 
-<strong>Access 3: Block Address 0 (repeated)</strong>
+<p><strong>Access 3: Block Address 0 (repeated)</strong></p>
 
 <ul>
 <li>Direct Mapped: MISS (conflict miss - block 8 overwrote block 0 at same index)</li>
@@ -514,7 +546,7 @@
 
 <strong>Score:</strong> Direct Mapped: 0 hits, 3 misses | 2-way: 1 hit, 2 misses | Fully: 1 hit, 2 misses
 
-<strong>Access 4: Block Address 6</strong>
+<p><strong>Access 4: Block Address 6</strong></p>
 
 <ul>
 <li>All three: MISS (cold miss)</li>
@@ -526,7 +558,7 @@
 
 <strong>Score:</strong> Direct Mapped: 0 hits, 4 misses | 2-way: 1 hit, 3 misses | Fully: 1 hit, 3 misses
 
-<strong>Access 5: Block Address 8 (repeated)</strong>
+<p><strong>Access 5: Block Address 8 (repeated)</strong></p>
 
 <ul>
 <li>Direct Mapped: MISS (conflict miss - keeps conflicting at index 0)</li>
@@ -544,8 +576,10 @@
 
 <h3>16.9.4 Types of Misses</h3>
 
-<p>1. Cold Misses: First access to address (unavoidable)</p>
-<p>2. Conflict Misses: Block evicted due to mapping, accessed again later</p>
+<ol>
+<li><strong>Cold Misses:</strong> First access to address (unavoidable)</li>
+<li><strong>Conflict Misses:</strong> Block evicted due to mapping, accessed again later</li>
+</ol>
 
 <h3>16.9.5 Key Observations</h3>
 
@@ -596,18 +630,23 @@
 
 <h2>Key Takeaways</h2>
 
-<p>1. <strong>Write policies</strong> manage cache-memory consistency:</p>
-<p>- Write-through: Simple but generates heavy memory traffic</p>
-<p>- Write-back: More efficient but requires dirty bit tracking</p>
-<p>2. <strong>Write buffers</strong> improve write-through performance by decoupling cache and memory writes</p>
-<p>3. <strong>Cache performance</strong> depends on three factors: hit rate, hit latency, and miss penalty</p>
-<p>4. <strong>Associativity spectrum</strong> ranges from direct-mapped (1-way) to fully associative (N-way)</p>
-<p>5. <strong>Higher associativity</strong> reduces conflict misses and improves hit rate but increases complexity</p>
-<p>6. <strong>Set-associative caches</strong> balance the trade-offs between direct-mapped and fully associative designs</p>
-<p>7. <strong>Replacement policies</strong> (LRU, PLRU, FIFO) determine which block to evict in associative caches</p>
-<p>8. <strong>Design decisions</strong> must balance performance, power consumption, cost, and complexity</p>
-<p>9. <strong>Real-world caches</strong> use different associativity levels based on application requirements</p>
-<p>10. <strong>Performance analysis</strong> shows that even small improvements in hit rate significantly reduce average access time</p>
+<ol>
+<li><strong>Write policies</strong> manage cache-memory consistency:
+<ul>
+<li>Write-through: Simple but generates heavy memory traffic</li>
+<li>Write-back: More efficient but requires dirty bit tracking</li>
+</ul>
+</li>
+<li><strong>Write buffers</strong> improve write-through performance by decoupling cache and memory writes</li>
+<li><strong>Cache performance</strong> depends on three factors: hit rate, hit latency, and miss penalty</li>
+<li><strong>Associativity spectrum</strong> ranges from direct-mapped (1-way) to fully associative (N-way)</li>
+<li><strong>Higher associativity</strong> reduces conflict misses and improves hit rate but increases complexity</li>
+<li><strong>Set-associative caches</strong> balance the trade-offs between direct-mapped and fully associative designs</li>
+<li><strong>Replacement policies</strong> (LRU, PLRU, FIFO) determine which block to evict in associative caches</li>
+<li><strong>Design decisions</strong> must balance performance, power consumption, cost, and complexity</li>
+<li><strong>Real-world caches</strong> use different associativity levels based on application requirements</li>
+<li><strong>Performance analysis</strong> shows that even small improvements in hit rate significantly reduce average access time</li>
+</ol>
 
 
 <h2>Summary</h2>

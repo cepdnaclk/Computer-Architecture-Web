@@ -6,6 +6,14 @@
     <title>Lecture 18: Virtual Memory - Lectures on Computer Architecture</title>
     <link rel="stylesheet" href="../../assets/css/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-c.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-asm6502.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
 </head>
 <body>
     <header class="lecture-header">
@@ -147,10 +155,12 @@
 
 <p>Complete hierarchy from top to bottom:</p>
 
-<p>1. <strong>CPU</strong> (generates virtual addresses, thinks memory is large and fast)</p>
-<p>2. <strong>Cache</strong> (virtually or physically addressed)</p>
-<p>3. <strong>Main Memory</strong> (acts as cache for secondary storage)</p>
-<p>4. <strong>Secondary Storage/Disk</strong> (contains all pages)</p>
+<ol>
+<li><strong>CPU</strong> (generates virtual addresses, thinks memory is large and fast)</li>
+<li><strong>Cache</strong> (virtually or physically addressed)</li>
+<li><strong>Main Memory</strong> (acts as cache for secondary storage)</li>
+<li><strong>Secondary Storage/Disk</strong> (contains all pages)</li>
+</ol>
 
 <p>CPU accesses cache directly. Main memory acts as cache for disk, not just a second level cache - requires additional mechanisms.</p>
 
@@ -187,13 +197,16 @@
 <ul>
 <li><strong>Cache Hit</strong>: Under 1 cycle</li>
 <li><strong>Cache Miss</strong> (accessing main memory): 10-100 cycles</li>
-<li><strong>Page Fault</strong> (accessing disk): ~1 million cycles</li>
+<li><strong>Page Fault</strong> (accessing disk): ~1 million cycles
+<ul>
+<li>Extremely large penalty</li>
+<li>Influences design decisions significantly</li>
+<li>Page faults handled in software by OS due to large penalty</li>
 </ul>
-<p>- Extremely large penalty</p>
-<p>- Influences design decisions significantly</p>
-<p>- Page faults handled in software by OS due to large penalty</p>
+</li>
+</ul>
 
-<img src="../img/Virtual<em>mem</em>cycles.jpg" alt="Access Latencies" style="max-width: 100%;">
+<img src="../img/Virtual_mem_cycles.jpg" alt="Access Latencies" style="max-width: 100%;">
 
 <h2>18.8 Virtual and Physical Address Structure</h2>
 
@@ -275,14 +288,22 @@
 
 <h3>18.10.2 Page Table Entry Contents</h3>
 
-<p>1. <strong>Physical Page Number</strong> (main component)</p>
-<p>2. <strong>Valid Bit</strong>: Is the page currently in memory?</p>
-<p>- 1 = Page is in memory (translation valid)</p>
-<p>- 0 = Page not in memory (page fault)</p>
-<p>3. <strong>Dirty Bit</strong>: Has page been modified?</p>
-<p>- 1 = Page modified, inconsistent with disk</p>
-<p>- 0 = Page not modified, consistent with disk</p>
-<p>4. <strong>Additional bits</strong>: Access permissions, memory protection status</p>
+<ol>
+<li><strong>Physical Page Number</strong> (main component)</li>
+<li><strong>Valid Bit</strong>: Is the page currently in memory?
+<ul>
+<li>1 = Page is in memory (translation valid)</li>
+<li>0 = Page not in memory (page fault)</li>
+</ul>
+</li>
+<li><strong>Dirty Bit</strong>: Has page been modified?
+<ul>
+<li>1 = Page modified, inconsistent with disk</li>
+<li>0 = Page not modified, consistent with disk</li>
+</ul>
+</li>
+<li><strong>Additional bits</strong>: Access permissions, memory protection status</li>
+</ol>
 
 <h3>18.10.3 Finding Page Table</h3>
 
@@ -295,18 +316,23 @@
 
 <h2>18.11 Address Translation Process</h2>
 
-<img src="../img/Virtual<em>Mem</em>Translation.jpg" alt="Address Translation Process" style="max-width: 100%;">
+<img src="../img/Virtual_Mem_Translation.jpg" alt="Address Translation Process" style="max-width: 100%;">
 
 <p>Steps to access memory:</p>
 
-<p>1. <strong>CPU generates virtual address</strong> (virtual page number + page offset)</p>
-<p>2. <strong>Access page table</strong> using PTBR + virtual page number as index</p>
-<p>3. <strong>Read page table entry</strong>:</p>
-<p>- If valid bit = 0: Page fault (handled by OS)</p>
-<p>- If valid bit = 1: Read physical page number</p>
-<p>4. <strong>Construct physical address</strong>: Physical page number + page offset</p>
-<p>5. <strong>Access physical memory</strong> with physical address</p>
-6. <strong>Return data to CPU</strong>
+<ol>
+<li><strong>CPU generates virtual address</strong> (virtual page number + page offset)</li>
+<li><strong>Access page table</strong> using PTBR + virtual page number as index</li>
+<li><strong>Read page table entry</strong>:
+<ul>
+<li>If valid bit = 0: Page fault (handled by OS)</li>
+<li>If valid bit = 1: Read physical page number</li>
+</ul>
+</li>
+<li><strong>Construct physical address</strong>: Physical page number + page offset</li>
+<li><strong>Access physical memory</strong> with physical address</li>
+<li><strong>Return data to CPU</strong></li>
+</ol>
 
 <h3>18.11.1 Memory Accesses Required</h3>
 
@@ -366,11 +392,12 @@
 <ul>
 <li>Writes only update memory</li>
 <li>Dirty bit tracks modified pages</li>
-<li>Only write to disk when:</li>
-</ul>
-<p>- Page is evicted from memory</p>
-<p>- Page's dirty bit is 1</p>
+<li>Only write to disk when:
 <ul>
+<li>Page is evicted from memory</li>
+<li>Page's dirty bit is 1</li>
+</ul>
+</li>
 <li>Minimizes disk accesses</li>
 </ul>
 
@@ -421,13 +448,14 @@
 
 <ul>
 <li>Select active page to replace using replacement policy</li>
-<li>Common replacement policies:</li>
-</ul>
-<p>- Least Recently Used (LRU)</p>
-<p>- Pseudo-LRU (PLRU)</p>
-<p>- First-In-First-Out (FIFO)</p>
-<p>- Least Frequently Used (LFU)</p>
+<li>Common replacement policies:
 <ul>
+<li>Least Recently Used (LRU)</li>
+<li>Pseudo-LRU (PLRU)</li>
+<li>First-In-First-Out (FIFO)</li>
+<li>Least Frequently Used (LFU)</li>
+</ul>
+</li>
 <li>Goal: Exploit temporal locality (keep recently/frequently used pages)</li>
 </ul>
 
@@ -466,7 +494,7 @@
 
 <h2>18.16 Translation Lookaside Buffer (TLB)</h2>
 
-<img src="../img/Virtual<em>mem</em>TLB.jpg" alt="TLB" style="max-width: 100%;">
+<img src="../img/Virtual_mem_TLB.jpg" alt="TLB" style="max-width: 100%;">
 
 <h3>18.16.1 Purpose</h3>
 
@@ -490,15 +518,16 @@
 <ul>
 <li><strong>Tag</strong>: Virtual address tag (or physical address tag)</li>
 <li><strong>Physical Page Number</strong>: The address translation</li>
-<li><strong>Valid Bit</strong>: Is this TLB entry valid?</li>
-</ul>
-<p>- Different from page table valid bit</p>
-<p>- Indicates if TLB entry contains valid translation</p>
+<li><strong>Valid Bit</strong>: Is this TLB entry valid?
 <ul>
+<li>Different from page table valid bit</li>
+<li>Indicates if TLB entry contains valid translation</li>
+</ul>
+</li>
 <li><strong>Dirty Bit</strong>: Same meaning as in page table</li>
 </ul>
 
-<h3>18.16.4 TLB Parametersrameters</h3>
+<h3>18.16.4 TLB Parameters</h3>
 
 <h4>Size</h4>
 
@@ -572,39 +601,51 @@
 
 <h3>18.18.1 Process</h3>
 
-1. <strong>CPU generates virtual address</strong>
-<p>2. <strong>Access cache with virtual address</strong> (parallel with TLB)</p>
-<p>3. <strong>Cache Hit</strong>: Return data to CPU immediately</p>
-<p>4. <strong>Cache Miss</strong>:</p>
-
-a. <strong>Check TLB for address translation</strong>
-
-<p>b. <strong>TLB Hit</strong>:</p>
-
-<p>- Get physical address</p>
-<p>- Access memory with physical address</p>
-<p>- Fetch missing block</p>
-<p>- Update cache</p>
-<p>- Send word to CPU</p>
-
-<p>c. <strong>TLB Miss</strong>:</p>
-
-<p>- Access page table in memory</p>
-<p>- <strong>Page Hit</strong>:</p>
-<p>- Get translation</p>
-<p>- Access memory for data</p>
-<p>- Update TLB</p>
-<p>- Update cache</p>
-<p>- Send word to CPU</p>
-<p>- <strong>Page Fault</strong>:</p>
-<p>- OS accesses disk</p>
-<p>- Fetch missing page</p>
-<p>- Find unused frame or replace page</p>
-<p>- If replaced page dirty: write back</p>
-<p>- Update page table</p>
-<p>- Update TLB</p>
-<p>- Update cache</p>
-<p>- Send word to CPU</p>
+<ol>
+<li><strong>CPU generates virtual address</strong></li>
+<li><strong>Access cache with virtual address</strong> (parallel with TLB)</li>
+<li><strong>Cache Hit</strong>: Return data to CPU immediately</li>
+<li><strong>Cache Miss</strong>:
+<ul>
+<li><strong>Check TLB for address translation</strong></li>
+<li><strong>TLB Hit</strong>:
+<ul>
+<li>Get physical address</li>
+<li>Access memory with physical address</li>
+<li>Fetch missing block</li>
+<li>Update cache</li>
+<li>Send word to CPU</li>
+</ul>
+</li>
+<li><strong>TLB Miss</strong>:
+<ul>
+<li>Access page table in memory</li>
+<li><strong>Page Hit</strong>:
+<ul>
+<li>Get translation</li>
+<li>Access memory for data</li>
+<li>Update TLB</li>
+<li>Update cache</li>
+<li>Send word to CPU</li>
+</ul>
+</li>
+<li><strong>Page Fault</strong>:
+<ul>
+<li>OS accesses disk</li>
+<li>Fetch missing page</li>
+<li>Find unused frame or replace page</li>
+<li>If replaced page dirty: write back</li>
+<li>Update page table</li>
+<li>Update TLB</li>
+<li>Update cache</li>
+<li>Send word to CPU</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
 
 <h3>18.18.2 Advantage</h3>
 
@@ -619,40 +660,46 @@ a. <strong>Check TLB for address translation</strong>
 
 <h3>18.19.1 Process</h3>
 
-1. <strong>CPU generates virtual address</strong>
-2. <strong>Access TLB for translation first</strong>
-<p>3. <strong>TLB Hit</strong>:</p>
-
-<p>a. Get physical address</p>
-
-b. <strong>Access cache with physical address</strong>
-
-<p>c. <strong>Cache Hit</strong>: Return data to CPU</p>
-
-<p>d. <strong>Cache Miss</strong>:</p>
-
-<p>- Access memory with physical address</p>
-<p>- Fetch missing block</p>
-<p>- Update cache</p>
-<p>- Send word to CPU</p>
-
-<p>4. <strong>TLB Miss</strong>:</p>
-
-<p>a. Access page table in memory</p>
-
-<p>b. <strong>Page Hit</strong>:</p>
-
-<p>- Get translation</p>
-<p>- Update TLB</p>
-<p>- Access cache with physical address</p>
-<p>- If cache hit: return data</p>
-<p>- If cache miss: fetch from memory, update cache, return data</p>
-
-<p>c. <strong>Page Fault</strong>:</p>
-
-<p>- OS handles as described above</p>
-<p>- Update page table, TLB, cache</p>
-<p>- Return data to CPU</p>
+<ol>
+<li><strong>CPU generates virtual address</strong></li>
+<li><strong>Access TLB for translation first</strong></li>
+<li><strong>TLB Hit</strong>:
+<ul>
+<li>Get physical address</li>
+<li><strong>Access cache with physical address</strong></li>
+<li><strong>Cache Hit</strong>: Return data to CPU</li>
+<li><strong>Cache Miss</strong>:
+<ul>
+<li>Access memory with physical address</li>
+<li>Fetch missing block</li>
+<li>Update cache</li>
+<li>Send word to CPU</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>TLB Miss</strong>:
+<ul>
+<li>Access page table in memory</li>
+<li><strong>Page Hit</strong>:
+<ul>
+<li>Get translation</li>
+<li>Update TLB</li>
+<li>Access cache with physical address</li>
+<li>If cache hit: return data</li>
+<li>If cache miss: fetch from memory, update cache, return data</li>
+</ul>
+</li>
+<li><strong>Page Fault</strong>:
+<ul>
+<li>OS handles as described above</li>
+<li>Update page table, TLB, cache</li>
+<li>Return data to CPU</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
 
 <h3>18.19.2 Advantage</h3>
 
@@ -674,16 +721,18 @@ b. <strong>Access cache with physical address</strong>
 
 <h2>Key Takeaways</h2>
 
-<p>1. Virtual memory provides memory abstraction and protection</p>
-<p>2. Address translation is fundamental to virtual memory operation</p>
-<p>3. Page tables map virtual addresses to physical addresses</p>
-<p>4. TLB caches translations to avoid double memory access</p>
-<p>5. Page faults are extremely expensive (~1 million cycles)</p>
-<p>6. Write-back policy is essential for virtual memory</p>
-<p>7. Fully associative placement minimizes page faults</p>
-<p>8. Multiple programs can safely share physical memory</p>
-<p>9. OS handles page faults in software</p>
-<p>10. Virtual memory enables modern multitasking operating systems</p>
+<ol>
+<li>Virtual memory provides memory abstraction and protection</li>
+<li>Address translation is fundamental to virtual memory operation</li>
+<li>Page tables map virtual addresses to physical addresses</li>
+<li>TLB caches translations to avoid double memory access</li>
+<li>Page faults are extremely expensive (~1 million cycles)</li>
+<li>Write-back policy is essential for virtual memory</li>
+<li>Fully associative placement minimizes page faults</li>
+<li>Multiple programs can safely share physical memory</li>
+<li>OS handles page faults in software</li>
+<li>Virtual memory enables modern multitasking operating systems</li>
+</ol>
 
 
 <h2>Summary</h2>

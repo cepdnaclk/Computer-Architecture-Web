@@ -2478,45 +2478,47 @@ SW   $15, 4($2)     # Store temp to v[k+1]
 
 <h2>Key Takeaways</h2>
 
-<p>1. <strong>Moore's Law predicted transistor doubling every 2 years</strong> - remarkably accurate for over 40 years, guiding semiconductor industry planning and investment</p>
+<ol>
+<li><strong>Moore's Law predicted transistor doubling every 2 years</strong> - remarkably accurate for over 40 years, guiding semiconductor industry planning and investment</li>
 
-<p>2. <strong>Smaller transistors enabled by improved lithography</strong> - progression from 90nm → 45nm → 22nm → 7nm → 5nm through advancing manufacturing processes</p>
+<li><strong>Smaller transistors enabled by improved lithography</strong> - progression from 90nm → 45nm → 22nm → 7nm → 5nm through advancing manufacturing processes</li>
 
-<p>3. <strong>Feature size now marketing term rather than physical measurement</strong> - modern processes use 3D structures making simple linear dimensions misleading</p>
+<li><strong>Feature size now marketing term rather than physical measurement</strong> - modern processes use 3D structures making simple linear dimensions misleading</li>
 
-<p>4. <strong>Smaller transistors provide dual benefits</strong> - enable more complex circuits (more transistors available) and faster switching (lower voltage, reduced impedance)</p>
+<li><strong>Smaller transistors provide dual benefits</strong> - enable more complex circuits (more transistors available) and faster switching (lower voltage, reduced impedance)</li>
 
-<p>5. <strong>Clock rate increased exponentially until ~2004</strong> - grew from 12.5 MHz (1982) to 3.6 GHz (2004), then hit fundamental thermal limitations</p>
+<li><strong>Clock rate increased exponentially until ~2004</strong> - grew from 12.5 MHz (1982) to 3.6 GHz (2004), then hit fundamental thermal limitations</li>
 
-<p>6. <strong>Power wall halted frequency scaling</strong> - heat generation (<code>P = CV²f</code>) exceeded cooling capability, establishing ~100W practical limit for consumer processors</p>
+<li><strong>Power wall halted frequency scaling</strong> - heat generation (<code>P = CV²f</code>) exceeded cooling capability, establishing ~100W practical limit for consumer processors</li>
 
-<p>7. <strong>Dynamic power equation explains the crisis</strong> - despite 25× power reduction from voltage scaling, 300× frequency increase overwhelmed the benefit</p>
+<li><strong>Dynamic power equation explains the crisis</strong> - despite 25× power reduction from voltage scaling, 300× frequency increase overwhelmed the benefit</li>
 
-<p>8. <strong>Overclocking emerged as risky performance technique</strong> - users could exceed rated speeds at risk of destroying processors, popular among gaming enthusiasts</p>
+<li><strong>Overclocking emerged as risky performance technique</strong> - users could exceed rated speeds at risk of destroying processors, popular among gaming enthusiasts</li>
 
-<p>9. <strong>Industry pivoted to multi-core processors</strong> - solution to utilize Moore's Law transistors without exceeding power limits, starting ~2004-2008</p>
+<li><strong>Industry pivoted to multi-core processors</strong> - solution to utilize Moore's Law transistors without exceeding power limits, starting ~2004-2008</li>
 
-<p>10. <strong>Multi-core growth slowed due to programming difficulty</strong> - initial projection of hundreds of cores didn't materialize; parallel programming remains challenging</p>
+<li><strong>Multi-core growth slowed due to programming difficulty</strong> - initial projection of hundreds of cores didn't materialize; parallel programming remains challenging</li>
 
-<p>11. <strong>Parallel programming requires explicit management</strong> - unlike automatic instruction-level parallelism, multi-core requires programmers to handle threads, synchronization, communication</p>
+<li><strong>Parallel programming requires explicit management</strong> - unlike automatic instruction-level parallelism, multi-core requires programmers to handle threads, synchronization, communication</li>
 
-<p>12. <strong>Three major parallel programming challenges</strong> - load balancing across cores, minimizing communication overhead, optimizing synchronization</p>
+<li><strong>Three major parallel programming challenges</strong> - load balancing across cores, minimizing communication overhead, optimizing synchronization</li>
 
-<p>13. <strong>3D chip technology changed scaling paradigm (2013-2015)</strong> - industry shifted from pure 2D shrinking to vertical stacking of transistor layers</p>
+<li><strong>3D chip technology changed scaling paradigm (2013-2015)</strong> - industry shifted from pure 2D shrinking to vertical stacking of transistor layers</li>
 
-<p>14. <strong>ITRS dissolved in 2015</strong> - technology roadmap organization ended as multiple paths to density replaced simple feature size scaling</p>
+<li><strong>ITRS dissolved in 2015</strong> - technology roadmap organization ended as multiple paths to density replaced simple feature size scaling</li>
 
-<p>15. <strong>Computer systems organized in three layers</strong> - hardware (physical components), system software (OS, compilers, tools), application software (user programs)</p>
+<li><strong>Computer systems organized in three layers</strong> - hardware (physical components), system software (OS, compilers, tools), application software (user programs)</li>
 
-<p>16. <strong>System software provides abstraction and protection</strong> - OS prevents malicious programs from damaging hardware, hides complexity from application programmers</p>
+<li><strong>System software provides abstraction and protection</strong> - OS prevents malicious programs from damaging hardware, hides complexity from application programmers</li>
 
-<p>17. <strong>Program translation is multi-stage process</strong> - high-level language → assembly language → machine code through compiler, assembler, linker</p>
+<li><strong>Program translation is multi-stage process</strong> - high-level language → assembly language → machine code through compiler, assembler, linker</li>
 
-<p>18. <strong>CPU contains datapath and control</strong> - datapath performs computation by routing data through functional units; control coordinates execution and generates signals</p>
+<li><strong>CPU contains datapath and control</strong> - datapath performs computation by routing data through functional units; control coordinates execution and generates signals</li>
 
-<p>19. <strong>Cache memory critical for performance</strong> - fast on-chip memory (L1, L2, L3) stores frequently accessed data/instructions, hiding main memory latency</p>
+<li><strong>Cache memory critical for performance</strong> - fast on-chip memory (L1, L2, L3) stores frequently accessed data/instructions, hiding main memory latency</li>
 
-<p>20. <strong>Real CPUs have complex layouts</strong> - die photos reveal intricate organization with multiple cores, cache hierarchies, shared interconnects, memory controllers</p>
+<li><strong>Real CPUs have complex layouts</strong> - die photos reveal intricate organization with multiple cores, cache hierarchies, shared interconnects, memory controllers</li>
+</ol>
 
 <h2>Summary</h2>
 

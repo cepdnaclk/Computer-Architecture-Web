@@ -6,6 +6,14 @@
     <title>Lecture 17: Multi-Level Caching - Lectures on Computer Architecture</title>
     <link rel="stylesheet" href="../../assets/css/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-c.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-asm6502.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
 </head>
 <body>
     <header class="lecture-header">
@@ -180,9 +188,8 @@
 
 <h3>17.4.1 Average Access Time Equation</h3>
 
-
-<p>T_avg = Hit Latency + Miss Rate × Miss Penalty</p>
-
+<pre><code>T_avg = Hit Latency + Miss Rate × Miss Penalty
+</code></pre>
 
 <p>Three main factors can be optimized as below.</p>
 
@@ -339,10 +346,12 @@
 
 <h3>17.8.3 Operation</h3>
 
-<p>1. CPU requests data from L1</p>
-<p>2. L1 miss → request goes to L2 (not directly to memory)</p>
-<p>3. L2 miss → request goes to L3 (if exists)</p>
-<p>4. Last-level miss → request goes to main memory</p>
+<ol>
+<li>CPU requests data from L1</li>
+<li>L1 miss → request goes to L2 (not directly to memory)</li>
+<li>L2 miss → request goes to L3 (if exists)</li>
+<li>Last-level miss → request goes to main memory</li>
+</ol>
 
 <h3>17.8.4 Benefits</h3>
 
@@ -357,9 +366,8 @@
 
 <p>For L1 cache:</p>
 
-
-<p>Effective Miss Penalty = L2 Hit Latency + L2 Miss Rate × L2 Miss Penalty</p>
-
+<pre><code>Effective Miss Penalty = L2 Hit Latency + L2 Miss Rate × L2 Miss Penalty
+</code></pre>
 
 <p>If L2 has good hit rate:</p>
 
@@ -380,10 +388,8 @@
 <li>Memory penalty: 100 cycles</li>
 </ul>
 
-
-<p>L1 effective penalty = 3 + 0.001 × 100 = 3.1 cycles</p>
-
-
+<pre><code>L1 effective penalty = 3 + 0.001 × 100 = 3.1 cycles
+</code></pre>
 
 <h2>17.9 Optimization Strategies for Multi-Level Caches</h2>
 
@@ -497,10 +503,13 @@
 <li>Almost always on-chip (inside CPU die)</li>
 <li>Integrated within CPU core</li>
 <li>Smallest but fastest</li>
-<li>Typically split into:</li>
+<li>Typically split into:
+<ul>
+<li>L1 instruction cache (L1-I)</li>
+<li>L1 data cache (L1-D)</li>
 </ul>
-<p>- L1 instruction cache (L1-I)</p>
-<p>- L1 data cache (L1-D)</p>
+</li>
+</ul>
 
 <h3>17.13.2 L2 Cache</h3>
 
@@ -662,12 +671,15 @@
 <ul>
 <li>Detailed CPU architecture information</li>
 <li>Real implementation details</li>
-<li>Various processor families:</li>
+<li>Various processor families:
+<ul>
+<li>Intel x86 architectures</li>
+<li>ARM implementations</li>
+<li>AMD processors</li>
+<li>Other architectures</li>
 </ul>
-<p>- Intel x86 architectures</p>
-<p>- ARM implementations</p>
-<p>- AMD processors</p>
-<p>- Other architectures</p>
+</li>
+</ul>
 
 <strong>Benefits</strong>:
 
@@ -681,20 +693,28 @@
 
 <h2>Key Takeaways</h2>
 
-<p>1. Cache hierarchies reduce effective miss penalty</p>
-<p>2. Different levels optimized for different goals:</p>
-<p>- L1: Hit latency (speed)</p>
-<p>- L2/L3: Hit rate (coverage)</p>
-<p>3. Multi-level caches balance competing requirements</p>
-<p>4. Real implementations show concepts in practice</p>
-<p>5. Design decisions depend on:</p>
-<p>- Performance targets</p>
-<p>- Power budget</p>
-<p>- Cost constraints</p>
-<p>- Application requirements</p>
-<p>6. Modern CPUs use sophisticated cache hierarchies</p>
-<p>7. Cache takes significant portion of CPU die area</p>
-<p>8. Pipeline optimizations also require substantial hardware</p>
+<ol>
+<li>Cache hierarchies reduce effective miss penalty</li>
+<li>Different levels optimized for different goals:
+<ul>
+<li>L1: Hit latency (speed)</li>
+<li>L2/L3: Hit rate (coverage)</li>
+</ul>
+</li>
+<li>Multi-level caches balance competing requirements</li>
+<li>Real implementations show concepts in practice</li>
+<li>Design decisions depend on:
+<ul>
+<li>Performance targets</li>
+<li>Power budget</li>
+<li>Cost constraints</li>
+<li>Application requirements</li>
+</ul>
+</li>
+<li>Modern CPUs use sophisticated cache hierarchies</li>
+<li>Cache takes significant portion of CPU die area</li>
+<li>Pipeline optimizations also require substantial hardware</li>
+</ol>
 
 
 <h2>Summary</h2>
