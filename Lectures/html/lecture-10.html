@@ -19,7 +19,7 @@
         });"></script>
     
     <!-- Prism for syntax highlighting -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-asm6502.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-c.min.js"></script>
@@ -139,12 +139,10 @@
 
 <p><strong>Address Calculation</strong>:</p>
 
-<pre><code>
-<pre><code>
-Address = Base Register + Immediate Offset
-= RS + Sign_Extend(Immediate)
+<pre><code class="language-c">Address = Base Register + Immediate Offset
+         = RS + Sign_Extend(Immediate)
 </code></pre>
-</code></pre>
+
 <p><strong>ALU Function</strong>: ADDITION (always)</p>
 
 <ul>
@@ -157,10 +155,10 @@ Address = Base Register + Immediate Offset
 
 <p><strong>Example</strong>:</p>
 
-<pre><code>
-LW $t1, 8($t0)    # Address = $t0 + 8
+<pre><code class="language-asm6502">LW $t1, 8($t0)    # Address = $t0 + 8
 SW $t2, -4($sp)   # Address = $sp + (-4)
 </code></pre>
+
 <h3>10.3.2 Branch Instructions</h3>
 
 <p><strong>Comparison Operation</strong>:</p>
@@ -180,10 +178,10 @@ SW $t2, -4($sp)   # Address = $sp + (-4)
 
 <p><strong>Branch Decision</strong>:</p>
 
-<pre><code>
-Zero = 1: RS == RT, take branch
+<pre><code class="language-c">Zero = 1: RS == RT, take branch
 Zero = 0: RS != RT, don't take branch
 </code></pre>
+
 <h3>10.3.3 R-Type Instructions</h3>
 
 <p><strong>Variable Operations</strong>: Determined by funct field</p>
@@ -200,15 +198,43 @@ Zero = 0: RS != RT, don't take branch
 
 <p><strong>Funct Field Mapping</strong>:</p>
 
-<pre><code>
-Funct    | Operation | ALU Control
----------|-----------|-------------
-0x20     | ADD       | 0010
-0x22     | SUB       | 0110
-0x24     | AND       | 0000
-0x25     | OR        | 0001
-0x2A     | SLT       | 0111
-</code></pre>
+<table>
+<thead>
+<tr>
+<th>Funct</th>
+<th>Operation</th>
+<th>ALU Control</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0x20</td>
+<td>ADD</td>
+<td>0010</td>
+</tr>
+<tr>
+<td>0x22</td>
+<td>SUB</td>
+<td>0110</td>
+</tr>
+<tr>
+<td>0x24</td>
+<td>AND</td>
+<td>0000</td>
+</tr>
+<tr>
+<td>0x25</td>
+<td>OR</td>
+<td>0001</td>
+</tr>
+<tr>
+<td>0x2A</td>
+<td>SLT</td>
+<td>0111</td>
+</tr>
+</tbody>
+</table>
+
 <h2>10.4 ALU Control Signal</h2>
 
 <h3>10.4.1 Signal Format</h3>
@@ -217,14 +243,14 @@ Funct    | Operation | ALU Control
 
 <p><strong>Possible Operations</strong> (2⁴ = 16):</p>
 
-<pre><code>
-0000: AND
+<pre><code class="language-c">0000: AND
 0001: OR
 0010: ADD
 0110: SUBTRACT
 0111: Set on Less Than (SLT)
 1100: NOR
 </code></pre>
+
 <p><strong>Usage</strong>:</p>
 
 <ul>
@@ -297,14 +323,38 @@ Funct    | Operation | ALU Control
 
 <p><strong>Encoding</strong>:</p>
 
-<pre><code>
-Instruction    | Opcode   | ALUOp
----------------|----------|-------
-Load Word      | 100011   | 00
-Store Word     | 101011   | 00
-Branch Equal   | 000100   | 01
-R-type         | 000000   | 10
-</code></pre>
+<table>
+<thead>
+<tr>
+<th>Instruction</th>
+<th>Opcode</th>
+<th>ALUOp</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Load Word</td>
+<td>100011</td>
+<td>00</td>
+</tr>
+<tr>
+<td>Store Word</td>
+<td>101011</td>
+<td>00</td>
+</tr>
+<tr>
+<td>Branch Equal</td>
+<td>000100</td>
+<td>01</td>
+</tr>
+<tr>
+<td>R-type</td>
+<td>000000</td>
+<td>10</td>
+</tr>
+</tbody>
+</table>
+
 <p><strong>ALUOp Meaning</strong>:</p>
 
 <ul>
@@ -329,17 +379,61 @@ R-type         | 000000   | 10
 
 <p><strong>Truth Table</strong>:</p>
 
-<pre><code>
-ALUOp | Funct   | ALU Control | Operation
-------|---------|-------------|----------
-00    | XXXXXX  | 0010        | ADD (LW/SW)
-01    | XXXXXX  | 0110        | SUB (BEQ)
-10    | 100000  | 0010        | ADD (R-type)
-10    | 100010  | 0110        | SUB (R-type)
-10    | 100100  | 0000        | AND
-10    | 100101  | 0001        | OR
-10    | 101010  | 0111        | SLT
-</code></pre>
+<table>
+<thead>
+<tr>
+<th>ALUOp</th>
+<th>Funct</th>
+<th>ALU Control</th>
+<th>Operation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>00</td>
+<td>XXXXXX</td>
+<td>0010</td>
+<td>ADD (LW/SW)</td>
+</tr>
+<tr>
+<td>01</td>
+<td>XXXXXX</td>
+<td>0110</td>
+<td>SUB (BEQ)</td>
+</tr>
+<tr>
+<td>10</td>
+<td>100000</td>
+<td>0010</td>
+<td>ADD (R-type)</td>
+</tr>
+<tr>
+<td>10</td>
+<td>100010</td>
+<td>0110</td>
+<td>SUB (R-type)</td>
+</tr>
+<tr>
+<td>10</td>
+<td>100100</td>
+<td>0000</td>
+<td>AND</td>
+</tr>
+<tr>
+<td>10</td>
+<td>100101</td>
+<td>0001</td>
+<td>OR</td>
+</tr>
+<tr>
+<td>10</td>
+<td>101010</td>
+<td>0111</td>
+<td>SLT</td>
+</tr>
+</tbody>
+</table>
+
 <p><strong>"X" Notation</strong>: Don't Care</p>
 
 <ul>
@@ -352,17 +446,21 @@ ALUOp | Funct   | ALU Control | Operation
 
 <p><strong>Flow Diagram</strong>:</p>
 
-<p>Instruction Opcode (6 bits)</p>
-<p>↓</p>
-<p>[Main Control Unit]</p>
-<p>↓</p>
-<p>ALUOp (2 bits)  +  Funct Field (6 bits)</p>
-<p>↓                    ↓</p>
-<p>[ALU Control Unit]</p>
-<p>↓</p>
-<p>ALU Control (4 bits)</p>
-<p>↓</p>
-<p>[ALU]</p>
+<pre><code class="language-c">Instruction Opcode (6 bits)
+         ↓
+  [Main Control Unit]
+         ↓
+   ALUOp (2 bits)  +  Funct Field (6 bits)
+         ↓                    ↓
+         └──────────┬─────────┘
+                    ↓
+         [ALU Control Unit]
+                    ↓
+          ALU Control (4 bits)
+                    ↓
+                  [ALU]
+</code></pre>
+
 <p><strong>Advantages</strong>:</p>
 
 <ul>
@@ -378,16 +476,16 @@ ALUOp | Funct   | ALU Control | Operation
 
 <p><strong>Signals Generated</strong>:</p>
 
-<pre><code>
-1. <strong>RegDst</strong> (1 bit): Register destination select
-2. <strong>Branch</strong> (1 bit): Branch instruction indicator
-3. <strong>MemRead</strong> (1 bit): Memory read enable
-4. <strong>MemtoReg</strong> (1 bit): Memory to register select
-5. <strong>MemWrite</strong> (1 bit): Memory write enable
-6. <strong>ALUSrc</strong> (1 bit): ALU source select
-7. <strong>RegWrite</strong> (1 bit): Register write enable
-8. <strong>ALUOp</strong> (2 bits): To ALU control unit
-</code></pre>
+<ol>
+<li><strong>RegDst</strong> (1 bit): Register destination select</li>
+<li><strong>Branch</strong> (1 bit): Branch instruction indicator</li>
+<li><strong>MemRead</strong> (1 bit): Memory read enable</li>
+<li><strong>MemtoReg</strong> (1 bit): Memory to register select</li>
+<li><strong>MemWrite</strong> (1 bit): Memory write enable</li>
+<li><strong>ALUSrc</strong> (1 bit): ALU source select</li>
+<li><strong>RegWrite</strong> (1 bit): Register write enable</li>
+<li><strong>ALUOp</strong> (2 bits): To ALU control unit</li>
+</ol>
 
 <p><strong>Total</strong>: 9 control bits from main control</p>
 
@@ -405,10 +503,10 @@ ALUOp | Funct   | ALU Control | Operation
 
 <p><strong>Settings</strong>:</p>
 
-<pre><code>
-RegDst = 0: Write to RT (Load Word)
+<pre><code class="language-c">RegDst = 0: Write to RT (Load Word)
 RegDst = 1: Write to RD (R-type)
 </code></pre>
+
 <p><strong>Rationale</strong>:</p>
 
 <ul>
@@ -419,10 +517,10 @@ RegDst = 1: Write to RD (R-type)
 
 <p><strong>Examples</strong>:</p>
 
-<pre><code>
-LW $t1, 8($t0)     # Write to $t1 (RT) → RegDst = 0
+<pre><code class="language-asm6502">LW $t1, 8($t0)     # Write to $t1 (RT) → RegDst = 0
 ADD $t2, $t3, $t4  # Write to $t2 (RD) → RegDst = 1
 </code></pre>
+
 <h3>10.6.3 Branch</h3>
 
 <p><strong>Purpose</strong>: Indicate if instruction is branch</p>
@@ -431,33 +529,32 @@ ADD $t2, $t3, $t4  # Write to $t2 (RD) → RegDst = 1
 
 <p><strong>Settings</strong>:</p>
 
-<pre><code>
-Branch = 0: Not a branch (LW, SW, R-type)
+<pre><code class="language-c">Branch = 0: Not a branch (LW, SW, R-type)
 Branch = 1: Branch instruction (BEQ, BNE)
 </code></pre>
+
 <p><strong>PC Selection Logic</strong>:</p>
 
-<pre><code>
-For BEQ:
+<pre><code class="language-c">For BEQ:
 PCSrc = Branch AND Zero
 (Take branch if instruction is branch AND comparison equal)
 </code></pre>
 
-<pre><code>
-For BNE:
+<pre><code class="language-c">For BNE:
 PCSrc = Branch AND NOT(Zero)
 (Take branch if instruction is branch AND comparison not equal)
 </code></pre>
+
 <h3>10.6.4 MemRead</h3>
 
 <p><strong>Purpose</strong>: Enable reading from data memory</p>
 
 <p><strong>Settings</strong>:</p>
 
-<pre><code>
-MemRead = 0: No memory read (R-type, SW, BEQ)
+<pre><code class="language-c">MemRead = 0: No memory read (R-type, SW, BEQ)
 MemRead = 1: Read from memory (LW)
 </code></pre>
+
 <p><strong>Function</strong>:</p>
 
 <ul>
@@ -480,26 +577,26 @@ MemRead = 1: Read from memory (LW)
 
 <p><strong>Settings</strong>:</p>
 
-<pre><code>
-MemtoReg = 0: Write ALU result (R-type)
+<pre><code class="language-c">MemtoReg = 0: Write ALU result (R-type)
 MemtoReg = 1: Write memory data (LW)
 </code></pre>
+
 <p><strong>Examples</strong>:</p>
 
-<pre><code>
-ADD $t1, $t2, $t3  # $t1 = ALU result → MemtoReg = 0
+<pre><code class="language-asm6502">ADD $t1, $t2, $t3  # $t1 = ALU result → MemtoReg = 0
 LW $t1, 8($t0)     # $t1 = memory data → MemtoReg = 1
 </code></pre>
+
 <h3>10.6.6 MemWrite</h3>
 
 <p><strong>Purpose</strong>: Enable writing to data memory</p>
 
 <p><strong>Settings</strong>:</p>
 
-<pre><code>
-MemWrite = 0: No memory write (R-type, LW, BEQ)
+<pre><code class="language-c">MemWrite = 0: No memory write (R-type, LW, BEQ)
 MemWrite = 1: Write to memory (SW)
 </code></pre>
+
 <p><strong>Function</strong>:</p>
 
 <ul>
@@ -522,46 +619,99 @@ MemWrite = 1: Write to memory (SW)
 
 <p><strong>Settings</strong>:</p>
 
-<pre><code>
-ALUSrc = 0: Use register (R-type, BEQ)
+<pre><code class="language-c">ALUSrc = 0: Use register (R-type, BEQ)
 ALUSrc = 1: Use immediate (LW, SW)
 </code></pre>
+
 <p><strong>Examples</strong>:</p>
 
-<pre><code>
-ADD $t1, $t2, $t3  # Use $t3 → ALUSrc = 0
+<pre><code class="language-asm6502">ADD $t1, $t2, $t3  # Use $t3 → ALUSrc = 0
 LW $t1, 8($t0)     # Use imm 8 → ALUSrc = 1
 </code></pre>
+
 <h3>10.6.8 RegWrite</h3>
 
 <p><strong>Purpose</strong>: Enable writing to register file</p>
 
 <p><strong>Settings</strong>:</p>
 
-<pre><code>
-RegWrite = 0: No register write (SW, BEQ)
+<pre><code class="language-c">RegWrite = 0: No register write (SW, BEQ)
 RegWrite = 1: Write to register (R-type, LW)
 </code></pre>
+
 <p><strong>Usage by Instruction</strong>:</p>
 
-<pre><code>
-R-type:    RegWrite = 1 (write ALU result)
+<pre><code class="language-c">R-type:    RegWrite = 1 (write ALU result)
 Load Word: RegWrite = 1 (write memory data)
 Store Word: RegWrite = 0 (no write)
 Branch:    RegWrite = 0 (no write)
 </code></pre>
+
 <h2>10.7 Control Signal Truth Table</h2>
 
 <h3>10.7.1 Complete Table</h3>
 
-<p>| Instruction | RegDst | ALUSrc | MemtoReg | RegWrite | MemRead | MemWrite | Branch | ALUOp |</p>
-<pre><code>
-| ----------- | :----: | :----: | :------: | :------: | :-----: | :------: | :----: | :---: |
-| R-type      |   1    |   0    |    0     |    1     |    0    |    0     |   0    |  10   |
-| Load Word   |   0    |   1    |    1     |    1     |    1    |    0     |   0    |  00   |
-| Store Word  |   X    |   1    |    X     |    0     |    0    |    1     |   0    |  00   |
-| Branch Eq   |   X    |   0    |    X     |    0     |    0    |    0     |   1    |  01   |
-</code></pre>
+<table>
+<thead>
+<tr>
+<th>Instruction</th>
+<th>RegDst</th>
+<th>ALUSrc</th>
+<th>MemtoReg</th>
+<th>RegWrite</th>
+<th>MemRead</th>
+<th>MemWrite</th>
+<th>Branch</th>
+<th>ALUOp</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>R-type</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Load Word</td>
+<td>0</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>00</td>
+</tr>
+<tr>
+<td>Store Word</td>
+<td>X</td>
+<td>1</td>
+<td>X</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td>00</td>
+</tr>
+<tr>
+<td>Branch Eq</td>
+<td>X</td>
+<td>0</td>
+<td>X</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>01</td>
+</tr>
+</tbody>
+</table>
 
 <p><strong>Legend</strong>:</p>
 
@@ -575,8 +725,7 @@ Branch:    RegWrite = 0 (no write)
 
 <p><strong>Settings</strong>:</p>
 
-<pre><code>
-RegDst = 1:     Write to RD field
+<pre><code class="language-c">RegDst = 1:     Write to RD field
 ALUSrc = 0:     Second operand from register (RT)
 MemtoReg = 0:   Write ALU result
 RegWrite = 1:   Enable register write
@@ -585,6 +734,7 @@ MemWrite = 0:   No memory write
 Branch = 0:     Not a branch
 ALUOp = 10:     Consult funct field
 </code></pre>
+
 <p><strong>Active Elements</strong>:</p>
 
 <ul>
@@ -607,8 +757,7 @@ ALUOp = 10:     Consult funct field
 
 <p><strong>Settings</strong>:</p>
 
-<pre><code>
-RegDst = 0:     Write to RT field
+<pre><code class="language-c">RegDst = 0:     Write to RT field
 ALUSrc = 1:     Second operand from immediate
 MemtoReg = 1:   Write memory data
 RegWrite = 1:   Enable register write
@@ -617,6 +766,7 @@ MemWrite = 0:   No memory write
 Branch = 0:     Not a branch
 ALUOp = 00:     ALU performs ADD
 </code></pre>
+
 <p><strong>Active Elements</strong>:</p>
 
 <ul>
@@ -639,8 +789,7 @@ ALUOp = 00:     ALU performs ADD
 
 <p><strong>Settings</strong>:</p>
 
-<pre><code>
-RegDst = X:     Don't care (no register write)
+<pre><code class="language-c">RegDst = X:     Don't care (no register write)
 ALUSrc = 1:     Second operand from immediate
 MemtoReg = X:   Don't care (no register write)
 RegWrite = 0:   No register write
@@ -649,6 +798,7 @@ MemWrite = 1:   Enable memory write
 Branch = 0:     Not a branch
 ALUOp = 00:     ALU performs ADD
 </code></pre>
+
 <p><strong>Key Difference from Load</strong>:</p>
 
 <ul>
@@ -661,8 +811,7 @@ ALUOp = 00:     ALU performs ADD
 
 <p><strong>Settings</strong>:</p>
 
-<pre><code>
-RegDst = X:     Don't care (no register write)
+<pre><code class="language-c">RegDst = X:     Don't care (no register write)
 ALUSrc = 0:     Second operand from register (RT)
 MemtoReg = X:   Don't care (no register write)
 RegWrite = 0:   No register write
@@ -671,6 +820,7 @@ MemWrite = 0:   No memory write
 Branch = 1:     This is a branch
 ALUOp = 01:     ALU performs SUBTRACT
 </code></pre>
+
 <p><strong>Active Elements</strong>:</p>
 
 <ul>
@@ -684,10 +834,15 @@ ALUOp = 01:     ALU performs SUBTRACT
 
 <p><strong>Branch Decision Logic</strong>:</p>
 
-<pre><code>
-Zero = (RS - RT == 0)
+<pre><code class="language-c">Zero = (RS - RT == 0)
 PCSrc = Branch AND Zero
 If PCSrc:
+    PC = Branch Target
+Else:
+    PC = PC + 4
+</code></pre>
+
+<h2>10.8 Understanding the Control Logic</h2>
 Next PC = PC + 4 + (SignExtend(Imm) << 2)
 Else:
 Next PC = PC + 4
@@ -724,10 +879,10 @@ Next PC = PC + 4
 
 <p><strong>Example for RegWrite</strong>:</p>
 
-<pre><code>
-RegWrite = (R-type) OR (Load Word)
+<pre><code class="language-c">RegWrite = (R-type) OR (Load Word)
 RegWrite = (opcode == 000000) OR (opcode == 100011)
 </code></pre>
+
 <h3>10.8.3 Control Unit Structure</h3>
 
 <p><strong>ROM-Based Implementation</strong>:</p>
@@ -819,12 +974,12 @@ RegWrite = (opcode == 000000) OR (opcode == 100011)
 
 <p><strong>Three States Required</strong>:</p>
 
-<pre><code>
-MemRead=1, MemWrite=0: Read
+<pre><code class="language-c">MemRead=1, MemWrite=0: Read
 MemRead=0, MemWrite=1: Write
 MemRead=0, MemWrite=0: No access
 (MemRead=1, MemWrite=1: Invalid)
 </code></pre>
+
 <h3>10.9.3 Future: Pipelined Processors</h3>
 
 <p><strong>Concurrent Access</strong>:</p>
@@ -896,29 +1051,25 @@ MemRead=0, MemWrite=0: No access
 
 <p><strong>Step 1: Fetch</strong></p>
 
-<pre><code>
-PC → Instruction Memory
+<pre><code class="language-c">PC → Instruction Memory
 Opcode = 100011 (LW)
 </code></pre>
 
 <p><strong>Step 2: Control Signals</strong></p>
 
-<pre><code>
-RegDst=0, ALUSrc=1, MemtoReg=1, RegWrite=1,
+<pre><code class="language-c">RegDst=0, ALUSrc=1, MemtoReg=1, RegWrite=1,
 MemRead=1, MemWrite=0, Branch=0, ALUOp=00
 </code></pre>
 
 <p><strong>Step 3: Register Read</strong></p>
 
-<pre><code>
-RS field ($t0) → Register file
+<pre><code class="language-c">RS field ($t0) → Register file
 Read Data 1 = $t0 value
 </code></pre>
 
 <p><strong>Step 4: ALU</strong></p>
 
-<pre><code>
-Immediate = 8
+<pre><code class="language-c">Immediate = 8
 Sign-extended to 32 bits
 ALUSrc=1: Selects immediate
 ALU performs ADD: $t0 + 8 = address
@@ -926,15 +1077,13 @@ ALU performs ADD: $t0 + 8 = address
 
 <p><strong>Step 5: Memory</strong></p>
 
-<pre><code>
-MemRead=1: Memory reads at address
+<pre><code class="language-c">MemRead=1: Memory reads at address
 Data output from memory
 </code></pre>
 
 <p><strong>Step 6: Write-Back</strong></p>
 
-<pre><code>
-MemtoReg=1: Selects memory data
+<pre><code class="language-c">MemtoReg=1: Selects memory data
 RegDst=0: Selects RT ($t1)
 RegWrite=1: Enables write
 At clock edge: Memory data → $t1
@@ -942,8 +1091,7 @@ At clock edge: Memory data → $t1
 
 <p><strong>Step 7: PC Update</strong></p>
 
-<pre><code>
-Branch=0: PCSrc=0
+<pre><code class="language-c">Branch=0: PCSrc=0
 PC updated to PC + 4
 </code></pre>
 

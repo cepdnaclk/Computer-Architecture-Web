@@ -6,6 +6,13 @@
     <title>Lecture 13: Pipeline Operation and Timing - Lectures on Computer Architecture</title>
     <link rel="stylesheet" href="../../assets/css/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-c.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-asm6502.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
 </head>
 <body>
     <header class="lecture-header">
@@ -63,7 +70,7 @@
 
 <h3>13.2.1 Previous Topics Review</h3>
 
-<strong>Pipelining Concept:</strong>
+<p><strong>Pipelining Concept:</strong></p>
 
 <ul>
 <li>Instruction-level parallelism exploitation</li>
@@ -72,7 +79,7 @@
 <li>All hardware utilized simultaneously</li>
 </ul>
 
-<strong>Performance Metric:</strong>
+<p><strong>Performance Metric:</strong></p>
 
 <ul>
 <li>Throughput improved (not latency)</li>
@@ -81,13 +88,15 @@
 <li>Overall system performance dramatically better</li>
 </ul>
 
-<strong>Hazards Covered:</strong>
+<p><strong>Hazards Covered:</strong></p>
 
-<p>1. <strong>Structural:</strong> Hardware resource conflicts</p>
-<p>2. <strong>Data:</strong> Register/memory dependencies</p>
-<p>3. <strong>Control:</strong> Branch/jump decision delays</p>
+<ol>
+<li><strong>Structural:</strong> Hardware resource conflicts</li>
+<li><strong>Data:</strong> Register/memory dependencies</li>
+<li><strong>Control:</strong> Branch/jump decision delays</li>
+</ol>
 
-<strong>Solutions Discussed:</strong>
+<p><strong>Solutions Discussed:</strong></p>
 
 <ul>
 <li>Structural: Separate I-cache and D-cache</li>
@@ -97,7 +106,7 @@
 
 <h3>13.2.2 Today's Focus</h3>
 
-<strong>Detailed Pipeline Analysis:</strong>
+<p><strong>Detailed Pipeline Analysis:</strong></p>
 
 <ul>
 <li>Cycle-by-cycle operation walkthrough</li>
@@ -118,7 +127,7 @@
 
 <h3>13.3.1 Stage 1: Instruction Fetch (IF)</h3>
 
-<strong>Operations:</strong>
+<p><strong>Operations:</strong></p>
 
 <ul>
 <li>PC value determines instruction address</li>
@@ -127,7 +136,7 @@
 <li>Calculate PC + 4 for next sequential instruction</li>
 </ul>
 
-<strong>Hardware Elements:</strong>
+<p><strong>Hardware Elements:</strong></p>
 
 <ul>
 <li>Program Counter register</li>
@@ -135,7 +144,7 @@
 <li>PC + 4 Adder</li>
 </ul>
 
-<strong>Key Point:</strong>
+<p><strong>Key Point:</strong></p>
 
 <ul>
 <li>Both operations (memory read, PC+4 calculation) occur in parallel</li>
@@ -143,7 +152,7 @@
 
 <h3>13.3.2 Stage 2: Instruction Decode / Register Read (ID)</h3>
 
-<strong>Operations:</strong>
+<p><strong>Operations:</strong></p>
 
 <ul>
 <li>Decode opcode (6 bits)</li>
@@ -154,7 +163,7 @@
 <li>Generate control signals</li>
 </ul>
 
-<strong>Hardware Elements:</strong>
+<p><strong>Hardware Elements:</strong></p>
 
 <ul>
 <li>Instruction decoder (combinational logic)</li>
@@ -163,7 +172,7 @@
 <li>Control unit</li>
 </ul>
 
-<strong>Workload Balancing:</strong>
+<p><strong>Workload Balancing:</strong></p>
 
 <ul>
 <li>Decode + register read fit in one cycle</li>
@@ -171,7 +180,7 @@
 <li>Register read dominates timing</li>
 </ul>
 
-<strong>Control Signal Generation:</strong>
+<p><strong>Control Signal Generation:</strong></p>
 
 <ul>
 <li>9-10 control signal bits generated</li>
@@ -182,7 +191,7 @@
 
 <h3>13.3.3 Stage 3: Execution (EX)</h3>
 
-<strong>Operations:</strong>
+<p><strong>Operations:</strong></p>
 
 <ul>
 <li>ALU performs computation OR address calculation</li>
@@ -190,7 +199,7 @@
 <li>Branch: Compare registers, compute target address</li>
 </ul>
 
-<strong>Hardware Elements:</strong>
+<p><strong>Hardware Elements:</strong></p>
 
 <ul>
 <li>ALU (Arithmetic Logic Unit)</li>
@@ -199,7 +208,7 @@
 <li>Shift left 2 unit (for branch offset)</li>
 </ul>
 
-<strong>Key Characteristics:</strong>
+<p><strong>Key Characteristics:</strong></p>
 
 <ul>
 <li>ALU operation dominates timing</li>
@@ -209,7 +218,7 @@
 
 <h3>13.3.4 Stage 4: Memory Access (MEM)</h3>
 
-<strong>Operations:</strong>
+<p><strong>Operations:</strong></p>
 
 <ul>
 <li>Load: Read from data memory</li>
@@ -218,14 +227,14 @@
 <li>Branch: PC update decision</li>
 </ul>
 
-<strong>Hardware Elements:</strong>
+<p><strong>Hardware Elements:</strong></p>
 
 <ul>
 <li>Data Memory</li>
 <li>PC source multiplexer (for branches)</li>
 </ul>
 
-<strong>Timing Consideration:</strong>
+<p><strong>Timing Consideration:</strong></p>
 
 <ul>
 <li>Memory access slowest operation</li>
@@ -235,7 +244,7 @@
 
 <h3>13.3.5 Stage 5: Write Back (WB)</h3>
 
-<strong>Operations:</strong>
+<p><strong>Operations:</strong></p>
 
 <ul>
 <li>Select data source (ALU result OR memory data)</li>
@@ -244,14 +253,14 @@
 <li>Arithmetic: ALU result → register</li>
 </ul>
 
-<strong>Hardware Elements:</strong>
+<p><strong>Hardware Elements:</strong></p>
 
 <ul>
 <li>MemtoReg multiplexer</li>
 <li>Register file (write port)</li>
 </ul>
 
-<strong>Minimal Hardware:</strong>
+<p><strong>Minimal Hardware:</strong></p>
 
 <ul>
 <li>Mostly multiplexer visible</li>
@@ -264,7 +273,7 @@
 
 <h3>13.4.1 Problem Without Pipeline Registers</h3>
 
-<strong>Scenario:</strong>
+<p><strong>Scenario:</strong></p>
 
 <ul>
 <li>Multiple instructions in different stages</li>
@@ -272,14 +281,16 @@
 <li>Data from different instructions</li>
 </ul>
 
-<strong>Example Issues:</strong>
+<p><strong>Example Issues:</strong></p>
 
-<p>1. Register file: ID stage reads while WB stage writes</p>
-<p>2. Control signals: Generated in ID, needed in later stages</p>
-<p>3. Data values: Computed in EX, needed in MEM</p>
-<p>4. Overwriting: New instruction data overwrites previous instruction data</p>
+<ol>
+<li>Register file: ID stage reads while WB stage writes</li>
+<li>Control signals: Generated in ID, needed in later stages</li>
+<li>Data values: Computed in EX, needed in MEM</li>
+<li>Overwriting: New instruction data overwrites previous instruction data</li>
+</ol>
 
-<strong>Result Without Pipeline Registers:</strong>
+<p><strong>Result Without Pipeline Registers:</strong></p>
 
 <ul>
 <li>Data hazards everywhere</li>
@@ -295,7 +306,7 @@
 <p><em>Figure 2: Pipeline Registers Between Pipeline Stages</em></p>
 </div>
 
-<strong>Key Function:</strong>
+<p><strong>Key Function:</strong></p>
 
 <ul>
 <li>Store information from previous stage</li>
@@ -304,7 +315,7 @@
 <li>Prevent interference between instructions</li>
 </ul>
 
-<strong>Placement:</strong>
+<p><strong>Placement:</strong></p>
 
 <ul>
 <li>One between each pair of consecutive stages</li>
@@ -314,7 +325,7 @@
 <li><strong>MEM/WB:</strong> Between memory and write back</li>
 </ul>
 
-<strong>Exception:</strong>
+<p><strong>Exception:</strong></p>
 
 <ul>
 <li>No register between WB and IF</li>
@@ -325,7 +336,7 @@
 
 <h3>13.4.3 Pipeline Register Contents</h3>
 
-<strong>IF/ID Pipeline Register:</strong>
+<p><strong>IF/ID Pipeline Register:</strong></p>
 
 <ul>
 <li>32-bit instruction word</li>
@@ -333,7 +344,7 @@
 <li><strong>Total:</strong> 64 bits</li>
 </ul>
 
-<strong>ID/EX Pipeline Register:</strong>
+<p><strong>ID/EX Pipeline Register:</strong></p>
 
 <ul>
 <li>Two 32-bit register values (from register file)</li>
@@ -344,7 +355,7 @@
 <li><strong>Total:</strong> ~140+ bits (largest pipeline register)</li>
 </ul>
 
-<strong>EX/MEM Pipeline Register:</strong>
+<p><strong>EX/MEM Pipeline Register:</strong></p>
 
 <ul>
 <li>32-bit ALU result</li>
@@ -356,7 +367,7 @@
 <li><strong>Total:</strong> ~105+ bits</li>
 </ul>
 
-<strong>MEM/WB Pipeline Register:</strong>
+<p><strong>MEM/WB Pipeline Register:</strong></p>
 
 <ul>
 <li>32-bit memory read data</li>
@@ -368,16 +379,25 @@
 
 <h3>13.4.4 Timing: Writing and Reading Pipeline Registers</h3>
 
-<strong>At Rising Clock Edge:</strong>
+<p><strong>At Rising Clock Edge:</strong></p>
 
-<p>1. Pipeline register write begins</p>
-<p>2. Small hold time delay (~10-30 ps)</p>
-<p>3. Data captured and stored</p>
-<p>4. Writing delay consumed</p>
+<ol>
+<li>Pipeline register write begins</li>
+<li>Small hold time delay (~10-30 ps)</li>
+<li>Data captured and stored</li>
+<li>Writing delay consumed</li>
+</ol>
 
-<strong>After Writing:</strong> 5. Reading delay begins 6. Data propagates to output (~10-30 ps) 7. Outputs stabilize at new values 8. Next stage begins operations
+<p><strong>After Writing:</strong></p>
 
-<strong>Combined Overhead:</strong>
+<ol start="5">
+<li>Reading delay begins</li>
+<li>Data propagates to output (~10-30 ps)</li>
+<li>Outputs stabilize at new values</li>
+<li>Next stage begins operations</li>
+</ol>
+
+<p><strong>Combined Overhead:</strong></p>
 
 <ul>
 <li>Write delay + read delay = ~20-60 ps</li>
@@ -386,7 +406,7 @@
 <li>Pipelining overhead cost</li>
 </ul>
 
-<strong>Critical Observation:</strong>
+<p><strong>Critical Observation:</strong></p>
 
 <ul>
 <li>These delays don't exist in single-cycle</li>
@@ -399,20 +419,19 @@
 
 <h3>13.5.1 Load Word Instruction Format</h3>
 
-<strong>Encoding:</strong>
+<p><strong>Encoding:</strong></p>
 
+<pre><code class="language-asm6502">LW $rt, offset($rs)
 
-<p>LW $rt, offset($rs)</p>
+Opcode: 100011 (bits 26-31)
+RS:     Base register (bits 21-25)
+RT:     Destination register (bits 16-20)
+Offset: 16-bit immediate (bits 0-15)
+</code></pre>
 
-<p>Opcode: 100011 (bits 26-31)</p>
-<p>RS:     Base register (bits 21-25)</p>
-<p>RT:     Destination register (bits 16-20)</p>
-<p>Offset: 16-bit immediate (bits 0-15)</p>
+<p><strong>Operation:</strong> <code>$rt = Memory[$rs + offset]</code></p>
 
-
-<strong>Operation:</strong> $rt = Memory[$rs + offset]
-
-<strong>Example:</strong> LW $8, 32($9)
+<p><strong>Example:</strong> <code>LW $8, 32($9)</code></p>
 
 <ul>
 <li>Base address in $9</li>
@@ -422,7 +441,7 @@
 
 <h3>13.5.2 Clock Cycle 1: Instruction Fetch (IF)</h3>
 
-<strong>Start of Cycle:</strong>
+<p><strong>Start of Cycle:</strong></p>
 
 <ul>
 <li>New PC value available (from previous cycle)</li>
@@ -430,15 +449,17 @@
 <li>PC read delay: ~10-30 ps</li>
 </ul>
 
-<strong>Operations:</strong>
+<p><strong>Operations:</strong></p>
 
-<p>1. Update PC register (rising edge)</p>
-<p>2. Read PC value (small delay)</p>
-<p>3. Access instruction memory with PC address</p>
-<p>4. Instruction memory read delay: ~200 ps (dominant)</p>
-<p>5. Compute PC + 4 in parallel: ~70 ps</p>
+<ol>
+<li>Update PC register (rising edge)</li>
+<li>Read PC value (small delay)</li>
+<li>Access instruction memory with PC address</li>
+<li>Instruction memory read delay: ~200 ps (dominant)</li>
+<li>Compute PC + 4 in parallel: ~70 ps</li>
+</ol>
 
-<strong>End of Cycle:</strong>
+<p><strong>End of Cycle:</strong></p>
 
 <ul>
 <li>32-bit LW instruction available</li>
@@ -446,7 +467,7 @@
 <li>Both ready to write to IF/ID register</li>
 </ul>
 
-<strong>Hardware Shading Convention:</strong>
+<p><strong>Hardware Shading Convention:</strong></p>
 
 <ul>
 <li>Right side shaded: Device READ</li>
@@ -455,17 +476,24 @@
 <li>IF/ID register left-side shaded (written to)</li>
 </ul>
 
-<strong>Total Stage Time:</strong> ~200+ ps (instruction memory dominant)
+<p><strong>Total Stage Time:</strong> ~200+ ps (instruction memory dominant)</p>
 
 <h3>13.5.3 Clock Cycle 2: Instruction Decode / Register Read (ID)</h3>
 
-<strong>Start of Cycle (Rising Edge):</strong>
+<p><strong>Start of Cycle (Rising Edge):</strong></p>
 
-<p>1. IF/ID register write: ~30 ps</p>
-<p>2. IF/ID register read: ~30 ps</p>
-<p>3. Combined delay: ~60 ps</p>
+<ol>
+<li>IF/ID register write: ~30 ps</li>
+<li>IF/ID register read: ~30 ps</li>
+<li>Combined delay: ~60 ps</li>
+</ol>
 
-<strong>After Pipeline Register:</strong> 4. Instruction word available 5. Extract fields:
+<p><strong>After Pipeline Register:</strong></p>
+
+<ol start="4">
+<li>Instruction word available</li>
+<li>Extract fields:</li>
+</ol>
 
 <ul>
 <li>Opcode: bits 26-31 → Control Unit</li>
@@ -474,7 +502,7 @@
 <li>Offset (bits 0-15) → Sign extender</li>
 </ul>
 
-<strong>Parallel Operations:</strong>
+<p><strong>Parallel Operations:</strong></p>
 
 <ul>
 <li>Control Unit: Decode opcode → Generate control signals (~50 ps)</li>
@@ -485,7 +513,7 @@
 <li>Sign Extender: Extend 32 to 32 bits (~10 ps, negligible)</li>
 </ul>
 
-<strong>End of Cycle:</strong>
+<p><strong>End of Cycle:</strong></p>
 
 <ul>
 <li>Base address value (from $9) available</li>
@@ -496,7 +524,7 @@
 <li>All ready for ID/EX register</li>
 </ul>
 
-<strong>Why Read Both Registers:</strong>
+<p><strong>Why Read Both Registers:</strong></p>
 
 <ul>
 <li>Hardware simplicity: Always read both</li>
@@ -505,16 +533,23 @@
 <li>Simpler than conditional reading</li>
 </ul>
 
-<strong>Total Stage Time:</strong> ~60 + 90 = ~150 ps (register read dominant)
+<p><strong>Total Stage Time:</strong> ~60 + 90 = ~150 ps (register read dominant)</p>
 
 <h3>13.5.4 Clock Cycle 3: Execution (EX)</h3>
 
-<strong>Start of Cycle:</strong>
+<p><strong>Start of Cycle:</strong></p>
 
-<p>1. ID/EX register write: ~30 ps</p>
-<p>2. ID/EX register read: ~30 ps</p>
+<ol>
+<li>ID/EX register write: ~30 ps</li>
+<li>ID/EX register read: ~30 ps</li>
+</ol>
 
-<strong>ALU Input Preparation:</strong> 3. Input A: Base address (from $9) directly from pipeline register 4. Input B: Multiplexer selects immediate OR register
+<p><strong>ALU Input Preparation:</strong></p>
+
+<ol start="3">
+<li>Input A: Base address (from $9) directly from pipeline register</li>
+<li>Input B: Multiplexer selects immediate OR register</li>
+</ol>
 
 <ul>
 <li>Control signal ALUSrc = 1 (select immediate)</li>
@@ -522,9 +557,15 @@
 <li>Sign-extended offset (32) selected</li>
 </ul>
 
-<strong>ALU Operation:</strong> 5. Add base address + offset 6. ALU delay: ~90 ps (dominant) 7. Result: Memory address = $9 + 32
+<p><strong>ALU Operation:</strong></p>
 
-<strong>Parallel Operations (for branches, not used here):</strong>
+<ol start="5">
+<li>Add base address + offset</li>
+<li>ALU delay: ~90 ps (dominant)</li>
+<li>Result: Memory address = $9 + 32</li>
+</ol>
+
+<p><strong>Parallel Operations (for branches, not used here):</strong></p>
 
 <ul>
 <li>Shift left 2: Offset × 4 (~10 ps)</li>
@@ -532,7 +573,7 @@
 <li>Zero flag generation</li>
 </ul>
 
-<strong>End of Cycle:</strong>
+<p><strong>End of Cycle:</strong></p>
 
 <ul>
 <li>Memory address available at ALU output</li>
@@ -544,25 +585,34 @@
 <li>All ready for EX/MEM register</li>
 </ul>
 
-<strong>Total Stage Time:</strong> ~30 + 30 + 20 + 90 = ~170 ps (ALU dominant)
+<p><strong>Total Stage Time:</strong> ~30 + 30 + 20 + 90 = ~170 ps (ALU dominant)</p>
 
 <h3>13.5.5 Clock Cycle 4: Memory Access (MEM)</h3>
 
-<strong>Start of Cycle:</strong>
+<p><strong>Start of Cycle:</strong></p>
 
-<p>1. EX/MEM register write: ~30 ps</p>
-<p>2. EX/MEM register read: ~30 ps</p>
+<ol>
+<li>EX/MEM register write: ~30 ps</li>
+<li>EX/MEM register read: ~30 ps</li>
+</ol>
 
-<strong>Memory Access:</strong> 3. ALU result (address) → Data memory address input 4. MemRead control signal = 1 (enable read) 5. MemWrite control signal = 0 (disable write) 6. Data memory read delay: ~250 ps (<strong>DOMINANT</strong> - slowest operation!)
+<p><strong>Memory Access:</strong></p>
 
-<strong>Parallel Operations (unused for LW):</strong>
+<ol start="3">
+<li>ALU result (address) → Data memory address input</li>
+<li>MemRead control signal = 1 (enable read)</li>
+<li>MemWrite control signal = 0 (disable write)</li>
+<li>Data memory read delay: ~250 ps (<strong>DOMINANT</strong> - slowest operation!)</li>
+</ol>
+
+<p><strong>Parallel Operations (unused for LW):</strong></p>
 
 <ul>
 <li>Zero flag + Branch → PCSrc decision</li>
 <li>Branch target → PC multiplexer</li>
 </ul>
 
-<strong>End of Cycle:</strong>
+<p><strong>End of Cycle:</strong></p>
 
 <ul>
 <li>Loaded data available from memory</li>
@@ -572,7 +622,7 @@
 <li>All ready for MEM/WB register</li>
 </ul>
 
-<strong>Critical Path:</strong>
+<p><strong>Critical Path:</strong></p>
 
 <ul>
 <li>Load Word determines minimum clock period</li>
@@ -580,16 +630,22 @@
 <li>All other instructions wait for this</li>
 </ul>
 
-<strong>Total Stage Time:</strong> ~30 + 30 + 250 = ~310 ps (memory READ dominant!)
+<p><strong>Total Stage Time:</strong> ~30 + 30 + 250 = ~310 ps (memory READ dominant!)</p>
 
 <h3>13.5.6 Clock Cycle 5: Write Back (WB)</h3>
 
-<strong>Start of Cycle:</strong>
+<p><strong>Start of Cycle:</strong></p>
 
-<p>1. MEM/WB register write: ~30 ps</p>
-<p>2. MEM/WB register read: ~30 ps</p>
+<ol>
+<li>MEM/WB register write: ~30 ps</li>
+<li>MEM/WB register read: ~30 ps</li>
+</ol>
 
-<strong>Data Selection:</strong> 3. MemtoReg multiplexer:
+<p><strong>Data Selection:</strong></p>
+
+<ol start="3">
+<li>MemtoReg multiplexer:</li>
+</ol>
 
 <ul>
 <li>Control signal MemtoReg = 1 (select memory data)</li>
@@ -598,9 +654,15 @@
 <li>Multiplexer delay: ~20 ps</li>
 </ul>
 
-<strong>Register Write Preparation:</strong> 4. Write data: Memory data from multiplexer 5. Write address: RT ($8) from pipeline register 6. RegWrite control signal = 1 (enable write)
+<p><strong>Register Write Preparation:</strong></p>
 
-<strong>CRITICAL ERROR IN TEXTBOOK DIAGRAM:</strong>
+<ol start="4">
+<li>Write data: Memory data from multiplexer</li>
+<li>Write address: RT ($8) from pipeline register</li>
+<li>RegWrite control signal = 1 (enable write)</li>
+</ol>
+
+<p><strong>CRITICAL ERROR IN TEXTBOOK DIAGRAM:</strong></p>
 
 <ul>
 <li>Many diagrams show write address from IF/ID register</li>
@@ -609,9 +671,15 @@
 <li>Must use write address from MEM/WB register</li>
 </ul>
 
-<strong>At Rising Edge (End of Cycle / Start of Next):</strong> 7. Register $8 written with loaded data 8. Write occurs in first half of cycle 9. Subsequent ID stage can read in second half (same cycle!)
+<p><strong>At Rising Edge (End of Cycle / Start of Next):</strong></p>
 
-<strong>Register File Timing Trick:</strong>
+<ol start="7">
+<li>Register $8 written with loaded data</li>
+<li>Write occurs in first half of cycle</li>
+<li>Subsequent ID stage can read in second half (same cycle!)</li>
+</ol>
+
+<p><strong>Register File Timing Trick:</strong></p>
 
 <ul>
 <li>Write: First half of clock cycle</li>
@@ -624,18 +692,59 @@
 
 <h3>13.5.7 Load Word Complete Pipeline Summary</h3>
 
-<p>| Cycle | Stage | Operations                    | Dominant Delay | Time                  |</p>
-<p>| ----- | ----- | ----------------------------- | -------------- | --------------------- |</p>
-<p>| 1     | IF    | Fetch instruction, PC+4       | Inst Memory    | 200ps                 |</p>
-<p>| 2     | ID    | Decode, read regs, control    | Reg Read       | 150ps                 |</p>
-<p>| 3     | EX    | ALU: base + offset            | ALU            | 170ps                 |</p>
-<p>| 4     | MEM   | Read data memory              | Memory Read    | <strong>310ps ← CRITICAL!</strong> |</p>
-<p>| 5     | WB    | Select memory, write register | Multiplexer    | 80ps                  |</p>
+<table>
+<thead>
+<tr>
+<th>Cycle</th>
+<th>Stage</th>
+<th>Operations</th>
+<th>Dominant Delay</th>
+<th>Time</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>IF</td>
+<td>Fetch instruction, PC+4</td>
+<td>Inst Memory</td>
+<td>200ps</td>
+</tr>
+<tr>
+<td>2</td>
+<td>ID</td>
+<td>Decode, read regs, control</td>
+<td>Reg Read</td>
+<td>150ps</td>
+</tr>
+<tr>
+<td>3</td>
+<td>EX</td>
+<td>ALU: base + offset</td>
+<td>ALU</td>
+<td>170ps</td>
+</tr>
+<tr>
+<td>4</td>
+<td>MEM</td>
+<td>Read data memory</td>
+<td>Memory Read</td>
+<td><strong>310ps ← CRITICAL!</strong></td>
+</tr>
+<tr>
+<td>5</td>
+<td>WB</td>
+<td>Select memory, write register</td>
+<td>Multiplexer</td>
+<td>80ps</td>
+</tr>
+</tbody>
+</table>
 
-<strong>Minimum Clock Period:</strong> 310 ps (limited by MEM stage)
-<strong>Maximum Clock Frequency:</strong> 1 / 310ps ≈ 3.2 GHz
+<p><strong>Minimum Clock Period:</strong> 310 ps (limited by MEM stage)</p>
+<p><strong>Maximum Clock Frequency:</strong> 1 / 310ps ≈ 3.2 GHz</p>
 
-<strong>Pipeline Overhead:</strong>
+<p><strong>Pipeline Overhead:</strong></p>
 
 <ul>
 <li>Pipeline register delays: ~(30+30) × 5 stages = 300ps</li>
@@ -644,7 +753,7 @@
 <li>Overhead: ~32% of execution time</li>
 </ul>
 
-<strong>Comparison to Single-Cycle:</strong>
+<p><strong>Comparison to Single-Cycle:</strong></p>
 
 <ul>
 <li>Single-cycle latency: ~800 ps (no pipeline register overhead)</li>
@@ -657,20 +766,19 @@
 
 <h3>13.6.1 Store Word Instruction Format</h3>
 
-<strong>Encoding:</strong>
+<p><strong>Encoding:</strong></p>
 
+<pre><code class="language-asm6502">SW $rt, offset($rs)
 
-<p>SW $rt, offset($rs)</p>
+Opcode: 101011 (bits 26-31)
+RS:     Base register (bits 21-25)
+RT:     Source data register (bits 16-20)
+Offset: 16-bit immediate (bits 0-15)
+</code></pre>
 
-<p>Opcode: 101011 (bits 26-31)</p>
-<p>RS:     Base register (bits 21-25)</p>
-<p>RT:     Source data register (bits 16-20)</p>
-<p>Offset: 16-bit immediate (bits 0-15)</p>
+<p><strong>Operation:</strong> <code>Memory[$rs + offset] = $rt</code></p>
 
-
-<strong>Operation:</strong> Memory[$rs + offset] = $rt
-
-<strong>Example:</strong> SW $8, 32($9)
+<p><strong>Example:</strong> <code>SW $8, 32($9)</code></p>
 
 <ul>
 <li>Base address in $9</li>
@@ -678,18 +786,18 @@
 <li>Store $8 value to memory</li>
 </ul>
 
-<strong>Key Difference from Load:</strong>
+<p><strong>Key Difference from Load:</strong></p>
 
 <ul>
 <li>RT is SOURCE (not destination)</li>
 <li>RT value needed for memory write</li>
 </ul>
 
-<h3>13.6.2 Stages IF, ID, EX: Same as Load Word</h3>
+<p><strong>Stages IF, ID, EX: Same as Load Word</strong></p>
 
-<strong>Instruction Fetch:</strong> Identical to LW
+<p><strong>Instruction Fetch:</strong> Identical to LW</p>
 
-<strong>Instruction Decode:</strong> Identical to LW
+<p><strong>Instruction Decode:</strong> Identical to LW</p>
 
 <ul>
 <li>Read both RS and RT</li>
@@ -697,7 +805,7 @@
 <li>Sign-extend offset</li>
 </ul>
 
-<strong>Execution:</strong> Identical to LW
+<p><strong>Execution:</strong> Identical to LW</p>
 
 <ul>
 <li>Compute memory address: base + offset</li>
@@ -706,15 +814,17 @@
 
 <h3>13.6.3 Memory Access Stage: KEY DIFFERENCE</h3>
 
-<strong>Start of Cycle:</strong>
+<p><strong>Start of Cycle:</strong></p>
 
 <ul>
 <li>EX/MEM register contains:</li>
 </ul>
-<p>- Memory address (from ALU)</p>
-<p>- RT data value (from register file, preserved through pipeline)</p>
 
-<strong>Memory Access:</strong>
+<pre><code>- Memory address (from ALU)
+- RT data value (from register file, preserved through pipeline)
+</code></pre>
+
+<p><strong>Memory Access:</strong></p>
 
 <ul>
 <li>Address → Data memory address input</li>
@@ -723,14 +833,14 @@
 <li>MemRead = 0 (<strong>DISABLE</strong> read)</li>
 </ul>
 
-<strong>Operation:</strong>
+<p><strong>Operation:</strong></p>
 
 <ul>
 <li>Write RT value to computed address</li>
 <li>Memory write delay: ~250 ps</li>
 </ul>
 
-<strong>End of Cycle:</strong>
+<p><strong>End of Cycle:</strong></p>
 
 <ul>
 <li>Data written to memory</li>
@@ -738,17 +848,38 @@
 <li>Not used by subsequent stage</li>
 </ul>
 
-<strong>Control Signal Critical:</strong>
+<p><strong>Control Signal Critical:</strong></p>
 
-<p>| Control Signal      | Load | Store             |</p>
-<p>| ------------------- | ---- | ----------------- |</p>
-<p>| MemRead             | 1    | 0                 |</p>
-<p>| MemWrite            | 0    | 1                 |</p>
-<p>| RegWrite (WB stage) | 1    | <strong>0 ← CRITICAL!</strong> |</p>
+<table>
+<thead>
+<tr>
+<th>Control Signal</th>
+<th>Load</th>
+<th>Store</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MemRead</td>
+<td>1</td>
+<td>0</td>
+</tr>
+<tr>
+<td>MemWrite</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr>
+<td>RegWrite (WB stage)</td>
+<td>1</td>
+<td><strong>0 ← CRITICAL!</strong></td>
+</tr>
+</tbody>
+</table>
 
 <h3>13.6.4 Write Back Stage: NO OPERATION</h3>
 
-<strong>Store Word WB Stage:</strong>
+<p><strong>Store Word WB Stage:</strong></p>
 
 <ul>
 <li>NO register write needed</li>
@@ -756,18 +887,20 @@
 <li>RegWrite = 0 (<strong>DISABLE</strong>)</li>
 </ul>
 
-<strong>Why RegWrite MUST Be 0:</strong>
+<p><strong>Why RegWrite MUST Be 0:</strong></p>
 
 <ul>
 <li>Pipeline registers still contain data</li>
 <li>MemtoReg multiplexer produces output</li>
 <li>If RegWrite = 1: <strong>DISASTER!</strong></li>
 </ul>
-<p>- Random data written to random register</p>
-<p>- Data corruption</p>
-<p>- Program failure</p>
 
-<strong>Hardware Still Operates:</strong>
+<pre><code>- Random data written to random register
+- Data corruption
+- Program failure
+</code></pre>
+
+<p><strong>Hardware Still Operates:</strong></p>
 
 <ul>
 <li>Multiplexer produces output (garbage)</li>
@@ -776,7 +909,7 @@
 <li>But RegWrite = 0 prevents write</li>
 </ul>
 
-<strong>Lesson: Control Signals Essential</strong>
+<p><strong>Lesson: Control Signals Essential</strong></p>
 
 <ul>
 <li>Must prevent unwanted operations</li>
@@ -784,29 +917,64 @@
 <li>Only control signals prevent corruption</li>
 </ul>
 
-<strong>Store Word Pipeline Summary:</strong>
+<p><strong>Store Word Pipeline Summary:</strong></p>
 
-<p>| Cycle | Stage | Operations           | Notes                         |</p>
-<p>| ----- | ----- | -------------------- | ----------------------------- |</p>
-<p>| 1     | IF    | Fetch SW instruction | Same as LW                    |</p>
-<p>| 2     | ID    | Decode, read RS, RT  | RT value USED (not discarded) |</p>
-<p>| 3     | EX    | Compute address      | Same as LW                    |</p>
-<p>| 4     | MEM   | Write RT to memory   | <strong>WRITE</strong> instead of read     |</p>
-<p>| 5     | WB    | Nothing (bubble)     | RegWrite=0, stage idle        |</p>
+<table>
+<thead>
+<tr>
+<th>Cycle</th>
+<th>Stage</th>
+<th>Operations</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>IF</td>
+<td>Fetch SW instruction</td>
+<td>Same as LW</td>
+</tr>
+<tr>
+<td>2</td>
+<td>ID</td>
+<td>Decode, read RS, RT</td>
+<td>RT value USED (not discarded)</td>
+</tr>
+<tr>
+<td>3</td>
+<td>EX</td>
+<td>Compute address</td>
+<td>Same as LW</td>
+</tr>
+<tr>
+<td>4</td>
+<td>MEM</td>
+<td>Write RT to memory</td>
+<td><strong>WRITE</strong> instead of read</td>
+</tr>
+<tr>
+<td>5</td>
+<td>WB</td>
+<td>Nothing (bubble)</td>
+<td>RegWrite=0, stage idle</td>
+</tr>
+</tbody>
+</table>
 
 
 <h2>13.7 Common Pipeline Diagram Errors</h2>
 
 <h3>13.7.1 Error 1: Write Register Address Source</h3>
 
-<strong>Incorrect Diagram Shows:</strong>
+<p><strong>Incorrect Diagram Shows:</strong></p>
 
 <ul>
 <li>Write register address from IF/ID pipeline register</li>
 <li>Connected directly to register file write port</li>
 </ul>
 
-<strong>Why This Is Wrong:</strong>
+<p><strong>Why This Is Wrong:</strong></p>
 
 <ul>
 <li>IF/ID contains CURRENT instruction (just fetched)</li>
@@ -814,25 +982,22 @@
 <li>Wrong register would be written!</li>
 </ul>
 
-<strong>Example:</strong>
+<p><strong>Example:</strong></p>
 
-``<code>
-<p>Cycle 1: LW $8, 0($10) fetched  (IF)</p>
-<p>Cycle 2: LW $9, 4($10) fetched  (IF), LW $8 in ID</p>
-<p>Cycle 3: LW $10, 8($10) fetched (IF), LW $8 in EX</p>
-<p>Cycle 4: ADD $11, $12, $13 fetched (IF), LW $8 in MEM</p>
-<p>Cycle 5: SUB $14, $15, $16 fetched (IF), LW $8 in WB</p>
+<pre><code class="language-asm6502">Cycle 1: LW $8, 0($10) fetched  (IF)
+Cycle 2: LW $9, 4($10) fetched  (IF), LW $8 in ID
+Cycle 3: LW $10, 8($10) fetched (IF), LW $8 in EX
+Cycle 4: ADD $11, $12, $13 fetched (IF), LW $8 in MEM
+Cycle 5: SUB $14, $15, $16 fetched (IF), LW $8 in WB
 
-<p>At Cycle 5:</p>
-<ul>
-<li>IF/ID contains SUB (writes $14)</li>
-<li>WB should write $8 (from LW)</li>
-<li>If using IF/ID: Would write to $14 instead of $8!</li>
-<li>WRONG REGISTER!</li>
-</ul>
-</code>`<code>
+At Cycle 5:
+• IF/ID contains SUB (writes $14)
+• WB should write $8 (from LW)
+• If using IF/ID: Would write to $14 instead of $8!
+• WRONG REGISTER!
+</code></pre>
 
-<strong>Correct Implementation:</strong>
+<p><strong>Correct Implementation:</strong></p>
 
 <ul>
 <li>Propagate write address through ALL pipeline registers</li>
@@ -842,7 +1007,7 @@
 <li>WB uses address from MEM/WB register</li>
 </ul>
 
-<strong>Additional Lines Required:</strong>
+<p><strong>Additional Lines Required:</strong></p>
 
 <ul>
 <li>5-bit write address bus through each pipeline register</li>
@@ -852,37 +1017,77 @@
 
 <h3>13.7.2 Error 2: Incorrect Memory Access Indication</h3>
 
-<strong>Diagram Error from Textbook:</strong>
+<p><strong>Diagram Error from Textbook:</strong></p>
 
 <ul>
 <li>ADD instruction shown accessing data memory (wrong!)</li>
 <li>LW instruction shown NOT accessing data memory (wrong!)</li>
 </ul>
 
-<strong>Correct Resource Usage:</strong>
+<p><strong>Correct Resource Usage:</strong></p>
 
-<p>| Instruction | IF  | ID  | EX  | MEM         | WB          |</p>
-<p>| ----------- | --- | --- | --- | ----------- | ----------- |</p>
-<p>| LW          | ✓   | ✓   | ✓   | ✓ Read      | ✓ Write Reg |</p>
-<p>| SW          | ✓   | ✓   | ✓   | ✓ Write     | No action   |</p>
-<p>| ADD         | ✓   | ✓   | ✓   | ✗ No access | ✓ Write Reg |</p>
-<p>| BEQ         | ✓   | ✓   | ✓   | ✗ PC update | ✗ No write  |</p>
+<table>
+<thead>
+<tr>
+<th>Instruction</th>
+<th>IF</th>
+<th>ID</th>
+<th>EX</th>
+<th>MEM</th>
+<th>WB</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>LW</td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+<td>✓ Read</td>
+<td>✓ Write Reg</td>
+</tr>
+<tr>
+<td>SW</td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+<td>✓ Write</td>
+<td>No action</td>
+</tr>
+<tr>
+<td>ADD</td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+<td>✗ No access</td>
+<td>✓ Write Reg</td>
+</tr>
+<tr>
+<td>BEQ</td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+<td>✗ PC update</td>
+<td>✗ No write</td>
+</tr>
+</tbody>
+</table>
 
-<strong>Shading Convention:</strong>
+<p><strong>Shading Convention:</strong></p>
 
 <ul>
 <li>Shaded box: Resource USED</li>
 <li>Unshaded box: Resource NOT USED (idle)</li>
 </ul>
 
-<strong>ADD Instruction Correct:</strong>
+<p><strong>ADD Instruction Correct:</strong></p>
 
 <ul>
 <li>MEM stage: No memory access, stage mostly idle</li>
 <li>Just forwards ALU result</li>
 </ul>
 
-<strong>LW Instruction Correct:</strong>
+<p><strong>LW Instruction Correct:</strong></p>
 
 <ul>
 <li>MEM stage: Read from data memory</li>
@@ -891,14 +1096,14 @@
 
 <h3>13.7.3 Error 3: Store Word Memory Read</h3>
 
-<strong>Another Common Error:</strong>
+<p><strong>Another Common Error:</strong></p>
 
 <ul>
 <li>Store instruction shown with MemRead = 1</li>
 <li>Memory output shown as valid</li>
 </ul>
 
-<strong>Why Wrong:</strong>
+<p><strong>Why Wrong:</strong></p>
 
 <ul>
 <li>Store WRITES to memory (MemWrite = 1)</li>
@@ -906,7 +1111,7 @@
 <li>Memory read output undefined/invalid</li>
 </ul>
 
-<strong>Correct:</strong>
+<p><strong>Correct:</strong></p>
 
 <ul>
 <li>MemWrite = 1, MemRead = 0</li>
@@ -919,7 +1124,7 @@
 
 <h3>13.8.1 Single-Clock vs Multi-Clock Diagrams</h3>
 
-<strong>Single-Clock-Cycle Diagram:</strong>
+<p><strong>Single-Clock-Cycle Diagram:</strong></p>
 
 <ul>
 <li>Shows ONE stage at ONE clock cycle</li>
@@ -928,7 +1133,7 @@
 <li>Good for understanding individual stage</li>
 </ul>
 
-<strong>Multi-Clock-Cycle Diagram:</strong>
+<p><strong>Multi-Clock-Cycle Diagram:</strong></p>
 
 <ul>
 <li>Shows MULTIPLE instructions at MULTIPLE cycles</li>
@@ -939,18 +1144,17 @@
 
 <h3>13.8.2 Traditional Multi-Cycle Diagram</h3>
 
-<strong>Format:</strong>
+<p><strong>Format:</strong></p>
 
-</code>`<code>
-<p>Cycle: 1    2    3    4    5    6    7    8    9</p>
-<p>Instr 1:         IF   ID   EX   MEM  WB</p>
-<p>Instr 2:              IF   ID   EX   MEM  WB</p>
-<p>Instr 3:                   IF   ID   EX   MEM  WB</p>
-<p>Instr 4:                        IF   ID   EX   MEM  WB</p>
-<p>Instr 5:                             IF   ID   EX   MEM  WB</p>
-</code>``
+<pre><code>Cycle:     1    2    3    4    5    6    7    8    9
+Instr 1:   IF   ID   EX   MEM  WB
+Instr 2:        IF   ID   EX   MEM  WB
+Instr 3:             IF   ID   EX   MEM  WB
+Instr 4:                  IF   ID   EX   MEM  WB
+Instr 5:                       IF   ID   EX   MEM  WB
+</code></pre>
 
-<strong>Shows:</strong>
+<p><strong>Shows:</strong></p>
 
 <ul>
 <li>Staggered execution</li>
@@ -959,7 +1163,7 @@
 <li>Pipeline drain time (cycles 7-9)</li>
 </ul>
 
-<strong>Does NOT Show:</strong>
+<p><strong>Does NOT Show:</strong></p>
 
 <ul>
 <li>Resource usage details</li>
@@ -969,26 +1173,49 @@
 
 <h3>13.8.3 Enhanced Multi-Cycle Diagram with Resources</h3>
 
-<strong>Format:</strong>
+<p><strong>Format:</strong></p>
 
-<p>Cycle | Instr 1                          | Instr 2                          | Instr 3</p>
-<p>-----:|:---------------------------------:|:---------------------------------:|:---------------------------------:</p>
-<p>1     | [IM][RF][  ][  ][  ]             | —                                 | —</p>
-<p>2     | [  ][IM][RF][  ][  ]             | [IM][RF][  ][  ][  ]             | —</p>
-<p>3     | [  ][  ][IM][RF][  ]             | [  ][IM][RF][  ][  ]             | [IM][RF][  ][  ][  ]</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: right;">Cycle</th>
+<th style="text-align: center;">Instr 1</th>
+<th style="text-align: center;">Instr 2</th>
+<th style="text-align: center;">Instr 3</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;">1</td>
+<td style="text-align: center;">[IM][RF][  ][  ][  ]</td>
+<td style="text-align: center;">—</td>
+<td style="text-align: center;">—</td>
+</tr>
+<tr>
+<td style="text-align: right;">2</td>
+<td style="text-align: center;">[  ][IM][RF][  ][  ]</td>
+<td style="text-align: center;">[IM][RF][  ][  ][  ]</td>
+<td style="text-align: center;">—</td>
+</tr>
+<tr>
+<td style="text-align: right;">3</td>
+<td style="text-align: center;">[  ][  ][IM][RF][  ]</td>
+<td style="text-align: center;">[  ][IM][RF][  ][  ]</td>
+<td style="text-align: center;">[IM][RF][  ][  ][  ]</td>
+</tr>
+</tbody>
+</table>
 
-<p>Legend:</p>
-
-<ul>
-<li>IM: Instruction Memory (IF)</li>
-<li>RF: Register File (ID)</li>
-<li>ALU: ALU operation (EX)</li>
-<li>DM: Data Memory (MEM)</li>
-<li>WB: Write Back (WB)</li>
-</ul>
+<p><strong>Legend:</strong></p>
+<pre><code>• IM: Instruction Memory (IF)
+• RF: Register File (ID)
+• ALU: ALU operation (EX)
+• DM: Data Memory (MEM)
+• WB: Write Back (WB)
+</code></pre>
 
 
-<strong>Shows:</strong>
+<p><strong>Shows:</strong></p>
 
 <ul>
 <li>Which resources used when</li>
@@ -997,7 +1224,7 @@
 <li>Detailed pipeline state</li>
 </ul>
 
-<strong>Benefits:</strong>
+<p><strong>Benefits:</strong></p>
 
 <ul>
 <li>Visualize structural hazards</li>
@@ -1006,7 +1233,7 @@
 <li>Verify correctness</li>
 </ul>
 
-<strong>Textbook Error Example:</strong>
+<p><strong>Textbook Error Example:</strong></p>
 
 <ul>
 <li>ADD instruction marked with DM (wrong!)</li>
@@ -1019,22 +1246,66 @@
 
 <h3>13.9.1 Component Delays (Typical Values)</h3>
 
-<p>| Component               | Delay (picoseconds) |</p>
-<p>| ----------------------- | ------------------- |</p>
-<p>| Instruction Memory      | 200                 |</p>
-<p>| Register File Read      | 90                  |</p>
-<p>| Register File Write     | 90                  |</p>
-<p>| ALU Operation           | 90                  |</p>
-<p>| Data Memory Read        | 250                 |</p>
-<p>| Data Memory Write       | 250                 |</p>
-<p>| Sign Extension          | 10 (negligible)     |</p>
-<p>| Multiplexer             | 20                  |</p>
-<p>| Adder (PC+4, branch)    | 70                  |</p>
-<p>| Shift Left 2            | 10 (wire routing)   |</p>
-<p>| Pipeline Register Write | 30                  |</p>
-<p>| Pipeline Register Read  | 30                  |</p>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Delay (picoseconds)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Instruction Memory</td>
+<td>200</td>
+</tr>
+<tr>
+<td>Register File Read</td>
+<td>90</td>
+</tr>
+<tr>
+<td>Register File Write</td>
+<td>90</td>
+</tr>
+<tr>
+<td>ALU Operation</td>
+<td>90</td>
+</tr>
+<tr>
+<td>Data Memory Read</td>
+<td>250</td>
+</tr>
+<tr>
+<td>Data Memory Write</td>
+<td>250</td>
+</tr>
+<tr>
+<td>Sign Extension</td>
+<td>10 (negligible)</td>
+</tr>
+<tr>
+<td>Multiplexer</td>
+<td>20</td>
+</tr>
+<tr>
+<td>Adder (PC+4, branch)</td>
+<td>70</td>
+</tr>
+<tr>
+<td>Shift Left 2</td>
+<td>10 (wire routing)</td>
+</tr>
+<tr>
+<td>Pipeline Register Write</td>
+<td>30</td>
+</tr>
+<tr>
+<td>Pipeline Register Read</td>
+<td>30</td>
+</tr>
+</tbody>
+</table>
 
-<strong>Key Observations:</strong>
+<p><strong>Key Observations:</strong></p>
 
 <ul>
 <li>Memory operations slowest (200-250 ps)</li>
@@ -1045,62 +1316,58 @@
 
 <h3>13.9.2 Stage Timing Calculation</h3>
 
-<strong>Stage 1: Instruction Fetch (IF)</strong>
+<p><strong>Stage 1: Instruction Fetch (IF)</strong></p>
 
+<pre><code>Pipeline Register Write:   N/A (PC register)
+Pipeline Register Read:    N/A
+Instruction Memory:        200 ps
+PC + 4 Adder:              70 ps (parallel)
 
-<p>Pipeline Register Write:   N/A (PC register)</p>
-<p>Pipeline Register Read:    N/A</p>
-<p>Instruction Memory:        200 ps</p>
-<p>PC + 4 Adder:              70 ps (parallel)</p>
+Total: 200 ps (memory dominant)
+</code></pre>
 
-<p>Total: 200 ps (memory dominant)</p>
+<p><strong>Stage 2: Instruction Decode (ID)</strong></p>
 
+<pre><code>IF/ID Write + Read:        60 ps
+Register File Read:        90 ps (dominant)
+Control Unit Decode:       50 ps (parallel)
+Sign Extension:            10 ps (parallel)
 
-<strong>Stage 2: Instruction Decode (ID)</strong>
+Total: 60 + 90 = 150 ps
+</code></pre>
 
+<p><strong>Stage 3: Execution (EX)</strong></p>
 
-<p>IF/ID Write + Read:        60 ps</p>
-<p>Register File Read:        90 ps (dominant)</p>
-<p>Control Unit Decode:       50 ps (parallel)</p>
-<p>Sign Extension:            10 ps (parallel)</p>
+<pre><code>ID/EX Write + Read:        60 ps
+Multiplexer:               20 ps
+ALU Operation:             90 ps
+Branch Adder:              70 ps (parallel)
+Shift Left 2:              10 ps (parallel)
 
-<p>Total: 60 + 90 = 150 ps</p>
+Total: 60 + 20 + 90 = 170 ps
+</code></pre>
 
+<p><strong>Stage 4: Memory Access (MEM)</strong></p>
 
-<strong>Stage 3: Execution (EX)</strong>
+<pre><code>EX/MEM Write + Read:       60 ps
+Data Memory Access:        250 ps (DOMINANT)
 
+Total: 60 + 250 = 310 ps ← CRITICAL PATH!
+</code></pre>
 
-<p>ID/EX Write + Read:        60 ps</p>
-<p>Multiplexer:               20 ps</p>
-<p>ALU Operation:             90 ps</p>
-<p>Branch Adder:              70 ps (parallel)</p>
-<p>Shift Left 2:              10 ps (parallel)</p>
+<p><strong>Stage 5: Write Back (WB)</strong></p>
 
-<p>Total: 60 + 20 + 90 = 170 ps</p>
+<pre><code>MEM/WB Write + Read:       60 ps
+MemtoReg Multiplexer:      20 ps
+</code></pre>
+<p><strong>Register File Write:       30 ps (first half of cycle)</strong></p>
 
-
-<strong>Stage 4: Memory Access (MEM)</strong>
-
-
-<p>EX/MEM Write + Read:       60 ps</p>
-<p>Data Memory Access:        250 ps (DOMINANT)</p>
-
-<p>Total: 60 + 250 = 310 ps ← CRITICAL PATH!</p>
-
-
-<strong>Stage 5: Write Back (WB)</strong>
-
-
-<p>MEM/WB Write + Read:       60 ps</p>
-<p>MemtoReg Multiplexer:      20 ps</p>
-<p>Register File Write:       30 ps (first half of cycle)</p>
-
-<p>Total: 60 + 20 + 30 = 110 ps</p>
+<p><strong>Total: 60 + 20 + 30 = 110 ps</strong></p>
 
 
 <h3>13.9.3 Clock Frequency Determination</h3>
 
-<strong>Minimum Clock Period:</strong>
+<p><strong>Minimum Clock Period:</strong></p>
 
 <ul>
 <li>Determined by SLOWEST stage</li>
@@ -1108,43 +1375,80 @@
 <li>All stages must use this period</li>
 </ul>
 
-<strong>Maximum Clock Frequency:</strong>
+<p><strong>Maximum Clock Frequency:</strong></p>
+
+<pre><code>f_max = 1 / T_min
+      = 1 / 310 ps
+      = 1 / (310 × 10^-12 s)
+      = 3.226 GHz
+      ≈ 3.2 GHz
+</code></pre>
 
 
-<p>f<em>max = 1 / T</em>min</p>
-<p>= 1 / 310 ps</p>
-<p>= 1 / (310 × 10^-12 s)</p>
-<p>= 3.226 GHz</p>
-<p>≈ 3.2 GHz</p>
+<p><strong>Efficiency Analysis:</strong></p>
 
+<table>
+<thead>
+<tr>
+<th>Stage</th>
+<th>Time</th>
+<th>Utilization</th>
+<th>Wasted Time</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>IF</td>
+<td>200</td>
+<td>65%</td>
+<td>110 ps</td>
+</tr>
+<tr>
+<td>ID</td>
+<td>150</td>
+<td>48%</td>
+<td>160 ps</td>
+</tr>
+<tr>
+<td>EX</td>
+<td>170</td>
+<td>55%</td>
+<td>140 ps</td>
+</tr>
+<tr>
+<td>MEM</td>
+<td>310</td>
+<td>100%</td>
+<td>0 ps</td>
+</tr>
+<tr>
+<td>WB</td>
+<td>110</td>
+<td>35%</td>
+<td>200 ps</td>
+</tr>
+</tbody>
+</table>
 
-<strong>Efficiency Analysis:</strong>
-
-<p>| Stage | Time | Utilization | Wasted Time |</p>
-<p>| ----- | ---- | ----------- | ----------- |</p>
-<p>| IF    | 200  | 65%         | 110 ps      |</p>
-<p>| ID    | 150  | 48%         | 160 ps      |</p>
-<p>| EX    | 170  | 55%         | 140 ps      |</p>
-<p>| MEM   | 310  | 100%        | 0 ps        |</p>
-<p>| WB    | 110  | 35%         | 200 ps      |</p>
-
-<strong>Average utilization:</strong> ~60%
-<strong>Wasted time:</strong> ~40% average
+<p><strong>Average utilization:</strong> ~60%</p>
+<p><strong>Wasted time:</strong> ~40% average</p>
 
 <h3>13.9.4 Performance Improvement Strategies</h3>
 
-<strong>Strategy 1: Pipeline Balancing</strong>
+<p><strong>Strategy 1: Pipeline Balancing</strong></p>
 
 <ul>
 <li>Reduce MEM stage delay (dominant)</li>
 <li>Options:</li>
 </ul>
-<p>- Faster memory technology</p>
-<p>- Separate instruction/data caches</p>
-<p>- Smaller, faster cache</p>
-<p>- Multi-ported memory</p>
 
-<strong>Strategy 2: Increase ALU Time</strong>
+<pre><code>- Faster memory technology
+- Separate instruction/data caches
+- Smaller, faster cache
+- Multi-ported memory
+</code></pre>
+
+<p><strong>Strategy 2: Increase ALU Time</strong></p>
 
 <ul>
 <li>Question: If ALU shortened by 25%, does it help?</li>
@@ -1153,7 +1457,7 @@
 <li>If EX is critical (rare): YES, improves throughput</li>
 </ul>
 
-<strong>Strategy 3: Additional Pipeline Stages</strong>
+<p><strong>Strategy 3: Additional Pipeline Stages</strong></p>
 
 <ul>
 <li>Subdivide long stages (especially MEM)</li>
@@ -1163,7 +1467,7 @@
 <li>Diminishing returns beyond certain point</li>
 </ul>
 
-<strong>Strategy 4: Cache Memory</strong>
+<p><strong>Strategy 4: Cache Memory</strong></p>
 
 <ul>
 <li>Fast cache between CPU and main memory</li>
@@ -1173,7 +1477,7 @@
 <li>(Covered in next lectures)</li>
 </ul>
 
-<strong>Real-World Example:</strong>
+<p><strong>Real-World Example:</strong></p>
 
 <ul>
 <li>Intel Atom processors: ~30 pipeline stages</li>
@@ -1188,23 +1492,23 @@
 
 <h3>13.10.1 Exercise: Maximum Clock Frequency Calculation</h3>
 
-<strong>Given Component Delays:</strong>
+<p><strong>Given Component Delays:</strong></p>
+
+<pre><code>Instruction Memory:      200 ps
+Register File (read):    90 ps
+Register File (write):   90 ps
+ALU:                     90 ps
+Data Memory (read):      250 ps
+Data Memory (write):     250 ps
+Sign Extend:             ~0 ps
+Multiplexer:             20 ps
+Adder:                   70 ps
+Shift Left 2:            10 ps
+Pipeline Register:       30 ps (write), 30 ps (read)
+</code></pre>
 
 
-<p>Instruction Memory:      200 ps</p>
-<p>Register File (read):    90 ps</p>
-<p>Register File (write):   90 ps</p>
-<p>ALU:                     90 ps</p>
-<p>Data Memory (read):      250 ps</p>
-<p>Data Memory (write):     250 ps</p>
-<p>Sign Extend:             ~0 ps</p>
-<p>Multiplexer:             20 ps</p>
-<p>Adder:                   70 ps</p>
-<p>Shift Left 2:            10 ps</p>
-<p>Pipeline Register:       30 ps (write), 30 ps (read)</p>
-
-
-<strong>Step 1: Calculate each stage timing</strong>
+<p><strong>Step 1: Calculate each stage timing</strong></p>
 
 <ul>
 <li>IF: 200 + 60 (pipeline reg) = 260 ps</li>
@@ -1214,42 +1518,46 @@
 <li>WB: 60 + 30 = 90 ps</li>
 </ul>
 
-<strong>Step 2: Identify critical path</strong>
+<p><strong>Step 2: Identify critical path</strong></p>
 
 <ul>
 <li>Longest stage: MEM at 310 ps</li>
 </ul>
 
-<strong>Step 3: Calculate maximum frequency</strong>
+<p><strong>Step 3: Calculate maximum frequency</strong></p>
 
-
-<p>f_max = 1 / 310 ps</p>
-<p>= 3.226 GHz</p>
-
+<pre><code>f_max = 1 / 310 ps
+      = 3.226 GHz
+</code></pre>
 
 <h3>13.10.2 Exercise: Improving Clock Frequency</h3>
 
-<strong>Question:</strong> Suggest mechanisms to increase clock frequency. Discuss negative impacts.
+<p><strong>Question:</strong> Suggest mechanisms to increase clock frequency. Discuss negative impacts.</p>
 
-<strong>Suggestion 1: Faster Memory Technology</strong>
+<p><strong>Suggestion 1: Faster Memory Technology</strong></p>
 
 <ul>
 <li>Use SRAM instead of DRAM</li>
 <li>Reduce memory access time to ~100 ps</li>
 <li><strong>Pros:</strong></li>
 </ul>
-<p>- Significantly reduces critical path</p>
-<p>- New critical path: IF at 260 ps</p>
-<p>- Frequency increase: 310→260 (1.2× improvement)</p>
+
+<pre><code>- Significantly reduces critical path
+- New critical path: IF at 260 ps
+- Frequency increase: 310→260 (1.2× improvement)
+</code></pre>
+
 <ul>
 <li><strong>Cons:</strong></li>
 </ul>
-<p>- SRAM very expensive</p>
-<p>- Much larger area</p>
-<p>- Higher power consumption</p>
-<p>- Limited capacity</p>
 
-<strong>Suggestion 2: Cache Memory (BEST)</strong>
+<pre><code>- SRAM very expensive
+- Much larger area
+- Higher power consumption
+- Limited capacity
+</code></pre>
+
+<p><strong>Suggestion 2: Cache Memory (BEST)</strong></p>
 
 <ul>
 <li>Add small, fast cache</li>
@@ -1257,18 +1565,23 @@
 <li>Most accesses hit cache</li>
 <li><strong>Pros:</strong></li>
 </ul>
-<p>- Cost-effective</p>
-<p>- Good performance</p>
-<p>- Scalable</p>
-<p>- Industry standard</p>
+
+<pre><code>- Cost-effective
+- Good performance
+- Scalable
+- Industry standard
+</code></pre>
+
 <ul>
 <li><strong>Cons:</strong></li>
 </ul>
-<p>- Cache misses still slow</p>
-<p>- Complex cache management</p>
-<p>- Additional hardware</p>
 
-<strong>Suggestion 3: Split Memory Stage</strong>
+<pre><code>- Cache misses still slow
+- Complex cache management
+- Additional hardware
+</code></pre>
+
+<p><strong>Suggestion 3: Split Memory Stage</strong></p>
 
 <ul>
 <li>Divide MEM into MEM1 and MEM2</li>
@@ -1276,36 +1589,46 @@
 <li>Total stages: 6</li>
 <li><strong>Pros:</strong></li>
 </ul>
-<p>- More balanced pipeline</p>
-<p>- Higher frequency possible</p>
+
+<pre><code>- More balanced pipeline
+- Higher frequency possible
+</code></pre>
+
 <ul>
 <li><strong>Cons:</strong></li>
 </ul>
-<p>- More pipeline registers (overhead)</p>
-<p>- Increased latency</p>
-<p>- More complex control</p>
 
-<strong>Suggestion 4: Eliminate Pipeline Register Overhead</strong>
+<pre><code>- More pipeline registers (overhead)
+- Increased latency
+- More complex control
+</code></pre>
+
+<p><strong>Suggestion 4: Eliminate Pipeline Register Overhead</strong></p>
 
 <ul>
 <li>Use transparent latches</li>
 <li>Reduce write+read delay</li>
 <li><strong>Pros:</strong></li>
 </ul>
-<p>- Removes 60 ps overhead per stage</p>
-<p>- Significant improvement</p>
+
+<pre><code>- Removes 60 ps overhead per stage
+- Significant improvement
+</code></pre>
+
 <ul>
 <li><strong>Cons:</strong></li>
 </ul>
-<p>- Timing more complex</p>
-<p>- Clock skew issues</p>
-<p>- Less reliable</p>
+
+<pre><code>- Timing more complex
+- Clock skew issues
+- Less reliable
+</code></pre>
 
 <h3>13.10.3 Exercise: ALU Optimization Impact</h3>
 
-<strong>Question:</strong> ALU time shortened by 25%. Does it affect speedup?
+<p><strong>Question:</strong> ALU time shortened by 25%. Does it affect speedup?</p>
 
-<strong>Analysis:</strong>
+<p><strong>Analysis:</strong></p>
 
 <ul>
 <li>Current ALU delay: 90 ps</li>
@@ -1313,7 +1636,7 @@
 <li>Savings: 22.5 ps</li>
 </ul>
 
-<strong>Scenario 1: MEM is Critical Path (Typical)</strong>
+<p><strong>Scenario 1: MEM is Critical Path (Typical)</strong></p>
 
 <ul>
 <li>Current EX stage: 60 + 20 + 90 = 170 ps</li>
@@ -1324,9 +1647,9 @@
 <li>Speedup: <strong>NONE</strong></li>
 </ul>
 
-<strong>Conclusion:</strong> No improvement when not on critical path
+<p><strong>Conclusion:</strong> No improvement when not on critical path</p>
 
-<strong>Scenario 2: EX is Critical Path (Hypothetical)</strong>
+<p><strong>Scenario 2: EX is Critical Path (Hypothetical)</strong></p>
 
 <ul>
 <li>Assume faster memory: MEM = 200 ps</li>
@@ -1337,9 +1660,9 @@
 <li>Improvement: 1.15× faster</li>
 </ul>
 
-<strong>Conclusion:</strong> Significant improvement when on critical path
+<p><strong>Conclusion:</strong> Significant improvement when on critical path</p>
 
-<strong>General Principle:</strong>
+<p><strong>General Principle:</strong></p>
 
 <ul>
 <li>Only optimizing critical path improves throughput</li>
@@ -1349,7 +1672,7 @@
 
 <h3>13.10.4 Exercise: Pipeline Speedup Calculation</h3>
 
-<strong>Given:</strong>
+<p><strong>Given:</strong></p>
 
 <ul>
 <li>10^7 instructions (10 million)</li>
@@ -1357,31 +1680,29 @@
 <li>Perfect 20-stage pipeline</li>
 </ul>
 
-<strong>Part A: Non-pipelined execution time</strong>
+<p><strong>Part A: Non-pipelined execution time</strong></p>
+
+<pre><code>Time = Instructions × Time per instruction
+     = 10^7 × 100 ps
+     = 10^9 ps
+     = 1 ms (0.001 seconds)
+</code></pre>
+
+<p><strong>Part B: Speedup from 20-stage perfect pipeline</strong></p>
+
+<pre><code>Ideal Speedup = Number of stages = 20×
+</code></pre>
+
+<p><strong>Part C: Time with perfect pipeline</strong></p>
+
+<pre><code>Time = (10^7 × 100 ps) / 20
+     = 10^9 / 20 ps
+     = 5 × 10^7 ps
+     = 0.05 ms
+</code></pre>
 
 
-<p>Time = Instructions × Time per instruction</p>
-<p>= 10^7 × 100 ps</p>
-<p>= 10^9 ps</p>
-<p>= 1 ms (0.001 seconds)</p>
-
-
-<strong>Part B: Speedup from 20-stage perfect pipeline</strong>
-
-
-<p>Ideal Speedup = Number of stages = 20×</p>
-
-
-<strong>Part C: Time with perfect pipeline</strong>
-
-
-<p>Time = (10^7 × 100 ps) / 20</p>
-<p>= 10^9 / 20 ps</p>
-<p>= 5 × 10^7 ps</p>
-<p>= 0.05 ms</p>
-
-
-<strong>Part D: Real pipeline overhead impact</strong>
+<p><strong>Part D: Real pipeline overhead impact</strong></p>
 
 <ul>
 <li>Overheads affect both latency AND throughput</li>
@@ -1390,16 +1711,16 @@
 <li>Hazards and stalls: Reduce throughput further</li>
 </ul>
 
-<strong>Answer: BOTH latency and throughput affected</strong>
+<p><strong>Answer: BOTH latency and throughput affected</strong></p>
 
-<strong>Latency Impact:</strong>
+<p><strong>Latency Impact:</strong></p>
 
 <ul>
 <li>Pipeline register overhead adds to per-instruction time</li>
 <li>100 ps → ~130 ps per instruction (with overhead)</li>
 </ul>
 
-<strong>Throughput Impact:</strong>
+<p><strong>Throughput Impact:</strong></p>
 
 <ul>
 <li>Unbalanced stages reduce effective speedup</li>
@@ -1412,7 +1733,7 @@
 
 <h3>13.11.1 Pipeline Operation Fundamentals</h3>
 
-<strong>Pipeline Registers Essential:</strong>
+<p><strong>Pipeline Registers Essential:</strong></p>
 
 <ul>
 <li>Synchronize operations across stages</li>
@@ -1421,7 +1742,7 @@
 <li>Enable parallel execution</li>
 </ul>
 
-<strong>Timing Critical:</strong>
+<p><strong>Timing Critical:</strong></p>
 
 <ul>
 <li>Write delay + read delay at every stage</li>
@@ -1432,7 +1753,7 @@
 
 <h3>13.11.2 Design Principles</h3>
 
-<strong>Make Common Case Fast:</strong>
+<p><strong>Make Common Case Fast:</strong></p>
 
 <ul>
 <li>Memory accesses most critical</li>
@@ -1440,7 +1761,7 @@
 <li>Cache memory industry solution</li>
 </ul>
 
-<strong>Balance Pipeline Stages:</strong>
+<p><strong>Balance Pipeline Stages:</strong></p>
 
 <ul>
 <li>Even workload distribution</li>
@@ -1448,7 +1769,7 @@
 <li>Maximize efficiency</li>
 </ul>
 
-<strong>Control Signals Matter:</strong>
+<p><strong>Control Signals Matter:</strong></p>
 
 <ul>
 <li>Prevent unwanted operations</li>
@@ -1458,7 +1779,7 @@
 
 <h3>13.11.3 Common Mistakes to Avoid</h3>
 
-<strong>Write Register Address:</strong>
+<p><strong>Write Register Address:</strong></p>
 
 <ul>
 <li>Must propagate through ALL pipeline registers</li>
@@ -1466,7 +1787,7 @@
 <li>4-cycle delay between fetch and write back</li>
 </ul>
 
-<strong>Control Signal Errors:</strong>
+<p><strong>Control Signal Errors:</strong></p>
 
 <ul>
 <li>RegWrite must be 0 for store/branch</li>
@@ -1474,7 +1795,7 @@
 <li>Incorrect signals cause data corruption</li>
 </ul>
 
-<strong>Diagram Interpretation:</strong>
+<p><strong>Diagram Interpretation:</strong></p>
 
 <ul>
 <li>Verify resource usage carefully</li>
@@ -1484,7 +1805,7 @@
 
 <h3>13.11.4 Performance Considerations</h3>
 
-<strong>Critical Path Analysis:</strong>
+<p><strong>Critical Path Analysis:</strong></p>
 
 <ul>
 <li>Identify slowest stage</li>
@@ -1492,21 +1813,23 @@
 <li>Non-critical optimizations don't help throughput</li>
 </ul>
 
-<strong>Speedup Limitations:</strong>
+<p><strong>Speedup Limitations:</strong></p>
 
 <ul>
 <li>Ideal speedup = number of stages</li>
 <li>Actual speedup < ideal</li>
 <li>Reasons:</li>
 </ul>
-<p>- Pipeline register overhead</p>
-<p>- Unbalanced stages</p>
-<p>- Hazards and stalls</p>
-<p>- Pipeline fill/drain time</p>
+
+<pre><code>- Pipeline register overhead
+- Unbalanced stages
+- Hazards and stalls
+- Pipeline fill/drain time
+</code></pre>
 
 <h3>13.11.5 Looking Ahead</h3>
 
-<strong>Memory Hierarchy (Next Topics):</strong>
+<p><strong>Memory Hierarchy (Next Topics):</strong></p>
 
 <ul>
 <li>Cache memory introduction</li>
@@ -1516,7 +1839,7 @@
 <li>Performance bottleneck solutions</li>
 </ul>
 
-<strong>Real-World Pipelines:</strong>
+<p><strong>Real-World Pipelines:</strong></p>
 
 <ul>
 <li>10-30 stages common</li>
@@ -1531,93 +1854,88 @@
 
 <h3>Clock Period</h3>
 
+<pre><code>T_clock = max(T_IF, T_ID, T_EX, T_MEM, T_WB)
 
-<p>T<em>clock = max(T</em>IF, T<em>ID, T</em>EX, T<em>MEM, T</em>WB)</p>
-
-<p>Where each T_stage includes:</p>
-<ul>
-<li>Pipeline register write delay</li>
-<li>Pipeline register read delay</li>
-<li>Dominant component delay</li>
-</ul>
-
+Where each T_stage includes:
+• Pipeline register write delay
+• Pipeline register read delay
+• Dominant component delay
+</code></pre>
 
 <h3>Maximum Frequency</h3>
 
-
-<p>f<em>max = 1 / T</em>clock</p>
-
+<pre><code>f_max = 1 / T_clock
+</code></pre>
 
 <h3>Pipeline Speedup</h3>
 
-
-<p>Speedup = T<em>non-pipelined / T</em>pipelined<em>steady</em>state</p>
-<p>≈ Number of stages (ideal)</p>
-< Number of stages (actual)
-
+<pre><code>Speedup = T_non-pipelined / T_pipelined_steady_state
+        ≈ Number of stages (ideal)
+        < Number of stages (actual)
+</code></pre>
 
 <h3>Stage Timing General Formula</h3>
 
+<pre><code>T_stage = T_pipe_write + T_pipe_read + T_dominant_component + T_other_parallel
 
-<p>T<em>stage = T</em>pipe<em>write + T</em>pipe<em>read + T</em>dominant<em>component + T</em>other_parallel</p>
-
-<p>Where parallel components don't add (take maximum)</p>
-
+Where parallel components don't add (take maximum)
+</code></pre>
 
 <h3>Throughput</h3>
 
-
-<p>Throughput = 1 instruction / T_clock (steady state)</p>
-
+<pre><code>Throughput = 1 instruction / T_clock (steady state)
+</code></pre>
 
 <h3>Latency</h3>
 
-
-<p>Latency = (Number of stages) × T_clock + Pipeline overhead</p>
+<pre><code>Latency = (Number of stages) × T_clock + Pipeline overhead
+</code></pre>
 
 
 
 <h2>Key Takeaways</h2>
 
-<p>1. <strong>Four pipeline registers separate five stages</strong>: IF/ID, ID/EX, EX/MEM, MEM/WB store all information needed by subsequent stages.</p>
+<ol>
+<li><strong>Four pipeline registers separate five stages</strong>: IF/ID, ID/EX, EX/MEM, MEM/WB store all information needed by subsequent stages.</li>
 
-<p>2. <strong>Pipeline registers capture data and control signals</strong>—instruction fields, register values, ALU results, memory data, and control bits all propagate through pipeline.</p>
+<li><strong>Pipeline registers capture data and control signals</strong>—instruction fields, register values, ALU results, memory data, and control bits all propagate through pipeline.</li>
 
-<p>3. <strong>Each register updates on clock edge</strong>—enabling clean separation between pipeline stages and preventing data corruption from simultaneous operations.</p>
+<li><strong>Each register updates on clock edge</strong>—enabling clean separation between pipeline stages and preventing data corruption from simultaneous operations.</li>
 
-<p>4. <strong>Load instruction takes 5 cycles to complete</strong>—IF (fetch), ID (decode/read), EX (address calc), MEM (read memory), WB (write register).</p>
+<li><strong>Load instruction takes 5 cycles to complete</strong>—IF (fetch), ID (decode/read), EX (address calc), MEM (read memory), WB (write register).</li>
 
-<p>5. <strong>Store instruction uses 4 active stages</strong>—skips WB stage since no register write occurs, but occupies pipeline for 5 cycles.</p>
+<li><strong>Store instruction uses 4 active stages</strong>—skips WB stage since no register write occurs, but occupies pipeline for 5 cycles.</li>
 
-<p>6. <strong>Instruction and data must travel together</strong>—control signals propagate alongside data through pipeline to ensure correct operations at later stages.</p>
+<li><strong>Instruction and data must travel together</strong>—control signals propagate alongside data through pipeline to ensure correct operations at later stages.</li>
 
-<p>7. <strong>Register file has two write ports and three read ports</strong> in practice—enabling simultaneous read in ID and write in WB stages.</p>
+<li><strong>Register file has two write ports and three read ports</strong> in practice—enabling simultaneous read in ID and write in WB stages.</li>
 
-<p>8. <strong>Forwarding paths bypass pipeline registers</strong>—directly connecting EX/MEM and MEM/WB outputs to ALU inputs for data hazard resolution.</p>
+<li><strong>Forwarding paths bypass pipeline registers</strong>—directly connecting EX/MEM and MEM/WB outputs to ALU inputs for data hazard resolution.</li>
 
-<p>9. <strong>Load-use hazard requires pipeline stall</strong>—memory data not available until MEM/WB register, too late for immediate ALU use even with forwarding.</p>
+<li><strong>Load-use hazard requires pipeline stall</strong>—memory data not available until MEM/WB register, too late for immediate ALU use even with forwarding.</li>
 
-<p>10. <strong>Clock frequency</strong> = 1 / (Register Delay + Maximum Stage Delay)—pipeline register overhead reduces frequency below ideal calculation.</p>
+<li><strong>Clock frequency</strong> = 1 / (Register Delay + Maximum Stage Delay)—pipeline register overhead reduces frequency below ideal calculation.</li>
 
-<p>11. <strong>Pipeline registers introduce 20-50 ps overhead</strong> per stage—must account for setup/hold times and propagation delays in timing analysis.</p>
+<li><strong>Pipeline registers introduce 20-50 ps overhead</strong> per stage—must account for setup/hold times and propagation delays in timing analysis.</li>
 
-<p>12. <strong>Stage delays must balance for optimal performance</strong>—uneven stages waste time as clock period determined by slowest stage.</p>
+<li><strong>Stage delays must balance for optimal performance</strong>—uneven stages waste time as clock period determined by slowest stage.</li>
 
-<p>13. <strong>Separate instruction and data caches essential</strong>—prevent structural hazards from simultaneous IF and MEM stage memory access.</p>
+<li><strong>Separate instruction and data caches essential</strong>—prevent structural hazards from simultaneous IF and MEM stage memory access.</li>
 
-<p>14. <strong>Pipeline depth tradeoff</strong>: Deeper pipelines increase clock frequency but amplify hazard penalties and register overhead.</p>
+<li><strong>Pipeline depth tradeoff</strong>: Deeper pipelines increase clock frequency but amplify hazard penalties and register overhead.</li>
 
-<p>15. <strong>Write-back stage coincides with fetch of fifth instruction</strong>—demonstrating true parallelism with five instructions in pipeline simultaneously.</p>
+<li><strong>Write-back stage coincides with fetch of fifth instruction</strong>—demonstrating true parallelism with five instructions in pipeline simultaneously.</li>
 
-<p>16. <strong>Control signals generated in ID stage</strong> propagate through pipeline with instruction—EX/MEM/WB stages use stored control bits.</p>
+<li><strong>Control signals generated in ID stage</strong> propagate through pipeline with instruction—EX/MEM/WB stages use stored control bits.</li>
 
-<p>17. <strong>ALU result available in EX stage</strong> can forward to dependent instruction in EX stage—eliminating most RAW hazard stalls.</p>
+<li><strong>ALU result available in EX stage</strong> can forward to dependent instruction in EX stage—eliminating most RAW hazard stalls.</li>
 
-<p>18. <strong>Memory data available in MEM stage</strong> can forward to dependent instruction in EX stage—but not soon enough for load-use case.</p>
+<li><strong>Memory data available in MEM stage</strong> can forward to dependent instruction in EX stage—but not soon enough for load-use case.</li>
 
-<p>19. <strong>Throughput approaches 1 instruction per cycle</strong> in steady state—achieving near 5× speedup over single-cycle design.</p>
+<li><strong>Throughput approaches 1 instruction per cycle</strong> in steady state—achieving near 5× speedup over single-cycle design.</li>
 
-<p>20. <strong>Pipeline timing analysis critical for clock frequency determination</strong>—must consider all delay components including registers, logic, and wire delays.</p>
+<li><strong>Pipeline timing analysis critical for clock frequency determination</strong>—must consider all delay components including registers, logic, and wire delays.</li>
+</ol>
 
 <h2>Summary</h2>
 
